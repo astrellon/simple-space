@@ -1,0 +1,19 @@
+{
+    "C_Cpp.default.configurationProvider": "vector-of-bool.cmake-tools",
+    "cmake.configureOnOpen": false,
+    "files.associations": {
+        "sstream": "cpp",
+        "fstream": "cpp",
+        "functional": "cpp",
+        "array": "cpp",
+        "*.tcc": "cpp",
+        "deque": "cpp",
+        "string": "cpp",
+        "unordered_map": "cpp",
+        "vector": "cpp",
+        "string_view": "cpp",
+        "initializer_list": "cpp",
+        "map": "cpp",
+        "typeinfo": "cpp"
+    }
+}
