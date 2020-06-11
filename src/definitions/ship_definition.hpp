@@ -8,8 +8,6 @@ namespace space
     class ShipDefinition : public BaseDefinition
     {
         public:
-            //const static std::string DefinitionType;
-
             // Fields
             std::string texturePath;
             std::string name;
@@ -19,7 +17,8 @@ namespace space
             // Methods
             static const std::string DefinitionType() { return "ship"; }
             std::string type() const { return DefinitionType(); }
-    };
 
-    //const std::string ShipDefinition::DefinitionType = "ship";
+            // Constructor
+            ShipDefinition(DefinitionId id) : BaseDefinition(id) { }
+    };
 } // space

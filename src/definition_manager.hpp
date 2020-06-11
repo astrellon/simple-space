@@ -5,6 +5,7 @@
 #include <map>
 #include <iostream>
 #include <fstream>
+#include <vector>
 
 #include "serialisers/json/json.hpp"
 #include "serialisers/json/json_serialisers.hpp"
@@ -20,43 +21,29 @@ namespace space
         public:
             typedef std::map<DefinitionId, std::unique_ptr<BaseDefinition>> DefinitionMap;
 
-            template <typename TDef>
-            const TDef *load(const std::string &filename)
-            {
-                auto find = _definitions.find(filename);
-                if (find != _definitions.end())
-                {
-                    return nullptr;
-                }
-
-                std::ifstream file;
-                file.open(filename);
-
-                if (!file)
-                {
-                    std::cout << "Unable to find definition file " << filename << std::endl;
-                    return nullptr;
-                }
-
-                nlohmann::json json;
-                file >> json;
-
-                auto temp = from_json_base_definition(json);
-                auto result = dynamic_cast<TDef *>(temp.get());
-                if (result == nullptr)
-                {
-                    return result;
-                }
-
-                _definitions.emplace(filename, std::move(temp));
-
-                //auto *temp = json.get<TDef *>();
-                //auto *temp = json.get<space::ShipDefinition *>();
-                //_definitions.emplace(filename, std::unique_ptr<TDef>(temp));
-                return result;
-            }
+            std::vector<const BaseDefinition *> load(const std::string &filename);
+            void load_folder(const std::string &folder);
 
             const DefinitionMap &definitions() const;
+
+            template<typename TDef>
+            bool try_get(const std::string &id, const TDef **result) const
+            {
+                auto find = _definitions.find(id);
+                if (find == _definitions.end())
+                {
+                    return false;
+                }
+
+                auto casted = dynamic_cast<const TDef *>(find->second.get());
+                if (casted == nullptr)
+                {
+                    return false;
+                }
+
+                *result = casted;
+                return true;
+            }
 
         private:
 

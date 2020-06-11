@@ -27,28 +27,20 @@ int main()
     engine.spriteScale(4.0f);
 
     auto textureManager = engine.textureManager();
-    auto shipTexture = textureManager->load_texture("data/textures/ships/ship1.png");
+    textureManager->load_folder("data/textures");
 
-    engine.fontManager()->load_fonts("data/fonts");
+    auto definitionManager = engine.definitionManager();
 
-    // space::ShipDefinition shipDef;
-    // shipDef.id = "SHIP_1";
-    // shipDef.name = "Ship Def";
+    definitionManager->load_folder("data/definitions");
 
-    // nlohmann::json j = shipDef;
-
-    // std::cout << std::setw(4) << j << std::endl;
-    space::DefinitionManager defManager;
-
-    const space::ShipDefinition *shipDef = defManager.load<space::ShipDefinition>("data/definitions/ships.json");
-    if (shipDef != nullptr)
+    const space::ShipDefinition *shipDef;
+    if (definitionManager->try_get("SHIP_1", &shipDef))
     {
-        std::cout << "Loaded: " << shipDef->name << std::endl;
+        std::cout << "Ship Def: " << shipDef->name << std::endl;
     }
-    else
-    {
-        std::cout << "Failed to load :(" << std::endl;
-    }
+
+    engine.fontManager()->load_folder("data/fonts");
+    auto shipTexture = textureManager->get("data/textures/ships/ship1.png");
 
     auto sansFont = engine.fontManager()->font("LiberationSans-Regular");
 

@@ -3,6 +3,7 @@
 #include "non_copyable.hpp"
 #include "font_manager.hpp"
 #include "texture_manager.hpp"
+#include "definition_manager.hpp"
 
 #include <SFML/Graphics.hpp>
 
@@ -18,9 +19,11 @@ namespace space
 
             const FontManager *fontManager() const;
             const TextureManager *textureManager() const;
+            const DefinitionManager *definitionManager() const;
 
             FontManager *fontManager();
             TextureManager *textureManager();
+            DefinitionManager *definitionManager();
 
             float spriteScale() const;
             void spriteScale(float scale);
@@ -48,6 +51,7 @@ namespace space
         private:
             std::unique_ptr<FontManager> _fontManager;
             std::unique_ptr<TextureManager> _textureManager;
+            std::unique_ptr<DefinitionManager> _definitionManager;
 
             float _spriteScale;
             float _spriteSize;

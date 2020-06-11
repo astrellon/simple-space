@@ -14,6 +14,7 @@ namespace space
     {
         _fontManager = std::make_unique<FontManager>();
         _textureManager = std::make_unique<TextureManager>();
+        _definitionManager = std::make_unique<DefinitionManager>();
     }
     Engine::~Engine()
     {
@@ -30,6 +31,11 @@ namespace space
         return _textureManager.get();
     }
 
+    const DefinitionManager *Engine::definitionManager() const
+    {
+        return _definitionManager.get();
+    }
+
     FontManager *Engine::fontManager()
     {
         return _fontManager.get();
@@ -38,6 +44,11 @@ namespace space
     TextureManager *Engine::textureManager()
     {
         return _textureManager.get();
+    }
+
+    DefinitionManager *Engine::definitionManager()
+    {
+        return _definitionManager.get();
     }
 
     float Engine::spriteScale() const

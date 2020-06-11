@@ -5,11 +5,9 @@
 
 #include "utils.hpp"
 
-using recursive_directory_iterator = std::filesystem::recursive_directory_iterator;
-
 namespace space
 {
-    bool FontManager::load_font(const std::string &name, const std::string &filename)
+    bool FontManager::load(const std::string &name, const std::string &filename)
     {
         if (name.empty())
         {
@@ -22,13 +20,13 @@ namespace space
             return false;
         }
 
-        _fonts.emplace(name, std::move(font));
+        font.swap(_fonts[name]);
         return true;
     }
 
-    bool FontManager::load_fonts(const std::string &folder)
+    bool FontManager::load_folder(const std::string &folder)
     {
-        for (const auto& dirEntry : recursive_directory_iterator(folder))
+        for (const auto& dirEntry : std::filesystem::recursive_directory_iterator(folder))
         {
             if (dirEntry.is_directory())
             {
@@ -40,7 +38,7 @@ namespace space
 
             std::cout << "Loading font: " << name << " from " << filename << std::endl;
 
-            load_font(name, filename);
+            load(name, filename);
         }
 
         return true;

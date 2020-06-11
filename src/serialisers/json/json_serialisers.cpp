@@ -53,13 +53,13 @@ namespace space
 
     std::unique_ptr<ShipDefinition> from_json_ship_definition(const json &j)
     {
-        auto input = std::make_unique<ShipDefinition>();
-        j.at("id").get_to(input->id);
+        auto id = j.at("id").get<std::string>();
+        auto input = std::make_unique<ShipDefinition>(id);
         j.at("texturePath").get_to(input->texturePath);
         j.at("name").get_to(input->name);
         j.at("maxRotation").get_to(input->maxRotation);
         j.at("maxSpeed").get_to(input->maxSpeed);
 
-        return std::move(input);
+        return input;
     }
 } // namespace space
