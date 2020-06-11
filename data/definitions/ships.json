@@ -5,7 +5,7 @@
         "maxRotation": 0.0,
         "maxSpeed": 0.0,
         "name": "Ship Def",
-        "texturePath": ""
+        "texturePath": "data/textures/ships/ship1.png"
     },
     {
         "type": "ship",
@@ -13,6 +13,6 @@
         "maxRotation": 0.0,
         "maxSpeed": 0.0,
         "name": "Ship Def 2",
-        "texturePath": ""
+        "texturePath": "data/textures/ships/ship1.png"
     }
 ]

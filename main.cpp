@@ -29,9 +29,12 @@ int main()
     auto textureManager = engine.textureManager();
     textureManager->load_folder("data/textures");
 
-    auto definitionManager = engine.definitionManager();
+    engine.fontManager()->load_folder("data/fonts");
 
+    auto definitionManager = engine.definitionManager();
     definitionManager->load_folder("data/definitions");
+
+    definitionManager->on_post_load(&engine);
 
     const space::ShipDefinition *shipDef;
     if (definitionManager->try_get("SHIP_1", &shipDef))
@@ -39,7 +42,6 @@ int main()
         std::cout << "Ship Def: " << shipDef->name << std::endl;
     }
 
-    engine.fontManager()->load_folder("data/fonts");
     auto shipTexture = textureManager->get("data/textures/ships/ship1.png");
 
     auto sansFont = engine.fontManager()->font("LiberationSans-Regular");

@@ -8,6 +8,7 @@
 namespace space
 {
     typedef std::string DefinitionId;
+    class Engine;
 
     class BaseDefinition : private NonCopyable
     {
@@ -19,5 +20,7 @@ namespace space
 
             // Constructor
             BaseDefinition(const DefinitionId id) : id(id) { }
+
+            virtual void on_post_load(Engine *engine) { }
     };
 } // space

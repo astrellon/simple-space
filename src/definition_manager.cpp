@@ -61,9 +61,18 @@ namespace space
             load(filename);
         }
     }
+
     const DefinitionManager::DefinitionMap &DefinitionManager::definitions() const
     {
         return _definitions;
+    }
+
+    void DefinitionManager::on_post_load(Engine *engine)
+    {
+        for (auto &it : _definitions)
+        {
+            it.second->on_post_load(engine);
+        }
     }
 }
 

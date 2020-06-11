@@ -16,6 +16,8 @@
 
 namespace space
 {
+    class Engine;
+
     class DefinitionManager : private NonCopyable
     {
         public:
@@ -25,6 +27,8 @@ namespace space
             void load_folder(const std::string &folder);
 
             const DefinitionMap &definitions() const;
+
+            void on_post_load(Engine *engine);
 
             template<typename TDef>
             bool try_get(const std::string &id, const TDef **result) const
