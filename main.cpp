@@ -18,6 +18,7 @@
 #include "src/serialisers/json/json.hpp"
 #include "src/definition_manager.hpp"
 #include "src/game/ship.hpp"
+#include "src/keyboard.hpp"
 
 int main()
 {
@@ -49,7 +50,9 @@ int main()
     auto spriteScale = engine.spriteScale();
 
     auto gameSession = engine.startGameSession();
-    auto ship = gameSession->createShip("SHIP", *shipDef);
+    auto ship = gameSession->createShip("PLAYER", *shipDef);
+    auto ship2 = gameSession->createShip("OTHER", *shipDef);
+    ship2->transform().position += sf::Vector2f(200, 0);
 
     engine.camera().setFollowing(ship->id);
 
@@ -60,6 +63,37 @@ int main()
     {
         engine.processEvents();
         engine.preUpdate();
+
+        sf::Vector2f moveInput;
+        float rotateInput = 0;
+        if (space::Keyboard::isKeyPressed(sf::Keyboard::A))
+        {
+            moveInput.x -= 1;
+        }
+        if (space::Keyboard::isKeyPressed(sf::Keyboard::D))
+        {
+            moveInput.x += 1;
+        }
+        if (space::Keyboard::isKeyPressed(sf::Keyboard::W))
+        {
+            moveInput.y -= 1;
+        }
+        if (space::Keyboard::isKeyPressed(sf::Keyboard::S))
+        {
+            moveInput.y += 1;
+        }
+        if (space::Keyboard::isKeyPressed(sf::Keyboard::Q))
+        {
+            rotateInput -= 1;
+        }
+        if (space::Keyboard::isKeyPressed(sf::Keyboard::E))
+        {
+            rotateInput += 1;
+        }
+
+        ship->moveInput = moveInput;
+        ship->rotateInput = rotateInput;
+
         engine.update();
         engine.draw();
 

@@ -17,8 +17,7 @@ namespace space
             SpaceObject *followingObject;
             if (_engine.currentSession()->tryGetSpaceObject(_followingId, &followingObject))
             {
-                const auto &trans = followingObject->transform().getMatrix();
-                _view.setCenter(sf::Vector2f(trans[3], trans[7]));
+                _view.setCenter(followingObject->transform().position);
             }
         }
     }
@@ -26,6 +25,11 @@ namespace space
     void Camera::setSize(sf::Vector2f size)
     {
         _view.setSize(size);
+    }
+
+    void Camera::setCenter(sf::Vector2f center)
+    {
+        _view.setCenter(center);
     }
 
     void Camera::setFollowing(const ObjectId &id)

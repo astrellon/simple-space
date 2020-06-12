@@ -5,6 +5,7 @@
 #include <vector>
 #include <random>
 
+#include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 
 namespace space
@@ -55,6 +56,14 @@ namespace space
                 auto x = paraLerp(init.x, target.x, t);
                 auto y = paraLerp(init.y, target.y, t);
                 return sf::Vector2f(x, y);
+            }
+
+            static inline sf::Vector2f transformDirection(const sf::Vector2f &direction, const sf::Transform &transform)
+            {
+                const auto mats = transform.getMatrix();
+
+                return sf::Vector2f(mats[0] * direction.x + mats[4] * direction.y,
+                    mats[1] * direction.x + mats[5] * direction.y);
             }
 
         private:

@@ -1,5 +1,7 @@
 #include "ship.hpp"
 
+#include "../utils.hpp"
+
 namespace space
 {
     Ship::Ship(const ObjectId &id, const ShipDefinition &definition):
@@ -11,12 +13,17 @@ namespace space
 
     void Ship::update(sf::Time dt)
     {
-        _transform.rotate(dt.asSeconds() * 15);
+        auto seconds = dt.asSeconds();
+        _speed += Utils::transformDirection(moveInput, _transform.getTransform());
+        _rotationSpeed += rotateInput;
+
+        _transform.position += _speed * seconds;
+        _transform.rotation += _rotationSpeed * seconds;
     }
 
     void Ship::draw(sf::RenderTarget &target, const sf::Transform &parentTransform)
     {
-        const auto combinedTransform = parentTransform * _transform;
+        const auto combinedTransform = parentTransform * _transform.getTransform();
         target.draw(_sprite, combinedTransform);
     }
 }

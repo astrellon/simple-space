@@ -5,6 +5,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "../non_copyable.hpp"
+#include "../space_transform.hpp"
 
 namespace space
 {
@@ -20,14 +21,16 @@ namespace space
             SpaceObject(const ObjectId &id) : id(id) { }
 
             // Methods
-            sf::Transform transform() const { return _transform; }
+            const SpaceTransform &transform() const { return _transform; }
+            SpaceTransform &transform() { return _transform; }
 
             virtual void update(sf::Time dt) = 0;
             virtual void draw(sf::RenderTarget &target, const sf::Transform &parentTransform) = 0;
 
         protected:
             // Fields
-            sf::Transform _transform;
+            //sf::Transform _transform;
+            SpaceTransform _transform;
 
             // Methods
     };

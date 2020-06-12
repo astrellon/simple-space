@@ -19,6 +19,7 @@ namespace space
             // Methods
             void update(sf::Time dt);
             void setSize(sf::Vector2f size);
+            void setCenter(sf::Vector2f center);
             void setFollowing(const ObjectId &id);
             void setFollowing(bool follow);
 
