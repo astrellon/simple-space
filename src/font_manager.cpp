@@ -24,7 +24,7 @@ namespace space
         return true;
     }
 
-    bool FontManager::load_folder(const std::string &folder)
+    bool FontManager::loadFolder(const std::string &folder)
     {
         for (const auto& dirEntry : std::filesystem::recursive_directory_iterator(folder))
         {
@@ -34,7 +34,7 @@ namespace space
             }
 
             const auto &filename = dirEntry.path().string();
-            auto name = Utils::filename_without_ext(filename);
+            auto name = Utils::filenameWithoutExt(filename);
 
             std::cout << "Loading font: " << name << " from " << filename << std::endl;
 

@@ -21,6 +21,6 @@ namespace space
             // Constructor
             BaseDefinition(const DefinitionId &id);
 
-            virtual void on_post_load(Engine &engine);
+            virtual void onPostLoad(Engine &engine);
     };
 } // space

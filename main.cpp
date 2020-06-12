@@ -28,17 +28,17 @@ int main()
     engine.spriteScale(4.0f);
 
     auto &textureManager = engine.textureManager();
-    textureManager.load_folder("data/textures");
+    textureManager.loadFolder("data/textures");
 
-    engine.fontManager().load_folder("data/fonts");
+    engine.fontManager().loadFolder("data/fonts");
 
     auto &definitionManager = engine.definitionManager();
-    definitionManager.load_folder("data/definitions");
+    definitionManager.loadFolder("data/definitions");
 
-    definitionManager.on_post_load(engine);
+    definitionManager.onPostLoad(engine);
 
     const space::ShipDefinition *shipDef;
-    if (definitionManager.try_get("SHIP_1", &shipDef))
+    if (definitionManager.tryGet("SHIP_1", &shipDef))
     {
         std::cout << "Ship Def: " << shipDef->name << std::endl;
     }

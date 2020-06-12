@@ -47,7 +47,7 @@ namespace space
         return ltrim(rtrim(str));
     }
 
-    std::string Utils::filename_without_ext(const std::string &str)
+    std::string Utils::filenameWithoutExt(const std::string &str)
     {
         int sepIndex = str.find_last_of('/');
         if (sepIndex == std::string::npos)
@@ -66,24 +66,5 @@ namespace space
         }
 
         return str.substr(sepIndex + 1, dotIndex - sepIndex - 1);
-    }
-
-    void Utils::readCSVLines(const std::string &filename, Utils::LineReader lineReader)
-    {
-        std::ifstream data(filename);
-
-        std::string line;
-        while (std::getline(data, line))
-        {
-            if (line.size() == 0 || line[0] == '#')
-            {
-                continue;
-            }
-
-            if (!lineReader(line))
-            {
-                break;
-            }
-        }
     }
 }

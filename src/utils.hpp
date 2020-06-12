@@ -18,10 +18,7 @@ namespace space
             static std::string &ltrim(std::string &str);
             static std::string &trim(std::string &str);
 
-            static std::string filename_without_ext(const std::string &str);
-
-            typedef std::function<bool (const std::string &)> LineReader;
-            static void readCSVLines(const std::string &filename, LineReader lineReader);
+            static std::string filenameWithoutExt(const std::string &str);
 
             static inline float randf(float min = 0.0f, float max = 1.0f)
             {
@@ -47,16 +44,16 @@ namespace space
                 return sf::Vector2f(x, y);
             }
 
-            static inline float para_lerp(float init, float target, float t)
+            static inline float paraLerp(float init, float target, float t)
             {
                 auto x = (t - 1);
                 x = -x*x + 1;
                 return (target - init) * x + init;
             }
-            static inline sf::Vector2f para_lerp(const sf::Vector2f &init, const sf::Vector2f &target, float t)
+            static inline sf::Vector2f paraLerp(const sf::Vector2f &init, const sf::Vector2f &target, float t)
             {
-                auto x = para_lerp(init.x, target.x, t);
-                auto y = para_lerp(init.y, target.y, t);
+                auto x = paraLerp(init.x, target.x, t);
+                auto y = paraLerp(init.y, target.y, t);
                 return sf::Vector2f(x, y);
             }
 

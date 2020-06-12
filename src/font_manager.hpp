@@ -15,7 +15,7 @@ namespace space
             typedef std::map<std::string, std::unique_ptr<sf::Font>> FontMap;
 
             bool load(const std::string &name, const std::string &filename);
-            bool load_folder(const std::string &folder);
+            bool loadFolder(const std::string &folder);
 
             const FontMap &fonts() const;
             const sf::Font *font(const std::string &name) const;

@@ -4,7 +4,7 @@
 
 namespace space
 {
-    void ShipDefinition::on_post_load(Engine &engine)
+    void ShipDefinition::onPostLoad(Engine &engine)
     {
         texture = engine.textureManager().get(texturePath);
     }

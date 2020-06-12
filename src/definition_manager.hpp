@@ -24,14 +24,14 @@ namespace space
             typedef std::map<DefinitionId, std::unique_ptr<BaseDefinition>> DefinitionMap;
 
             std::vector<const BaseDefinition *> load(const std::string &filename);
-            void load_folder(const std::string &folder);
+            void loadFolder(const std::string &folder);
 
             const DefinitionMap &definitions() const;
 
-            void on_post_load(Engine &engine);
+            void onPostLoad(Engine &engine);
 
             template<typename TDef>
-            bool try_get(const std::string &id, const TDef **result) const
+            bool tryGet(const std::string &id, const TDef **result) const
             {
                 auto find = _definitions.find(id);
                 if (find == _definitions.end())

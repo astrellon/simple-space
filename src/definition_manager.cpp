@@ -29,7 +29,7 @@ namespace space
 
         for (auto it : json)
         {
-            auto temp = from_json_base_definition(it);
+            auto temp = fromJsonBaseDefinition(it);
             if (temp == nullptr)
             {
                 std::cout << "Unable to parse definition json" << std::endl;
@@ -45,7 +45,7 @@ namespace space
         return result;
     }
 
-    void DefinitionManager::load_folder(const std::string &folder)
+    void DefinitionManager::loadFolder(const std::string &folder)
     {
         for (const auto& dirEntry : std::filesystem::recursive_directory_iterator(folder))
         {
@@ -67,11 +67,11 @@ namespace space
         return _definitions;
     }
 
-    void DefinitionManager::on_post_load(Engine &engine)
+    void DefinitionManager::onPostLoad(Engine &engine)
     {
         for (auto &it : _definitions)
         {
-            it.second->on_post_load(engine);
+            it.second->onPostLoad(engine);
         }
     }
 }

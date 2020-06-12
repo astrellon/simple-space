@@ -25,7 +25,7 @@ namespace space
             static const std::string DefinitionType() { return "ship"; }
             std::string type() const { return DefinitionType(); }
 
-            virtual void on_post_load(Engine &engine);
+            virtual void onPostLoad(Engine &engine);
 
             // Constructor
             ShipDefinition(DefinitionId id) :

@@ -28,13 +28,13 @@ namespace space
         return j;
     }
 
-    std::unique_ptr<BaseDefinition> from_json_base_definition(const json &j)
+    std::unique_ptr<BaseDefinition> fromJsonBaseDefinition(const json &j)
     {
         auto type = j.at("type").get<std::string>();
 
         if (type == ShipDefinition::DefinitionType())
         {
-            return from_json_ship_definition(j);
+            return fromJsonShipDefinition(j);
         }
 
         throw std::runtime_error("Oh no");
@@ -51,7 +51,7 @@ namespace space
         };
     }
 
-    std::unique_ptr<ShipDefinition> from_json_ship_definition(const json &j)
+    std::unique_ptr<ShipDefinition> fromJsonShipDefinition(const json &j)
     {
         auto id = j.at("id").get<std::string>();
         auto input = std::make_unique<ShipDefinition>(id);

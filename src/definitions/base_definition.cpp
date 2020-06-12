@@ -7,7 +7,7 @@ namespace space
 
     }
 
-    void BaseDefinition::on_post_load(Engine &engine)
+    void BaseDefinition::onPostLoad(Engine &engine)
     {
 
     }

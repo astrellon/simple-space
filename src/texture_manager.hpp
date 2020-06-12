@@ -15,7 +15,7 @@ namespace space
             typedef std::map<std::string, std::unique_ptr<sf::Texture>> TextureMap;
 
             const sf::Texture *get(const std::string &filename);
-            void load_folder(const std::string &folder);
+            void loadFolder(const std::string &folder);
 
             const TextureMap &textures() const;
 

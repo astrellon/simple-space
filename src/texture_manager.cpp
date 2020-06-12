@@ -28,7 +28,7 @@ namespace space
         return result;
     }
 
-    void TextureManager::load_folder(const std::string &folder)
+    void TextureManager::loadFolder(const std::string &folder)
     {
         for (const auto& dirEntry : std::filesystem::recursive_directory_iterator(folder))
         {
