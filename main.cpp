@@ -26,7 +26,7 @@ int main()
     window.setVerticalSyncEnabled(true);
 
     space::Engine engine(window);
-    engine.spriteScale(4.0f);
+    engine.spriteScale(2.0f);
 
     auto &textureManager = engine.textureManager();
     textureManager.loadFolder("data/textures");
@@ -96,9 +96,6 @@ int main()
 
         engine.update();
         engine.draw();
-
-        // window.draw(text);
-        // window.display();
     }
 
     return 0;
