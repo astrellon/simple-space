@@ -28,7 +28,7 @@ namespace space
 
             const DefinitionMap &definitions() const;
 
-            void on_post_load(Engine *engine);
+            void on_post_load(Engine &engine);
 
             template<typename TDef>
             bool try_get(const std::string &id, const TDef **result) const

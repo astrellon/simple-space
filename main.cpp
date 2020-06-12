@@ -17,6 +17,7 @@
 #include "src/serialisers/json/json_serialisers.hpp"
 #include "src/serialisers/json/json.hpp"
 #include "src/definition_manager.hpp"
+#include "src/game/ship.hpp"
 
 int main()
 {
@@ -26,31 +27,31 @@ int main()
     space::Engine engine(window);
     engine.spriteScale(4.0f);
 
-    auto textureManager = engine.textureManager();
-    textureManager->load_folder("data/textures");
+    auto &textureManager = engine.textureManager();
+    textureManager.load_folder("data/textures");
 
-    engine.fontManager()->load_folder("data/fonts");
+    engine.fontManager().load_folder("data/fonts");
 
-    auto definitionManager = engine.definitionManager();
-    definitionManager->load_folder("data/definitions");
+    auto &definitionManager = engine.definitionManager();
+    definitionManager.load_folder("data/definitions");
 
-    definitionManager->on_post_load(&engine);
+    definitionManager.on_post_load(engine);
 
     const space::ShipDefinition *shipDef;
-    if (definitionManager->try_get("SHIP_1", &shipDef))
+    if (definitionManager.try_get("SHIP_1", &shipDef))
     {
         std::cout << "Ship Def: " << shipDef->name << std::endl;
     }
 
-    auto shipTexture = textureManager->get("data/textures/ships/ship1.png");
-
-    auto sansFont = engine.fontManager()->font("LiberationSans-Regular");
+    auto sansFont = engine.fontManager().font("LiberationSans-Regular");
 
     auto spriteSize = static_cast<uint>(engine.spriteSize());
     auto spriteScale = engine.spriteScale();
 
     auto gameSession = engine.startGameSession();
-    auto ship = gameSession->createShip(shipTexture, 10, 10);
+    auto ship = gameSession->createShip("SHIP", *shipDef);
+
+    engine.camera().setFollowing(ship->id);
 
     sf::Text text("hello", *sansFont);
     text.setCharacterSize(72);

@@ -2,6 +2,13 @@
 
 namespace space
 {
+    Ship::Ship(const ObjectId &id, const ShipDefinition &definition):
+        SpaceObject(id), definition(definition), _sprite(*definition.texture)
+    {
+        auto size = definition.texture->getSize();
+        _sprite.setOrigin(size.x / 2, size.y / 2);
+    }
+
     void Ship::update(sf::Time dt)
     {
         _transform.rotate(dt.asSeconds() * 15);
@@ -12,10 +19,6 @@ namespace space
         sf::RenderStates state;
         state.transform = _transform;
 
-        sf::Sprite sprite;
-        sprite.setTexture(*_texture);
-        sprite.setOrigin(32, 32);
-
-        target.draw(sprite, state);
+        target.draw(_sprite, state);
     }
 }

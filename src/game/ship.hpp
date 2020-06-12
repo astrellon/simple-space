@@ -3,47 +3,37 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 
-#include "../non_copyable.hpp"
+#include "space_object.hpp"
+#include "../definitions/ship_definition.hpp"
 
 namespace space
 {
-    class Ship : private NonCopyable
+    class Ship : public SpaceObject
     {
         public:
             // Fields
+            const ShipDefinition &definition;
 
             // Constructor
-            Ship(const sf::Texture *texture, float maxRotation, float maxSpeed): _texture(texture), _maxRotation(maxRotation), _maxSpeed(maxSpeed)
-            {
-
-            }
+            Ship(const ObjectId &id, const ShipDefinition &definition);
 
             // Methods
-            sf::Transform transform() const { return _transform; }
 
             float rotationSpeed() const { return _rotationSpeed; }
             sf::Vector2f speed() const { return _speed; }
 
-            float maxRotation() const { return _maxRotation; }
-            float maxSpeed() const { return _maxSpeed; }
-
-            void update(sf::Time dt);
-            void draw(sf::RenderTarget &target);
+            virtual void update(sf::Time dt);
+            virtual void draw(sf::RenderTarget &target);
 
         private:
             // Fields
-            const sf::Texture *_texture;
 
             // Location
-            sf::Transform _transform;
+            sf::Sprite _sprite;
 
             // Current speeds
             float _rotationSpeed;
             sf::Vector2f _speed;
-
-            // Limits
-            float _maxRotation;
-            float _maxSpeed;
 
             // Methods
     };

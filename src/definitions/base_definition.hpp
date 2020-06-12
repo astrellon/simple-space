@@ -19,8 +19,8 @@ namespace space
             virtual std::string type() const = 0;
 
             // Constructor
-            BaseDefinition(const DefinitionId id) : id(id) { }
+            BaseDefinition(const DefinitionId &id);
 
-            virtual void on_post_load(Engine *engine) { }
+            virtual void on_post_load(Engine &engine);
     };
 } // space

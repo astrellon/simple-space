@@ -4,6 +4,7 @@
 #include "font_manager.hpp"
 #include "texture_manager.hpp"
 #include "definition_manager.hpp"
+#include "camera.hpp"
 
 #include <SFML/Graphics.hpp>
 
@@ -17,13 +18,15 @@ namespace space
             Engine(sf::RenderWindow &window);
             ~Engine();
 
-            const FontManager *fontManager() const;
-            const TextureManager *textureManager() const;
-            const DefinitionManager *definitionManager() const;
+            const FontManager &fontManager() const;
+            const TextureManager &textureManager() const;
+            const DefinitionManager &definitionManager() const;
+            const Camera &camera() const;
 
-            FontManager *fontManager();
-            TextureManager *textureManager();
-            DefinitionManager *definitionManager();
+            FontManager &fontManager();
+            TextureManager &textureManager();
+            DefinitionManager &definitionManager();
+            Camera &camera();
 
             float spriteScale() const;
             void spriteScale(float scale);
@@ -44,6 +47,8 @@ namespace space
             sf::Time deltaTime() const;
             sf::Time timeSinceStart() const;
 
+            void onResize(sf::Vector2f area);
+
             void preUpdate();
             void update();
             void draw();
@@ -52,6 +57,8 @@ namespace space
             std::unique_ptr<FontManager> _fontManager;
             std::unique_ptr<TextureManager> _textureManager;
             std::unique_ptr<DefinitionManager> _definitionManager;
+
+            Camera _camera;
 
             float _spriteScale;
             float _spriteSize;

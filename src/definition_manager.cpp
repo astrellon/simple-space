@@ -67,7 +67,7 @@ namespace space
         return _definitions;
     }
 
-    void DefinitionManager::on_post_load(Engine *engine)
+    void DefinitionManager::on_post_load(Engine &engine)
     {
         for (auto &it : _definitions)
         {

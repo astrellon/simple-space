@@ -10,7 +10,8 @@
 namespace space
 {
     Engine::Engine(sf::RenderWindow &window) :
-        _spriteScale(1.0f), _spriteSize(16.0f), _window(window), _deltaTime(sf::Time::Zero)
+        _spriteScale(1.0f), _spriteSize(16.0f), _window(window), _deltaTime(sf::Time::Zero),
+        _camera(*this)
     {
         _fontManager = std::make_unique<FontManager>();
         _textureManager = std::make_unique<TextureManager>();
@@ -21,34 +22,44 @@ namespace space
 
     }
 
-    const FontManager *Engine::fontManager() const
+    const FontManager &Engine::fontManager() const
     {
-        return _fontManager.get();
+        return *_fontManager.get();
     }
 
-    const TextureManager *Engine::textureManager() const
+    const TextureManager &Engine::textureManager() const
     {
-        return _textureManager.get();
+        return *_textureManager.get();
     }
 
-    const DefinitionManager *Engine::definitionManager() const
+    const DefinitionManager &Engine::definitionManager() const
     {
-        return _definitionManager.get();
+        return *_definitionManager.get();
     }
 
-    FontManager *Engine::fontManager()
+    const Camera &Engine::camera() const
     {
-        return _fontManager.get();
+        return _camera;
     }
 
-    TextureManager *Engine::textureManager()
+    FontManager &Engine::fontManager()
     {
-        return _textureManager.get();
+        return *_fontManager.get();
     }
 
-    DefinitionManager *Engine::definitionManager()
+    TextureManager &Engine::textureManager()
     {
-        return _definitionManager.get();
+        return *_textureManager.get();
+    }
+
+    DefinitionManager &Engine::definitionManager()
+    {
+        return *_definitionManager.get();
+    }
+
+    Camera &Engine::camera()
+    {
+        return _camera;
     }
 
     float Engine::spriteScale() const
@@ -85,7 +96,7 @@ namespace space
     }
     GameSession *Engine::startGameSession()
     {
-        _currentSession = std::make_unique<GameSession>(this);
+        _currentSession = std::make_unique<GameSession>(*this);
         return _currentSession.get();
     }
 
@@ -110,14 +121,8 @@ namespace space
         else if (event.type == sf::Event::Resized)
         {
             // update the view to the new size of the window
-            sf::FloatRect visibleArea(0.f, 0.f, event.size.width, event.size.height);
-            _window.setView(sf::View(visibleArea));
-
-            if (_currentSession.get() != nullptr)
-            {
-                sf::Vector2f area(event.size.width, event.size.height);
-                _currentSession->onResize(area);
-            }
+            sf::Vector2f area(event.size.width, event.size.height);
+            onResize(area);
         }
         else if (event.type == sf::Event::KeyPressed)
         {
@@ -138,6 +143,11 @@ namespace space
         return _timerSinceStart.getElapsedTime();
     }
 
+    void Engine::onResize(sf::Vector2f area)
+    {
+        _camera.setSize(area);
+    }
+
     void Engine::preUpdate()
     {
         _deltaTime = _timer.getElapsedTime();
@@ -150,11 +160,14 @@ namespace space
         {
             _currentSession->update(_deltaTime);
         }
+
+        _camera.update(_deltaTime);
     }
 
     void Engine::draw()
     {
         _window.clear();
+        _window.setView(_camera.view());
         if (_currentSession.get())
         {
             _currentSession->draw(_window);

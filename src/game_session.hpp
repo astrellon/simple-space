@@ -5,6 +5,9 @@
 
 #include <SFML/Graphics.hpp>
 
+#include "definitions/ship_definition.hpp"
+#include "game/space_object.hpp"
+
 namespace space
 {
     class Ship;
@@ -13,21 +16,20 @@ namespace space
     class GameSession
     {
         public:
-            GameSession(Engine *engine);
+            GameSession(Engine &engine);
             ~GameSession();
 
-            Ship *createShip(const sf::Texture *texture, float maxRotation, float maxSpeed);
+            Ship *createShip(const ObjectId &id, const ShipDefinition &definition);
 
-            void onResize(sf::Vector2f area);
+            bool tryGetSpaceObject(const ObjectId &id, SpaceObject **result);
 
             void update(sf::Time dt);
             void draw(sf::RenderTarget &target);
 
         private:
-            Engine *_engine;
-            sf::View _camera;
+            Engine &_engine;
 
-            std::vector<std::unique_ptr<Ship>> _ships;
+            std::vector<std::unique_ptr<SpaceObject>> _spaceObjects;
 
     };
 } // town

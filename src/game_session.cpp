@@ -2,10 +2,11 @@
 
 #include "engine.hpp"
 #include "game/ship.hpp"
+#include "definitions/ship_definition.hpp"
 
 namespace space
 {
-    GameSession::GameSession(Engine *engine) : _engine(engine)
+    GameSession::GameSession(Engine &engine) : _engine(engine)
     {
 
     }
@@ -14,30 +15,42 @@ namespace space
 
     }
 
-    Ship *GameSession::createShip(const sf::Texture *texture, float maxRotation, float maxSpeed)
+    Ship *GameSession::createShip(const ObjectId &id, const ShipDefinition &definition)
     {
-        auto &ship = _ships.emplace_back(std::make_unique<Ship>(texture, maxRotation, maxSpeed));
-        return ship.get();
+        auto ship = std::make_unique<Ship>(id, definition);
+        auto result = ship.get();
+        _spaceObjects.emplace_back(std::move(ship));
+
+        return result;
     }
 
-    void GameSession::onResize(sf::Vector2f area)
+    bool GameSession::tryGetSpaceObject(const ObjectId &id, SpaceObject **result)
     {
-        _camera.setSize(area);
+        for (auto &obj : _spaceObjects)
+        {
+            if (obj->id == id)
+            {
+                *result = obj.get();
+                return true;
+            }
+        }
+
+        return false;
     }
 
     void GameSession::update(sf::Time dt)
     {
-        for (auto &ship : _ships)
+        for (auto &spaceObject : _spaceObjects)
         {
-            ship->update(dt);
+            spaceObject->update(dt);
         }
     }
 
     void GameSession::draw(sf::RenderTarget &target)
     {
-        for (auto &ship : _ships)
+        for (auto &spaceObject : _spaceObjects)
         {
-            ship->draw(target);
+            spaceObject->draw(target);
         }
         // if (_currentMap != nullptr)
         // {
