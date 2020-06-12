@@ -14,11 +14,9 @@ namespace space
         _transform.rotate(dt.asSeconds() * 15);
     }
 
-    void Ship::draw(sf::RenderTarget &target)
+    void Ship::draw(sf::RenderTarget &target, const sf::Transform &parentTransform)
     {
-        sf::RenderStates state;
-        state.transform = _transform;
-
-        target.draw(_sprite, state);
+        const auto combinedTransform = parentTransform * _transform;
+        target.draw(_sprite, combinedTransform);
     }
 }

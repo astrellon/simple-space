@@ -23,7 +23,7 @@ namespace space
             sf::Vector2f speed() const { return _speed; }
 
             virtual void update(sf::Time dt);
-            virtual void draw(sf::RenderTarget &target);
+            virtual void draw(sf::RenderTarget &target, const sf::Transform &parentTransform);
 
         private:
             // Fields

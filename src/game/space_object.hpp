@@ -23,7 +23,7 @@ namespace space
             sf::Transform transform() const { return _transform; }
 
             virtual void update(sf::Time dt) = 0;
-            virtual void draw(sf::RenderTarget &target) = 0;
+            virtual void draw(sf::RenderTarget &target, const sf::Transform &parentTransform) = 0;
 
         protected:
             // Fields

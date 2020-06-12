@@ -50,7 +50,7 @@ namespace space
     {
         for (auto &spaceObject : _spaceObjects)
         {
-            spaceObject->draw(target);
+            spaceObject->draw(target, sf::Transform::Identity);
         }
         // if (_currentMap != nullptr)
         // {
