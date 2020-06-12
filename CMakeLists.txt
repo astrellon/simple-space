@@ -6,9 +6,9 @@ project(space)
 # set(SFML_STATIC_LIBRARIES TRUE)
 
 file(GLOB src_files
-    "src/*.cpp",
-    "src/game/*.cpp",
-    "src/definitions/*.cpp",
+    "src/*.cpp"
+    "src/game/*.cpp"
+    "src/definitions/*.cpp"
     "src/serialisers/json/*.cpp"
 )
 
