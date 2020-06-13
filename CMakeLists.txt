@@ -12,6 +12,12 @@ file(GLOB src_files
     "src/serialisers/json/*.cpp"
 )
 
+find_package(GLEW REQUIRED)
+if (GLEW_FOUND)
+    include_directories(${GLEW_INCLUDE_DIRS})
+    link_libraries(${GLEW_LIBRARIES})
+endif()
+
 add_executable(space main.cpp ${src_files})
 target_link_libraries(space sfml-graphics sfml-audio sfml-window sfml-system)
 target_include_directories(space PRIVATE src)

@@ -4,7 +4,9 @@
 #include "font_manager.hpp"
 #include "texture_manager.hpp"
 #include "definition_manager.hpp"
+#include "shader_manager.hpp"
 #include "camera.hpp"
+#include "particles.hpp"
 
 #include <SFML/Graphics.hpp>
 
@@ -21,11 +23,13 @@ namespace space
             const FontManager &fontManager() const;
             const TextureManager &textureManager() const;
             const DefinitionManager &definitionManager() const;
+            const ShaderManager &shaderManager() const;
             const Camera &camera() const;
 
             FontManager &fontManager();
             TextureManager &textureManager();
             DefinitionManager &definitionManager();
+            ShaderManager &shaderManager();
             Camera &camera();
 
             float spriteScale() const;
@@ -57,6 +61,9 @@ namespace space
             std::unique_ptr<FontManager> _fontManager;
             std::unique_ptr<TextureManager> _textureManager;
             std::unique_ptr<DefinitionManager> _definitionManager;
+            std::unique_ptr<ShaderManager> _shaderManager;
+
+            Particles _particles;
 
             Camera _camera;
 

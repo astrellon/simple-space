@@ -48,6 +48,8 @@ namespace space
             {"name", input->name},
             {"maxRotation", input->maxRotation},
             {"maxSpeed", input->maxSpeed},
+            {"turnRate", input->turnRate},
+            {"acceleration", input->acceleration},
         };
     }
 
@@ -59,6 +61,8 @@ namespace space
         j.at("name").get_to(input->name);
         j.at("maxRotation").get_to(input->maxRotation);
         j.at("maxSpeed").get_to(input->maxSpeed);
+        j.at("turnRate").get_to(input->turnRate);
+        j.at("acceleration").get_to(input->acceleration);
 
         return input;
     }

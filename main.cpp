@@ -1,3 +1,4 @@
+#include <GL/glew.h>
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 
@@ -22,11 +23,19 @@
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(1280, 800), "Starter");
+    sf::ContextSettings settings;
+    settings.majorVersion = 3;
+    settings.minorVersion = 0;
+
+    sf::RenderWindow window(sf::VideoMode(1280, 800), "Space", sf::Style::Default, settings);
     window.setVerticalSyncEnabled(true);
+
+    glewInit();
 
     space::Engine engine(window);
     engine.spriteScale(2.0f);
+
+    engine.shaderManager().load("particles", "data/shaders/particles.vert", "data/shaders/particles.frag");
 
     auto &textureManager = engine.textureManager();
     textureManager.loadFolder("data/textures");

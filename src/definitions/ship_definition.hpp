@@ -16,8 +16,11 @@ namespace space
             // Fields
             std::string texturePath;
             std::string name;
+
             float maxRotation;
+            float turnRate;
             float maxSpeed;
+            float acceleration;
 
             const sf::Texture *texture;
 

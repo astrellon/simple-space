@@ -6,16 +6,20 @@
 #include "utils.hpp"
 #include "game_session.hpp"
 #include "keyboard.hpp"
+#include "particles.hpp"
+
+#include <SFML/OpenGL.hpp>
 
 namespace space
 {
     Engine::Engine(sf::RenderWindow &window) :
         _spriteScale(1.0f), _spriteSize(16.0f), _window(window), _deltaTime(sf::Time::Zero),
-        _camera(*this)
+        _camera(*this), _particles(*this, 1000000)
     {
         _fontManager = std::make_unique<FontManager>();
         _textureManager = std::make_unique<TextureManager>();
         _definitionManager = std::make_unique<DefinitionManager>();
+        _shaderManager = std::make_unique<ShaderManager>();
     }
     Engine::~Engine()
     {
@@ -37,6 +41,11 @@ namespace space
         return *_definitionManager.get();
     }
 
+    const ShaderManager &Engine::shaderManager() const
+    {
+        return *_shaderManager.get();
+    }
+
     const Camera &Engine::camera() const
     {
         return _camera;
@@ -55,6 +64,11 @@ namespace space
     DefinitionManager &Engine::definitionManager()
     {
         return *_definitionManager.get();
+    }
+
+    ShaderManager &Engine::shaderManager()
+    {
+        return *_shaderManager.get();
     }
 
     Camera &Engine::camera()
@@ -160,6 +174,7 @@ namespace space
         {
             _currentSession->update(_deltaTime);
         }
+        _particles.update(_deltaTime);
 
         _camera.update(_deltaTime);
     }
@@ -172,6 +187,8 @@ namespace space
         {
             _currentSession->draw(_window);
         }
+
+        _particles.draw(_window, sf::Transform::Identity);
 
         _window.display();
     }

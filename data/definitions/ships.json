@@ -2,16 +2,20 @@
     {
         "type": "ship",
         "id": "SHIP_1",
-        "maxRotation": 0.0,
-        "maxSpeed": 0.0,
+        "maxRotation": 5.0,
+        "maxSpeed": 5.0,
+        "turnRate": 5.0,
+        "acceleration": 5.0,
         "name": "Ship Def",
         "texturePath": "data/textures/ships/ship1.png"
     },
     {
         "type": "ship",
         "id": "SHIP_2",
-        "maxRotation": 0.0,
-        "maxSpeed": 0.0,
+        "maxRotation": 5.0,
+        "maxSpeed": 5.0,
+        "turnRate": 5.0,
+        "acceleration": 5.0,
         "name": "Ship Def 2",
         "texturePath": "data/textures/ships/ship1.png"
     }
