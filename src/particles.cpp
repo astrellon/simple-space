@@ -40,44 +40,45 @@ namespace space
             _positions.resize(_numParticles);
             _colours.resize(_numParticles);
 
-            for (auto &particle : _particles)
-            {
-                particle.angle = Utils::randf(0, M_PI * 2);
-                particle.distance = Utils::randf(50, 500);
-            }
+            // for (auto &particle : _particles)
+            // {
+            //     particle.angle = Utils::randf(0, M_PI * 2);
+            //     particle.distance = Utils::randf(50, 500);
+            // }
 
             for (auto &position : _positions)
             {
                 position.x = Utils::randf(-1000, 1000);
-                position.y = Utils::randf() > 0.5 ? Utils::randf(-200, -50) : Utils::randf(50, 200);
+                position.y = Utils::randf(-1000, 1000);
+                // position.y = Utils::randf() > 0.5 ? Utils::randf(-200, -50) : Utils::randf(50, 200);
             }
 
             for (auto &colour : _colours)
             {
-                colour.r = Utils::randi(127, 255);
-                colour.g = Utils::randi(127, 255);
-                colour.b = Utils::randi(127, 255);
+                colour.r = Utils::randi(127, 235);
+                colour.g = Utils::randi(127, 235);
+                colour.b = Utils::randi(127, 235);
             }
 
             _inited = true;
         }
 
-        auto seconds = dt.asSeconds() * 10;
+        // auto seconds = dt.asSeconds() * 10;
 
-        for (auto i = 0; i < _numParticles; i++)
-        {
-            auto &particle = _particles[i];
-            //particle.angle += seconds;
+        // for (auto i = 0; i < _numParticles; i++)
+        // {
+        //     auto &particle = _particles[i];
+        //     //particle.angle += seconds;
 
-            auto &position = _positions[i];
-            // position.x = std::cos(particle.angle) * particle.distance;
-            // position.y = std::sin(particle.angle) * particle.distance;
-            position.x += seconds * particle.angle;
-            if (position.x > 1000)
-            {
-                position.x -= 2000;
-            }
-        }
+        //     auto &position = _positions[i];
+        //     // position.x = std::cos(particle.angle) * particle.distance;
+        //     // position.y = std::sin(particle.angle) * particle.distance;
+        //     position.x += seconds * particle.angle;
+        //     if (position.x > 1000)
+        //     {
+        //         position.x -= 2000;
+        //     }
+        // }
 
         glBindBuffer(GL_ARRAY_BUFFER, _particlesPositionBuffer);
         glBufferData(GL_ARRAY_BUFFER, _numParticles * 2 * sizeof(GLfloat), NULL, GL_STREAM_DRAW);
@@ -103,6 +104,7 @@ namespace space
 
         sf::Glsl::Mat4 mat4(combinedTransform.getMatrix());
         shader->setUniform("transform", mat4);
+        shader->setUniform("timeSinceStart", _engine.timeSinceStart().asSeconds());
 
         // 1st attribute buffer : vertices
         glEnableVertexAttribArray(0);
@@ -145,6 +147,8 @@ namespace space
         glVertexAttribDivisor(2, 1); // color : one per quad -> 1
 
         glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, _numParticles);
+
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
 
         glDisableVertexAttribArray(0);
         glDisableVertexAttribArray(1);

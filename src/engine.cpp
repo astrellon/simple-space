@@ -14,7 +14,7 @@ namespace space
 {
     Engine::Engine(sf::RenderWindow &window) :
         _spriteScale(1.0f), _spriteSize(16.0f), _window(window), _deltaTime(sf::Time::Zero),
-        _camera(*this), _particles(*this, 1000000)
+        _camera(*this), _particles(*this, 10000)
     {
         _fontManager = std::make_unique<FontManager>();
         _textureManager = std::make_unique<TextureManager>();
