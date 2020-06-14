@@ -19,7 +19,7 @@ namespace space
             // Fields
 
             // Constructor
-            StarBackground(Engine &engine, float chunkSize, int numParticlesPerChunk);
+            StarBackground(Engine &engine, const sf::Image &starColour, float chunkSize, int numParticlesPerChunk, float distanceScale);
 
             // Methods
             void update(sf::Time dt);
@@ -28,8 +28,10 @@ namespace space
         private:
             // Fields
             Engine &_engine;
+            const sf::Image &_starColour;
             float _chunkSize;
             int _numParticlesPerChunk;
+            float _distanceScale;
 
             std::vector<std::unique_ptr<StarBackgroundChunk>> _chunkList;
 

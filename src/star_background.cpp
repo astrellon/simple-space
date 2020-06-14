@@ -6,20 +6,23 @@
 
 namespace space
 {
-    StarBackground::StarBackground(Engine &engine, float chunkSize, int numParticlesPerChunk) :
-        _engine(engine), _chunkSize(chunkSize), _numParticlesPerChunk(numParticlesPerChunk)
+    StarBackground::StarBackground(Engine &engine, const sf::Image &starColour, float chunkSize, int numParticlesPerChunk, float distanceScale) :
+        _engine(engine), _starColour(starColour), _chunkSize(chunkSize), _numParticlesPerChunk(numParticlesPerChunk), _distanceScale(distanceScale)
     {
 
     }
 
     void StarBackground::update(sf::Time dt)
     {
-        auto center = _engine.camera().view().getCenter();
+        auto center = _engine.camera().view().getCenter() * _distanceScale;
         auto size = _engine.camera().view().getSize() * 0.6f;
+
         auto lowerX = (int)floor((center.x - size.x) / _chunkSize);
         auto upperX = (int)ceil((center.x + size.x) / _chunkSize);
         auto lowerY = (int)floor((center.y - size.y) / _chunkSize);
         auto upperY = (int)ceil((center.y + size.y) / _chunkSize);
+
+        // std::cout << "X: [" << lowerX << ", " << upperX << "] Y: [" << lowerY << ", " << upperY << "]" << std::endl;
 
         for (auto x = lowerX; x <= upperX; x++)
         {
@@ -55,7 +58,7 @@ namespace space
             }
         }
 
-        auto newChunk = std::make_unique<StarBackgroundChunk>(_engine, _numParticlesPerChunk, _chunkSize);
+        auto newChunk = std::make_unique<StarBackgroundChunk>(_engine, _numParticlesPerChunk, _chunkSize, _distanceScale);
         newChunk->position(pos);
 
         auto result = newChunk.get();

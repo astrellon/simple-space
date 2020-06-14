@@ -5,7 +5,7 @@
 
 namespace space
 {
-    StarBackgroundChunk::StarBackgroundChunk(Engine &engine, int numParticles, float area) : Particles(engine, numParticles, GL_DYNAMIC_DRAW), _area(area), _shader(nullptr)
+    StarBackgroundChunk::StarBackgroundChunk(Engine &engine, int numParticles, float area, float distanceScale) : Particles(engine, numParticles, GL_DYNAMIC_DRAW), _area(area), _shader(nullptr), _distanceScale(distanceScale)
     {
 
     }
@@ -13,11 +13,11 @@ namespace space
     void StarBackgroundChunk::reinit()
     {
         sf::Vector2f offset(_position.x * _area, _position.y * _area);
-        auto rand = Utils::randWithSeed(_position.x + _position.y << 16);
+        auto rand = Utils::randWithSeed((_position.x + _position.y << 16) / _distanceScale + _distanceScale * 255);
 
         std::uniform_real_distribution<float> xRange(offset.x, _area + offset.x);
         std::uniform_real_distribution<float> yRange(offset.y, _area + offset.y);
-        std::uniform_real_distribution<float> colourRange(127, 235);
+        std::uniform_real_distribution<float> colourRange(127 * _distanceScale * _distanceScale, 235 * _distanceScale * _distanceScale);
 
         for (auto &position : _positions)
         {
@@ -47,7 +47,7 @@ namespace space
     {
         reinit();
 
-        if (!_engine.shaderManager().tryGet("particles", &_shader))
+        if (!_engine.shaderManager().tryGet("stars", &_shader))
         {
             std::cout << "Unable to find shader for star background" << std::endl;
             return;
@@ -71,6 +71,9 @@ namespace space
         sf::Shader::bind(_shader);
 
         sf::Glsl::Mat4 mat4(combinedTransform.getMatrix());
+        mat4.array[12] *= _distanceScale;
+        mat4.array[13] *= _distanceScale;
+
         _shader->setUniform("transform", mat4);
         _shader->setUniform("timeSinceStart", _engine.timeSinceStart().asSeconds());
 

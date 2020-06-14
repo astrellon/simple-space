@@ -12,7 +12,7 @@ namespace space
             // Fields
 
             // Constructor
-            StarBackgroundChunk(Engine &engine, int numParticles, float area);
+            StarBackgroundChunk(Engine &engine, int numParticles, float area, float distanceScale);
 
             // Methods
             bool isActive() const;
@@ -30,6 +30,7 @@ namespace space
         private:
             sf::Vector2i _position;
             float _area;
+            float _distanceScale;
             sf::Shader *_shader;
             sf::Time _lastUseTime;
     };

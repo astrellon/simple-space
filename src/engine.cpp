@@ -14,12 +14,19 @@ namespace space
 {
     Engine::Engine(sf::RenderWindow &window) :
         _spriteScale(1.0f), _spriteSize(16.0f), _window(window), _deltaTime(sf::Time::Zero), _timeSinceStartOnUpdate(sf::Time::Zero),
-        _camera(*this), _background(*this, 500, 1000)
+        _camera(*this)
     {
         _fontManager = std::make_unique<FontManager>();
         _textureManager = std::make_unique<TextureManager>();
         _definitionManager = std::make_unique<DefinitionManager>();
         _shaderManager = std::make_unique<ShaderManager>();
+
+
+
+        for (auto i = 0; i < 7; i++)
+        {
+            _backgrounds.emplace_back(std::make_unique<StarBackground>(*this, 500 + i * 50, 200 - i * 10, 0.9f - i * 0.14f));
+        }
     }
     Engine::~Engine()
     {
@@ -179,7 +186,11 @@ namespace space
         {
             _currentSession->update(_deltaTime);
         }
-        _background.update(_deltaTime);
+
+        for (auto &background : _backgrounds)
+        {
+            background->update(_deltaTime);
+        }
 
         _camera.update(_deltaTime);
     }
@@ -188,12 +199,16 @@ namespace space
     {
         _window.clear();
         _window.setView(_camera.view());
+
+        for (auto &background : _backgrounds)
+        {
+            background->draw(_window, sf::Transform::Identity);
+        }
+
         if (_currentSession.get())
         {
             _currentSession->draw(_window);
         }
-
-        _background.draw(_window, sf::Transform::Identity);
 
         _window.display();
     }

@@ -35,7 +35,7 @@ int main()
     space::Engine engine(window);
     engine.spriteScale(2.0f);
 
-    engine.shaderManager().load("particles", "data/shaders/particles.vert", "data/shaders/particles.frag");
+    engine.shaderManager().load("stars", "data/shaders/stars.vert", "data/shaders/stars.frag");
 
     auto &textureManager = engine.textureManager();
     textureManager.loadFolder("data/textures");

@@ -64,7 +64,7 @@ namespace space
             std::unique_ptr<DefinitionManager> _definitionManager;
             std::unique_ptr<ShaderManager> _shaderManager;
 
-            StarBackground _background;
+            std::vector<std::unique_ptr<StarBackground>> _backgrounds;
 
             Camera _camera;
 
