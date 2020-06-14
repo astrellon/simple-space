@@ -6,12 +6,6 @@
 
 namespace space
 {
-    struct Particle
-    {
-        float angle;
-        float distance;
-    };
-
     class Engine;
 
     class Particles
@@ -26,7 +20,12 @@ namespace space
             void update(sf::Time dt);
             void draw(sf::RenderTarget &target, const sf::Transform &parentTransform);
 
-        private:
+            virtual void onInit() = 0;
+            virtual void onUpdate(sf::Time dt);
+            virtual bool onPreDraw(sf::RenderTarget &target, const sf::Transform &parentTransform);
+            virtual void onPostDraw(sf::RenderTarget &target, const sf::Transform &parentTransform);
+
+        protected:
             // Fields
             Engine &_engine;
             int _numParticles;
@@ -35,7 +34,6 @@ namespace space
             GLuint _particlesColourBuffer;
             bool _inited;
 
-            std::vector<Particle> _particles;
             std::vector<sf::Vector2f> _positions;
             std::vector<sf::Color> _colours;
 

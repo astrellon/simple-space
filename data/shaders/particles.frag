@@ -1,5 +1,7 @@
 #version 330 compatibility
 
+#define E 2.71828
+
 out vec4 FragColor;
 
 in vec4 colour;
@@ -9,5 +11,6 @@ uniform float timeSinceStart;
 
 void main()
 {
-    FragColor = colour + vec4(0.1, 0.1, 0.1, 0) * sin(index + timeSinceStart * 10) * cos(timeSinceStart * 4 + index * 3);
+    float x = mod(timeSinceStart + index, 5) - 2.5;
+    FragColor = colour + vec4(0.5, 0.5, 0.5, 0) * pow(E, -(x * x / 0.2));
 }

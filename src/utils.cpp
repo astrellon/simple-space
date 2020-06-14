@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <iostream>
 #include <fstream>
+#include <math.h>
 
 namespace space
 {
@@ -66,5 +67,56 @@ namespace space
         }
 
         return str.substr(sepIndex + 1, dotIndex - sepIndex - 1);
+    }
+
+    sf::Color hsv(float hue, float saturation, float value)
+    {
+        auto C = saturation * value;
+        auto X = C * (1 - abs(fmod(hue / 60.0f, 2) - 1));
+        float m = value - C;
+        float Rs, Gs, Bs;
+
+        if (hue >= 0 && hue < 60)
+        {
+            Rs = C;
+            Gs = X;
+            Bs = 0;
+        }
+        else if (hue >= 60 && hue < 120)
+        {
+            Rs = X;
+            Gs = C;
+            Bs = 0;
+        }
+        else if (hue >= 120 && hue < 180)
+        {
+            Rs = 0;
+            Gs = C;
+            Bs = X;
+        }
+        else if (hue >= 180 && hue < 240)
+        {
+            Rs = 0;
+            Gs = X;
+            Bs = C;
+        }
+        else if (hue >= 240 && hue < 300)
+        {
+            Rs = X;
+            Gs = 0;
+            Bs = C;
+        }
+        else
+        {
+            Rs = C;
+            Gs = 0;
+            Bs = X;
+        }
+
+        auto r = (Rs + m) * 255;
+        auto g = (Gs + m) * 255;
+        auto b = (Bs + m) * 255;
+
+        return sf::Color(r, g, b);
     }
 }

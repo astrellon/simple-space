@@ -14,6 +14,7 @@ namespace space
             sf::Vector2f position;
 
             // Constructor
+            SpaceTransform() : rotation(0) { }
 
             // Methods
             inline const sf::Transform &getTransform()

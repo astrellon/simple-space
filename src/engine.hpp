@@ -6,7 +6,7 @@
 #include "definition_manager.hpp"
 #include "shader_manager.hpp"
 #include "camera.hpp"
-#include "particles.hpp"
+#include "star_background.hpp"
 
 #include <SFML/Graphics.hpp>
 
@@ -63,7 +63,7 @@ namespace space
             std::unique_ptr<DefinitionManager> _definitionManager;
             std::unique_ptr<ShaderManager> _shaderManager;
 
-            Particles _particles;
+            StarBackground _background;
 
             Camera _camera;
 

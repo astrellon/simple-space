@@ -14,7 +14,7 @@ namespace space
 {
     Engine::Engine(sf::RenderWindow &window) :
         _spriteScale(1.0f), _spriteSize(16.0f), _window(window), _deltaTime(sf::Time::Zero),
-        _camera(*this), _particles(*this, 10000)
+        _camera(*this), _background(*this, 10000)
     {
         _fontManager = std::make_unique<FontManager>();
         _textureManager = std::make_unique<TextureManager>();
@@ -174,7 +174,7 @@ namespace space
         {
             _currentSession->update(_deltaTime);
         }
-        _particles.update(_deltaTime);
+        _background.update(_deltaTime);
 
         _camera.update(_deltaTime);
     }
@@ -188,7 +188,7 @@ namespace space
             _currentSession->draw(_window);
         }
 
-        _particles.draw(_window, sf::Transform::Identity);
+        _background.draw(_window, sf::Transform::Identity);
 
         _window.display();
     }

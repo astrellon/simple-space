@@ -66,6 +66,8 @@ namespace space
                     mats[1] * direction.x + mats[5] * direction.y);
             }
 
+            static sf::Color hsv(float hue, float saturation, float value);
+
         private:
             Utils();
 

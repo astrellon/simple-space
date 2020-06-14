@@ -4,14 +4,14 @@
 #include "engine.hpp"
 
 static const GLfloat g_vertex_buffer_data[] = {
-    // -0.5f, -0.5f,
-    // 0.5f, -0.5f,
-    // -0.5f, 0.5f,
-    // 0.5f, 0.5f,
-    -1, -1,
-    1, -1,
-    -1, 1,
-    1, 1,
+    -0.5f, -0.5f,
+    0.5f, -0.5f,
+    -0.5f, 0.5f,
+    0.5f, 0.5f,
+    // -1, -1,
+    // 1, -1,
+    // -1, 1,
+    // 1, 1,
 };
 
 namespace space
@@ -28,83 +28,33 @@ namespace space
             glBindBuffer(GL_ARRAY_BUFFER, _billboardVertexBuffer);
             glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
 
-            glGenBuffers(1, &_particlesPositionBuffer);
-            glBindBuffer(GL_ARRAY_BUFFER, _particlesPositionBuffer);
-            glBufferData(GL_ARRAY_BUFFER, _numParticles * 2 * sizeof(GLfloat), NULL, GL_STREAM_DRAW);
-
-            glGenBuffers(1, &_particlesColourBuffer);
-            glBindBuffer(GL_ARRAY_BUFFER, _particlesColourBuffer);
-            glBufferData(GL_ARRAY_BUFFER, _numParticles * 4 * sizeof(GLubyte), NULL, GL_STREAM_DRAW);
-
-            _particles.resize(_numParticles);
             _positions.resize(_numParticles);
             _colours.resize(_numParticles);
 
-            // for (auto &particle : _particles)
-            // {
-            //     particle.angle = Utils::randf(0, M_PI * 2);
-            //     particle.distance = Utils::randf(50, 500);
-            // }
+            onInit();
 
-            for (auto &position : _positions)
-            {
-                position.x = Utils::randf(-1000, 1000);
-                position.y = Utils::randf(-1000, 1000);
-                // position.y = Utils::randf() > 0.5 ? Utils::randf(-200, -50) : Utils::randf(50, 200);
-            }
+            glGenBuffers(1, &_particlesPositionBuffer);
+            glBindBuffer(GL_ARRAY_BUFFER, _particlesPositionBuffer);
+            glBufferData(GL_ARRAY_BUFFER, _numParticles * 2 * sizeof(GLfloat), _positions.data(), GL_STATIC_DRAW);
+            //glBufferSubData(GL_ARRAY_BUFFER, 0, _numParticles * sizeof(GLfloat) * 2, _positions.data());
 
-            for (auto &colour : _colours)
-            {
-                colour.r = Utils::randi(127, 235);
-                colour.g = Utils::randi(127, 235);
-                colour.b = Utils::randi(127, 235);
-            }
+            glGenBuffers(1, &_particlesColourBuffer);
+            glBindBuffer(GL_ARRAY_BUFFER, _particlesColourBuffer);
+            glBufferData(GL_ARRAY_BUFFER, _numParticles * 4 * sizeof(GLubyte), _colours.data(), GL_STATIC_DRAW);
+            //glBufferSubData(GL_ARRAY_BUFFER, 0, _numParticles * sizeof(GLubyte) * 4, _colours.data());
 
             _inited = true;
         }
 
-        // auto seconds = dt.asSeconds() * 10;
-
-        // for (auto i = 0; i < _numParticles; i++)
-        // {
-        //     auto &particle = _particles[i];
-        //     //particle.angle += seconds;
-
-        //     auto &position = _positions[i];
-        //     // position.x = std::cos(particle.angle) * particle.distance;
-        //     // position.y = std::sin(particle.angle) * particle.distance;
-        //     position.x += seconds * particle.angle;
-        //     if (position.x > 1000)
-        //     {
-        //         position.x -= 2000;
-        //     }
-        // }
-
-        glBindBuffer(GL_ARRAY_BUFFER, _particlesPositionBuffer);
-        glBufferData(GL_ARRAY_BUFFER, _numParticles * 2 * sizeof(GLfloat), NULL, GL_STREAM_DRAW);
-        glBufferSubData(GL_ARRAY_BUFFER, 0, _numParticles * sizeof(GLfloat) * 2, _positions.data());
-
-        glBindBuffer(GL_ARRAY_BUFFER, _particlesColourBuffer);
-        glBufferData(GL_ARRAY_BUFFER, _numParticles * 4 * sizeof(GLubyte), NULL, GL_STREAM_DRAW);
-        glBufferSubData(GL_ARRAY_BUFFER, 0, _numParticles * sizeof(GLubyte) * 4, _colours.data());
+        onUpdate(dt);
     }
 
     void Particles::draw(sf::RenderTarget &target, const sf::Transform &parentTransform)
     {
-        sf::Shader *shader;
-        if (!_engine.shaderManager().tryGet("particles", &shader))
+        if (!onPreDraw(target, parentTransform))
         {
-            std::cout << "Unable to find shader for particle system" << std::endl;
             return;
         }
-
-        sf::Shader::bind(shader);
-
-        auto combinedTransform = _engine.camera().view().getTransform() * parentTransform;
-
-        sf::Glsl::Mat4 mat4(combinedTransform.getMatrix());
-        shader->setUniform("transform", mat4);
-        shader->setUniform("timeSinceStart", _engine.timeSinceStart().asSeconds());
 
         // 1st attribute buffer : vertices
         glEnableVertexAttribArray(0);
@@ -154,6 +104,21 @@ namespace space
         glDisableVertexAttribArray(1);
         glDisableVertexAttribArray(2);
 
-        sf::Shader::bind(nullptr);
+        onPostDraw(target, parentTransform);
+    }
+
+    void Particles::onUpdate(sf::Time dt)
+    {
+
+    }
+
+    bool Particles::onPreDraw(sf::RenderTarget &target, const sf::Transform &parentTransform)
+    {
+        return true;
+    }
+
+    void Particles::onPostDraw(sf::RenderTarget &target, const sf::Transform &parentTransform)
+    {
+
     }
 } // namespace space
