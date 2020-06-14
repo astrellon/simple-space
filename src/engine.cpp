@@ -13,8 +13,8 @@
 namespace space
 {
     Engine::Engine(sf::RenderWindow &window) :
-        _spriteScale(1.0f), _spriteSize(16.0f), _window(window), _deltaTime(sf::Time::Zero),
-        _camera(*this), _background(*this, 10000)
+        _spriteScale(1.0f), _spriteSize(16.0f), _window(window), _deltaTime(sf::Time::Zero), _timeSinceStartOnUpdate(sf::Time::Zero),
+        _camera(*this), _background(*this, 500, 1000)
     {
         _fontManager = std::make_unique<FontManager>();
         _textureManager = std::make_unique<TextureManager>();
@@ -156,6 +156,10 @@ namespace space
     {
         return _timerSinceStart.getElapsedTime();
     }
+    sf::Time Engine::timeSinceStartOnUpdate() const
+    {
+        return _timeSinceStartOnUpdate;
+    }
 
     void Engine::onResize(sf::Vector2f area)
     {
@@ -165,6 +169,7 @@ namespace space
     void Engine::preUpdate()
     {
         _deltaTime = _timer.getElapsedTime();
+        _timeSinceStartOnUpdate = timeSinceStart();
         _timer.restart();
     }
 

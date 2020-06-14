@@ -69,6 +69,15 @@ namespace space
         return str.substr(sepIndex + 1, dotIndex - sepIndex - 1);
     }
 
+    std::mt19937 Utils::randWithSeed(int seed)
+    {
+        std::random_device rd;
+        std::mt19937 rand(rd());
+        rand.seed(seed);
+
+        return rand;
+    }
+
     sf::Color hsv(float hue, float saturation, float value)
     {
         auto C = saturation * value;

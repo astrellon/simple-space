@@ -1,63 +1,66 @@
 #include "star_background.hpp"
 
-#include "utils.hpp"
+#include <math.h>
+
 #include "engine.hpp"
 
 namespace space
 {
-    StarBackground::StarBackground(Engine &engine, int numParticles) : Particles(engine, numParticles), _shader(nullptr)
+    StarBackground::StarBackground(Engine &engine, float chunkSize, int numParticlesPerChunk) :
+        _engine(engine), _chunkSize(chunkSize), _numParticlesPerChunk(numParticlesPerChunk)
     {
 
     }
 
-
-    void StarBackground::onInit()
+    void StarBackground::update(sf::Time dt)
     {
-        for (auto &position : _positions)
-        {
-            position.x = Utils::randf(-1000, 1000);
-            position.y = Utils::randf(-1000, 1000);
-        }
+        auto center = _engine.camera().view().getCenter();
+        auto size = _engine.camera().view().getSize() * 0.6f;
+        auto lowerX = (int)floor((center.x - size.x) / _chunkSize);
+        auto upperX = (int)ceil((center.x + size.x) / _chunkSize);
+        auto lowerY = (int)floor((center.y - size.y) / _chunkSize);
+        auto upperY = (int)ceil((center.y + size.y) / _chunkSize);
 
-        for (auto &colour : _colours)
+        for (auto x = lowerX; x <= upperX; x++)
         {
-            colour.r = Utils::randi(127, 235);
-            colour.g = Utils::randi(127, 235);
-            colour.b = Utils::randi(127, 235);
-        }
-
-        if (!_engine.shaderManager().tryGet("particles", &_shader))
-        {
-            std::cout << "Unable to find shader for star background" << std::endl;
-            return;
+            for (auto y = lowerY; y <= upperY; y++)
+            {
+                sf::Vector2i pos(x, y);
+                auto chunk = getChunk(pos);
+                if (chunk->position() != pos)
+                {
+                    chunk->position(pos);
+                    chunk->reinit();
+                }
+                chunk->update(dt);
+            }
         }
     }
 
-    void StarBackground::onUpdate(sf::Time dt)
+    void StarBackground::draw(sf::RenderTarget &target, const sf::Transform &parentTransform)
     {
-
+        for (auto &chunk : _chunkList)
+        {
+            chunk->draw(target, parentTransform);
+        }
     }
 
-    bool StarBackground::onPreDraw(sf::RenderTarget &target, const sf::Transform &parentTransform)
+    StarBackgroundChunk *StarBackground::getChunk(sf::Vector2i pos)
     {
-        if (_shader == nullptr)
+        for (auto &it : _chunkList)
         {
-            return false;
+            if (!it->isActive())
+            {
+                return it.get();
+            }
         }
 
-        auto combinedTransform = _engine.camera().view().getTransform() * parentTransform;
+        auto newChunk = std::make_unique<StarBackgroundChunk>(_engine, _numParticlesPerChunk, _chunkSize);
+        newChunk->position(pos);
 
-        sf::Shader::bind(_shader);
+        auto result = newChunk.get();
+        _chunkList.emplace_back(std::move(newChunk));
 
-        sf::Glsl::Mat4 mat4(combinedTransform.getMatrix());
-        _shader->setUniform("transform", mat4);
-        _shader->setUniform("timeSinceStart", _engine.timeSinceStart().asSeconds());
-
-        return true;
-    }
-
-    void StarBackground::onPostDraw(sf::RenderTarget &target, const sf::Transform &parentTransform)
-    {
-        sf::Shader::bind(nullptr);
+        return result;
     }
 } // namespace space

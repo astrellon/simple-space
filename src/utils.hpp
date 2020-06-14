@@ -33,6 +33,8 @@ namespace space
                 return static_cast<int>(floatValue);
             }
 
+            static std::mt19937 randWithSeed(int seed);
+
             static inline float lerp(float init, float target, float t)
             {
                 return (target - init) * t + init;

@@ -16,7 +16,7 @@ static const GLfloat g_vertex_buffer_data[] = {
 
 namespace space
 {
-    Particles::Particles(Engine &engine, int numParticles) : _engine(engine), _numParticles(numParticles), _inited(false)
+    Particles::Particles(Engine &engine, int numParticles, GLenum bufferUsage) : _engine(engine), _numParticles(numParticles), _inited(false), _bufferUsage(bufferUsage)
     {
     }
 
@@ -35,13 +35,11 @@ namespace space
 
             glGenBuffers(1, &_particlesPositionBuffer);
             glBindBuffer(GL_ARRAY_BUFFER, _particlesPositionBuffer);
-            glBufferData(GL_ARRAY_BUFFER, _numParticles * 2 * sizeof(GLfloat), _positions.data(), GL_STATIC_DRAW);
-            //glBufferSubData(GL_ARRAY_BUFFER, 0, _numParticles * sizeof(GLfloat) * 2, _positions.data());
+            glBufferData(GL_ARRAY_BUFFER, _numParticles * 2 * sizeof(GLfloat), _positions.data(), _bufferUsage);
 
             glGenBuffers(1, &_particlesColourBuffer);
             glBindBuffer(GL_ARRAY_BUFFER, _particlesColourBuffer);
-            glBufferData(GL_ARRAY_BUFFER, _numParticles * 4 * sizeof(GLubyte), _colours.data(), GL_STATIC_DRAW);
-            //glBufferSubData(GL_ARRAY_BUFFER, 0, _numParticles * sizeof(GLubyte) * 4, _colours.data());
+            glBufferData(GL_ARRAY_BUFFER, _numParticles * 4 * sizeof(GLubyte), _colours.data(), _bufferUsage);
 
             _inited = true;
         }
@@ -120,5 +118,14 @@ namespace space
     void Particles::onPostDraw(sf::RenderTarget &target, const sf::Transform &parentTransform)
     {
 
+    }
+
+    void Particles::syncPositionsColours()
+    {
+        glBindBuffer(GL_ARRAY_BUFFER, _particlesPositionBuffer);
+        glBufferSubData(GL_ARRAY_BUFFER, 0, _numParticles * sizeof(GLfloat) * 2, _positions.data());
+
+        glBindBuffer(GL_ARRAY_BUFFER, _particlesColourBuffer);
+        glBufferSubData(GL_ARRAY_BUFFER, 0, _numParticles * sizeof(GLubyte) * 4, _colours.data());
     }
 } // namespace space

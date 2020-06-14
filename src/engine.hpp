@@ -50,6 +50,7 @@ namespace space
 
             sf::Time deltaTime() const;
             sf::Time timeSinceStart() const;
+            sf::Time timeSinceStartOnUpdate() const;
 
             void onResize(sf::Vector2f area);
 
@@ -74,5 +75,6 @@ namespace space
             sf::Clock _timer;
             sf::Clock _timerSinceStart;
             sf::Time _deltaTime;
+            sf::Time _timeSinceStartOnUpdate;
     };
 } // town

@@ -1,24 +1,40 @@
 #pragma once
 
-#include "particles.hpp"
+#include <map>
+#include <vector>
+#include <memory>
+
+#include <SFML/Graphics.hpp>
+#include <SFML/System.hpp>
+
+#include "star_background_chunk.hpp"
 
 namespace space
 {
-    class StarBackground : public Particles
+    class Engine;
+
+    class StarBackground
     {
         public:
             // Fields
 
             // Constructor
-            StarBackground(Engine &engine, int numParticles);
+            StarBackground(Engine &engine, float chunkSize, int numParticlesPerChunk);
 
             // Methods
-            virtual void onInit();
-            virtual void onUpdate(sf::Time dt);
-            virtual bool onPreDraw(sf::RenderTarget &target, const sf::Transform &parentTransform);
-            virtual void onPostDraw(sf::RenderTarget &target, const sf::Transform &parentTransform);
+            void update(sf::Time dt);
+            void draw(sf::RenderTarget &target, const sf::Transform &parentTransform);
 
         private:
-            sf::Shader *_shader;
+            // Fields
+            Engine &_engine;
+            float _chunkSize;
+            int _numParticlesPerChunk;
+
+            std::vector<std::unique_ptr<StarBackgroundChunk>> _chunkList;
+
+            // Methods
+            StarBackgroundChunk *getChunk(sf::Vector2i pos);
+
     };
 } // space

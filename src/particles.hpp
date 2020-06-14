@@ -14,7 +14,7 @@ namespace space
             // Fields
 
             // Constructor
-            Particles(Engine &engine, int numParticles);
+            Particles(Engine &engine, int numParticles, GLenum bufferUsage);
 
             // Methods
             void update(sf::Time dt);
@@ -32,11 +32,13 @@ namespace space
             GLuint _billboardVertexBuffer;
             GLuint _particlesPositionBuffer;
             GLuint _particlesColourBuffer;
+            GLenum _bufferUsage;
             bool _inited;
 
             std::vector<sf::Vector2f> _positions;
             std::vector<sf::Color> _colours;
 
             // Methods
+            void syncPositionsColours();
     };
 } // space
