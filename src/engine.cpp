@@ -16,12 +16,8 @@ namespace space
         _spriteScale(1.0f), _spriteSize(16.0f), _window(window), _deltaTime(sf::Time::Zero), _timeSinceStartOnUpdate(sf::Time::Zero),
         _camera(*this)
     {
-        _fontManager = std::make_unique<FontManager>();
-        _textureManager = std::make_unique<TextureManager>();
+        _resourceManager = std::make_unique<ResourceManager>();
         _definitionManager = std::make_unique<DefinitionManager>();
-        _shaderManager = std::make_unique<ShaderManager>();
-
-
 
         for (auto i = 0; i < 7; i++)
         {
@@ -33,14 +29,9 @@ namespace space
 
     }
 
-    const FontManager &Engine::fontManager() const
+    const ResourceManager &Engine::resourceManager() const
     {
-        return *_fontManager.get();
-    }
-
-    const TextureManager &Engine::textureManager() const
-    {
-        return *_textureManager.get();
+        return *_resourceManager.get();
     }
 
     const DefinitionManager &Engine::definitionManager() const
@@ -48,34 +39,19 @@ namespace space
         return *_definitionManager.get();
     }
 
-    const ShaderManager &Engine::shaderManager() const
-    {
-        return *_shaderManager.get();
-    }
-
     const Camera &Engine::camera() const
     {
         return _camera;
     }
 
-    FontManager &Engine::fontManager()
+    ResourceManager &Engine::resourceManager()
     {
-        return *_fontManager.get();
-    }
-
-    TextureManager &Engine::textureManager()
-    {
-        return *_textureManager.get();
+        return *_resourceManager.get();
     }
 
     DefinitionManager &Engine::definitionManager()
     {
         return *_definitionManager.get();
-    }
-
-    ShaderManager &Engine::shaderManager()
-    {
-        return *_shaderManager.get();
     }
 
     Camera &Engine::camera()

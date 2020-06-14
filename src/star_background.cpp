@@ -6,8 +6,8 @@
 
 namespace space
 {
-    StarBackground::StarBackground(Engine &engine, const sf::Image &starColour, float chunkSize, int numParticlesPerChunk, float distanceScale) :
-        _engine(engine), _starColour(starColour), _chunkSize(chunkSize), _numParticlesPerChunk(numParticlesPerChunk), _distanceScale(distanceScale)
+    StarBackground::StarBackground(Engine &engine, float chunkSize, int numParticlesPerChunk, float distanceScale) :
+        _engine(engine), _chunkSize(chunkSize), _numParticlesPerChunk(numParticlesPerChunk), _distanceScale(distanceScale)
     {
 
     }

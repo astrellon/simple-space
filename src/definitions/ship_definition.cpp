@@ -6,6 +6,6 @@ namespace space
 {
     void ShipDefinition::onPostLoad(Engine &engine)
     {
-        texture = engine.textureManager().get(texturePath);
+        engine.resourceManager().texture(texturePath, &texture);
     }
 }

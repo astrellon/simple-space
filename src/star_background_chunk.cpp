@@ -47,7 +47,7 @@ namespace space
     {
         reinit();
 
-        if (!_engine.shaderManager().tryGet("stars", &_shader))
+        if (!_engine.resourceManager().shader("stars", &_shader))
         {
             std::cout << "Unable to find shader for star background" << std::endl;
             return;

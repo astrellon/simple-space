@@ -9,10 +9,9 @@
 #include <iomanip>
 
 #include "src/engine.hpp"
-#include "src/font_manager.hpp"
+#include "src/resource_manager.hpp"
 #include "src/tiles.hpp"
 #include "src/game_session.hpp"
-#include "src/particle_system.hpp"
 #include "src/utils.hpp"
 #include "src/definitions/ship_definition.hpp"
 #include "src/serialisers/json/json_serialisers.hpp"
@@ -35,12 +34,12 @@ int main()
     space::Engine engine(window);
     engine.spriteScale(2.0f);
 
-    engine.shaderManager().load("stars", "data/shaders/stars.vert", "data/shaders/stars.frag");
+    space::ResourceManager &resourceManager = engine.resourceManager();
 
-    auto &textureManager = engine.textureManager();
-    textureManager.loadFolder("data/textures");
-
-    engine.fontManager().loadFolder("data/fonts");
+    resourceManager.loadEmbedded();
+    resourceManager.preloadShader("stars", "data/shaders/stars.vert", "data/shaders/stars.frag");
+    resourceManager.preloadTextures("data/textures");
+    resourceManager.preloadFonts("data/fonts");
 
     auto &definitionManager = engine.definitionManager();
     definitionManager.loadFolder("data/definitions");
@@ -53,7 +52,8 @@ int main()
         std::cout << "Ship Def: " << shipDef->name << std::endl;
     }
 
-    auto sansFont = engine.fontManager().font("LiberationSans-Regular");
+    const sf::Font *sansFont;
+    resourceManager.font("LiberationSans-Regular", &sansFont);
 
     auto spriteSize = static_cast<uint>(engine.spriteSize());
     auto spriteScale = engine.spriteScale();

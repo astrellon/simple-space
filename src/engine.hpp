@@ -1,10 +1,8 @@
 #pragma once
 
 #include "non_copyable.hpp"
-#include "font_manager.hpp"
-#include "texture_manager.hpp"
+#include "resource_manager.hpp"
 #include "definition_manager.hpp"
-#include "shader_manager.hpp"
 #include "camera.hpp"
 #include "star_background.hpp"
 
@@ -20,16 +18,12 @@ namespace space
             Engine(sf::RenderWindow &window);
             ~Engine();
 
-            const FontManager &fontManager() const;
-            const TextureManager &textureManager() const;
+            const ResourceManager &resourceManager() const;
             const DefinitionManager &definitionManager() const;
-            const ShaderManager &shaderManager() const;
             const Camera &camera() const;
 
-            FontManager &fontManager();
-            TextureManager &textureManager();
+            ResourceManager &resourceManager();
             DefinitionManager &definitionManager();
-            ShaderManager &shaderManager();
             Camera &camera();
 
             float spriteScale() const;
@@ -59,10 +53,8 @@ namespace space
             void draw();
 
         private:
-            std::unique_ptr<FontManager> _fontManager;
-            std::unique_ptr<TextureManager> _textureManager;
+            std::unique_ptr<ResourceManager> _resourceManager;
             std::unique_ptr<DefinitionManager> _definitionManager;
-            std::unique_ptr<ShaderManager> _shaderManager;
 
             std::vector<std::unique_ptr<StarBackground>> _backgrounds;
 
