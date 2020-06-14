@@ -3,6 +3,8 @@
 #include "utils.hpp"
 #include "engine.hpp"
 
+#include "debug/draw_debug.hpp"
+
 static const GLfloat g_vertex_buffer_data[] = {
     -0.5f, -0.5f,
     0.5f, -0.5f,
@@ -94,6 +96,7 @@ namespace space
         glVertexAttribDivisor(1, 1); // positions : one per quad (its center) -> 1
         glVertexAttribDivisor(2, 1); // color : one per quad -> 1
 
+        DrawDebug::glDraw++;
         glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, _numParticles);
 
         glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -120,12 +123,19 @@ namespace space
 
     }
 
-    void Particles::syncPositionsColours()
+    void Particles::syncPositions()
     {
         glBindBuffer(GL_ARRAY_BUFFER, _particlesPositionBuffer);
         glBufferSubData(GL_ARRAY_BUFFER, 0, _numParticles * sizeof(GLfloat) * 2, _positions.data());
-
+    }
+    void Particles::syncColours()
+    {
         glBindBuffer(GL_ARRAY_BUFFER, _particlesColourBuffer);
         glBufferSubData(GL_ARRAY_BUFFER, 0, _numParticles * sizeof(GLubyte) * 4, _colours.data());
+    }
+    void Particles::syncPositionsColours()
+    {
+        syncPositions();
+        syncColours();
     }
 } // namespace space

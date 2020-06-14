@@ -2,11 +2,13 @@
 
 #include <iostream>
 #include <fstream>
+#include <chrono>
 
 #include "utils.hpp"
 #include "game_session.hpp"
 #include "keyboard.hpp"
 #include "particles.hpp"
+#include "debug/draw_debug.hpp"
 
 #include <SFML/OpenGL.hpp>
 
@@ -94,10 +96,7 @@ namespace space
 
     void Engine::initBackground()
     {
-        for (auto i = 0; i < 7; i++)
-        {
-            _backgrounds.emplace_back(std::make_unique<StarBackground>(*this, 800, 200, 0.9f - i * 0.14f));
-        }
+        _background = std::make_unique<StarBackground>(*this, 8000);
     }
 
     void Engine::processEvents()
@@ -157,6 +156,8 @@ namespace space
         _deltaTime = _timer.getElapsedTime();
         _timeSinceStartOnUpdate = timeSinceStart();
         _timer.restart();
+
+        DrawDebug::glDraw = 0;
     }
 
     void Engine::update()
@@ -166,10 +167,7 @@ namespace space
             _currentSession->update(_deltaTime);
         }
 
-        for (auto &background : _backgrounds)
-        {
-            background->update(_deltaTime);
-        }
+        _background->update(_deltaTime);
 
         _camera.update(_deltaTime);
     }
@@ -179,15 +177,14 @@ namespace space
         _window.clear();
         _window.setView(_camera.view());
 
-        for (auto &background : _backgrounds)
-        {
-            background->draw(_window, sf::Transform::Identity);
-        }
+        _background->draw(_window, sf::Transform::Identity);
 
         if (_currentSession.get())
         {
             _currentSession->draw(_window);
         }
+
+        //std::cout << "DrawCalls: " << DrawDebug::glDraw << std::endl;
 
         _window.display();
     }

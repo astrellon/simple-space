@@ -56,7 +56,7 @@ namespace space
             std::unique_ptr<ResourceManager> _resourceManager;
             std::unique_ptr<DefinitionManager> _definitionManager;
 
-            std::vector<std::unique_ptr<StarBackground>> _backgrounds;
+            std::unique_ptr<StarBackground> _background;
 
             Camera _camera;
 

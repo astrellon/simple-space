@@ -39,6 +39,8 @@ namespace space
             std::vector<sf::Color> _colours;
 
             // Methods
+            void syncPositions();
+            void syncColours();
             void syncPositionsColours();
     };
 } // space

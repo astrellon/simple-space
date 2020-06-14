@@ -38,6 +38,7 @@ int main()
 
     resourceManager.loadEmbedded();
     resourceManager.preloadShader("stars", "data/shaders/stars.vert", "data/shaders/stars.frag");
+    resourceManager.preloadShader("stars2", "data/shaders/stars2.vert", "data/shaders/stars2.frag");
     resourceManager.preloadTextures("data/textures");
     resourceManager.preloadFonts("data/fonts");
 
