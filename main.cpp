@@ -53,7 +53,7 @@ int main()
     }
 
     const sf::Font *sansFont;
-    resourceManager.font("LiberationSans-Regular", &sansFont);
+    resourceManager.font("data/fonts/LiberationSans-Regular.ttf", &sansFont);
 
     auto spriteSize = static_cast<uint>(engine.spriteSize());
     auto spriteScale = engine.spriteScale();
