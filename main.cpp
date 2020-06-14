@@ -41,6 +41,8 @@ int main()
     resourceManager.preloadTextures("data/textures");
     resourceManager.preloadFonts("data/fonts");
 
+    engine.initBackground();
+
     auto &definitionManager = engine.definitionManager();
     definitionManager.loadFolder("data/definitions");
 

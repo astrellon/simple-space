@@ -7,7 +7,7 @@
 namespace space
 {
     StarBackground::StarBackground(Engine &engine, float chunkSize, int numParticlesPerChunk, float distanceScale) :
-        _engine(engine), _chunkSize(chunkSize), _numParticlesPerChunk(numParticlesPerChunk), _distanceScale(distanceScale)
+        _engine(engine), _chunkSize(chunkSize), _numParticlesPerChunk(numParticlesPerChunk), _distanceScale(distanceScale), _inited(false)
     {
 
     }
@@ -21,8 +21,6 @@ namespace space
         auto upperX = (int)ceil((center.x + size.x) / _chunkSize);
         auto lowerY = (int)floor((center.y - size.y) / _chunkSize);
         auto upperY = (int)ceil((center.y + size.y) / _chunkSize);
-
-        // std::cout << "X: [" << lowerX << ", " << upperX << "] Y: [" << lowerY << ", " << upperY << "]" << std::endl;
 
         for (auto x = lowerX; x <= upperX; x++)
         {
@@ -42,6 +40,8 @@ namespace space
 
     void StarBackground::draw(sf::RenderTarget &target, const sf::Transform &parentTransform)
     {
+        init();
+
         for (auto &chunk : _chunkList)
         {
             chunk->draw(target, parentTransform);
@@ -58,12 +58,28 @@ namespace space
             }
         }
 
-        auto newChunk = std::make_unique<StarBackgroundChunk>(_engine, _numParticlesPerChunk, _chunkSize, _distanceScale);
+        auto newChunk = std::make_unique<StarBackgroundChunk>(_engine, *this);
         newChunk->position(pos);
 
         auto result = newChunk.get();
         _chunkList.emplace_back(std::move(newChunk));
 
         return result;
+    }
+
+    void StarBackground::init()
+    {
+        if (_inited)
+        {
+            return;
+        }
+
+        _inited = true;
+
+        if (!_engine.resourceManager().shader("stars", &_shader))
+        {
+            std::cout << "Unable to find shader for star background" << std::endl;
+            return;
+        }
     }
 } // namespace space

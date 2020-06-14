@@ -18,11 +18,6 @@ namespace space
     {
         _resourceManager = std::make_unique<ResourceManager>();
         _definitionManager = std::make_unique<DefinitionManager>();
-
-        for (auto i = 0; i < 7; i++)
-        {
-            _backgrounds.emplace_back(std::make_unique<StarBackground>(*this, 500 + i * 50, 200 - i * 10, 0.9f - i * 0.14f));
-        }
     }
     Engine::~Engine()
     {
@@ -95,6 +90,14 @@ namespace space
     {
         _currentSession = std::make_unique<GameSession>(*this);
         return _currentSession.get();
+    }
+
+    void Engine::initBackground()
+    {
+        for (auto i = 0; i < 7; i++)
+        {
+            _backgrounds.emplace_back(std::make_unique<StarBackground>(*this, 800, 200, 0.9f - i * 0.14f));
+        }
     }
 
     void Engine::processEvents()

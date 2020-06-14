@@ -26,8 +26,12 @@ namespace space
             void draw(sf::RenderTarget &target, const sf::Transform &parentTransform);
 
         private:
+            friend class StarBackgroundChunk;
+
             // Fields
             Engine &_engine;
+            sf::Shader *_shader;
+            bool _inited;
             float _chunkSize;
             int _numParticlesPerChunk;
             float _distanceScale;
@@ -36,6 +40,7 @@ namespace space
 
             // Methods
             StarBackgroundChunk *getChunk(sf::Vector2i pos);
+            void init();
 
     };
 } // space

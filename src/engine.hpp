@@ -39,15 +39,15 @@ namespace space
             GameSession *currentSession() const;
             GameSession *startGameSession();
 
-            void processEvents();
-            void processEvent(const sf::Event &event);
-
             sf::Time deltaTime() const;
             sf::Time timeSinceStart() const;
             sf::Time timeSinceStartOnUpdate() const;
 
-            void onResize(sf::Vector2f area);
+            void initBackground();
 
+            void onResize(sf::Vector2f area);
+            void processEvents();
+            void processEvent(const sf::Event &event);
             void preUpdate();
             void update();
             void draw();

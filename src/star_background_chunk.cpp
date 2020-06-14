@@ -1,23 +1,28 @@
 #include "star_background_chunk.hpp"
 
+#include <math.h>
+
 #include "utils.hpp"
 #include "engine.hpp"
+#include "star_background.hpp"
 
 namespace space
 {
-    StarBackgroundChunk::StarBackgroundChunk(Engine &engine, int numParticles, float area, float distanceScale) : Particles(engine, numParticles, GL_DYNAMIC_DRAW), _area(area), _shader(nullptr), _distanceScale(distanceScale)
+    StarBackgroundChunk::StarBackgroundChunk(Engine &engine, const StarBackground &parent) : Particles(engine, parent._numParticlesPerChunk, GL_DYNAMIC_DRAW), _parent(parent)
     {
 
     }
 
     void StarBackgroundChunk::reinit()
     {
-        sf::Vector2f offset(_position.x * _area, _position.y * _area);
-        auto rand = Utils::randWithSeed((_position.x + _position.y << 16) / _distanceScale + _distanceScale * 255);
+        auto area = _parent._chunkSize;
+        auto distanceScale = _parent._distanceScale;
+        sf::Vector2f offset(_position.x * area, _position.y * area);
+        auto rand = Utils::randWithSeed((_position.x + _position.y << 16) / distanceScale + distanceScale * 255);
 
-        std::uniform_real_distribution<float> xRange(offset.x, _area + offset.x);
-        std::uniform_real_distribution<float> yRange(offset.y, _area + offset.y);
-        std::uniform_real_distribution<float> colourRange(127 * _distanceScale * _distanceScale, 235 * _distanceScale * _distanceScale);
+        std::uniform_real_distribution<float> xRange(offset.x, area + offset.x);
+        std::uniform_real_distribution<float> yRange(offset.y, area + offset.y);
+        std::uniform_real_distribution<float> colourRange(127 * distanceScale * distanceScale, 235 * distanceScale * distanceScale);
 
         for (auto &position : _positions)
         {
@@ -46,12 +51,6 @@ namespace space
     void StarBackgroundChunk::onInit()
     {
         reinit();
-
-        if (!_engine.resourceManager().shader("stars", &_shader))
-        {
-            std::cout << "Unable to find shader for star background" << std::endl;
-            return;
-        }
     }
 
     void StarBackgroundChunk::onUpdate(sf::Time dt)
@@ -61,21 +60,21 @@ namespace space
 
     bool StarBackgroundChunk::onPreDraw(sf::RenderTarget &target, const sf::Transform &parentTransform)
     {
-        if (_shader == nullptr || !isActive())
+        if (_parent._shader == nullptr || !isActive())
         {
             return false;
         }
 
         auto combinedTransform = _engine.camera().view().getTransform() * parentTransform;
 
-        sf::Shader::bind(_shader);
+        sf::Shader::bind(_parent._shader);
 
         sf::Glsl::Mat4 mat4(combinedTransform.getMatrix());
-        mat4.array[12] *= _distanceScale;
-        mat4.array[13] *= _distanceScale;
+        mat4.array[12] *= _parent._distanceScale;
+        mat4.array[13] *= _parent._distanceScale;
 
-        _shader->setUniform("transform", mat4);
-        _shader->setUniform("timeSinceStart", _engine.timeSinceStart().asSeconds());
+        _parent._shader->setUniform("transform", mat4);
+        _parent._shader->setUniform("timeSinceStart", _engine.timeSinceStart().asSeconds());
 
         return true;
     }

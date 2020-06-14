@@ -6,13 +6,15 @@
 
 namespace space
 {
+    class StarBackground;
+
     class StarBackgroundChunk : public Particles
     {
         public:
             // Fields
 
             // Constructor
-            StarBackgroundChunk(Engine &engine, int numParticles, float area, float distanceScale);
+            StarBackgroundChunk(Engine &engine, const StarBackground &parent);
 
             // Methods
             bool isActive() const;
@@ -29,9 +31,7 @@ namespace space
 
         private:
             sf::Vector2i _position;
-            float _area;
-            float _distanceScale;
-            sf::Shader *_shader;
             sf::Time _lastUseTime;
+            const StarBackground &_parent;
     };
 } // space
