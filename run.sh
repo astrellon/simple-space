@@ -1,3 +1,5 @@
 #!/bin/sh
 ./make.sh
-./build/space
+if [ $? -eq 0 ]; then
+    ./build/space
+fi

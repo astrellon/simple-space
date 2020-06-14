@@ -4,4 +4,10 @@ cd build
 cmake ..
 make -j4
 
-cp -rf ../data ./
+makeresult=$?
+
+if [ $makeresult -eq 0 ]; then
+    cp -rf ../data ./
+else
+    return $makeresult
+fi
