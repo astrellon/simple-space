@@ -70,6 +70,16 @@ namespace space
 
             static sf::Color hsv(float hue, float saturation, float value);
 
+            static inline sf::Vector2i floor(const sf::Vector2f & input)
+            {
+                return sf::Vector2i(std::floor(input.x), std::floor(input.y));
+            }
+
+            static inline sf::Vector2i ceil(const sf::Vector2f & input)
+            {
+                return sf::Vector2i(std::ceil(input.x), std::ceil(input.y));
+            }
+
         private:
             Utils();
 

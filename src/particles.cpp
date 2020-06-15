@@ -24,7 +24,7 @@ namespace space
 
     void Particles::update(sf::Time dt)
     {
-        if (!_inited)
+        if (!_inited && _numParticles > 0)
         {
             glGenBuffers(1, &_billboardVertexBuffer);
             glBindBuffer(GL_ARRAY_BUFFER, _billboardVertexBuffer);

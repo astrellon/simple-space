@@ -96,7 +96,10 @@ namespace space
 
     void Engine::initBackground()
     {
-        _background = std::make_unique<StarBackground>(*this, 8000);
+        for (auto i = 0; i < 7; i++)
+        {
+            _backgrounds.emplace_back(std::make_unique<StarBackground>(*this, 200, 500, 0.9 - (7 - i) * 0.1));
+        }
     }
 
     void Engine::processEvents()
@@ -149,6 +152,10 @@ namespace space
     void Engine::onResize(sf::Vector2f area)
     {
         _camera.setSize(area);
+        for (auto &b : _backgrounds)
+        {
+            b->onResize(area);
+        }
     }
 
     void Engine::preUpdate()
@@ -167,7 +174,14 @@ namespace space
             _currentSession->update(_deltaTime);
         }
 
-        _background->update(_deltaTime);
+        auto begin = std::chrono::steady_clock::now();
+        for (auto &b : _backgrounds)
+        {
+            b->update(_deltaTime);
+        }
+        auto end = std::chrono::steady_clock::now();
+
+        // std::cout << "U = " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << "[µs]" << std::endl;
 
         _camera.update(_deltaTime);
     }
@@ -177,14 +191,23 @@ namespace space
         _window.clear();
         _window.setView(_camera.view());
 
-        _background->draw(_window, sf::Transform::Identity);
+        auto begin = std::chrono::steady_clock::now();
+        _backgrounds.begin()->get()->bindShader(sf::Transform::Identity);
+        for (auto &b : _backgrounds)
+        {
+            b->draw(_window, sf::Transform::Identity);
+        }
+        _backgrounds.begin()->get()->unbindShader();
+        auto end = std::chrono::steady_clock::now();
+
+        //std::cout << "D = " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << "[µs]" << std::endl;
 
         if (_currentSession.get())
         {
             _currentSession->draw(_window);
         }
 
-        //std::cout << "DrawCalls: " << DrawDebug::glDraw << std::endl;
+        // std::cout << "DrawCalls: " << DrawDebug::glDraw << std::endl;
 
         _window.display();
     }

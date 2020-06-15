@@ -12,5 +12,5 @@ uniform float timeSinceStart;
 void main()
 {
     float x = mod(timeSinceStart + index, 5) - 2.5;
-    FragColor = colour + vec4(0.1, 0.1, 0.1, 0) * pow(E, -(x * x / 0.2));
+    FragColor = colour + vec4(0.15, 0.15, 0.15, 0) * pow(E, -(x * x / 0.2));
 }
