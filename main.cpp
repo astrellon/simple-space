@@ -26,7 +26,7 @@ int main()
     settings.majorVersion = 3;
     settings.minorVersion = 0;
 
-    sf::RenderWindow window(sf::VideoMode(1280, 800), "Space", sf::Style::Default, settings);
+    sf::RenderWindow window(sf::VideoMode(1280, 720), "Space", sf::Style::Default, settings);
     window.setVerticalSyncEnabled(true);
 
     glewInit();
@@ -38,7 +38,6 @@ int main()
 
     resourceManager.loadEmbedded();
     resourceManager.preloadShader("stars", "data/shaders/stars.vert", "data/shaders/stars.frag");
-    resourceManager.preloadShader("stars2", "data/shaders/stars2.vert", "data/shaders/stars2.frag");
     resourceManager.preloadTextures("data/textures");
     resourceManager.preloadFonts("data/fonts");
 

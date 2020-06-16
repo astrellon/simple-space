@@ -100,6 +100,8 @@ namespace space
         {
             _backgrounds.emplace_back(std::make_unique<StarBackground>(*this, 200, 500, 0.9 - (7 - i) * 0.1));
         }
+
+        _bloomEffect.init(*_resourceManager.get());
     }
 
     void Engine::processEvents()
@@ -156,6 +158,8 @@ namespace space
         {
             b->onResize(area);
         }
+
+        _sceneRenderTarget.create(area.x, area.y);
     }
 
     void Engine::preUpdate()
@@ -188,26 +192,51 @@ namespace space
 
     void Engine::draw()
     {
-        _window.clear();
-        _window.setView(_camera.view());
+        if (false)
+        {
+            _sceneRenderTarget.setActive(true);
+            _sceneRenderTarget.clear();
+            _sceneRenderTarget.setView(_camera.view());
+        }
+        else
+        {
+            _window.clear();
+            _window.setView(_camera.view());
+        }
 
         auto begin = std::chrono::steady_clock::now();
+
         _backgrounds.begin()->get()->bindShader(sf::Transform::Identity);
         for (auto &b : _backgrounds)
         {
             b->draw(_window, sf::Transform::Identity);
         }
         _backgrounds.begin()->get()->unbindShader();
-        auto end = std::chrono::steady_clock::now();
 
-        //std::cout << "D = " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << "[µs]" << std::endl;
+        auto end = std::chrono::steady_clock::now();
+        std::cout << "D = " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << "[µs]" << std::endl;
 
         if (_currentSession.get())
         {
             _currentSession->draw(_window);
         }
 
+        if (false)
+        {
+            _sceneRenderTarget.display();
+        }
+
         // std::cout << "DrawCalls: " << DrawDebug::glDraw << std::endl;
+        if (false)
+        {
+            _window.setActive(true);
+            _window.clear();
+
+            _bloomEffect.apply(_sceneRenderTarget, _window);
+            sf::Sprite sprite(_sceneRenderTarget.getTexture());
+            _window.draw(sprite);
+        }
+
 
         _window.display();
     }
