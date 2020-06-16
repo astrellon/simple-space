@@ -1,11 +1,17 @@
 #include "post-effect.hpp"
 
-#include <SFML/Graphics/Shader.hpp>
-#include <SFML/Graphics/RenderTarget.hpp>
-#include <SFML/Graphics/VertexArray.hpp>
-
 namespace space
 {
+    PostEffect::PostEffect() : _vertices(sf::Triangles, 6)
+    {
+        _vertices[0] = sf::Vertex(sf::Vector2f(-1, 1), sf::Vector2f(0, 1));
+        _vertices[1] = sf::Vertex(sf::Vector2f(1, 1), sf::Vector2f(1, 1));
+        _vertices[2] = sf::Vertex(sf::Vector2f(-1, -1), sf::Vector2f(0, 0));
+
+        _vertices[3] = sf::Vertex(sf::Vector2f(1, 1), sf::Vector2f(1, 1));
+        _vertices[4] = sf::Vertex(sf::Vector2f(1, -1), sf::Vector2f(1, 0));
+        _vertices[5] = sf::Vertex(sf::Vector2f(-1, -1), sf::Vector2f(0, 0));
+    }
 
     PostEffect::~PostEffect()
     {
@@ -15,21 +21,11 @@ namespace space
     {
         auto outputSize = static_cast<sf::Vector2f>(output.getSize());
 
-        sf::VertexArray vertices(sf::TrianglesStrip, 4);
-        // vertices[0] = sf::Vertex(sf::Vector2f(0, 0), sf::Vector2f(0, 1));
-        // vertices[1] = sf::Vertex(sf::Vector2f(outputSize.x, 0), sf::Vector2f(1, 1));
-        // vertices[2] = sf::Vertex(sf::Vector2f(0, outputSize.y), sf::Vector2f(0, 0));
-        // vertices[3] = sf::Vertex(sf::Vector2f(outputSize), sf::Vector2f(1, 0));
-        vertices[0] = sf::Vertex(sf::Vector2f(-1, 1), sf::Vector2f(0, 1));
-        vertices[1] = sf::Vertex(sf::Vector2f(1, 1), sf::Vector2f(1, 1));
-        vertices[2] = sf::Vertex(sf::Vector2f(-1, -1), sf::Vector2f(0, 0));
-        vertices[3] = sf::Vertex(sf::Vector2f(1, -1), sf::Vector2f(1, 0));
-
         sf::RenderStates states;
         states.shader = &shader;
         states.blendMode = sf::BlendNone;
 
-        output.draw(vertices, states);
+        output.draw(_vertices, states);
     }
 
     bool PostEffect::isSupported()

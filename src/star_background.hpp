@@ -30,6 +30,8 @@ namespace space
             void bindShader(const sf::Transform &parentTransform);
             void unbindShader();
 
+            void drawDebug(sf::RenderTarget &target);
+
         private:
             friend class StarBackgroundChunk;
 

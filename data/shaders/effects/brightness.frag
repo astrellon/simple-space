@@ -5,7 +5,7 @@ out vec4 FragColor;
 uniform sampler2D source;
 
 const float Threshold = 0.1;
-const float Factor = 0.5;
+const float Factor = 0.3;
 
 void main()
 {

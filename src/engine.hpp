@@ -71,5 +71,7 @@ namespace space
             sf::Clock _timerSinceStart;
             sf::Time _deltaTime;
             sf::Time _timeSinceStartOnUpdate;
+
+            bool _enableBloom;
     };
 } // town

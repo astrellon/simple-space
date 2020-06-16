@@ -26,8 +26,9 @@ int main()
     settings.majorVersion = 3;
     settings.minorVersion = 0;
 
-    sf::RenderWindow window(sf::VideoMode(1280, 720), "Space", sf::Style::Default, settings);
+    sf::RenderWindow window(sf::VideoMode(1280, 800), "Space", sf::Style::Default, settings);
     window.setVerticalSyncEnabled(true);
+    // window.setFramerateLimit(120);
 
     glewInit();
 
@@ -54,9 +55,6 @@ int main()
         std::cout << "Ship Def: " << shipDef->name << std::endl;
     }
 
-    const sf::Font *sansFont;
-    resourceManager.font("data/fonts/LiberationSans-Regular.ttf", &sansFont);
-
     auto spriteSize = static_cast<uint>(engine.spriteSize());
     auto spriteScale = engine.spriteScale();
 
@@ -66,9 +64,6 @@ int main()
     ship2->transform().position += sf::Vector2f(200, 0);
 
     engine.camera().setFollowing(ship->id);
-
-    sf::Text text("hello", *sansFont);
-    text.setCharacterSize(72);
 
     while (window.isOpen())
     {

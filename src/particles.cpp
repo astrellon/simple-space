@@ -18,7 +18,7 @@ static const GLfloat g_vertex_buffer_data[] = {
 
 namespace space
 {
-    Particles::Particles(Engine &engine, int numParticles, GLenum bufferUsage) : _engine(engine), _numParticles(numParticles), _inited(false), _bufferUsage(bufferUsage)
+    Particles::Particles(Engine &engine, int numParticles, GLenum bufferUsage) : _engine(engine), _numParticles(numParticles), _inited(false), _bufferUsage(bufferUsage), _billboardVertexBuffer(0), _particlesPositionBuffer(0), _particlesColourBuffer(0)
     {
     }
 
@@ -26,20 +26,29 @@ namespace space
     {
         if (!_inited && _numParticles > 0)
         {
-            glGenBuffers(1, &_billboardVertexBuffer);
-            glBindBuffer(GL_ARRAY_BUFFER, _billboardVertexBuffer);
-            glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
+            if (_billboardVertexBuffer == 0)
+            {
+                glGenBuffers(1, &_billboardVertexBuffer);
+                glBindBuffer(GL_ARRAY_BUFFER, _billboardVertexBuffer);
+                glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
+            }
 
             _positions.resize(_numParticles);
             _colours.resize(_numParticles);
 
             onInit();
 
-            glGenBuffers(1, &_particlesPositionBuffer);
+            if (_particlesPositionBuffer == 0)
+            {
+                glGenBuffers(1, &_particlesPositionBuffer);
+            }
             glBindBuffer(GL_ARRAY_BUFFER, _particlesPositionBuffer);
             glBufferData(GL_ARRAY_BUFFER, _numParticles * 2 * sizeof(GLfloat), _positions.data(), _bufferUsage);
 
-            glGenBuffers(1, &_particlesColourBuffer);
+            if (_particlesColourBuffer == 0)
+            {
+                glGenBuffers(1, &_particlesColourBuffer);
+            }
             glBindBuffer(GL_ARRAY_BUFFER, _particlesColourBuffer);
             glBufferData(GL_ARRAY_BUFFER, _numParticles * 4 * sizeof(GLubyte), _colours.data(), _bufferUsage);
 

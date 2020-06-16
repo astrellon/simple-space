@@ -2,12 +2,7 @@
 
 #include "non_copyable.hpp"
 
-namespace sf
-{
-    class RenderTarget;
-    class RenderTexture;
-    class Shader;
-} // namespace sf
+#include <SFML/Graphics.hpp>
 
 namespace space
 {
@@ -15,13 +10,16 @@ namespace space
 class PostEffect : private NonCopyable
 {
     public:
+        PostEffect();
         virtual ~PostEffect();
         virtual void apply(const sf::RenderTexture &input, sf::RenderTarget &output) = 0;
 
         static bool isSupported();
 
     protected:
-        static void applyShader(const sf::Shader &shader, sf::RenderTarget &output);
+        void applyShader(const sf::Shader &shader, sf::RenderTarget &output);
+
+        sf::VertexArray _vertices;
 };
 
 } // namespace space

@@ -1,6 +1,7 @@
 #include "star_background.hpp"
 
 #include <random>
+#include <sstream>
 
 #include "engine.hpp"
 #include "utils.hpp"
@@ -29,6 +30,7 @@ namespace space
         _nextAvailableIndex = 0;
 
         _chunks.clear();
+        _availableIndicies.clear();
 
         _numChunks = _chunkDims.x * _chunkDims.y;
         _numParticles = _numChunks * _numParticlesPerChunk;
@@ -149,6 +151,27 @@ namespace space
         sf::Shader::bind(nullptr);
     }
 
+    void StarBackground::drawDebug(sf::RenderTarget &target)
+    {
+        auto font = _engine.resourceManager().defaultFont();
+        // std::cout << "Chunks: ";
+        for (auto &chunk : _chunks)
+        {
+            std::stringstream ss;
+            ss << chunk.first.first << ", " << chunk.first.second;
+            // std::cout << "[" << chunk.first.first << ", " << chunk.first.second << "], ";
+            sf::Text text(ss.str(), *font);
+            text.setCharacterSize(24);
+
+            sf::RenderStates renderState;
+            renderState.transform = sf::Transform::Identity;
+            renderState.transform.translate(chunk.first.first * _chunkArea, chunk.first.second * _chunkArea);
+
+            target.draw(text, renderState);
+        }
+        // std::cout << std::endl;
+    }
+
     // Chunks
     StarBackgroundChunk::StarBackgroundChunk(int indexOffset)
         : _indexOffset(indexOffset)
@@ -167,7 +190,8 @@ namespace space
         std::uniform_real_distribution<float> yRange(offset.y, area + offset.y);
         std::uniform_real_distribution<float> colourRange(127 * distanceScale * distanceScale, 235 * distanceScale * distanceScale);
 
-        for (auto i = _indexOffset; i < _indexOffset + parent._numParticlesPerChunk; i++)
+        auto endIndex = _indexOffset + parent._numParticlesPerChunk;
+        for (auto i = _indexOffset; i < endIndex; i++)
         {
             auto &position = parent._positions[i];
             auto &colour = parent._colours[i];

@@ -16,7 +16,7 @@ namespace space
 {
     Engine::Engine(sf::RenderWindow &window) :
         _spriteScale(1.0f), _spriteSize(16.0f), _window(window), _deltaTime(sf::Time::Zero), _timeSinceStartOnUpdate(sf::Time::Zero),
-        _camera(*this)
+        _camera(*this), _enableBloom(true)
     {
         _resourceManager = std::make_unique<ResourceManager>();
         _definitionManager = std::make_unique<DefinitionManager>();
@@ -192,52 +192,43 @@ namespace space
 
     void Engine::draw()
     {
-        if (false)
+        auto begin = std::chrono::steady_clock::now();
+
+        sf::RenderTarget *target = &_window;
+        if (_enableBloom)
         {
+            target = &_sceneRenderTarget;
             _sceneRenderTarget.setActive(true);
-            _sceneRenderTarget.clear();
-            _sceneRenderTarget.setView(_camera.view());
-        }
-        else
-        {
-            _window.clear();
-            _window.setView(_camera.view());
         }
 
-        auto begin = std::chrono::steady_clock::now();
+        target->clear();
+        target->setView(_camera.view());
 
         _backgrounds.begin()->get()->bindShader(sf::Transform::Identity);
         for (auto &b : _backgrounds)
         {
-            b->draw(_window, sf::Transform::Identity);
+            b->draw(*target, sf::Transform::Identity);
         }
         _backgrounds.begin()->get()->unbindShader();
 
-        auto end = std::chrono::steady_clock::now();
-        std::cout << "D = " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << "[µs]" << std::endl;
-
         if (_currentSession.get())
         {
-            _currentSession->draw(_window);
+            _currentSession->draw(*target);
         }
 
-        if (false)
+        if (_enableBloom)
         {
             _sceneRenderTarget.display();
-        }
 
-        // std::cout << "DrawCalls: " << DrawDebug::glDraw << std::endl;
-        if (false)
-        {
             _window.setActive(true);
             _window.clear();
 
             _bloomEffect.apply(_sceneRenderTarget, _window);
-            sf::Sprite sprite(_sceneRenderTarget.getTexture());
-            _window.draw(sprite);
         }
 
-
         _window.display();
+
+        auto end = std::chrono::steady_clock::now();
+        // std::cout << "D = " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << "[µs]" << std::endl;
     }
 }
