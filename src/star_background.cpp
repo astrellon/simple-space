@@ -2,6 +2,7 @@
 
 #include <random>
 #include <sstream>
+#include <algorithm>
 
 #include "engine.hpp"
 #include "utils.hpp"
@@ -186,6 +187,7 @@ namespace space
         sf::Vector2f offset(position.x * area, position.y * area);
         auto rand = Utils::randWithSeed((position.x + position.y << 16) / distanceScale + distanceScale * 255);
 
+        std::uniform_real_distribution<float> bigStarRange(0, 100);
         std::uniform_real_distribution<float> xRange(offset.x, area + offset.x);
         std::uniform_real_distribution<float> yRange(offset.y, area + offset.y);
         std::uniform_real_distribution<float> colourRange(127 * distanceScale * distanceScale, 235 * distanceScale * distanceScale);
@@ -193,6 +195,11 @@ namespace space
         auto endIndex = _indexOffset + parent._numParticlesPerChunk;
         for (auto i = _indexOffset; i < endIndex; i++)
         {
+            auto isBigStar = false;
+            if (i < endIndex - 5)
+            {
+                isBigStar = bigStarRange(rand) < 5;
+            }
             auto &position = parent._positions[i];
             auto &colour = parent._colours[i];
             position.x = xRange(rand);
@@ -201,6 +208,30 @@ namespace space
             colour.r = static_cast<int>(colourRange(rand));
             colour.g = static_cast<int>(colourRange(rand));
             colour.b = static_cast<int>(colourRange(rand));
+
+            if (isBigStar)
+            {
+                sf::Color dimmedColour(colour.r * 0.6, colour.g * 0.6, colour.b * 0.6);
+                colour.r = std::min(255, static_cast<int>(colour.r * 1.4));
+                colour.g = std::min(255, static_cast<int>(colour.g * 1.4));
+                colour.b = std::min(255, static_cast<int>(colour.b * 1.4));
+
+                parent._positions[i + 1].x = position.x - 1;
+                parent._positions[i + 1].y = position.y;
+                parent._positions[i + 2].x = position.x + 1;
+                parent._positions[i + 2].y = position.y;
+                parent._positions[i + 3].x = position.x;
+                parent._positions[i + 3].y = position.y - 1;
+                parent._positions[i + 4].x = position.x;
+                parent._positions[i + 4].y = position.y + 1;
+
+                Utils::setColour(parent._colours[i + 1], dimmedColour);
+                Utils::setColour(parent._colours[i + 2], dimmedColour);
+                Utils::setColour(parent._colours[i + 3], dimmedColour);
+                Utils::setColour(parent._colours[i + 4], dimmedColour);
+
+                i += 5;
+            }
         }
     }
 } // namespace space
