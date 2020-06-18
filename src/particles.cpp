@@ -9,7 +9,10 @@ static const GLfloat g_vertex_buffer_data[] = {
     -0.5f, -0.5f,
     0.5f, -0.5f,
     -0.5f, 0.5f,
+
+    0.5f, -0.5f,
     0.5f, 0.5f,
+    -0.5f, 0.5f,
     // -1, -1,
     // 1, -1,
     // -1, 1,
@@ -106,7 +109,7 @@ namespace space
         glVertexAttribDivisor(2, 1); // color : one per quad -> 1
 
         DrawDebug::glDraw++;
-        glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, _numParticles);
+        glDrawArraysInstanced(GL_TRIANGLES, 0, 6, _numParticles);
 
         glBindBuffer(GL_ARRAY_BUFFER, 0);
 
