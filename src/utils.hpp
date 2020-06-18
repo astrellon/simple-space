@@ -80,6 +80,14 @@ namespace space
                 return sf::Vector2i(std::ceil(input.x), std::ceil(input.y));
             }
 
+            static inline void setColour(sf::Color &target, const sf::Color &src)
+            {
+                target.r = src.r;
+                target.g = src.g;
+                target.b = src.b;
+                target.a = src.a;
+            }
+
         private:
             Utils();
 
