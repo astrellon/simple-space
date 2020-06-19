@@ -105,6 +105,13 @@ namespace space
     // Textures
     bool ResourceManager::texture(const std::string &filename, const sf::Texture **result)
     {
+        sf::Texture *tempResult;
+        const bool loaded = texture(filename, &tempResult);
+        *result = tempResult;
+        return loaded;
+    }
+    bool ResourceManager::texture(const std::string &filename, sf::Texture **result)
+    {
         auto find = _textures.find(filename);
         if (find != _textures.end())
         {
@@ -116,7 +123,7 @@ namespace space
         return *result != nullptr;
     }
 
-    const sf::Texture *ResourceManager::preloadTexture(const std::string &filename)
+    sf::Texture *ResourceManager::preloadTexture(const std::string &filename)
     {
         auto texture = std::make_unique<sf::Texture>();
         if (!texture->loadFromFile(filename))

@@ -39,6 +39,7 @@ int main()
 
     resourceManager.loadEmbedded();
     resourceManager.preloadShader("stars", "data/shaders/stars.vert", "data/shaders/stars.frag");
+    resourceManager.preloadShader("planet", "data/shaders/planet.vert", "data/shaders/planet.frag");
     resourceManager.preloadTextures("data/textures");
     resourceManager.preloadFonts("data/fonts");
 
