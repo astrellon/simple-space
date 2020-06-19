@@ -8,6 +8,8 @@
 
 namespace space
 {
+    class Engine;
+
     class Ship : public SpaceObject
     {
         public:
@@ -25,8 +27,8 @@ namespace space
             float rotationSpeed() const { return _rotationSpeed; }
             sf::Vector2f speed() const { return _speed; }
 
-            virtual void update(sf::Time dt);
-            virtual void draw(sf::RenderTarget &target, const sf::Transform &parentTransform);
+            virtual void update(Engine &engine, sf::Time dt);
+            virtual void draw(Engine &engine, sf::RenderTarget &target, const sf::Transform &parentTransform);
 
         private:
             // Fields

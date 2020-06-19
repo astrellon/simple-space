@@ -38,7 +38,8 @@ namespace space
             const TextureMap &textures() const { return _textures; }
 
             bool texture(const std::string &filename, const sf::Texture **result);
-            const sf::Texture *preloadTexture(const std::string &filename);
+            bool texture(const std::string &filename, sf::Texture **result);
+            sf::Texture *preloadTexture(const std::string &filename);
             void preloadTextures(const std::string &folder);
 
             // Images

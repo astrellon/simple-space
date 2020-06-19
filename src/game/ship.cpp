@@ -11,7 +11,7 @@ namespace space
         _sprite.setOrigin(size.x / 2, size.y / 2);
     }
 
-    void Ship::update(sf::Time dt)
+    void Ship::update(Engine &engine, sf::Time dt)
     {
         auto seconds = dt.asSeconds();
         _speed += Utils::transformDirection(moveInput, _transform.getTransform());
@@ -21,7 +21,7 @@ namespace space
         _transform.rotation += _rotationSpeed * seconds;
     }
 
-    void Ship::draw(sf::RenderTarget &target, const sf::Transform &parentTransform)
+    void Ship::draw(Engine &engine, sf::RenderTarget &target, const sf::Transform &parentTransform)
     {
         const auto combinedTransform = parentTransform * _transform.getTransform();
         target.draw(_sprite, combinedTransform);

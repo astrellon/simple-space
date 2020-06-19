@@ -10,27 +10,25 @@ namespace space
 {
     class Engine;
 
-    class ShipDefinition : public BaseDefinition
+    class PlanetDefinition : public BaseDefinition
     {
         public:
             // Fields
             std::string texturePath;
             std::string name;
 
-            float maxRotation;
-            float turnRate;
-            float maxSpeed;
-            float acceleration;
+            float rotationRate;
+            float size;
 
             const sf::Texture *texture;
 
             // Methods
-            static const std::string DefinitionType() { return "ship"; }
+            static const std::string DefinitionType() { return "planet"; }
             std::string type() const { return DefinitionType(); }
 
             virtual void onPostLoad(Engine &engine);
 
             // Constructor
-            ShipDefinition(DefinitionId id) : BaseDefinition(id) { }
+            PlanetDefinition(DefinitionId id) : BaseDefinition(id) { }
     };
 } // space
