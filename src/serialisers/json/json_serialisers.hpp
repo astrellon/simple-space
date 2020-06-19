@@ -2,6 +2,7 @@
 
 #include "../../definitions/base_definition.hpp"
 #include "../../definitions/ship_definition.hpp"
+#include "../../definitions/planet_definition.hpp"
 #include "json.hpp"
 
 using nlohmann::json;
@@ -13,4 +14,7 @@ namespace space
 
     json toJson(const ShipDefinition &input);
     std::unique_ptr<ShipDefinition> fromJsonShipDefinition(const json &j);
+
+    json toJson(const PlanetDefinition &input);
+    std::unique_ptr<PlanetDefinition> fromJsonPlanetDefinition(const json &j);
 } // namespace space

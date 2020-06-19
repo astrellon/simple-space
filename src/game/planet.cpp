@@ -6,37 +6,38 @@
 
 namespace space
 {
-    Planet::Planet(Engine &engine, sf::Texture *texture) : SpaceObject("planet"), _engine(engine), _texture(texture), _shader(nullptr)
+    Planet::Planet(const ObjectId &id, const PlanetDefinition &definition)
+        : SpaceObject(id), definition(definition), _shader(nullptr)
     {
         _renderTexture = std::make_unique<sf::RenderTexture>();
-        _renderTexture->create(128, 128);
+        _renderTexture->create(definition.size, definition.size);
         _renderTexture->setSmooth(false);
 
-        _texture->setRepeated(true);
-        _texture->setSmooth(true);
     }
 
-    void Planet::draw(sf::RenderTarget &target, const sf::Transform &parentTransform)
+    void Planet::draw(Engine &engine, sf::RenderTarget &target, const sf::Transform &parentTransform)
     {
         if (_shader == nullptr)
         {
-            if (!_engine.resourceManager().shader("planet", &_shader))
+            if (!engine.resourceManager().shader("planet", &_shader))
             {
                 std::cout << "Unable to find shader for planet" << std::endl;
             }
         }
-        sf::Sprite sprite(*_texture);
+        sf::Sprite sprite(*definition.texture);
 
         sf::RenderStates renderState;
         renderState.shader = _shader;
 
-        _shader->setUniform("timeSinceStart", _engine.timeSinceStart().asSeconds());
+        _shader->setUniform("timeSinceStart", engine.timeSinceStart().asSeconds());
+        _shader->setUniform("offset", sf::Vector2f(0, 0));
+        _shader->setUniform("rotationRate", definition.rotationRate);
 
         _renderTexture->draw(sprite, renderState);
         _renderTexture->display();
 
         sf::Sprite sphereSprite(_renderTexture->getTexture());
-        sphereSprite.setOrigin(64, 64);
+        sphereSprite.setOrigin(definition.size * 3.0 / 4.0, definition.size / 4.0);
 
         const auto combinedTransform = parentTransform * _transform.getTransform();
         target.draw(sphereSprite, combinedTransform);

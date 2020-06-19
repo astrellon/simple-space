@@ -102,10 +102,6 @@ namespace space
         }
 
         _bloomEffect.init(*_resourceManager.get());
-
-        sf::Texture *planetTexture;
-        _resourceManager->texture("data/textures/planet.png", &planetTexture);
-        _planet = std::make_unique<Planet>(*this, planetTexture);
     }
 
     void Engine::processEvents()
@@ -214,8 +210,6 @@ namespace space
             b->draw(*target, sf::Transform::Identity);
         }
         _backgrounds.begin()->get()->unbindShader();
-
-        _planet->draw(*target, sf::Transform::Identity);
 
         if (_currentSession.get())
         {

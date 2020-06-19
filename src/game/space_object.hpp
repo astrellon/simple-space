@@ -10,6 +10,7 @@
 namespace space
 {
     typedef std::string ObjectId;
+    class Engine;
 
     class SpaceObject : private NonCopyable
     {
@@ -24,8 +25,8 @@ namespace space
             const SpaceTransform &transform() const { return _transform; }
             SpaceTransform &transform() { return _transform; }
 
-            virtual void update(sf::Time dt) = 0;
-            virtual void draw(sf::RenderTarget &target, const sf::Transform &parentTransform) = 0;
+            virtual void update(Engine &engine, sf::Time dt) = 0;
+            virtual void draw(Engine &engine, sf::RenderTarget &target, const sf::Transform &parentTransform) = 0;
 
         protected:
             // Fields

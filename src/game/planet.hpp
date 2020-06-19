@@ -3,7 +3,8 @@
 #include <SFML/Graphics.hpp>
 #include <memory>
 
-#include "game/space_object.hpp"
+#include "space_object.hpp"
+#include "../definitions/planet_definition.hpp"
 
 namespace space
 {
@@ -13,19 +14,18 @@ namespace space
     {
         public:
             // Fields
+            const PlanetDefinition &definition;
 
             // Constructor
-            Planet(Engine &engine, sf::Texture *texture);
+            Planet(const ObjectId &id, const PlanetDefinition &definition);
 
             // Methods
-            virtual void update(sf::Time dt) {}
-            virtual void draw(sf::RenderTarget &target, const sf::Transform &parentTransform);
+            virtual void update(Engine &engine, sf::Time dt) {}
+            virtual void draw(Engine &engine, sf::RenderTarget &target, const sf::Transform &parentTransform);
 
         private:
             // Fields
-            Engine &_engine;
             std::unique_ptr<sf::RenderTexture> _renderTexture;
-            sf::Texture *_texture;
             sf::Shader *_shader;
 
             // Methods

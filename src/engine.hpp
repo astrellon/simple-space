@@ -6,7 +6,6 @@
 #include "camera.hpp"
 #include "star_background.hpp"
 #include "effects/bloom-effect.hpp"
-#include "planet.hpp"
 
 #include <SFML/Graphics.hpp>
 
@@ -63,7 +62,6 @@ namespace space
             BloomEffect _bloomEffect;
 
             Camera _camera;
-            std::unique_ptr<Planet> _planet;
 
             float _spriteScale;
             float _spriteSize;

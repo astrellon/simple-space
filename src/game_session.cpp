@@ -2,7 +2,9 @@
 
 #include "engine.hpp"
 #include "game/ship.hpp"
+#include "game/planet.hpp"
 #include "definitions/ship_definition.hpp"
+#include "definitions/planet_definition.hpp"
 
 namespace space
 {
@@ -20,6 +22,15 @@ namespace space
         auto ship = std::make_unique<Ship>(id, definition);
         auto result = ship.get();
         _spaceObjects.emplace_back(std::move(ship));
+
+        return result;
+    }
+
+    Planet *GameSession::createPlanet(const ObjectId &id, const PlanetDefinition &definition)
+    {
+        auto planet = std::make_unique<Planet>(id, definition);
+        auto result = planet.get();
+        _spaceObjects.emplace_back(std::move(planet));
 
         return result;
     }
@@ -42,7 +53,7 @@ namespace space
     {
         for (auto &spaceObject : _spaceObjects)
         {
-            spaceObject->update(dt);
+            spaceObject->update(_engine, dt);
         }
     }
 
@@ -50,7 +61,7 @@ namespace space
     {
         for (auto &spaceObject : _spaceObjects)
         {
-            spaceObject->draw(target, sf::Transform::Identity);
+            spaceObject->draw(_engine, target, sf::Transform::Identity);
         }
     }
 } // namespace town

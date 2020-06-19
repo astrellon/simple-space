@@ -18,6 +18,7 @@
 #include "src/serialisers/json/json.hpp"
 #include "src/definition_manager.hpp"
 #include "src/game/ship.hpp"
+#include "src/game/planet.hpp"
 #include "src/keyboard.hpp"
 
 int main()
@@ -56,10 +57,19 @@ int main()
         std::cout << "Ship Def: " << shipDef->name << std::endl;
     }
 
+    const space::PlanetDefinition *planetDef;
+    if (definitionManager.tryGet("PLANET_1", &planetDef))
+    {
+        std::cout << "Planet Def: " << planetDef->name << std::endl;
+    }
+
     auto spriteSize = static_cast<uint>(engine.spriteSize());
     auto spriteScale = engine.spriteScale();
 
     auto gameSession = engine.startGameSession();
+
+    auto planet = gameSession->createPlanet("PLANET", *planetDef);
+    planet->transform().position += sf::Vector2f(50, 50);
     auto ship = gameSession->createShip("PLAYER", *shipDef);
     auto ship2 = gameSession->createShip("OTHER", *shipDef);
     ship2->transform().position += sf::Vector2f(200, 0);
