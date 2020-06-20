@@ -183,5 +183,51 @@ namespace space
         image.swap(_images[filename]);
         return result;
     }
+
+    // Maps
+    bool ResourceManager::map(const std::string &filename, tmx::Map **result)
+    {
+        auto find = _maps.find(filename);
+        if (find != _maps.end())
+        {
+            *result = find->second.get();
+            return true;
+        }
+
+        *result = preloadMap(filename);
+        return *result != nullptr;
+    }
+
+    tmx::Map *ResourceManager::preloadMap(const std::string &filename)
+    {
+        auto map = std::make_unique<tmx::Map>();
+        map->load(filename);
+
+        auto result = map.get();
+        map.swap(_maps[filename]);
+        return result;
+    }
+
+    void ResourceManager::preloadMaps(const std::string &folder)
+    {
+        for (const auto& dirEntry : std::filesystem::recursive_directory_iterator(folder))
+        {
+            if (dirEntry.is_directory())
+            {
+                continue;
+            }
+
+            const auto &filename = dirEntry.path().string();
+            auto ext = Utils::getFilenameExt(filename);
+            if (ext != "tmx")
+            {
+                continue;
+            }
+
+            std::cout << "Loading map: " << filename << std::endl;
+
+            preloadMap(filename);
+        }
+    }
 }
 

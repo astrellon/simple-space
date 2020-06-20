@@ -6,6 +6,8 @@
 #include "definitions/ship_definition.hpp"
 #include "definitions/planet_definition.hpp"
 
+#include <tmxlite/Map.hpp>
+
 namespace space
 {
     GameSession::GameSession(Engine &engine) : _engine(engine)
@@ -51,6 +53,19 @@ namespace space
 
     void GameSession::update(sf::Time dt)
     {
+        if (_mapLayer.get() == nullptr)
+        {
+            tmx::Map *map;
+            if (_engine.resourceManager().map("data/maps/test.tmx", &map))
+            {
+                _mapLayer = std::make_unique<MapLayer>(*map, 0);
+            }
+        }
+        else
+        {
+            _mapLayer->update(dt);
+        }
+
         for (auto &spaceObject : _spaceObjects)
         {
             spaceObject->update(_engine, dt);
@@ -59,6 +74,13 @@ namespace space
 
     void GameSession::draw(sf::RenderTarget &target)
     {
+        if (_mapLayer)
+        {
+            sf::RenderStates states;
+            //_mapLayer->draw(target, states);
+            target.draw(*_mapLayer);
+        }
+
         for (auto &spaceObject : _spaceObjects)
         {
             spaceObject->draw(_engine, target, sf::Transform::Identity);

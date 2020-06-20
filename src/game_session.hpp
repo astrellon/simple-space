@@ -9,6 +9,8 @@
 #include "definitions/planet_definition.hpp"
 #include "game/space_object.hpp"
 
+#include "map-layer.hpp"
+
 namespace space
 {
     class Ship;
@@ -33,6 +35,7 @@ namespace space
             Engine &_engine;
 
             std::vector<std::unique_ptr<SpaceObject>> _spaceObjects;
+            std::unique_ptr<MapLayer> _mapLayer;
 
     };
 } // town

@@ -2,6 +2,8 @@
 
 #include <SFML/Graphics.hpp>
 
+#include <tmxlite/Map.hpp>
+
 #include <string>
 #include <map>
 
@@ -16,6 +18,7 @@ namespace space
             typedef std::map<std::string, std::unique_ptr<sf::Image>> ImageMap;
             typedef std::map<std::string, std::unique_ptr<sf::Font>> FontMap;
             typedef std::map<std::string, std::unique_ptr<sf::Shader>> ShaderMap;
+            typedef std::map<std::string, std::unique_ptr<tmx::Map>> TmxMap;
 
             // Methods
             void loadEmbedded();
@@ -48,6 +51,13 @@ namespace space
             bool image(const std::string &filename, const sf::Image **result);
             const sf::Image *preloadImage(const std::string &filename);
 
+            // Maps
+            const TmxMap &maps() const { return _maps; }
+
+            bool map(const std::string &filename, tmx::Map **result);
+            tmx::Map *preloadMap(const std::string &filename);
+            void preloadMaps(const std::string &folder);
+
         private:
 
             std::unique_ptr<sf::Font> _defaultFont;
@@ -55,6 +65,7 @@ namespace space
             ImageMap _images;
             FontMap _fonts;
             ShaderMap _shaders;
+            TmxMap _maps;
     };
 }
 

@@ -20,6 +20,7 @@ namespace space
             static std::string &trim(std::string &str);
 
             static std::string filenameWithoutExt(const std::string &str);
+            static std::string getFilenameExt(const std::string &str);
 
             static inline float randf(float min = 0.0f, float max = 1.0f)
             {

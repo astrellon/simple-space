@@ -21,6 +21,8 @@
 #include "src/game/planet.hpp"
 #include "src/keyboard.hpp"
 
+#include <tmxlite/Map.hpp>
+
 int main()
 {
     sf::ContextSettings settings;
@@ -43,6 +45,7 @@ int main()
     resourceManager.preloadShader("planet", "data/shaders/planet.vert", "data/shaders/planet.frag");
     resourceManager.preloadTextures("data/textures");
     resourceManager.preloadFonts("data/fonts");
+    resourceManager.preloadMaps("data/maps");
 
     engine.initBackground();
 

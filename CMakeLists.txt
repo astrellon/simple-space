@@ -20,6 +20,9 @@ if (GLEW_FOUND)
     link_libraries(${GLEW_LIBRARIES})
 endif()
 
+include_directories("/home/alan/git/tmxlite/tmxlite/include/")
+link_libraries("/home/alan/git/tmxlite/tmxlite/build/libtmxlite.so")
+
 add_executable(space main.cpp ${src_files})
 target_link_libraries(space sfml-graphics sfml-audio sfml-window sfml-system)
 target_include_directories(space PRIVATE src)
