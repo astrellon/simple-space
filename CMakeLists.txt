@@ -14,6 +14,7 @@ file(GLOB src_files
     "src/serialisers/json/*.cpp"
 )
 
+set("OpenGL_GL_PREFERENCE" GLVND)
 find_package(OpenGL REQUIRED)
 find_package(GLEW REQUIRED)
 if (GLEW_FOUND)
@@ -21,10 +22,9 @@ if (GLEW_FOUND)
     link_libraries(${GLEW_LIBRARIES})
 endif()
 
-include_directories("/home/alan/git/tmxlite/tmxlite/include/")
-link_libraries("/home/alan/git/tmxlite/tmxlite/build/libtmxlite.so")
+add_subdirectory("extern/tmxlite/tmxlite")
 
 add_executable(space main.cpp ${src_files})
-target_link_libraries(space ${OPENGL_LIBRARIES} sfml-graphics sfml-audio sfml-window sfml-system)
+target_link_libraries(space ${OPENGL_LIBRARIES} sfml-graphics sfml-audio sfml-window sfml-system tmxlite)
 target_include_directories(space PRIVATE src)
 target_compile_features(space PRIVATE cxx_std_17)

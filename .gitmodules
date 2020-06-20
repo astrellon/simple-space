@@ -1,0 +1,3 @@
+[submodule "extern/tmxlite"]
+	path = extern/tmxlite
+	url = https://github.com/fallahn/tmxlite

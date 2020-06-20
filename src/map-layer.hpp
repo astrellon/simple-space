@@ -140,14 +140,7 @@ private:
     public:
         using Ptr = std::unique_ptr<Chunk>;
 
-		// the Android OpenGL driver isn't capable of rendering quads,
-		// so we need to use two triangles per tile instead
-#ifdef __ANDROID__
 		using Tile = std::array<sf::Vertex, 6u>;
-#endif
-#ifndef __ANDROID__
-		using Tile = std::array<sf::Vertex, 4u>;
-#endif
         Chunk(const tmx::TileLayer& layer, std::vector<const tmx::Tileset*> tilesets,
             const sf::Vector2f& position, const sf::Vector2f& tileCount, const sf::Vector2u& tileSize,
             std::size_t rowSize,  TextureResource& tr, const std::map<std::uint32_t, tmx::Tileset::Tile>& animTiles)
@@ -224,20 +217,12 @@ private:
                             tileIndex.y *= ca->tileSetSize.y;
                             Tile tile =
                             {
-#ifndef __ANDROID__
-                                sf::Vertex(tileOffset - getPosition(), m_chunkColors[idx], tileIndex),
-                                sf::Vertex(tileOffset - getPosition() + sf::Vector2f(ca->tileSetSize.x, 0.f), m_chunkColors[idx], tileIndex + sf::Vector2f(ca->tileSetSize.x, 0.f)),
-                                sf::Vertex(tileOffset - getPosition() + sf::Vector2f(ca->tileSetSize.x, ca->tileSetSize.y), m_chunkColors[idx], tileIndex + sf::Vector2f(ca->tileSetSize.x, ca->tileSetSize.y)),
-                                sf::Vertex(tileOffset - getPosition() + sf::Vector2f(0.f, ca->tileSetSize.y), m_chunkColors[idx], tileIndex + sf::Vector2f(0.f, ca->tileSetSize.y))
-#endif
-#ifdef __ANDROID__
 								sf::Vertex(tileOffset - getPosition(), m_chunkColors[idx], tileIndex),
 								sf::Vertex(tileOffset - getPosition() + sf::Vector2f(ca->tileSetSize.x, 0.f), m_chunkColors[idx], tileIndex + sf::Vector2f(ca->tileSetSize.x, 0.f)),
 								sf::Vertex(tileOffset - getPosition() + sf::Vector2f(ca->tileSetSize.x, ca->tileSetSize.y), m_chunkColors[idx], tileIndex + sf::Vector2f(ca->tileSetSize.x, ca->tileSetSize.y)),
 								sf::Vertex(tileOffset - getPosition(), m_chunkColors[idx], tileIndex),
 								sf::Vertex(tileOffset - getPosition() + sf::Vector2f(0.f, ca->tileSetSize.y), m_chunkColors[idx], tileIndex + sf::Vector2f(0.f, ca->tileSetSize.y)),
 								sf::Vertex(tileOffset - getPosition() + sf::Vector2f(ca->tileSetSize.x, ca->tileSetSize.y), m_chunkColors[idx], tileIndex + sf::Vector2f(ca->tileSetSize.x, ca->tileSetSize.y))
-#endif
                             };
                             doFlips(m_chunkTileIDs[idx].flipFlags,&tile[0].texCoords,&tile[1].texCoords,&tile[2].texCoords,&tile[3].texCoords);
                             ca->addTile(tile);
@@ -429,12 +414,7 @@ private:
             void draw(sf::RenderTarget& rt, sf::RenderStates states) const override
             {
                 states.texture = &m_texture;
-#ifndef __ANDROID__
-                rt.draw(m_vertices.data(), m_vertices.size(), sf::Quads, states);
-#endif
-#ifdef __ANDROID__
 				rt.draw(m_vertices.data(), m_vertices.size(), sf::Triangles, states);
-#endif
             }
         };
 

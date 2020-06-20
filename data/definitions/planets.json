@@ -5,7 +5,7 @@
         "rotationRate": 0.1,
         "size": 256,
         "name": "Planet 1",
-        "texturePath": "data/textures/rainbow.png"
+        "texturePath": "data/textures/planetColours1.png"
     },
     {
         "type": "planet",

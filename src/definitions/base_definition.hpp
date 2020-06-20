@@ -20,6 +20,7 @@ namespace space
 
             // Constructor
             BaseDefinition(const DefinitionId &id);
+            virtual ~BaseDefinition() { }
 
             virtual void onPostLoad(Engine &engine);
     };

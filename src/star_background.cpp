@@ -185,7 +185,7 @@ namespace space
         auto area = parent._chunkArea;
         auto distanceScale = parent._distanceScale;
         sf::Vector2f offset(position.x * area, position.y * area);
-        auto rand = Utils::randWithSeed((position.x + position.y << 16) / distanceScale + distanceScale * 255);
+        auto rand = Utils::randWithSeed((position.x + (position.y << 16)) / distanceScale + distanceScale * 255);
 
         std::uniform_real_distribution<float> bigStarRange(0, 100);
         std::uniform_real_distribution<float> xRange(offset.x, area + offset.x);

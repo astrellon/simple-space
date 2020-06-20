@@ -32,5 +32,6 @@ namespace space
 
             // Constructor
             ShipDefinition(DefinitionId id) : BaseDefinition(id) { }
+            virtual ~ShipDefinition() { }
     };
 } // space

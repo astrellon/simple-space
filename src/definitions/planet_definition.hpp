@@ -30,5 +30,6 @@ namespace space
 
             // Constructor
             PlanetDefinition(DefinitionId id) : BaseDefinition(id) { }
+            virtual ~PlanetDefinition() { }
     };
 } // space

@@ -20,6 +20,7 @@ namespace space
 
             // Constructor
             SpaceObject(const ObjectId &id) : id(id) { }
+            virtual ~SpaceObject() { }
 
             // Methods
             const SpaceTransform &transform() const { return _transform; }
