@@ -99,7 +99,7 @@ namespace space
                 if (_nextAvailableIndex >= _numParticles)
                 {
                     std::cout << "Ran out of available indicies" << std::endl;
-                    exit(1);
+                    break;
                 }
 
                 index = _nextAvailableIndex;
