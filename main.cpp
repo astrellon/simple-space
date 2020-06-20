@@ -60,19 +60,20 @@ int main()
         std::cout << "Ship Def: " << shipDef->name << std::endl;
     }
 
+    const space::PlanetDefinition *starDef;
+    definitionManager.tryGet("STAR_1", &starDef);
+
     const space::PlanetDefinition *planetDef;
-    if (definitionManager.tryGet("PLANET_1", &planetDef))
-    {
-        std::cout << "Planet Def: " << planetDef->name << std::endl;
-    }
+    definitionManager.tryGet("PLANET_1", &planetDef);
 
     auto spriteSize = static_cast<uint>(engine.spriteSize());
     auto spriteScale = engine.spriteScale();
 
     auto gameSession = engine.startGameSession();
 
+    auto star = gameSession->createPlanet("STAR", *starDef);
     auto planet = gameSession->createPlanet("PLANET", *planetDef);
-    planet->transform().position += sf::Vector2f(50, 50);
+    planet->transform().position += sf::Vector2f(500, 0);
     auto ship = gameSession->createShip("PLAYER", *shipDef);
     auto ship2 = gameSession->createShip("OTHER", *shipDef);
     ship2->transform().position += sf::Vector2f(200, 0);

@@ -9,21 +9,22 @@ uniform sampler2D source;
 uniform float timeSinceStart;
 uniform float rotationRate;
 uniform float offset;
+uniform float scale;
 uniform vec4 glowColour;
 
-float Hash(in vec2 p, in float scale)
+float Hash(in vec2 p, in float localScale)
 {
     // This is tiling part, adjusts with the scale...
-    p = mod(p, scale);
+    p = mod(p, localScale);
     return fract(sin(dot(p, vec2(27.16898, 38.90563))) * 5151.5473453);
 }
 
 //----------------------------------------------------------------------------------------
-float noise(in vec2 p, in float scale)
+float noise(in vec2 p, in float localScale)
 {
     vec2 f;
 
-    p *= scale;
+    p *= localScale;
 
 
     f = fract(p);		// Separate integer from fractional
@@ -33,10 +34,10 @@ float noise(in vec2 p, in float scale)
 
     f = f*f*(3.0-2.0*f);	// Cosine interpolation approximation
 
-    float res = mix(mix(Hash(p,                  scale),
-                        Hash(p + vec2(1.0, 0.0), scale), f.x),
-                    mix(Hash(p + vec2(0.0, 1.0), scale),
-                        Hash(p + vec2(1.0, 1.0), scale), f.x), f.y);
+    float res = mix(mix(Hash(p,                  localScale),
+                        Hash(p + vec2(1.0, 0.0), localScale), f.x),
+                    mix(Hash(p + vec2(0.0, 1.0), localScale),
+                        Hash(p + vec2(1.0, 1.0), localScale), f.x), f.y);
     return res;
 }
 
@@ -45,16 +46,16 @@ float fBm(in vec2 p)
 {
     float f = 0.0;
     // Change starting scale to any integer value...
-    float scale = 10.;
-    p = mod(p, scale);
+    float localScale = scale;
+    p = mod(p, localScale);
     float amp  = 0.6;
 
     for (int i = 0; i < 5; i++)
     {
-        f += noise(p, scale) * amp;
+        f += noise(p, localScale) * amp;
         amp *= .5;
         // Scale must be multiplied by an integer value...
-        scale *= 2.;
+        localScale *= 2.;
     }
     // Clamp it just in case....
     return min(f, 1.0);
@@ -75,7 +76,7 @@ void main()
     if (len > 1.0) {
         float t = max(0, 1 - ((len - 1) / 0.2));
         float p = easeOutQuad(t);
-        FragColor = glowColour * p; //vec4(0.6 * p, 0.8 * p, p, p);
+        FragColor = glowColour * p;
 
         return;
     }

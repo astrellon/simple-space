@@ -3,18 +3,30 @@
         "type": "planet",
         "id": "PLANET_1",
         "rotationRate": 0.1,
-        "size": 256,
+        "size": 128,
         "glowColour": "0x6090FFFF",
         "name": "Planet 1",
+        "scale": 10,
         "texturePath": "data/textures/planetColours1.png"
     },
     {
         "type": "planet",
         "id": "PLANET_2",
         "rotationRate": 0.08,
-        "size": 256,
+        "size": 128,
         "name": "Planet 2",
+        "scale": 10,
         "glowColour": "0xFF0000FF",
         "texturePath": "data/textures/planetColours2.png"
+    },
+    {
+        "type": "planet",
+        "id": "STAR_1",
+        "rotationRate": 0.04,
+        "size": 256,
+        "name": "Star",
+        "scale": 20,
+        "glowColour": "0xFBB236FF",
+        "texturePath": "data/textures/starColours1.png"
     }
 ]

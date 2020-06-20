@@ -35,6 +35,7 @@ namespace space
 
         _shader->setUniform("timeSinceStart", engine.timeSinceStart().asSeconds());
         _shader->setUniform("offset", 0.0f);
+        _shader->setUniform("scale", definition.scale);
 
         sf::Glsl::Vec4 colour(definition.glowColour);
         _shader->setUniform("glowColour", colour);

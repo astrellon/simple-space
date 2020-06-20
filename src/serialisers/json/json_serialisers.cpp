@@ -81,6 +81,7 @@ namespace space
             {"name", input->name},
             {"rotationRate", input->rotationRate},
             {"size", input->size},
+            {"scale", input->scale},
             {"glowColour", Utils::toHexString(input->glowColour)}
         };
     }
@@ -93,6 +94,7 @@ namespace space
         j.at("name").get_to(input->name);
         j.at("rotationRate").get_to(input->rotationRate);
         j.at("size").get_to(input->size);
+        j.at("scale").get_to(input->scale);
 
         input->glowColour = Utils::fromHexString(j.at("glowColour").get<std::string>());
 

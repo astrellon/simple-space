@@ -20,6 +20,7 @@ namespace space
 
             float rotationRate;
             float size;
+            float scale;
 
             const sf::Texture *texture;
 
