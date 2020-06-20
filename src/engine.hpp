@@ -6,6 +6,7 @@
 #include "camera.hpp"
 #include "star_background.hpp"
 #include "effects/bloom-effect.hpp"
+#include "effects/bloom-effect-2.hpp"
 
 #include <SFML/Graphics.hpp>
 
@@ -60,6 +61,7 @@ namespace space
             std::vector<std::unique_ptr<StarBackground>> _backgrounds;
             sf::RenderTexture _sceneRenderTarget;
             BloomEffect _bloomEffect;
+            BloomEffect2 _bloomEffect2;
 
             Camera _camera;
 

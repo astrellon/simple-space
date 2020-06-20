@@ -102,6 +102,7 @@ namespace space
         }
 
         _bloomEffect.init(*_resourceManager.get());
+        _bloomEffect2.init(*_resourceManager.get());
     }
 
     void Engine::processEvents()
@@ -223,7 +224,7 @@ namespace space
             _window.setActive(true);
             _window.clear();
 
-            _bloomEffect.apply(_sceneRenderTarget, _window);
+            _bloomEffect2.apply(_sceneRenderTarget, _window);
         }
 
         _window.display();

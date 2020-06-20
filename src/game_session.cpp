@@ -63,7 +63,7 @@ namespace space
         }
         else
         {
-            _mapLayer->update(dt);
+            // _mapLayer->update(dt);
         }
 
         for (auto &spaceObject : _spaceObjects)
@@ -78,7 +78,7 @@ namespace space
         {
             sf::RenderStates states;
             //_mapLayer->draw(target, states);
-            target.draw(*_mapLayer);
+            // target.draw(*_mapLayer);
         }
 
         for (auto &spaceObject : _spaceObjects)
