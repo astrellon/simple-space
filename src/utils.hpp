@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 #include <random>
+#include <sstream>
+#include <iomanip>
 
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
@@ -87,6 +89,30 @@ namespace space
                 target.g = src.g;
                 target.b = src.b;
                 target.a = src.a;
+            }
+
+            static inline std::string toHexString(const sf::Color &input)
+            {
+                std::stringstream ss;
+                ss << "0x" << std::setfill('0') << std::setw(2) << std::hex << input.r << input.g << input.b << input.a;
+
+                return ss.str();
+            }
+
+            static inline sf::Color fromHexString(const std::string &input)
+            {
+                std::stringstream ss(input);
+                char c1, c2;
+                ss >> c1 >> c2;
+                std::uint32_t full;
+                ss >> std::hex >> full;
+
+                sf::Uint8 r = (full >> 24) & 0xFF;
+                sf::Uint8 g = (full >> 16) & 0xFF;
+                sf::Uint8 b = (full >> 8) & 0xFF;
+                sf::Uint8 a = full & 0xFF;
+
+                return sf::Color(r, g, b, a);
             }
 
         private:

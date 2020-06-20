@@ -31,7 +31,10 @@ namespace space
         renderState.blendMode = sf::BlendMode(sf::BlendMode::One, sf::BlendMode::SrcAlpha);
 
         _shader->setUniform("timeSinceStart", engine.timeSinceStart().asSeconds());
-        _shader->setUniform("offset", sf::Vector2f(0, 0));
+        _shader->setUniform("offset", 0.0f);
+
+        sf::Glsl::Vec4 colour(definition.glowColour);
+        _shader->setUniform("glowColour", colour);
         _shader->setUniform("rotationRate", definition.rotationRate);
 
         _renderTexture->clear();

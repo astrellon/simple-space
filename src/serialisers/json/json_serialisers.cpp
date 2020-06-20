@@ -3,21 +3,23 @@
 #include <iostream>
 #include <stdexcept>
 
+#include "utils.hpp"
+
 using nlohmann::json;
 
 namespace space
 {
-    json to_json(const BaseDefinition *input)
+    json toJson(const BaseDefinition *input)
     {
         json j;
         auto type = input->type();
         if (type == ShipDefinition::DefinitionType())
         {
-            j = to_json(dynamic_cast<const ShipDefinition *>(input));
+            j = toJson(dynamic_cast<const ShipDefinition *>(input));
         }
         else if (type == PlanetDefinition::DefinitionType())
         {
-            j = to_json(dynamic_cast<const PlanetDefinition *>(input));
+            j = toJson(dynamic_cast<const PlanetDefinition *>(input));
         }
         else
         {
@@ -44,7 +46,7 @@ namespace space
         throw std::runtime_error("Oh no");
     }
 
-    json to_json(const ShipDefinition *input)
+    json toJson(const ShipDefinition *input)
     {
         return json {
             {"id", input->id},
@@ -54,17 +56,6 @@ namespace space
             {"maxSpeed", input->maxSpeed},
             {"turnRate", input->turnRate},
             {"acceleration", input->acceleration},
-        };
-    }
-
-    json to_json(const PlanetDefinition *input)
-    {
-        return json {
-            {"id", input->id},
-            {"texturePath", input->texturePath},
-            {"name", input->name},
-            {"rotationRate", input->rotationRate},
-            {"size", input->size},
         };
     }
 
@@ -82,6 +73,18 @@ namespace space
         return input;
     }
 
+    json toJson(const PlanetDefinition *input)
+    {
+        return json {
+            {"id", input->id},
+            {"texturePath", input->texturePath},
+            {"name", input->name},
+            {"rotationRate", input->rotationRate},
+            {"size", input->size},
+            {"glowColour", Utils::toHexString(input->glowColour)}
+        };
+    }
+
     std::unique_ptr<PlanetDefinition> fromJsonPlanetDefinition(const json &j)
     {
         auto id = j.at("id").get<std::string>();
@@ -90,6 +93,8 @@ namespace space
         j.at("name").get_to(input->name);
         j.at("rotationRate").get_to(input->rotationRate);
         j.at("size").get_to(input->size);
+
+        input->glowColour = Utils::fromHexString(j.at("glowColour").get<std::string>());
 
         return input;
     }

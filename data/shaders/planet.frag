@@ -5,10 +5,11 @@
 in vec2 texCoord;
 out vec4 FragColor;
 
-uniform float timeSinceStart;
 uniform sampler2D source;
-uniform vec2 offset;
+uniform float timeSinceStart;
 uniform float rotationRate;
+uniform float offset;
+uniform vec4 glowColour;
 
 float Hash(in vec2 p, in float scale)
 {
@@ -18,7 +19,7 @@ float Hash(in vec2 p, in float scale)
 }
 
 //----------------------------------------------------------------------------------------
-float noise(in vec2 p, in float scale, in vec2 offset )
+float noise(in vec2 p, in float scale)
 {
     vec2 f;
 
@@ -50,7 +51,7 @@ float fBm(in vec2 p)
 
     for (int i = 0; i < 5; i++)
     {
-        f += noise(p, scale, offset) * amp;
+        f += noise(p, scale) * amp;
         amp *= .5;
         // Scale must be multiplied by an integer value...
         scale *= 2.;
@@ -74,7 +75,7 @@ void main()
     if (len > 1.0) {
         float t = max(0, 1 - ((len - 1) / 0.2));
         float p = easeOutQuad(t);
-        FragColor = vec4(0.6 * p, 0.8 * p, p, p);
+        FragColor = glowColour * p; //vec4(0.6 * p, 0.8 * p, p, p);
 
         return;
     }

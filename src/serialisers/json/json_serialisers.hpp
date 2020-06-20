@@ -1,5 +1,7 @@
 #pragma once
 
+#include <SFML/Graphics.hpp>
+
 #include "../../definitions/base_definition.hpp"
 #include "../../definitions/ship_definition.hpp"
 #include "../../definitions/planet_definition.hpp"
@@ -17,4 +19,7 @@ namespace space
 
     json toJson(const PlanetDefinition &input);
     std::unique_ptr<PlanetDefinition> fromJsonPlanetDefinition(const json &j);
+
+    std::string toJson(const sf::Color &input);
+
 } // namespace space

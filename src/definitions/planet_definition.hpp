@@ -16,6 +16,7 @@ namespace space
             // Fields
             std::string texturePath;
             std::string name;
+            sf::Color glowColour;
 
             float rotationRate;
             float size;
