@@ -1,9 +1,7 @@
 #version 130
 
-in vec4 vertex;
-
 void main()
 {
-    gl_Position = vertex;
+    gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
     gl_TexCoord[0] = gl_MultiTexCoord0;
 }

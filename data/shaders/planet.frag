@@ -67,7 +67,7 @@ float easeOutQuad(float t)
 
 void main()
 {
-    vec2 uv = gl_TexCoord[0].xy * 2;
+    vec2 uv = gl_TexCoord[0].xy;
     uv *= 1.2;
     uv -= 1.2;
 

@@ -24,7 +24,10 @@ namespace space
                 std::cout << "Unable to find shader for planet" << std::endl;
             }
         }
+
         sf::Sprite sprite(*definition.texture);
+        sprite.setScale(definition.size / 2, definition.size / 2);
+        sprite.setTextureRect(sf::IntRect(0, 0, 2, 2));
 
         sf::RenderStates renderState;
         renderState.shader = _shader;
@@ -42,7 +45,7 @@ namespace space
         _renderTexture->display();
 
         sf::Sprite sphereSprite(_renderTexture->getTexture());
-        sphereSprite.setOrigin(definition.size * 3.0 / 4.0, definition.size / 4.0);
+        sphereSprite.setOrigin(definition.size / 2.0, definition.size / 2.0);
 
         sf::RenderStates states;
         states.transform = parentTransform * _transform.getTransform();
