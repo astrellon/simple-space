@@ -1,7 +1,8 @@
-#version 330 compatibility
+#version 130
 
 #define PI 3.1415926
 
+in vec2 texCoord;
 out vec4 FragColor;
 
 uniform float timeSinceStart;

@@ -1,8 +1,11 @@
-#version 330 compatibility
+#version 140
 
-layout(location = 0) in vec2 vertex;
-layout(location = 1) in vec2 positions;
-layout(location = 2) in vec4 colours;
+// layout(location = 0) in vec2 vertex;
+// layout(location = 1) in vec2 positions;
+// layout(location = 2) in vec4 colours;
+in vec2 vertex;
+in vec2 positions;
+in vec4 colours;
 
 out vec4 colour;
 out float index;

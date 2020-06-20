@@ -1,4 +1,4 @@
-#version 330 compatibility
+#version 140
 
 #define E 2.71828
 

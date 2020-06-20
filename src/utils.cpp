@@ -69,6 +69,17 @@ namespace space
         return str.substr(sepIndex + 1, dotIndex - sepIndex - 1);
     }
 
+    std::string Utils::getFilenameExt(const std::string &str)
+    {
+        auto dotIndex = str.find_last_of('.');
+        if (dotIndex == std::string::npos)
+        {
+            dotIndex = str.length();
+        }
+
+        return str.substr(dotIndex + 1);
+    }
+
     std::mt19937 Utils::randWithSeed(int seed)
     {
         std::random_device rd;

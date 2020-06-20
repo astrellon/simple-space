@@ -28,19 +28,23 @@ namespace space
 
         sf::RenderStates renderState;
         renderState.shader = _shader;
+        renderState.blendMode = sf::BlendMode(sf::BlendMode::One, sf::BlendMode::SrcAlpha);
 
         _shader->setUniform("timeSinceStart", engine.timeSinceStart().asSeconds());
         _shader->setUniform("offset", sf::Vector2f(0, 0));
         _shader->setUniform("rotationRate", definition.rotationRate);
 
+        _renderTexture->clear();
         _renderTexture->draw(sprite, renderState);
         _renderTexture->display();
 
         sf::Sprite sphereSprite(_renderTexture->getTexture());
         sphereSprite.setOrigin(definition.size * 3.0 / 4.0, definition.size / 4.0);
 
-        const auto combinedTransform = parentTransform * _transform.getTransform();
-        target.draw(sphereSprite, combinedTransform);
+        sf::RenderStates states;
+        states.transform = parentTransform * _transform.getTransform();
+
+        target.draw(sphereSprite, states);
     }
 
 } // namespace space
