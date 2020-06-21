@@ -4,8 +4,8 @@
         "id": "SHIP_1",
         "maxRotation": 5.0,
         "maxSpeed": 5.0,
-        "turnRate": 5.0,
-        "acceleration": 5.0,
+        "turnRate": 100.0,
+        "acceleration": 100.0,
         "name": "Ship Def",
         "texturePath": "data/textures/ships/ship1.png"
     },

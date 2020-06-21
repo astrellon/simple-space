@@ -14,8 +14,8 @@ namespace space
     void Ship::update(Engine &engine, sf::Time dt)
     {
         auto seconds = dt.asSeconds();
-        _speed += Utils::transformDirection(moveInput, _transform.getTransform());
-        _rotationSpeed += rotateInput;
+        _speed += Utils::transformDirection(moveInput, _transform.getTransform()) * seconds * definition.acceleration;
+        _rotationSpeed += rotateInput * seconds * definition.turnRate;
 
         _transform.position += _speed * seconds;
         _transform.rotation += _rotationSpeed * seconds;

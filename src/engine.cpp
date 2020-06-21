@@ -191,6 +191,8 @@ namespace space
         // std::cout << "U = " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << "[µs]" << std::endl;
 
         _camera.update(_deltaTime);
+
+        std::cout << "FPS: " << 1.0f / _deltaTime.asSeconds() << std::endl;
     }
 
     void Engine::draw()
