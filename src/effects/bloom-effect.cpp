@@ -64,8 +64,8 @@ namespace space
 
         for (std::size_t count = 0; count < 2; ++count)
         {
-            blur(renderTextures[0], renderTextures[1], sf::Vector2f(0.f, 3.f / textureSize.y));
-            blur(renderTextures[1], renderTextures[0], sf::Vector2f(3.f / textureSize.x, 0.f));
+            blur(renderTextures[0], renderTextures[1], sf::Vector2f(0.f, 2.f / textureSize.y));
+            blur(renderTextures[1], renderTextures[0], sf::Vector2f(2.f / textureSize.x, 0.f));
         }
     }
 

@@ -98,7 +98,7 @@ namespace space
     {
         for (auto i = 0; i < 7; i++)
         {
-            _backgrounds.emplace_back(std::make_unique<StarBackground>(*this, 200, 500, 0.9 - (7 - i) * 0.1));
+            _backgrounds.emplace_back(std::make_unique<StarBackground>(*this, 200, 500, 0.4 - (7 - i) * 0.05));
         }
 
         _bloomEffect.init(*_resourceManager.get());
@@ -154,6 +154,8 @@ namespace space
 
     void Engine::onResize(sf::Vector2f area)
     {
+        area *= 0.5f;
+
         _camera.setSize(area);
         for (auto &b : _backgrounds)
         {
@@ -195,36 +197,36 @@ namespace space
     {
         auto begin = std::chrono::steady_clock::now();
 
-        sf::RenderTarget *target = &_window;
-        if (_enableBloom)
-        {
-            target = &_sceneRenderTarget;
-            _sceneRenderTarget.setActive(true);
-        }
+        _sceneRenderTarget.setActive(true);
 
-        target->clear();
-        target->setView(_camera.view());
+        _sceneRenderTarget.clear();
+        _sceneRenderTarget.setView(_camera.view());
 
         _backgrounds.begin()->get()->bindShader(sf::Transform::Identity);
         for (auto &b : _backgrounds)
         {
-            b->draw(*target, sf::Transform::Identity);
+            b->draw(_sceneRenderTarget, sf::Transform::Identity);
         }
         _backgrounds.begin()->get()->unbindShader();
 
         if (_currentSession.get())
         {
-            _currentSession->draw(*target);
+            _currentSession->draw(_sceneRenderTarget);
         }
 
+        _sceneRenderTarget.display();
+
+        _window.setActive(true);
+        _window.clear();
         if (_enableBloom)
         {
-            _sceneRenderTarget.display();
-
-            _window.setActive(true);
-            _window.clear();
-
             _bloomEffect2.apply(_sceneRenderTarget, _window);
+        }
+        else
+        {
+            sf::Sprite sprite(_sceneRenderTarget.getTexture());
+            sprite.setScale(2, 2);
+            _window.draw(sprite);
         }
 
         _window.display();

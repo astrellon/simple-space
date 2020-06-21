@@ -25,8 +25,8 @@ namespace space
         auto dx = viewport.x / _chunkArea;
         auto dy = viewport.y / _chunkArea;
 
-        _chunkDims.x = std::ceil(dx) + 1;
-        _chunkDims.y = std::ceil(dy) + 1;
+        _chunkDims.x = std::ceil(dx) + 2;
+        _chunkDims.y = std::ceil(dy) + 2;
 
         _nextAvailableIndex = 0;
 

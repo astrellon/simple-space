@@ -24,7 +24,7 @@ namespace space
 
     void Camera::setSize(sf::Vector2f size)
     {
-        _view.setSize(size / _engine.spriteScale());
+        _view.setSize(size);
     }
 
     void Camera::setCenter(sf::Vector2f center)
