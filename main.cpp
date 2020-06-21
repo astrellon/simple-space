@@ -55,10 +55,10 @@ int main()
     definitionManager.onPostLoad(engine);
 
     const space::ShipDefinition *shipDef;
-    if (definitionManager.tryGet("SHIP_1", &shipDef))
-    {
-        std::cout << "Ship Def: " << shipDef->name << std::endl;
-    }
+    definitionManager.tryGet("SHIP_1", &shipDef);
+
+    const space::ShipDefinition *shipDef2;
+    definitionManager.tryGet("SHIP_2", &shipDef2);
 
     const space::PlanetDefinition *starDef;
     definitionManager.tryGet("STAR_1", &starDef);
@@ -75,7 +75,7 @@ int main()
     auto planet = gameSession->createPlanet("PLANET", *planetDef);
     planet->transform().position += sf::Vector2f(500, 0);
     auto ship = gameSession->createShip("PLAYER", *shipDef);
-    auto ship2 = gameSession->createShip("OTHER", *shipDef);
+    auto ship2 = gameSession->createShip("OTHER", *shipDef2);
     ship2->transform().position += sf::Vector2f(200, 0);
 
     engine.camera().setFollowing(ship->id);

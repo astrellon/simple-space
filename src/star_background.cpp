@@ -145,6 +145,7 @@ namespace space
     {
         sf::Shader::bind(_shader);
         _shader->setUniform("timeSinceStart", _engine.timeSinceStart().asSeconds());
+        _shader->setUniform("distanceScale", _distanceScale);
     }
 
     void StarBackground::unbindShader()
@@ -190,7 +191,7 @@ namespace space
         std::uniform_real_distribution<float> bigStarRange(0, 100);
         std::uniform_real_distribution<float> xRange(offset.x, area + offset.x);
         std::uniform_real_distribution<float> yRange(offset.y, area + offset.y);
-        std::uniform_real_distribution<float> colourRange(127 * distanceScale * distanceScale, 235 * distanceScale * distanceScale);
+        std::uniform_real_distribution<float> colourRange(127, 255);
 
         auto endIndex = _indexOffset + parent._numParticlesPerChunk;
         for (auto i = _indexOffset; i < endIndex; i++)
@@ -208,13 +209,15 @@ namespace space
             colour.r = static_cast<int>(colourRange(rand));
             colour.g = static_cast<int>(colourRange(rand));
             colour.b = static_cast<int>(colourRange(rand));
+            colour.a = 255 * distanceScale;
 
             if (isBigStar)
             {
-                sf::Color dimmedColour(colour.r * 0.6, colour.g * 0.6, colour.b * 0.6);
+                sf::Color dimmedColour( colour.r, colour.g, colour.b, distanceScale * 0.6);
                 colour.r = std::min(255, static_cast<int>(colour.r * 1.4));
                 colour.g = std::min(255, static_cast<int>(colour.g * 1.4));
                 colour.b = std::min(255, static_cast<int>(colour.b * 1.4));
+                colour.a = std::min(255, static_cast<int>(colour.a * 1.4));
 
                 parent._positions[i + 1].x = position.x - 1;
                 parent._positions[i + 1].y = position.y;

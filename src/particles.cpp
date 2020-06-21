@@ -109,6 +109,9 @@ namespace space
         glVertexAttribDivisor(2, 1); // color : one per quad -> 1
 
         DrawDebug::glDraw++;
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
         glDrawArraysInstanced(GL_TRIANGLES, 0, 6, _numParticles);
 
         glBindBuffer(GL_ARRAY_BUFFER, 0);

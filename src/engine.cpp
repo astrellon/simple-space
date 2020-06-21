@@ -181,14 +181,10 @@ namespace space
             _currentSession->update(_deltaTime);
         }
 
-        auto begin = std::chrono::steady_clock::now();
         for (auto &b : _backgrounds)
         {
             b->update(_deltaTime);
         }
-        auto end = std::chrono::steady_clock::now();
-
-        // std::cout << "U = " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << "[µs]" << std::endl;
 
         _camera.update(_deltaTime);
 
@@ -197,11 +193,9 @@ namespace space
 
     void Engine::draw()
     {
-        auto begin = std::chrono::steady_clock::now();
-
         _sceneRenderTarget.setActive(true);
 
-        _sceneRenderTarget.clear();
+        _sceneRenderTarget.clear(sf::Color(20, 24, 46));
         _sceneRenderTarget.setView(_camera.view());
 
         _backgrounds.begin()->get()->bindShader(sf::Transform::Identity);

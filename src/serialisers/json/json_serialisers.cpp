@@ -96,6 +96,12 @@ namespace space
         j.at("size").get_to(input->size);
         j.at("scale").get_to(input->scale);
 
+        auto oscillateNoise = j.find("oscillateNoise");
+        if (oscillateNoise != j.end())
+        {
+            oscillateNoise->get_to(input->oscillateNoise);
+        }
+
         input->glowColour = Utils::fromHexString(j.at("glowColour").get<std::string>());
 
         return input;

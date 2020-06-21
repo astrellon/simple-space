@@ -10,6 +10,7 @@ uniform float timeSinceStart;
 uniform float rotationRate;
 uniform float offset;
 uniform float scale;
+uniform float oscillateNoise;
 uniform vec4 glowColour;
 
 float Hash(in vec2 p, in float localScale)
@@ -90,6 +91,12 @@ void main()
     uv.x *= 0.25;
 
     float noise = fBm(uv);
+
+    if (oscillateNoise > 0)
+    {
+        noise += sin(timeSinceStart * oscillateNoise);
+    }
+
     vec4 colour = texture2D(source, vec2(noise, 0));
 
     FragColor = colour;

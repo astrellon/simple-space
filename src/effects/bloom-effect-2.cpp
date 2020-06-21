@@ -25,14 +25,8 @@ namespace space
 
         filterBright(mDownsampled, mBlurred[0]);
 
-        //blur(mBrightnessTexture, mBlurred, );
         blurMultipass(mBlurred);
 
-        // downsample(mFirstPassTextures[0], mSecondPassTextures[0]);
-        // blurMultipass(mSecondPassTextures);
-
-        //add(mFirstPassTextures[0], mSecondPassTextures[0], mFirstPassTextures[1]);
-        //mFirstPassTextures[1].display();
         mBlurred[0].display();
         add(input, mBlurred[0], output);
     }
@@ -66,8 +60,8 @@ namespace space
 
         for (std::size_t count = 0; count < 1; ++count)
         {
-            blur(renderTextures[0], renderTextures[1], sf::Vector2f(0.f, 1.f / textureSize.y));
-            blur(renderTextures[1], renderTextures[0], sf::Vector2f(1.f / textureSize.x, 0.f));
+            blur(renderTextures[0], renderTextures[1], sf::Vector2f(0.f, 1.5f / textureSize.y));
+            blur(renderTextures[1], renderTextures[0], sf::Vector2f(1.5f / textureSize.x, 0.f));
         }
     }
 

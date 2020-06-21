@@ -22,10 +22,11 @@
     {
         "type": "planet",
         "id": "STAR_1",
-        "rotationRate": 0.04,
+        "rotationRate": 0.02,
         "size": 256,
         "name": "Star",
-        "scale": 20,
+        "scale": 30,
+        "oscillateNoise": 0.02,
         "glowColour": "0xFBB236FF",
         "texturePath": "data/textures/starColours1.png"
     }

@@ -21,6 +21,7 @@ namespace space
             float rotationRate;
             float size;
             float scale;
+            float oscillateNoise;
 
             const sf::Texture *texture;
 
@@ -31,7 +32,7 @@ namespace space
             virtual void onPostLoad(Engine &engine);
 
             // Constructor
-            PlanetDefinition(DefinitionId id) : BaseDefinition(id) { }
+            PlanetDefinition(DefinitionId id) : BaseDefinition(id), oscillateNoise(0.0f) { }
             virtual ~PlanetDefinition() { }
     };
 } // space
