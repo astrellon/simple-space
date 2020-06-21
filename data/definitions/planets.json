@@ -2,6 +2,11 @@
     {
         "type": "planet",
         "id": "PLANET_1",
+        "location": {
+            "distance": 150,
+            "influenceRadius": 200,
+            "angle": 10
+        },
         "rotationRate": 0.1,
         "size": 128,
         "glowColour": "0x6090FFFF",
@@ -13,6 +18,11 @@
         "type": "planet",
         "id": "PLANET_2",
         "rotationRate": 0.08,
+        "location": {
+            "distance": 150,
+            "influenceRadius": 200,
+            "angle": 10
+        },
         "size": 128,
         "name": "Planet 2",
         "scale": 10,
@@ -22,6 +32,11 @@
     {
         "type": "planet",
         "id": "STAR_1",
+        "location": {
+            "distance": 0,
+            "influenceRadius": 4000,
+            "angle": 0
+        },
         "rotationRate": 0.02,
         "size": 256,
         "name": "Star",

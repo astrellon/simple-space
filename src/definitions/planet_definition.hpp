@@ -4,13 +4,13 @@
 
 #include <string>
 
-#include "base_definition.hpp"
+#include "celestial_body_definition.hpp"
 
 namespace space
 {
     class Engine;
 
-    class PlanetDefinition : public BaseDefinition
+    class PlanetDefinition : public CelestialBodyDefinition
     {
         public:
             // Fields
@@ -32,7 +32,7 @@ namespace space
             virtual void onPostLoad(Engine &engine);
 
             // Constructor
-            PlanetDefinition(DefinitionId id) : BaseDefinition(id), oscillateNoise(0.0f) { }
+            PlanetDefinition(DefinitionId id) : CelestialBodyDefinition(id), oscillateNoise(0.0f) { }
             virtual ~PlanetDefinition() { }
     };
 } // space

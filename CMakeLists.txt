@@ -14,6 +14,8 @@ file(GLOB src_files
     "src/serialisers/json/*.cpp"
 )
 
+SET (CMAKE_CXX_FLAGS_RELEASE_INIT        "-O3 -DNDEBUG")
+
 set("OpenGL_GL_PREFERENCE" GLVND)
 find_package(OpenGL REQUIRED)
 find_package(GLEW REQUIRED)

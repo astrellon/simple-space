@@ -188,7 +188,7 @@ namespace space
 
         _camera.update(_deltaTime);
 
-        std::cout << "FPS: " << 1.0f / _deltaTime.asSeconds() << std::endl;
+        //std::cout << "FPS: " << 1.0f / _deltaTime.asSeconds() << std::endl;
     }
 
     void Engine::draw()
@@ -226,8 +226,5 @@ namespace space
         }
 
         _window.display();
-
-        auto end = std::chrono::steady_clock::now();
-        // std::cout << "D = " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << "[µs]" << std::endl;
     }
 }
