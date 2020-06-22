@@ -1,0 +1,55 @@
+[
+    {
+        "type": "star-system",
+        "id": "STAR_SYSTEM_2",
+        "name": "Star System 2",
+        "rootBody": {
+            "type": "planet",
+            "id": "STAR_1",
+            "location": {
+                "distance": 0,
+                "influenceRadius": 4000,
+                "angle": 0
+            },
+            "rotationRate": 0.02,
+            "size": 350,
+            "name": "Star",
+            "scale": 40,
+            "oscillateNoise": 0.01,
+            "glowColour": "0xEBA226FF",
+            "texturePath": "data/textures/starColours1.png",
+            "children": [
+                {
+                    "type": "planet",
+                    "id": "SS2_PLANET_1",
+                    "location": {
+                        "distance": 700,
+                        "influenceRadius": 200,
+                        "angle": 125
+                    },
+                    "rotationRate": 0.1,
+                    "size": 100,
+                    "glowColour": "0x6090FFFF",
+                    "name": "Planet 1",
+                    "scale": 10,
+                    "texturePath": "data/textures/planetColours1.png"
+                },
+                {
+                    "type": "planet",
+                    "id": "SS2_PLANET_2",
+                    "rotationRate": 0.08,
+                    "location": {
+                        "distance": 800,
+                        "influenceRadius": 200,
+                        "angle": -90
+                    },
+                    "size": 128,
+                    "name": "Planet 2",
+                    "scale": 10,
+                    "glowColour": "0xc9eae1FF",
+                    "texturePath": "data/textures/planetColours2.png"
+                }
+            ]
+        }
+    }
+]

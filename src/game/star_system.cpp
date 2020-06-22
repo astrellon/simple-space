@@ -39,6 +39,19 @@ namespace space
             std::cout << "Cannot add null object to star system" << std::endl;
             return;
         }
+
+        if (object->starSystem() == this)
+        {
+            return;
+        }
+
+        if (object->starSystem() != nullptr)
+        {
+            object->starSystem()->removeObject(object);
+        }
+
+        object->starSystem(this);
+
         _objects.push_back(object);
     }
 
@@ -53,6 +66,7 @@ namespace space
         auto find = std::find(_objects.begin(), _objects.end(), object);
         if (find != _objects.end())
         {
+            object->starSystem(nullptr);
             _objects.erase(find);
         }
         else

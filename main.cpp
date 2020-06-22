@@ -65,6 +65,9 @@ int main()
     const space::StarSystemDefinition *starSystemDef;
     definitionManager.tryGet("STAR_SYSTEM_1", &starSystemDef);
 
+    const space::StarSystemDefinition *starSystemDef2;
+    definitionManager.tryGet("STAR_SYSTEM_2", &starSystemDef2);
+
     auto spriteSize = static_cast<uint>(engine.spriteSize());
     auto spriteScale = engine.spriteScale();
 
@@ -78,6 +81,9 @@ int main()
     starSystem->initFromDefinition();
     starSystem->addObject(ship);
     starSystem->addObject(ship2);
+
+    auto starSystem2 = gameSession->createStarSystem(*starSystemDef2);
+    starSystem2->initFromDefinition();
 
     gameSession->activeStarSystem(starSystem);
 
@@ -113,6 +119,17 @@ int main()
         if (space::Keyboard::isKeyPressed(sf::Keyboard::E))
         {
             rotateInput += 1;
+        }
+
+        if (space::Keyboard::isKeyDown(sf::Keyboard::Num1))
+        {
+            gameSession->activeStarSystem(starSystem);
+            starSystem->addObject(ship);
+        }
+        if (space::Keyboard::isKeyDown(sf::Keyboard::Num2))
+        {
+            gameSession->activeStarSystem(starSystem2);
+            starSystem2->addObject(ship);
         }
 
         ship->moveInput = moveInput;
