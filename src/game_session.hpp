@@ -16,6 +16,7 @@ namespace space
     class Ship;
     class Planet;
     class Engine;
+    class StarSystem;
 
     class GameSession
     {
@@ -25,6 +26,7 @@ namespace space
 
             Ship *createShip(const ObjectId &id, const ShipDefinition &definition);
             Planet *createPlanet(const ObjectId &id, const PlanetDefinition &definition);
+            StarSystem *createStarSystem(const ObjectId &id, const PlanetDefinition &definition);
 
             bool tryGetSpaceObject(const ObjectId &id, SpaceObject **result);
 
@@ -36,6 +38,8 @@ namespace space
 
             std::vector<std::unique_ptr<SpaceObject>> _spaceObjects;
             std::unique_ptr<MapLayer> _mapLayer;
+
+            StarSystem *_activeStarSystem;
 
     };
 } // town

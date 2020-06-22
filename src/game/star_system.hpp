@@ -1,5 +1,8 @@
 #pragma once
 
+#include <SFML/Graphics.hpp>
+
+#include <string>
 #include <vector>
 
 #include "../non_copyable.hpp"
@@ -7,9 +10,11 @@
 
 namespace space
 {
+    typedef std::string StarSystemId;
+    class Engine;
     class SpaceObject;
 
-    class StarSystem
+    class StarSystem : private NonCopyable
     {
         public:
             // Fields
@@ -23,6 +28,12 @@ namespace space
             {
                 return _objects;
             }
+
+            void addObject(SpaceObject *object);
+            void removeObject(SpaceObject *object);
+
+            void update(Engine &engine, sf::Time dt);
+            void draw(Engine &engine, sf::RenderTarget &target, const sf::Transform &parentTransform);
 
         private:
             // Fields

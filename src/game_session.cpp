@@ -3,6 +3,7 @@
 #include "engine.hpp"
 #include "game/ship.hpp"
 #include "game/planet.hpp"
+#include "game/star_system.hpp"
 #include "definitions/ship_definition.hpp"
 #include "definitions/planet_definition.hpp"
 
@@ -10,7 +11,7 @@
 
 namespace space
 {
-    GameSession::GameSession(Engine &engine) : _engine(engine)
+    GameSession::GameSession(Engine &engine) : _engine(engine), _activeStarSystem(nullptr)
     {
 
     }
@@ -81,9 +82,9 @@ namespace space
             // target.draw(*_mapLayer);
         }
 
-        for (auto &spaceObject : _spaceObjects)
+        if (_activeStarSystem)
         {
-            spaceObject->draw(_engine, target, sf::Transform::Identity);
+            _activeStarSystem->draw(_engine, target, sf::Transform::Identity);
         }
     }
 } // namespace town
