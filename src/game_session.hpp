@@ -9,7 +9,7 @@
 #include "definitions/planet_definition.hpp"
 #include "game/space_object.hpp"
 
-#include "map-layer.hpp"
+#include "map_layer.hpp"
 
 namespace space
 {
