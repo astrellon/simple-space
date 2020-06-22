@@ -4,13 +4,14 @@
 #include <memory>
 
 #include "space_object.hpp"
+#include "celestial_body.hpp"
 #include "../definitions/planet_definition.hpp"
 
 namespace space
 {
     class Engine;
 
-    class Planet : public SpaceObject
+    class Planet : public CelestialBody
     {
         public:
             // Fields

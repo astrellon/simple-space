@@ -23,9 +23,9 @@
                     "type": "planet",
                     "id": "SS_PLANET_1",
                     "location": {
-                        "distance": 150,
+                        "distance": 400,
                         "influenceRadius": 200,
-                        "angle": 10
+                        "angle": 35
                     },
                     "rotationRate": 0.1,
                     "size": 128,
@@ -39,14 +39,14 @@
                     "id": "SS_PLANET_2",
                     "rotationRate": 0.08,
                     "location": {
-                        "distance": 150,
+                        "distance": 400,
                         "influenceRadius": 200,
-                        "angle": 10
+                        "angle": -35
                     },
                     "size": 128,
                     "name": "Planet 2",
                     "scale": 10,
-                    "glowColour": "0xFF0000FF",
+                    "glowColour": "0xc9eae1FF",
                     "texturePath": "data/textures/planetColours2.png"
                 }
             ]

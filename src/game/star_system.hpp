@@ -13,6 +13,7 @@ namespace space
     typedef std::string StarSystemId;
     class Engine;
     class SpaceObject;
+    class GameSession;
 
     class StarSystem : private NonCopyable
     {
@@ -21,7 +22,7 @@ namespace space
             const StarSystemDefinition &definition;
 
             // Constructor
-            StarSystem(const StarSystemDefinition &definition);
+            StarSystem(GameSession &session, const StarSystemDefinition &definition);
 
             // Methods
             const std::vector<SpaceObject *> objects() const
@@ -29,6 +30,7 @@ namespace space
                 return _objects;
             }
 
+            void initFromDefinition();
             void addObject(SpaceObject *object);
             void removeObject(SpaceObject *object);
 
@@ -38,7 +40,10 @@ namespace space
         private:
             // Fields
             std::vector<SpaceObject *> _objects;
+            GameSession &_session;
 
             // Methods
+            void createCelestialBody(const CelestialBodyDefinition *bodyDefinition);
+
     };
 } // space

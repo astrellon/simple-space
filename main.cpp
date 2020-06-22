@@ -14,11 +14,13 @@
 #include "src/game_session.hpp"
 #include "src/utils.hpp"
 #include "src/definitions/ship_definition.hpp"
+#include "src/definitions/star_system_definition.hpp"
 #include "src/serialisers/json/json_serialisers.hpp"
 #include "src/serialisers/json/json.hpp"
 #include "src/definition_manager.hpp"
 #include "src/game/ship.hpp"
 #include "src/game/planet.hpp"
+#include "src/game/star_system.hpp"
 #include "src/keyboard.hpp"
 
 #include <tmxlite/Map.hpp>
@@ -60,23 +62,24 @@ int main()
     const space::ShipDefinition *shipDef2;
     definitionManager.tryGet("SHIP_2", &shipDef2);
 
-    const space::PlanetDefinition *starDef;
-    definitionManager.tryGet("STAR_1", &starDef);
-
-    const space::PlanetDefinition *planetDef;
-    definitionManager.tryGet("PLANET_1", &planetDef);
+    const space::StarSystemDefinition *starSystemDef;
+    definitionManager.tryGet("STAR_SYSTEM_1", &starSystemDef);
 
     auto spriteSize = static_cast<uint>(engine.spriteSize());
     auto spriteScale = engine.spriteScale();
 
     auto gameSession = engine.startGameSession();
 
-    auto star = gameSession->createPlanet("STAR", *starDef);
-    auto planet = gameSession->createPlanet("PLANET", *planetDef);
-    planet->transform().position += sf::Vector2f(500, 0);
-    auto ship = gameSession->createShip("PLAYER", *shipDef);
-    auto ship2 = gameSession->createShip("OTHER", *shipDef2);
+    auto ship = gameSession->createObject<space::Ship>("PLAYER", *shipDef);
+    auto ship2 = gameSession->createObject<space::Ship>("OTHER", *shipDef2);
     ship2->transform().position += sf::Vector2f(200, 0);
+
+    auto starSystem = gameSession->createStarSystem(*starSystemDef);
+    starSystem->initFromDefinition();
+    starSystem->addObject(ship);
+    starSystem->addObject(ship2);
+
+    gameSession->activeStarSystem(starSystem);
 
     engine.camera().setFollowing(ship->id);
 

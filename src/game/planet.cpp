@@ -7,12 +7,11 @@
 namespace space
 {
     Planet::Planet(const ObjectId &id, const PlanetDefinition &definition)
-        : SpaceObject(id), definition(definition), _shader(nullptr)
+        : CelestialBody(id, definition), definition(definition), _shader(nullptr)
     {
         _renderTexture = std::make_unique<sf::RenderTexture>();
         _renderTexture->create(definition.size, definition.size);
         _renderTexture->setSmooth(false);
-
     }
 
     void Planet::draw(Engine &engine, sf::RenderTarget &target, const sf::Transform &parentTransform)
@@ -24,6 +23,8 @@ namespace space
                 std::cout << "Unable to find shader for planet" << std::endl;
             }
         }
+
+        setTransformFromLocation();
 
         sf::Sprite sprite(*definition.texture);
         sprite.setScale(definition.size / 2, definition.size / 2);
