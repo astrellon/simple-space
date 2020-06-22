@@ -25,6 +25,10 @@ namespace space
         {
             j = toJson(dynamic_cast<const OrbitPointCelestialDefinition &>(input));
         }
+        else if (type == StarSystemDefinition::DefinitionType())
+        {
+            j = toJson(dynamic_cast<const StarSystemDefinition &>(input));
+        }
         else
         {
             std::cout << "Error!" << std::endl;
@@ -46,6 +50,10 @@ namespace space
             type == OrbitPointCelestialDefinition::DefinitionType())
         {
             return fromJsonCelestialBodyDefinition(j);
+        }
+        else if (type == StarSystemDefinition::DefinitionType())
+        {
+            return fromJsonStarSystemDefinition(j);
         }
 
         throw std::runtime_error("Oh no");
@@ -158,7 +166,7 @@ namespace space
         auto childrenJson = j.find("children");
         if (childrenJson != j.end())
         {
-            for (auto &childJson : j)
+            for (auto &childJson : *childrenJson)
             {
                 result->children.emplace_back(std::move(fromJsonCelestialBodyDefinition(childJson)));
             }
@@ -177,6 +185,26 @@ namespace space
         }
 
         result->glowColour = Utils::fromHexString(j.at("glowColour").get<std::string>());
+
+        return result;
+    }
+
+    json toJson(const StarSystemDefinition &input)
+    {
+        return json {
+            {"id", input.id},
+            {"name", input.name},
+            {"rootBody", toJson(*input.rootBody.get())}
+        };
+    }
+
+    std::unique_ptr<StarSystemDefinition> fromJsonStarSystemDefinition(const json &j)
+    {
+        auto id = j.at("id").get<std::string>();
+        auto result = std::make_unique<StarSystemDefinition>(id);
+        j.at("name").get_to(result->name);
+
+        result->rootBody = fromJsonCelestialBodyDefinition(j.at("rootBody"));
 
         return result;
     }

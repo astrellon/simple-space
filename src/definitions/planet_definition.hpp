@@ -25,14 +25,14 @@ namespace space
 
             const sf::Texture *texture;
 
+            // Constructor
+            PlanetDefinition(DefinitionId id) : CelestialBodyDefinition(id), oscillateNoise(0.0f) { }
+            virtual ~PlanetDefinition() { }
+
             // Methods
             static const std::string DefinitionType() { return "planet"; }
             std::string type() const { return DefinitionType(); }
 
             virtual void onPostLoad(Engine &engine);
-
-            // Constructor
-            PlanetDefinition(DefinitionId id) : CelestialBodyDefinition(id), oscillateNoise(0.0f) { }
-            virtual ~PlanetDefinition() { }
     };
 } // space

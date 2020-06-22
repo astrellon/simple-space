@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <string>
+#include <vector>
 
 #include "base_definition.hpp"
 
@@ -32,7 +33,7 @@ namespace space
             // Methods
             virtual std::string type() const = 0;
 
-            virtual void onPostLoad(Engine &engine) { }
+            virtual void onPostLoad(Engine &engine);
     };
 
     class OrbitPointCelestialDefinition : public CelestialBodyDefinition

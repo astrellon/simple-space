@@ -6,6 +6,8 @@ namespace space
 {
     void PlanetDefinition::onPostLoad(Engine &engine)
     {
+        CelestialBodyDefinition::onPostLoad(engine);
+
         sf::Texture *text;
         engine.resourceManager().texture(texturePath, &text);
         texture = text;

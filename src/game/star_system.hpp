@@ -3,19 +3,23 @@
 #include <vector>
 
 #include "../non_copyable.hpp"
+#include "../definitions/star_system_definition.hpp"
 
 namespace space
 {
+    class SpaceObject;
+
     class StarSystem
     {
         public:
             // Fields
+            const StarSystemDefinition &definition;
 
             // Constructor
-            StarSystem();
+            StarSystem(const StarSystemDefinition &definition);
 
             // Methods
-            const std::vector<const Space Object *> objects() const
+            const std::vector<SpaceObject *> objects() const
             {
                 return _objects;
             }

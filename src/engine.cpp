@@ -216,7 +216,7 @@ namespace space
         _window.clear();
         if (_enableBloom)
         {
-            _bloomEffect2.apply(_sceneRenderTarget, _window);
+            _bloomEffect.apply(_sceneRenderTarget, _window);
         }
         else
         {

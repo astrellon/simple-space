@@ -9,5 +9,5 @@ void main()
 {
     vec4 sourceFragment = texture2D(source, gl_TexCoord[0].xy);
     vec4 bloomFragment = texture2D(bloom, gl_TexCoord[0].xy);
-    FragColor = sourceFragment + (bloomFragment * 1.5);
+    FragColor = sourceFragment + (bloomFragment * 1.0);
 }

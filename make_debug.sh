@@ -2,6 +2,6 @@
 mkdir -p debug
 cd debug
 cmake -DCMAKE_BUILD_TYPE=Debug ..
-make -j4
+make -j12
 
 cp -rf ../data ./
