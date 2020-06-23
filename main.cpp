@@ -14,11 +14,13 @@
 #include "src/game_session.hpp"
 #include "src/utils.hpp"
 #include "src/definitions/ship_definition.hpp"
+#include "src/definitions/character_definition.hpp"
 #include "src/definitions/star_system_definition.hpp"
 #include "src/serialisers/json/json_serialisers.hpp"
 #include "src/serialisers/json/json.hpp"
 #include "src/definition_manager.hpp"
 #include "src/game/ship.hpp"
+#include "src/game/character.hpp"
 #include "src/game/planet.hpp"
 #include "src/game/star_system.hpp"
 #include "src/keyboard.hpp"
@@ -84,6 +86,14 @@ int main()
 
     auto starSystem2 = gameSession->createStarSystem(*starSystemDef2);
     starSystem2->initFromDefinition();
+
+    space::CharacterDefinition charDef("CHAR_1");
+    charDef.spriteSize = 32;
+    charDef.texturePath = "data/textures/characters/doggo2.png";
+    charDef.onPostLoad(engine);
+
+    auto character = gameSession->createObject<space::Character>("CHAR", charDef);
+    starSystem->addObject(character);
 
     gameSession->activeStarSystem(starSystem);
 

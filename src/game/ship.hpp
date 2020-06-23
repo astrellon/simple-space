@@ -23,7 +23,6 @@ namespace space
             Ship(const ObjectId &id, const ShipDefinition &definition);
 
             // Methods
-
             float rotationSpeed() const { return _rotationSpeed; }
             sf::Vector2f speed() const { return _speed; }
 

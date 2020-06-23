@@ -5,31 +5,28 @@
 #include <string>
 
 #include "base_definition.hpp"
+#include "../tiles.hpp"
 
 namespace space
 {
     class Engine;
 
-    class ShipDefinition : public BaseDefinition
+    class CharacterDefinition : public BaseDefinition
     {
         public:
             // Fields
             std::string texturePath;
-            std::string name;
-
-            float maxRotation;
-            float turnRate;
-            float maxSpeed;
-            float acceleration;
+            uint spriteSize;
 
             const sf::Texture *texture;
+            Tiles tiles;
 
             // Constructor
-            ShipDefinition(const DefinitionId &id) : BaseDefinition(id) { }
-            virtual ~ShipDefinition() { }
+            CharacterDefinition(const DefinitionId &id) : BaseDefinition(id) { }
+            virtual ~CharacterDefinition() { }
 
             // Methods
-            static const std::string DefinitionType() { return "ship"; }
+            static const std::string DefinitionType() { return "character"; }
             std::string type() const { return DefinitionType(); }
 
             virtual void onPostLoad(Engine &engine);

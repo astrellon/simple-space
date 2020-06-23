@@ -22,6 +22,7 @@ namespace space
             BaseDefinition(const DefinitionId &id);
             virtual ~BaseDefinition() { }
 
+            // Methods
             virtual void onPostLoad(Engine &engine);
     };
 } // space
