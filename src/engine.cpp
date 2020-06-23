@@ -156,7 +156,7 @@ namespace space
     {
         area *= 0.5f;
 
-        _camera.setSize(area);
+        _camera.size(area);
         for (auto &b : _backgrounds)
         {
             b->onResize(area);

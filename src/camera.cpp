@@ -5,7 +5,7 @@
 
 namespace space
 {
-    Camera::Camera(Engine &engine) : _engine(engine)
+    Camera::Camera(Engine &engine) : _engine(engine), _scale(1.0f)
     {
 
     }
@@ -22,23 +22,30 @@ namespace space
         }
     }
 
-    void Camera::setSize(sf::Vector2f size)
+    void Camera::scale(float scale)
     {
-        _view.setSize(size);
+        _scale = scale;
+        _view.setSize(_size / _scale);
     }
 
-    void Camera::setCenter(sf::Vector2f center)
+    void Camera::size(sf::Vector2f size)
+    {
+        _size = size;
+        _view.setSize(size / _scale);
+    }
+
+    void Camera::center(sf::Vector2f center)
     {
         _view.setCenter(center);
     }
 
-    void Camera::setFollowing(const ObjectId &id)
+    void Camera::following(const ObjectId &id)
     {
         _followingId = id;
         _following = true;
     }
 
-    void Camera::setFollowing(bool following)
+    void Camera::following(bool following)
     {
         _following = following;
     }

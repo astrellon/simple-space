@@ -18,10 +18,17 @@ namespace space
 
             // Methods
             void update(sf::Time dt);
-            void setSize(sf::Vector2f size);
-            void setCenter(sf::Vector2f center);
-            void setFollowing(const ObjectId &id);
-            void setFollowing(bool follow);
+
+            void size(sf::Vector2f size);
+            sf::Vector2f size() const { return _size; }
+
+            void center(sf::Vector2f center);
+
+            void scale(float scale);
+            float scale() const { return _scale;}
+
+            void following(const ObjectId &id);
+            void following(bool follow);
 
             const sf::View &view() const;
 
@@ -29,7 +36,9 @@ namespace space
             // Fields
             Engine &_engine;
             sf::View _view;
+            sf::Vector2f _size;
             bool _following;
+            float _scale;
             ObjectId _followingId;
 
             // Methods

@@ -23,7 +23,7 @@ namespace space
     void Character::draw(Engine &engine, sf::RenderTarget &target, const sf::Transform &parentTransform)
     {
         const auto combinedTransform = parentTransform * _transform.getTransform();
-        auto elapsedTime = _timeSinceStart.getElapsedTime().asSeconds();
+        auto elapsedTime = _timeSinceStart.getElapsedTime().asSeconds() * 8;
         auto mod = std::fmod(elapsedTime, static_cast<double>(definition.tiles.length()));
         auto index = static_cast<uint>(mod);
 

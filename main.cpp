@@ -97,7 +97,9 @@ int main()
 
     gameSession->activeStarSystem(starSystem);
 
-    engine.camera().setFollowing(ship->id);
+    engine.camera().following(ship->id);
+
+    auto scale = 1.0f;
 
     while (window.isOpen())
     {
@@ -140,6 +142,11 @@ int main()
         {
             gameSession->activeStarSystem(starSystem2);
             starSystem2->addObject(ship);
+        }
+        if (space::Keyboard::isKeyDown(sf::Keyboard::T))
+        {
+            scale = scale < 4.0f ? 4.0f : 1.0f;
+            engine.camera().scale(scale);
         }
 
         ship->moveInput = moveInput;
