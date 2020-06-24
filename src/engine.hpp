@@ -5,6 +5,7 @@
 #include "definition_manager.hpp"
 #include "camera.hpp"
 #include "star_background.hpp"
+#include "star_background_2.hpp"
 #include "effects/bloom-effect.hpp"
 #include "effects/bloom-effect-2.hpp"
 
@@ -31,11 +32,6 @@ namespace space
             float spriteScale() const;
             void spriteScale(float scale);
 
-            float spriteSize() const;
-            void spriteSize(float size);
-
-            float spriteScaleCombined() const;
-
             sf::Vector2u windowSize() const;
 
             GameSession *currentSession() const;
@@ -59,6 +55,7 @@ namespace space
             std::unique_ptr<DefinitionManager> _definitionManager;
 
             std::vector<std::unique_ptr<StarBackground>> _backgrounds;
+            std::vector<std::unique_ptr<StarBackground2>> _backgrounds2;
             sf::RenderTexture _sceneRenderTarget;
             BloomEffect _bloomEffect;
             BloomEffect2 _bloomEffect2;
@@ -66,7 +63,6 @@ namespace space
             Camera _camera;
 
             float _spriteScale;
-            float _spriteSize;
             std::unique_ptr<GameSession> _currentSession;
             sf::RenderWindow &_window;
             sf::Clock _timer;

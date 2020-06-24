@@ -23,6 +23,7 @@ namespace space
             sf::Vector2f size() const { return _size; }
 
             void center(sf::Vector2f center);
+            sf::Vector2f center() const { return _view.getCenter(); }
 
             void scale(float scale);
             float scale() const { return _scale;}

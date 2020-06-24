@@ -15,7 +15,7 @@
 namespace space
 {
     Engine::Engine(sf::RenderWindow &window) :
-        _spriteScale(1.0f), _spriteSize(16.0f), _window(window), _deltaTime(sf::Time::Zero), _timeSinceStartOnUpdate(sf::Time::Zero),
+        _spriteScale(1.0f), _window(window), _deltaTime(sf::Time::Zero), _timeSinceStartOnUpdate(sf::Time::Zero),
         _camera(*this), _enableBloom(true)
     {
         _resourceManager = std::make_unique<ResourceManager>();
@@ -65,20 +65,6 @@ namespace space
         _spriteScale = scale;
     }
 
-    float Engine::spriteSize() const
-    {
-        return _spriteSize;
-    }
-    void Engine::spriteSize(float size)
-    {
-        _spriteSize = size;
-    }
-
-    float Engine::spriteScaleCombined() const
-    {
-        return _spriteSize * _spriteScale;
-    }
-
     sf::Vector2u Engine::windowSize() const
     {
         return _window.getSize();
@@ -99,6 +85,12 @@ namespace space
         for (auto i = 0; i < 7; i++)
         {
             _backgrounds.emplace_back(std::make_unique<StarBackground>(*this, 200, 500, 0.4 - (7 - i) * 0.05));
+        }
+
+        for (auto y = -5; y <= 5; y++)
+        for (auto x = -5; x <= 5; x++)
+        {
+            _backgrounds2.emplace_back(std::make_unique<StarBackground2>(*this, 500, 200, 0.5f, sf::Vector2i(x, y)));
         }
 
         _bloomEffect.init(*_resourceManager.get());
@@ -157,9 +149,9 @@ namespace space
         area *= 0.5f;
 
         _camera.size(area);
-        for (auto &b : _backgrounds)
+        for (auto &b : _backgrounds2)
         {
-            b->onResize(area);
+            b->camera().size(area);
         }
 
         _sceneRenderTarget.create(area.x, area.y);
@@ -181,12 +173,28 @@ namespace space
             _currentSession->update(_deltaTime);
         }
 
-        for (auto &b : _backgrounds)
-        {
-            b->update(_deltaTime);
-        }
+        // for (auto &b : _backgrounds)
+        // {
+        //     b->update(_deltaTime);
+        // }
 
         _camera.update(_deltaTime);
+
+        for (auto &b : _backgrounds2)
+        {
+            b->setCameraCenter(_camera.center());
+        }
+
+        if (space::Keyboard::isKeyDown(sf::Keyboard::T))
+        {
+            _spriteScale = _spriteScale < 4.0f ? 4.0f : 1.0f;
+            _camera.scale(_spriteScale);
+
+            for (auto &b : _backgrounds2)
+            {
+                b->camera().scale(_spriteScale > 1 ? 2 : 1);
+            }
+        }
 
         //std::cout << "FPS: " << 1.0f / _deltaTime.asSeconds() << std::endl;
     }
@@ -196,14 +204,20 @@ namespace space
         _sceneRenderTarget.setActive(true);
 
         _sceneRenderTarget.clear(sf::Color(20, 24, 46));
-        _sceneRenderTarget.setView(_camera.view());
 
-        _backgrounds.begin()->get()->bindShader(sf::Transform::Identity);
-        for (auto &b : _backgrounds)
+        // _backgrounds.begin()->get()->bindShader(sf::Transform::Identity);
+        // for (auto &b : _backgrounds)
+        // {
+        //     b->draw(_sceneRenderTarget, sf::Transform::Identity);
+        // }
+        // _backgrounds.begin()->get()->unbindShader();
+        for (auto &b : _backgrounds2)
         {
-            b->draw(_sceneRenderTarget, sf::Transform::Identity);
+            _sceneRenderTarget.setView(b->camera().view());
+            b->draw(_sceneRenderTarget);
         }
-        _backgrounds.begin()->get()->unbindShader();
+
+        _sceneRenderTarget.setView(_camera.view());
 
         if (_currentSession.get())
         {

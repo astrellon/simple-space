@@ -5,7 +5,7 @@
 
 namespace space
 {
-    Camera::Camera(Engine &engine) : _engine(engine), _scale(1.0f)
+    Camera::Camera(Engine &engine) : _engine(engine), _scale(1.0f), _following(false)
     {
 
     }

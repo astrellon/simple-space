@@ -70,9 +70,6 @@ int main()
     const space::StarSystemDefinition *starSystemDef2;
     definitionManager.tryGet("STAR_SYSTEM_2", &starSystemDef2);
 
-    auto spriteSize = static_cast<uint>(engine.spriteSize());
-    auto spriteScale = engine.spriteScale();
-
     auto gameSession = engine.startGameSession();
 
     auto ship = gameSession->createObject<space::Ship>("PLAYER", *shipDef);
@@ -98,8 +95,6 @@ int main()
     gameSession->activeStarSystem(starSystem);
 
     engine.camera().following(ship->id);
-
-    auto scale = 1.0f;
 
     while (window.isOpen())
     {
@@ -142,11 +137,6 @@ int main()
         {
             gameSession->activeStarSystem(starSystem2);
             starSystem2->addObject(ship);
-        }
-        if (space::Keyboard::isKeyDown(sf::Keyboard::T))
-        {
-            scale = scale < 4.0f ? 4.0f : 1.0f;
-            engine.camera().scale(scale);
         }
 
         ship->moveInput = moveInput;
