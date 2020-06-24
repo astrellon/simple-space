@@ -1,6 +1,4 @@
-#version 330 compatibility
-
-uniform mat4 transform;
+#version 130
 
 void main()
 {
