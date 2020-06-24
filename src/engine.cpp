@@ -90,7 +90,7 @@ namespace space
         for (auto y = -5; y <= 5; y++)
         for (auto x = -5; x <= 5; x++)
         {
-            _backgrounds2.emplace_back(std::make_unique<StarBackground2>(*this, 500, 200, 0.5f, sf::Vector2i(x, y)));
+            _backgrounds2.emplace_back(std::make_unique<StarBackground2>(*this, 500, 200, 0.5f));
         }
 
         _bloomEffect.init(*_resourceManager.get());
