@@ -46,6 +46,8 @@ namespace space
 
     void GameSession::update(sf::Time dt)
     {
+        _playerController.update(dt);
+
         if (_mapLayer.get() == nullptr)
         {
             tmx::Map *map;

@@ -93,6 +93,9 @@ int main()
     character->transform().scale = 0.2f;
     starSystem->addObject(character);
 
+    gameSession->playerController().controllingShip(ship);
+    gameSession->playerController().controlling(space::ControlShip);
+
     gameSession->activeStarSystem(starSystem);
 
     engine.camera().followingId(ship->id);
@@ -101,33 +104,6 @@ int main()
     {
         engine.processEvents();
         engine.preUpdate();
-
-        sf::Vector2f moveInput;
-        float rotateInput = 0;
-        if (space::Keyboard::isKeyPressed(sf::Keyboard::A))
-        {
-            moveInput.x -= 1;
-        }
-        if (space::Keyboard::isKeyPressed(sf::Keyboard::D))
-        {
-            moveInput.x += 1;
-        }
-        if (space::Keyboard::isKeyPressed(sf::Keyboard::W))
-        {
-            moveInput.y -= 1;
-        }
-        if (space::Keyboard::isKeyPressed(sf::Keyboard::S))
-        {
-            moveInput.y += 1;
-        }
-        if (space::Keyboard::isKeyPressed(sf::Keyboard::Q))
-        {
-            rotateInput -= 1;
-        }
-        if (space::Keyboard::isKeyPressed(sf::Keyboard::E))
-        {
-            rotateInput += 1;
-        }
 
         if (space::Keyboard::isKeyDown(sf::Keyboard::Num1))
         {
@@ -139,9 +115,6 @@ int main()
             gameSession->activeStarSystem(starSystem2);
             starSystem2->addObject(ship);
         }
-
-        ship->moveInput = moveInput;
-        ship->rotateInput = rotateInput;
 
         engine.update();
         engine.draw();

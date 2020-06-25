@@ -9,6 +9,7 @@
 #include "definitions/planet_definition.hpp"
 #include "game/space_object.hpp"
 
+#include "player_controller.hpp"
 #include "map_layer.hpp"
 
 namespace space
@@ -22,9 +23,11 @@ namespace space
     class GameSession
     {
         public:
+            // Constructor
             GameSession(Engine &engine);
             ~GameSession();
 
+            // Methods
             StarSystem *createStarSystem(const StarSystemDefinition &definition);
 
             template <typename T, typename... TArgs>
@@ -42,6 +45,8 @@ namespace space
             void activeStarSystem(StarSystem *activeStarSystem) { _activeStarSystem = activeStarSystem; }
             StarSystem *activeStarSystem() const { return _activeStarSystem; }
 
+            PlayerController &playerController() { return _playerController; }
+
             void update(sf::Time dt);
             void draw(sf::RenderTarget &target);
 
@@ -53,6 +58,7 @@ namespace space
             std::unique_ptr<MapLayer> _mapLayer;
 
             StarSystem *_activeStarSystem;
+            PlayerController _playerController;
 
     };
 } // town
