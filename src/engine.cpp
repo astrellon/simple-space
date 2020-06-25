@@ -87,10 +87,17 @@ namespace space
             _backgrounds.emplace_back(std::make_unique<StarBackground>(*this, 200, 500, 0.4 - (7 - i) * 0.05));
         }
 
-        for (auto y = -5; y <= 5; y++)
-        for (auto x = -5; x <= 5; x++)
+        sf::Shader *starShader;
+        if (_resourceManager->shader("stars2", &starShader))
         {
-            _backgrounds2.emplace_back(std::make_unique<StarBackground2>(*this, 500, 200, 0.5f));
+            for (auto i = 0; i < 7; i++)
+            {
+                _backgrounds2.emplace_back(std::make_unique<StarBackground2>(*this, starShader, 800, 200, 0.9f - (7 - i) * 0.1f));
+            }
+        }
+        else
+        {
+            std::cout << "Unable to load shader for stars" << std::endl;
         }
 
         _bloomEffect.init(*_resourceManager.get());
@@ -182,7 +189,8 @@ namespace space
 
         for (auto &b : _backgrounds2)
         {
-            b->setCameraCenter(_camera.center());
+            b->cameraCenter(_camera.center());
+            b->update(_deltaTime);
         }
 
         if (space::Keyboard::isKeyDown(sf::Keyboard::T))
