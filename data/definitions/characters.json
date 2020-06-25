@@ -1,0 +1,10 @@
+[
+    {
+        "type": "character",
+        "id": "PLAYER_CHAR",
+        "spriteSize": 32,
+        "speed": 50,
+        "name": "Player",
+        "texturePath": "data/textures/characters/doggo2.png"
+    }
+]

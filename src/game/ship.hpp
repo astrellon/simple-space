@@ -16,6 +16,7 @@ namespace space
             // Fields
             const ShipDefinition &definition;
 
+            // Inputs
             float rotateInput;
             sf::Vector2f moveInput;
 

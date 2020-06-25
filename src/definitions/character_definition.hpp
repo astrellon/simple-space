@@ -16,7 +16,9 @@ namespace space
         public:
             // Fields
             std::string texturePath;
+            std::string name;
             uint spriteSize;
+            float speed;
 
             const sf::Texture *texture;
             Tiles tiles;

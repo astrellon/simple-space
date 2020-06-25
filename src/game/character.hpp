@@ -16,6 +16,10 @@ namespace space
             // Fields
             const CharacterDefinition &definition;
 
+            // Inputs
+            float rotateInput;
+            sf::Vector2f moveInput;
+
             // Constructor
             Character(const ObjectId &id, const CharacterDefinition &definition);
 
@@ -26,6 +30,7 @@ namespace space
         private:
             // Fields
             sf::Clock _timeSinceStart;
+            float _rotationSpeed;
 
             // Methods
     };

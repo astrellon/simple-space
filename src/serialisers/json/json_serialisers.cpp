@@ -17,6 +17,10 @@ namespace space
         {
             j = toJson(dynamic_cast<const ShipDefinition &>(input));
         }
+        else if (type == CharacterDefinition::DefinitionType())
+        {
+            j = toJson(dynamic_cast<const CharacterDefinition &>(input));
+        }
         else if (type == PlanetDefinition::DefinitionType())
         {
             j = toJson(dynamic_cast<const PlanetDefinition &>(input));
@@ -45,6 +49,10 @@ namespace space
         if (type == ShipDefinition::DefinitionType())
         {
             return fromJsonShipDefinition(j);
+        }
+        else if (type == CharacterDefinition::DefinitionType())
+        {
+            return fromJsonCharacterDefinition(j);
         }
         else if (type == PlanetDefinition::DefinitionType() ||
             type == OrbitPointCelestialDefinition::DefinitionType())
@@ -82,6 +90,29 @@ namespace space
         j.at("maxSpeed").get_to(input->maxSpeed);
         j.at("turnRate").get_to(input->turnRate);
         j.at("acceleration").get_to(input->acceleration);
+
+        return input;
+    }
+
+    json toJson(const CharacterDefinition &input)
+    {
+        return json {
+            {"id", input.id},
+            {"texturePath", input.texturePath},
+            {"name", input.name},
+            {"spriteSize", input.spriteSize},
+            {"speed", input.speed},
+        };
+    }
+
+    std::unique_ptr<CharacterDefinition> fromJsonCharacterDefinition(const json &j)
+    {
+        auto id = j.at("id").get<std::string>();
+        auto input = std::make_unique<CharacterDefinition>(id);
+        j.at("texturePath").get_to(input->texturePath);
+        j.at("name").get_to(input->name);
+        j.at("spriteSize").get_to(input->spriteSize);
+        j.at("speed").get_to(input->speed);
 
         return input;
     }

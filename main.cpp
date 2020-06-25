@@ -70,6 +70,9 @@ int main()
     const space::StarSystemDefinition *starSystemDef2;
     definitionManager.tryGet("STAR_SYSTEM_2", &starSystemDef2);
 
+    const space::CharacterDefinition *playerCharDef;
+    definitionManager.tryGet("PLAYER_CHAR", &playerCharDef);
+
     auto gameSession = engine.startGameSession();
 
     auto ship = gameSession->createObject<space::Ship>("PLAYER", *shipDef);
@@ -84,21 +87,16 @@ int main()
     auto starSystem2 = gameSession->createStarSystem(*starSystemDef2);
     starSystem2->initFromDefinition();
 
-    space::CharacterDefinition charDef("CHAR_1");
-    charDef.spriteSize = 32;
-    charDef.texturePath = "data/textures/characters/doggo2.png";
-    charDef.onPostLoad(engine);
-
-    auto character = gameSession->createObject<space::Character>("CHAR", charDef);
-    character->transform().scale = 0.2f;
+    auto character = gameSession->createObject<space::Character>("PLAYER_CHAR", *playerCharDef);
+    //character->transform().scale = 0.2f;
     starSystem->addObject(character);
 
-    gameSession->playerController().controllingShip(ship);
-    gameSession->playerController().controlling(space::ControlShip);
+    gameSession->playerController().controllingCharacter(character);
+    gameSession->playerController().controlling(space::ControlCharacter);
 
     gameSession->activeStarSystem(starSystem);
 
-    engine.camera().followingId(ship->id);
+    engine.camera().followingId(character->id);
 
     while (window.isOpen())
     {

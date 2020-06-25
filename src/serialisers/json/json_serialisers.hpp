@@ -4,6 +4,7 @@
 
 #include "../../definitions/base_definition.hpp"
 #include "../../definitions/ship_definition.hpp"
+#include "../../definitions/character_definition.hpp"
 #include "../../definitions/celestial_body_definition.hpp"
 #include "../../definitions/planet_definition.hpp"
 #include "../../definitions/star_system_definition.hpp"
@@ -18,6 +19,9 @@ namespace space
 
     json toJson(const ShipDefinition &input);
     std::unique_ptr<ShipDefinition> fromJsonShipDefinition(const json &j);
+
+    json toJson(const CharacterDefinition &input);
+    std::unique_ptr<CharacterDefinition> fromJsonCharacterDefinition(const json &j);
 
     std::unique_ptr<CelestialBodyDefinition> fromJsonCelestialBodyDefinition(const json &j);
 
