@@ -48,9 +48,11 @@ namespace space
         sf::RenderStates states;
         states.shader = _shader;
 
+        auto pointSize = std::max(1, static_cast<int>(std::roundf(_distanceScale * _camera.scale())));
+
         _shader->setUniform("timeSinceStart", _engine.timeSinceStart().asSeconds());
         _shader->setUniform("distanceScale", _distanceScale);
-        _shader->setUniform("zoomScale", _camera.scale());
+        _shader->setUniform("pointSize", pointSize);
 
         glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
 

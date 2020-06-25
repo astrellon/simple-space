@@ -1,4 +1,4 @@
-#version 140
+#version 130
 
 #define E 2.71828
 
