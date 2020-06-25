@@ -4,7 +4,7 @@
 
 #include <SFML/Graphics.hpp>
 
-#include "camera.hpp"
+#include "layer_camera.hpp"
 
 namespace space
 {
@@ -26,7 +26,7 @@ namespace space
             void draw(sf::RenderTarget &target);
 
             void cameraCenter(sf::Vector2f center);
-            Camera &camera() { return _camera; }
+            LayerCamera &camera() { return _camera; }
 
             float area() const { return _area; }
             float distanceScale() const { return _distanceScale; }
@@ -35,7 +35,7 @@ namespace space
         private:
             // Fields
             Engine &_engine;
-            Camera _camera;
+            LayerCamera _camera;
             sf::Shader *_shader;
             float _area;
             float _distanceScale;

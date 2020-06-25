@@ -11,12 +11,13 @@
 namespace space
 {
     StarBackground::StarBackground(Engine &engine, sf::Shader *shader, float area, int numParticles, float distanceScale) :
-        _engine(engine), _area(area), _shader(shader), _distanceScale(distanceScale), _camera(engine), _numParticles(numParticles)
+        _engine(engine), _area(area), _shader(shader), _distanceScale(distanceScale), _camera(engine.camera(), distanceScale), _numParticles(numParticles)
     {
     }
 
     void StarBackground::update(sf::Time dt)
     {
+        _camera.update(dt);
         auto center = _camera.view().getCenter();
         auto size = _camera.view().getSize() * 0.6f;
         auto lowerX = (int)floor((center.x - size.x) / _area);
@@ -50,7 +51,7 @@ namespace space
         sf::RenderStates states;
         states.shader = _shader;
 
-        auto pointSize = std::max(1, static_cast<int>(std::roundf(_distanceScale * _camera.scale())));
+        auto pointSize = std::max(1, static_cast<int>(std::roundf(_distanceScale * _camera.camera().scale())));
 
         _shader->setUniform("timeSinceStart", _engine.timeSinceStart().asSeconds());
         _shader->setUniform("distanceScale", _distanceScale);
@@ -73,13 +74,14 @@ namespace space
 
     void StarBackground::onResize(sf::Vector2f size)
     {
-        _camera.size(size);
+        //_camera.size(size);
+        // _camera.size(size);
     }
 
-    void StarBackground::cameraCenter(sf::Vector2f center)
-    {
-        _camera.center(center * _distanceScale);
-    }
+    // void StarBackground::cameraCenter(sf::Vector2f center)
+    // {
+    //     _camera.center(center * _distanceScale);
+    // }
 
     StarBackgroundChunk *StarBackground::getChunk(sf::Vector2i pos)
     {
@@ -130,7 +132,8 @@ namespace space
 
         std::uniform_real_distribution<float> bigStarRange(0, 100);
         std::uniform_real_distribution<float> posRange(0, area);
-        std::uniform_real_distribution<float> colourRange(127 - distanceScale * 100, 255 - distanceScale * 100);
+        //std::uniform_real_distribution<float> colourRange(127 - distanceScale * 100, 255 - distanceScale * 100);
+        std::uniform_real_distribution<float> colourRange(distanceScale * 100 + 20, distanceScale * 100 + 120);
 
         for (auto i = 0; i < numParticles; i++)
         {

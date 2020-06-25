@@ -151,10 +151,6 @@ namespace space
         area *= 0.5f;
 
         _camera.size(area);
-        for (auto &b : _backgrounds)
-        {
-            b->camera().size(area);
-        }
 
         _sceneRenderTarget.create(area.x, area.y);
     }
@@ -175,23 +171,22 @@ namespace space
             _currentSession->update(_deltaTime);
         }
 
-        _camera.update(_deltaTime);
-
-        for (auto &b : _backgrounds)
-        {
-            b->cameraCenter(_camera.center());
-            b->update(_deltaTime);
-        }
-
         if (space::Keyboard::isKeyDown(sf::Keyboard::T))
         {
             _spriteScale = _spriteScale < 4.0f ? 4.0f : 1.0f;
             _camera.scale(_spriteScale);
 
-            for (auto &b : _backgrounds)
-            {
-                b->camera().scale(_spriteScale > 1 ? 2 : 1);
-            }
+            // for (auto &b : _backgrounds)
+            // {
+            //     b->camera().scale(_spriteScale > 1 ? 2 : 1);
+            // }
+        }
+
+        _camera.update(_deltaTime);
+
+        for (auto &b : _backgrounds)
+        {
+            b->update(_deltaTime);
         }
 
         //std::cout << "FPS: " << 1.0f / _deltaTime.asSeconds() << std::endl;
