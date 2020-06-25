@@ -28,8 +28,17 @@ namespace space
             void scale(float scale);
             float scale() const { return _scale;}
 
-            void following(const ObjectId &id);
+            void followingId(const ObjectId &id);
+            const ObjectId &followingId() const { return _followingId; }
+
             void following(bool follow);
+            bool isFollowing() const { return _following; }
+
+            void followingRotationId(const ObjectId &id);
+            const ObjectId &followingRotationId() const { return _followingRotationId; }
+
+            void followingRotation(bool follow);
+            bool isFollowingRotation() const { return _followingRotation; }
 
             const sf::View &view() const;
 
@@ -38,9 +47,11 @@ namespace space
             Engine &_engine;
             sf::View _view;
             sf::Vector2f _size;
-            bool _following;
             float _scale;
+            bool _following;
             ObjectId _followingId;
+            bool _followingRotation;
+            ObjectId _followingRotationId;
 
             // Methods
     };

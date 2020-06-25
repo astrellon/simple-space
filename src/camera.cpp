@@ -5,7 +5,7 @@
 
 namespace space
 {
-    Camera::Camera(Engine &engine) : _engine(engine), _scale(1.0f), _following(false)
+    Camera::Camera(Engine &engine) : _engine(engine), _scale(1.0f), _following(false), _followingRotation(false)
     {
 
     }
@@ -19,6 +19,22 @@ namespace space
             {
                 _view.setCenter(followingObject->transform().position);
             }
+        }
+
+        auto resetRotation = true;
+        if (_followingRotation)
+        {
+            SpaceObject *followingObject;
+            if (_engine.currentSession()->tryGetSpaceObject(_followingRotationId, &followingObject))
+            {
+                resetRotation = false;
+                _view.setRotation(followingObject->transform().rotation);
+            }
+        }
+
+        if (resetRotation && _view.getRotation() != 0.0f)
+        {
+            _view.setRotation(0.0f);
         }
     }
 
@@ -39,7 +55,7 @@ namespace space
         _view.setCenter(center);
     }
 
-    void Camera::following(const ObjectId &id)
+    void Camera::followingId(const ObjectId &id)
     {
         _followingId = id;
         _following = true;
@@ -48,6 +64,17 @@ namespace space
     void Camera::following(bool following)
     {
         _following = following;
+    }
+
+    void Camera::followingRotationId(const ObjectId &id)
+    {
+        _followingRotationId = id;
+        _followingRotation = true;
+    }
+
+    void Camera::followingRotation(bool following)
+    {
+        _followingRotation = following;
     }
 
     const sf::View &Camera::view() const

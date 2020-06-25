@@ -173,13 +173,19 @@ namespace space
 
         if (space::Keyboard::isKeyDown(sf::Keyboard::T))
         {
-            _spriteScale = _spriteScale < 4.0f ? 4.0f : 1.0f;
-            _camera.scale(_spriteScale);
+            auto zoomIn = _spriteScale < 4.0f;
+            if (zoomIn)
+            {
+                _spriteScale = 4.0f;
+                _camera.followingRotationId("PLAYER");
+            }
+            else
+            {
+                _spriteScale = 1.0f;
+                _camera.followingRotation(false);
+            }
 
-            // for (auto &b : _backgrounds)
-            // {
-            //     b->camera().scale(_spriteScale > 1 ? 2 : 1);
-            // }
+            _camera.scale(_spriteScale);
         }
 
         _camera.update(_deltaTime);

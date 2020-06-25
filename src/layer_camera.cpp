@@ -17,6 +17,15 @@ namespace space
         {
             size(_camera.size(), _camera.scale());
         }
+
+        if (_camera.isFollowingRotation())
+        {
+            _view.setRotation(_camera.view().getRotation());
+        }
+        else if (_view.getRotation() != 0.0f)
+        {
+            _view.setRotation(0.0f);
+        }
     }
 
     void LayerCamera::size(const sf::Vector2f &size, float scale)

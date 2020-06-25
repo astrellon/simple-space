@@ -95,7 +95,7 @@ int main()
 
     gameSession->activeStarSystem(starSystem);
 
-    engine.camera().following(ship->id);
+    engine.camera().followingId(ship->id);
 
     while (window.isOpen())
     {
