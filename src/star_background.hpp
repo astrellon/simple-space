@@ -1,69 +1,75 @@
 #pragma once
 
+#include <vector>
+
 #include <SFML/Graphics.hpp>
 
-#include <map>
-
-#include "particles.hpp"
-#include "non_copyable.hpp"
+#include "camera.hpp"
 
 namespace space
 {
     class Engine;
     class StarBackgroundChunk;
 
-    class StarBackground : public Particles
+    class StarBackground
     {
         public:
             // Fields
 
             // Constructor
-            StarBackground(Engine &engine, int numParticlesPerChunk, float chunkArea, float distanceScale);
+            StarBackground(Engine &engine, sf::Shader *shader, float area, int numParticles, float distanceScale);
 
             // Methods
-            void onResize(sf::Vector2f viewport);
-            virtual void onInit();
-            virtual void onUpdate(sf::Time dt);
-            virtual bool onPreDraw(sf::RenderTarget &target, const sf::Transform &parentTransform);
-            virtual void onPostDraw(sf::RenderTarget &target, const sf::Transform &parentTransform);
+            void onResize(sf::Vector2f size);
 
-            void bindShader(const sf::Transform &parentTransform);
-            void unbindShader();
+            void update(sf::Time dt);
+            void draw(sf::RenderTarget &target);
 
-            void drawDebug(sf::RenderTarget &target);
+            void cameraCenter(sf::Vector2f center);
+            Camera &camera() { return _camera; }
+
+            float area() const { return _area; }
+            float distanceScale() const { return _distanceScale; }
+            int numParticles() const { return _numParticles; }
 
         private:
-            friend class StarBackgroundChunk;
-
             // Fields
+            Engine &_engine;
+            Camera _camera;
             sf::Shader *_shader;
-            sf::Vector2f _chunkDims;
+            float _area;
             float _distanceScale;
-            float _chunkArea;
-            int _numParticlesPerChunk;
-            int _numChunks;
-            int _nextAvailableIndex;
-            sf::Vector2f _viewport;
-            std::map<std::pair<int, int>, StarBackgroundChunk> _chunks;
-            std::vector<int> _availableIndicies;
+            float _numParticles;
+            std::vector<std::unique_ptr<StarBackgroundChunk>> _chunks;
 
             // Methods
+            StarBackgroundChunk *getChunk(sf::Vector2i pos);
     };
 
     class StarBackgroundChunk
     {
         public:
+            // Fields
+
             // Constructor
-            StarBackgroundChunk(int indexOffset);
+            StarBackgroundChunk(StarBackground &parent);
 
             // Methods
-            void updatePosition(StarBackground &parent, sf::Vector2i position);
+            void position(sf::Vector2i position);
+            sf::Vector2i position() const { return _position; }
 
-            inline int indexOffset() const { return _indexOffset; }
+            void draw(sf::RenderTarget &target, sf::RenderStates &states);
+
+            void active(bool active) { _active = active; }
+            bool isActive() const { return _active; }
 
         private:
             // Fields
-            int _indexOffset;
+            StarBackground &_parent;
+            sf::VertexArray _vertices;
+            sf::Vector2i _position;
+            bool _active;
 
+            // Methods
     };
 } // space

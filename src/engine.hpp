@@ -5,7 +5,6 @@
 #include "definition_manager.hpp"
 #include "camera.hpp"
 #include "star_background.hpp"
-#include "star_background_2.hpp"
 #include "effects/bloom-effect.hpp"
 #include "effects/bloom-effect-2.hpp"
 
@@ -55,7 +54,6 @@ namespace space
             std::unique_ptr<DefinitionManager> _definitionManager;
 
             std::vector<std::unique_ptr<StarBackground>> _backgrounds;
-            std::vector<std::unique_ptr<StarBackground2>> _backgrounds2;
             sf::RenderTexture _sceneRenderTarget;
             BloomEffect _bloomEffect;
             BloomEffect2 _bloomEffect2;

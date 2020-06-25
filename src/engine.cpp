@@ -82,17 +82,12 @@ namespace space
 
     void Engine::initBackground()
     {
-        for (auto i = 0; i < 7; i++)
-        {
-            _backgrounds.emplace_back(std::make_unique<StarBackground>(*this, 200, 500, 0.4 - (7 - i) * 0.05));
-        }
-
         sf::Shader *starShader;
         if (_resourceManager->shader("stars2", &starShader))
         {
             for (auto i = 0; i < 7; i++)
             {
-                _backgrounds2.emplace_back(std::make_unique<StarBackground2>(*this, starShader, 800, 200, 0.9f - (7 - i) * 0.1f));
+                _backgrounds.emplace_back(std::make_unique<StarBackground>(*this, starShader, 800, 200, 0.9f - (7 - i) * 0.1f));
             }
         }
         else
@@ -156,7 +151,7 @@ namespace space
         area *= 0.5f;
 
         _camera.size(area);
-        for (auto &b : _backgrounds2)
+        for (auto &b : _backgrounds)
         {
             b->camera().size(area);
         }
@@ -180,14 +175,9 @@ namespace space
             _currentSession->update(_deltaTime);
         }
 
-        // for (auto &b : _backgrounds)
-        // {
-        //     b->update(_deltaTime);
-        // }
-
         _camera.update(_deltaTime);
 
-        for (auto &b : _backgrounds2)
+        for (auto &b : _backgrounds)
         {
             b->cameraCenter(_camera.center());
             b->update(_deltaTime);
@@ -198,7 +188,7 @@ namespace space
             _spriteScale = _spriteScale < 4.0f ? 4.0f : 1.0f;
             _camera.scale(_spriteScale);
 
-            for (auto &b : _backgrounds2)
+            for (auto &b : _backgrounds)
             {
                 b->camera().scale(_spriteScale > 1 ? 2 : 1);
             }
@@ -213,13 +203,7 @@ namespace space
 
         _sceneRenderTarget.clear(sf::Color(20, 24, 46));
 
-        // _backgrounds.begin()->get()->bindShader(sf::Transform::Identity);
-        // for (auto &b : _backgrounds)
-        // {
-        //     b->draw(_sceneRenderTarget, sf::Transform::Identity);
-        // }
-        // _backgrounds.begin()->get()->unbindShader();
-        for (auto &b : _backgrounds2)
+        for (auto &b : _backgrounds)
         {
             _sceneRenderTarget.setView(b->camera().view());
             b->draw(_sceneRenderTarget);
