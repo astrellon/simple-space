@@ -46,7 +46,6 @@ int main()
 
     resourceManager.loadEmbedded();
     resourceManager.preloadShader("stars", "data/shaders/stars.vert", "data/shaders/stars.frag");
-    resourceManager.preloadShader("stars2", "data/shaders/stars2.vert", "data/shaders/stars2.frag");
     resourceManager.preloadShader("planet", "data/shaders/planet.vert", "data/shaders/planet.frag");
     resourceManager.preloadTextures("data/textures");
     resourceManager.preloadFonts("data/fonts");
@@ -91,6 +90,7 @@ int main()
     charDef.onPostLoad(engine);
 
     auto character = gameSession->createObject<space::Character>("CHAR", charDef);
+    character->transform().scale = 0.2f;
     starSystem->addObject(character);
 
     gameSession->activeStarSystem(starSystem);

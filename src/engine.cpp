@@ -83,7 +83,7 @@ namespace space
     void Engine::initBackground()
     {
         sf::Shader *starShader;
-        if (_resourceManager->shader("stars2", &starShader))
+        if (_resourceManager->shader("stars", &starShader))
         {
             for (auto i = 0; i < 7; i++)
             {
@@ -176,7 +176,7 @@ namespace space
             auto zoomIn = _spriteScale < 4.0f;
             if (zoomIn)
             {
-                _spriteScale = 4.0f;
+                _spriteScale = 5.0f;
                 _camera.followingRotationId("PLAYER");
             }
             else

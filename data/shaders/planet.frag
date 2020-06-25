@@ -62,9 +62,9 @@ float fBm(in vec2 p)
     return min(f, 1.0);
 }
 
-float easeOutQuad(float t)
+float easeOutCubic(float t)
 {
-    return t * t;
+    return t * t * t;
 }
 
 void main()
@@ -75,9 +75,9 @@ void main()
 
     float len = length(uv);
     if (len > 1.0) {
-        float t = max(0, 1 - ((len - 1) / 0.2));
-        float p = easeOutQuad(t);
-        FragColor = glowColour * p;
+        float t = clamp(1 - ((len - 1) / 0.2), 0, 1);
+        float p = easeOutCubic(t);
+        FragColor = vec4(glowColour.rgb, glowColour.a * p);
 
         return;
     }
