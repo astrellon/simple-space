@@ -81,4 +81,18 @@ namespace space
     {
         return _view;
     }
+
+    float Camera::getRotation() const
+    {
+        if (_followingRotation)
+        {
+            SpaceObject *followingObject;
+            if (_engine.currentSession()->tryGetSpaceObject(_followingRotationId, &followingObject))
+            {
+                return followingObject->transform().rotation;
+            }
+        }
+
+        return 0.0f;
+    }
 }

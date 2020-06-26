@@ -7,6 +7,6 @@ namespace space
     void CharacterDefinition::onPostLoad(Engine &engine)
     {
         engine.resourceManager().texture(texturePath, &texture);
-        tiles.init(texture, spriteSize);
+        tiles.init(texture, spriteSize, true);
     }
 } // namespace space

@@ -11,11 +11,12 @@ namespace space
     class Tiles : private NonCopyable
     {
         public:
-            void init(const sf::Texture *texture, uint spriteSize);
+            void init(const sf::Texture *texture, uint spriteSize, bool center);
 
             inline uint length() const { return _length; }
             inline uint rows() const { return _rows; }
             inline uint columns() const { return _columns; }
+            bool isCentered() const { return _centered; }
 
             sf::Sprite *sprite(uint index);
             const sf::Sprite *sprite(uint index) const;
@@ -28,6 +29,7 @@ namespace space
         private:
             const sf::Texture *_texture;
             SpriteList _sprites;
+            bool _centered;
             uint _spriteSize;
             uint _rows;
             uint _columns;

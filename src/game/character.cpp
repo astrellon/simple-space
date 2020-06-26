@@ -4,6 +4,8 @@
 #include <math.h>
 
 #include "../utils.hpp"
+#include "../engine.hpp"
+#include "../space_transform.hpp"
 
 namespace space
 {
@@ -15,7 +17,11 @@ namespace space
     void Character::update(Engine &engine, sf::Time dt)
     {
         auto seconds = dt.asSeconds();
-        auto movement = Utils::transformDirection(moveInput, _transform.getTransform()) * seconds * definition.speed;
+
+        SpaceTransform trans;
+        trans.rotation = engine.camera().getRotation();
+
+        auto movement = Utils::transformDirection(moveInput, trans.getTransform()) * seconds * definition.speed;
         _rotationSpeed += rotateInput * seconds * 30.0f;
 
         _transform.position += movement;

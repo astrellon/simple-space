@@ -4,7 +4,7 @@
 
 namespace space
 {
-    void Tiles::init(const sf::Texture *texture, uint spriteSize)
+    void Tiles::init(const sf::Texture *texture, uint spriteSize, bool center)
     {
         _texture = texture;
 
@@ -15,6 +15,8 @@ namespace space
 
         _spriteSize = spriteSize;
 
+        auto halfSize = spriteSize / 2.0f;
+
         for (auto y = 0; y < _rows; y++)
         {
             for (auto x = 0; x < _columns; x++)
@@ -22,6 +24,10 @@ namespace space
                 auto rect = sf::IntRect(x * spriteSize, y * spriteSize, spriteSize, spriteSize);
 
                 auto sprite = std::make_unique<sf::Sprite>(*texture, rect);
+                if (center)
+                {
+                    sprite->setOrigin(halfSize, halfSize);
+                }
                 _sprites.push_back(std::move(sprite));
             }
         }

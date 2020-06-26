@@ -40,6 +40,8 @@ namespace space
             void followingRotation(bool follow);
             bool isFollowingRotation() const { return _followingRotation; }
 
+            float getRotation() const;
+
             const sf::View &view() const;
 
         private:
