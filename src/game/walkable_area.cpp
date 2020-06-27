@@ -17,21 +17,28 @@ namespace space
         target.draw(_sprite, parentTransform);
     }
 
-    void WalkableArea::update(Engine &engine, sf::Time dt)
-    {
 
+
+    void WalkableArea::update(Engine &engine, sf::Time dt, const sf::Transform &parentTransform)
+    {
+        _worldTransform = parentTransform;
+
+        for (auto &character : _characters)
+        {
+            character->update(engine, dt, parentTransform);
+        }
     }
 
-    void WalkableArea::draw(Engine &engine, sf::RenderTarget &target, const sf::Transform &parentTransform)
+    void WalkableArea::draw(Engine &engine, sf::RenderTarget &target)
     {
         for (auto &placedItem : _placedItems)
         {
-            placedItem.draw(target, parentTransform);
+            placedItem.draw(target, _worldTransform);
         }
 
         for (auto &character : _characters)
         {
-            character->draw(engine, target, parentTransform);
+            character->draw(engine, target);
         }
     }
 

@@ -17,13 +17,17 @@ namespace space
 
     void StarSystem::update(Engine &engine, sf::Time dt)
     {
+        for (auto obj : _objects)
+        {
+            obj->update(engine, dt, sf::Transform::Identity);
+        }
     }
 
-    void StarSystem::draw(Engine &engine, sf::RenderTarget &target, const sf::Transform &parentTransform)
+    void StarSystem::draw(Engine &engine, sf::RenderTarget &target)
     {
         for (auto obj : _objects)
         {
-            obj->draw(engine, target, parentTransform);
+            obj->draw(engine, target);
         }
     }
 

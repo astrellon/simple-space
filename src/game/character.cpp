@@ -10,11 +10,11 @@
 namespace space
 {
     Character::Character(const ObjectId &id, const CharacterDefinition &definition) :
-        SpaceObject(id), definition(definition), _rotationSpeed(0)
+        SpaceObject(id), definition(definition), _rotationSpeed(0), rotateInput(0)
     {
     }
 
-    void Character::update(Engine &engine, sf::Time dt)
+    void Character::update(Engine &engine, sf::Time dt, const sf::Transform &parentTransform)
     {
         auto seconds = dt.asSeconds();
 
@@ -26,12 +26,12 @@ namespace space
 
         _transform.position += movement;
         _transform.rotation += _rotationSpeed * seconds;
+
+        updateWorldTransform(parentTransform);
     }
 
-    void Character::draw(Engine &engine, sf::RenderTarget &target, const sf::Transform &parentTransform)
+    void Character::draw(Engine &engine, sf::RenderTarget &target)
     {
-        SpaceObject::draw(engine, target, parentTransform);
-
         auto elapsedTime = _timeSinceStart.getElapsedTime().asSeconds() * 8;
         auto mod = std::fmod(elapsedTime, static_cast<double>(definition.tiles.length()));
         auto index = static_cast<uint>(mod);

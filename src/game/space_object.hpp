@@ -33,11 +33,8 @@ namespace space
             void starSystem(StarSystem *starSystem) { _insideStarSystem = starSystem; }
             StarSystem *starSystem() const { return _insideStarSystem; }
 
-            virtual void update(Engine &engine, sf::Time dt) = 0;
-            virtual void draw(Engine &engine, sf::RenderTarget &target, const sf::Transform &parentTransform)
-            {
-                _worldTransform = parentTransform * _transform.getTransform();
-            }
+            virtual void update(Engine &engine, sf::Time dt, const sf::Transform &parentTransform) = 0;
+            virtual void draw(Engine &engine, sf::RenderTarget &target) = 0;
 
         protected:
             // Fields
@@ -46,5 +43,9 @@ namespace space
             StarSystem *_insideStarSystem;
 
             // Methods
+            void updateWorldTransform(const sf::Transform &parentTransform)
+            {
+                _worldTransform = parentTransform * _transform.getTransform();
+            }
     };
 } // space

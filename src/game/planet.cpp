@@ -14,10 +14,13 @@ namespace space
         _renderTexture->setSmooth(false);
     }
 
-    void Planet::draw(Engine &engine, sf::RenderTarget &target, const sf::Transform &parentTransform)
+    void Planet::update(Engine &engine, sf::Time dt, const sf::Transform &parentTransform)
     {
-        CelestialBody::draw(engine, target, parentTransform);
+        updateWorldTransform(parentTransform);
+    }
 
+    void Planet::draw(Engine &engine, sf::RenderTarget &target)
+    {
         if (_shader == nullptr)
         {
             if (!engine.resourceManager().shader("planet", &_shader))

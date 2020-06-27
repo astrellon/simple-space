@@ -19,8 +19,6 @@ namespace space
             CelestialBody(const ObjectId &id, const CelestialBodyDefinition &definition) : SpaceObject(id), celestialBodyDefinition(definition) { }
 
             // Methods
-            //virtual void update(Engine &engine, sf::Time dt) = 0;
-            //virtual void draw(Engine &engine, sf::RenderTarget &target, const sf::Transform &parentTransform);
 
         protected:
             // Methods

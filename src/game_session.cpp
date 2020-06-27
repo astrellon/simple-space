@@ -61,9 +61,9 @@ namespace space
             // _mapLayer->update(dt);
         }
 
-        for (auto &spaceObject : _spaceObjects)
+        if (_activeStarSystem)
         {
-            spaceObject->update(_engine, dt);
+            _activeStarSystem->update(_engine, dt);
         }
     }
 
@@ -78,7 +78,7 @@ namespace space
 
         if (_activeStarSystem)
         {
-            _activeStarSystem->draw(_engine, target, sf::Transform::Identity);
+            _activeStarSystem->draw(_engine, target);
         }
     }
 } // namespace town

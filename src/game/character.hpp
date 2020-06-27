@@ -24,8 +24,8 @@ namespace space
             Character(const ObjectId &id, const CharacterDefinition &definition);
 
             // Methods
-            virtual void update(Engine &engine, sf::Time dt);
-            virtual void draw(Engine &engine, sf::RenderTarget &target, const sf::Transform &parentTransform);
+            virtual void update(Engine &engine, sf::Time dt, const sf::Transform &parentTransform);
+            virtual void draw(Engine &engine, sf::RenderTarget &target);
 
         private:
             // Fields

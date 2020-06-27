@@ -31,8 +31,8 @@ namespace space
             WalkableArea &walkableArea() { return _walkableArea; }
             const WalkableArea &walkableArea() const { return _walkableArea; }
 
-            virtual void update(Engine &engine, sf::Time dt);
-            virtual void draw(Engine &engine, sf::RenderTarget &target, const sf::Transform &parentTransform);
+            virtual void update(Engine &engine, sf::Time dt, const sf::Transform &parentTransform);
+            virtual void draw(Engine &engine, sf::RenderTarget &target);
 
         private:
             // Fields

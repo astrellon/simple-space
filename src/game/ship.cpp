@@ -11,7 +11,7 @@ namespace space
         _sprite.setOrigin(size.x / 2, size.y / 2);
     }
 
-    void Ship::update(Engine &engine, sf::Time dt)
+    void Ship::update(Engine &engine, sf::Time dt, const sf::Transform &parentTransform)
     {
         auto seconds = dt.asSeconds();
         _speed += Utils::transformDirection(moveInput, _transform.getTransform()) * seconds * definition.acceleration;
@@ -20,15 +20,15 @@ namespace space
         _transform.position += _speed * seconds;
         _transform.rotation += _rotationSpeed * seconds;
 
-        _walkableArea.update(engine, dt);
+        updateWorldTransform(parentTransform);
+
+        _walkableArea.update(engine, dt, _worldTransform);
     }
 
-    void Ship::draw(Engine &engine, sf::RenderTarget &target, const sf::Transform &parentTransform)
+    void Ship::draw(Engine &engine, sf::RenderTarget &target)
     {
-        SpaceObject::draw(engine, target, parentTransform);
-
         target.draw(_sprite, _worldTransform);
 
-        _walkableArea.draw(engine, target, _worldTransform);
+        _walkableArea.draw(engine, target);
     }
 }

@@ -38,8 +38,8 @@ namespace space
             // Constructor
 
             // Methods
-            void update(Engine &engine, sf::Time dt);
-            void draw(Engine &engine, sf::RenderTarget &target, const sf::Transform &parentTransform);
+            void update(Engine &engine, sf::Time dt, const sf::Transform &parentTransform);
+            void draw(Engine &engine, sf::RenderTarget &target);
 
             void addCharacter(Character *character);
             void removeCharacter(Character *character);
@@ -51,6 +51,7 @@ namespace space
             // Fields
             std::vector<Character *> _characters;
             std::vector<PlacedItem> _placedItems;
+            sf::Transform _worldTransform;
 
             // Methods
     };
