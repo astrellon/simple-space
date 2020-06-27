@@ -1,6 +1,8 @@
 #include "ship.hpp"
 
 #include "../utils.hpp"
+#include "../engine.hpp"
+#include "../game_session.hpp"
 
 namespace space
 {
@@ -29,6 +31,9 @@ namespace space
     {
         target.draw(_sprite, _worldTransform);
 
-        _walkableArea.draw(engine, target);
+        if (engine.currentSession()->playerController().controlling() == ControlCharacter)
+        {
+            _walkableArea.draw(engine, target);
+        }
     }
 }

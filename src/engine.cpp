@@ -178,11 +178,13 @@ namespace space
             {
                 _spriteScale = 5.0f;
                 _camera.followingRotationId("PLAYER");
+                _currentSession->playerController().controlling(ControlCharacter);
             }
             else
             {
                 _spriteScale = 1.0f;
                 _camera.followingRotation(false);
+                _currentSession->playerController().controlling(ControlShip);
             }
 
             _camera.scale(_spriteScale);

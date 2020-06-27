@@ -44,6 +44,7 @@ namespace space
 
     void WalkableArea::addCharacter(Character *character)
     {
+        character->transform().scale = 0.2f;
         _characters.push_back(character);
     }
     void WalkableArea::removeCharacter(Character *character)

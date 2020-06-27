@@ -18,10 +18,7 @@ namespace space
     {
         auto seconds = dt.asSeconds();
 
-        SpaceTransform trans;
-        trans.rotation = engine.camera().getRotation();
-
-        auto movement = Utils::transformDirection(moveInput, trans.getTransform()) * seconds * definition.speed;
+        auto movement = moveInput * seconds * definition.speed;
         _rotationSpeed += rotateInput * seconds * 30.0f;
 
         _transform.position += movement;

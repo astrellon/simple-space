@@ -93,6 +93,7 @@ int main()
 
     ship->walkableArea().addCharacter(character);
 
+    gameSession->playerController().controllingCharacter(character);
     gameSession->playerController().controllingShip(ship);
     gameSession->playerController().controlling(space::ControlShip);
 
