@@ -89,10 +89,12 @@ int main()
 
     auto character = gameSession->createObject<space::Character>("PLAYER_CHAR", *playerCharDef);
     //character->transform().scale = 0.2f;
-    starSystem->addObject(character);
+    //starSystem->addObject(character);
 
-    gameSession->playerController().controllingCharacter(character);
-    gameSession->playerController().controlling(space::ControlCharacter);
+    ship->walkableArea().addCharacter(character);
+
+    gameSession->playerController().controllingShip(ship);
+    gameSession->playerController().controlling(space::ControlShip);
 
     gameSession->activeStarSystem(starSystem);
 

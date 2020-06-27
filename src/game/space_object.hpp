@@ -28,15 +28,21 @@ namespace space
             const SpaceTransform &transform() const { return _transform; }
             SpaceTransform &transform() { return _transform; }
 
+            const sf::Transform &worldTransform() const { return _worldTransform; }
+
             void starSystem(StarSystem *starSystem) { _insideStarSystem = starSystem; }
             StarSystem *starSystem() const { return _insideStarSystem; }
 
             virtual void update(Engine &engine, sf::Time dt) = 0;
-            virtual void draw(Engine &engine, sf::RenderTarget &target, const sf::Transform &parentTransform) = 0;
+            virtual void draw(Engine &engine, sf::RenderTarget &target, const sf::Transform &parentTransform)
+            {
+                _worldTransform = parentTransform * _transform.getTransform();
+            }
 
         protected:
             // Fields
             SpaceTransform _transform;
+            sf::Transform _worldTransform;
             StarSystem *_insideStarSystem;
 
             // Methods

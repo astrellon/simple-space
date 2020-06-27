@@ -17,7 +17,9 @@ namespace space
             SpaceObject *followingObject;
             if (_engine.currentSession()->tryGetSpaceObject(_followingId, &followingObject))
             {
-                _view.setCenter(followingObject->transform().position);
+                auto trans = followingObject->worldTransform();
+                sf::Vector2f pos(trans.getMatrix()[12], trans.getMatrix()[13]);
+                _view.setCenter(pos);
             }
         }
 

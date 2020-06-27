@@ -19,11 +19,16 @@ namespace space
 
         _transform.position += _speed * seconds;
         _transform.rotation += _rotationSpeed * seconds;
+
+        _walkableArea.update(engine, dt);
     }
 
     void Ship::draw(Engine &engine, sf::RenderTarget &target, const sf::Transform &parentTransform)
     {
-        const auto combinedTransform = parentTransform * _transform.getTransform();
-        target.draw(_sprite, combinedTransform);
+        SpaceObject::draw(engine, target, parentTransform);
+
+        target.draw(_sprite, _worldTransform);
+
+        _walkableArea.draw(engine, target, _worldTransform);
     }
 }

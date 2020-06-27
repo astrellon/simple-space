@@ -4,6 +4,7 @@
 #include <SFML/System.hpp>
 
 #include "space_object.hpp"
+#include "walkable_area.hpp"
 #include "../definitions/ship_definition.hpp"
 
 namespace space
@@ -27,11 +28,15 @@ namespace space
             float rotationSpeed() const { return _rotationSpeed; }
             sf::Vector2f speed() const { return _speed; }
 
+            WalkableArea &walkableArea() { return _walkableArea; }
+            const WalkableArea &walkableArea() const { return _walkableArea; }
+
             virtual void update(Engine &engine, sf::Time dt);
             virtual void draw(Engine &engine, sf::RenderTarget &target, const sf::Transform &parentTransform);
 
         private:
             // Fields
+            WalkableArea _walkableArea;
 
             // Location
             sf::Sprite _sprite;

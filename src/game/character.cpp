@@ -30,12 +30,13 @@ namespace space
 
     void Character::draw(Engine &engine, sf::RenderTarget &target, const sf::Transform &parentTransform)
     {
-        const auto combinedTransform = parentTransform * _transform.getTransform();
+        SpaceObject::draw(engine, target, parentTransform);
+
         auto elapsedTime = _timeSinceStart.getElapsedTime().asSeconds() * 8;
         auto mod = std::fmod(elapsedTime, static_cast<double>(definition.tiles.length()));
         auto index = static_cast<uint>(mod);
 
         auto sprite = definition.tiles.sprite(index);
-        target.draw(*sprite, combinedTransform);
+        target.draw(*sprite, _worldTransform);
     }
 } // namespace space

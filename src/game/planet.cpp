@@ -16,6 +16,8 @@ namespace space
 
     void Planet::draw(Engine &engine, sf::RenderTarget &target, const sf::Transform &parentTransform)
     {
+        CelestialBody::draw(engine, target, parentTransform);
+
         if (_shader == nullptr)
         {
             if (!engine.resourceManager().shader("planet", &_shader))
@@ -51,7 +53,7 @@ namespace space
         sphereSprite.setOrigin(definition.size / 2.0, definition.size / 2.0);
 
         sf::RenderStates states;
-        states.transform = parentTransform * _transform.getTransform();
+        states.transform = _worldTransform;
 
         target.draw(sphereSprite, states);
     }
