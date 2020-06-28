@@ -38,6 +38,7 @@ namespace space
 
             // Constructor
             WalkableArea();
+            ~WalkableArea();
 
             // Methods
             void update(Engine &engine, sf::Time dt, const sf::Transform &parentTransform);

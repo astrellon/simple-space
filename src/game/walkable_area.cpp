@@ -21,12 +21,39 @@ namespace space
 
     WalkableArea::WalkableArea() : _physicsWorld(b2Vec2(0, 0))
     {
+        auto _physicsFixureDef = new b2FixtureDef();
+        auto shape = new b2PolygonShape();
+        shape->SetAsBox(32.0f, 1.0f);
 
+        _physicsFixureDef->shape = shape;
+        _physicsFixureDef->restitution = 0.0f;
+        _physicsFixureDef->friction = 0.9f;
+
+        auto _physicsBodyDef = new b2BodyDef();
+        _physicsBodyDef->type = b2_staticBody;
+        _physicsBodyDef->position = b2Vec2(0, -2.0f / 100.0f);
+
+        auto body = _physicsWorld.CreateBody(_physicsBodyDef);
+        body->CreateFixture(_physicsFixureDef);
+    }
+    WalkableArea::~WalkableArea()
+    {
+        for (auto &character : _characters)
+        {
+            character->removeFromPhysicsWorld(&_physicsWorld);
+        }
     }
 
     void WalkableArea::update(Engine &engine, sf::Time dt, const sf::Transform &parentTransform)
     {
         _worldTransform = parentTransform;
+
+        for (auto &character : _characters)
+        {
+            character->prePhysics(engine, dt, parentTransform);
+        }
+
+        _physicsWorld.Step(1.0f / 60.0f, 4, 2);
 
         for (auto &character : _characters)
         {
@@ -51,6 +78,8 @@ namespace space
     {
         character->transform().scale = 0.2f;
         _characters.push_back(character);
+
+        character->addToPhysicsWorld(&_physicsWorld);
     }
     void WalkableArea::removeCharacter(Character *character)
     {
@@ -59,5 +88,7 @@ namespace space
         {
             _characters.erase(find);
         }
+
+        character->removeFromPhysicsWorld(&_physicsWorld);
     }
 } // namespace space

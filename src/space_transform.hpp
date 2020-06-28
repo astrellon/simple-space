@@ -26,10 +26,10 @@ namespace space
 
                 auto m = const_cast<float *>(_transform.getMatrix());
                 m[0] = scale * cosine;
-                m[4] = sine;
+                m[4] = scale * sine;
                 m[12] = position.x;
 
-                m[1] = -sine;
+                m[1] = -m[4];
                 m[5] = m[0];
                 m[13] = position.y;
 

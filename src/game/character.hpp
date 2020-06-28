@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include <Box2D/Box2D.h>
 
 #include "space_object.hpp"
 #include "../definitions/character_definition.hpp"
@@ -24,13 +25,21 @@ namespace space
             Character(const ObjectId &id, const CharacterDefinition &definition);
 
             // Methods
+            virtual void prePhysics(Engine &engine, sf::Time dt, const sf::Transform &parentTransform);
             virtual void update(Engine &engine, sf::Time dt, const sf::Transform &parentTransform);
             virtual void draw(Engine &engine, sf::RenderTarget &target);
+
+            void addToPhysicsWorld(b2World *world);
+            void removeFromPhysicsWorld(b2World *world);
 
         private:
             // Fields
             sf::Clock _timeSinceStart;
             float _rotationSpeed;
+
+            b2FixtureDef _physicsFixureDef;
+            b2BodyDef _physicsBodyDef;
+            b2Body *_physicsBody;
 
             // Methods
     };

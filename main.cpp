@@ -46,19 +46,19 @@ int main()
     // The first polyline defines the main polygon.
     polygon.push_back({{100, 0}, {100, 100}, {0, 100}, {0, 0}});
     // Following polylines define holes.
-    polygon.push_back({{25, 75}, {25, 25}, {75, 25}, {75, 75}});
+    polygon.push_back({{75, 25}, {75, 75}, {25, 75}, {25, 25}});
 
     std::vector<uint32_t> indices = mapbox::earcut<uint32_t>(polygon);
 
     std::vector<sf::VertexArray *> polygons;
     for (auto i = 0; i < indices.size(); i += 3)
     {
-        auto v = new sf::VertexArray(sf::Triangles, 3);
+        auto v = new sf::VertexArray(sf::TrianglesFan, 3);
         for (auto j = 0; j < 3; j++)
         {
             auto index = indices[i + j];
             Point p;
-            if (index > polygon[0].size())
+            if (index >= polygon[0].size())
             {
                 p = polygon[1][index - polygon[0].size()];
             }
