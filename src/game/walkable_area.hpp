@@ -3,6 +3,7 @@
 #include <vector>
 
 #include <SFML/Graphics.hpp>
+#include <Box2D/Box2D.h>
 
 namespace space
 {
@@ -36,6 +37,7 @@ namespace space
             // Fields
 
             // Constructor
+            WalkableArea();
 
             // Methods
             void update(Engine &engine, sf::Time dt, const sf::Transform &parentTransform);
@@ -52,6 +54,8 @@ namespace space
             std::vector<Character *> _characters;
             std::vector<PlacedItem> _placedItems;
             sf::Transform _worldTransform;
+
+            b2World _physicsWorld;
 
             // Methods
     };

@@ -19,6 +19,11 @@ namespace space
 
 
 
+    WalkableArea::WalkableArea() : _physicsWorld(b2Vec2(0, 0))
+    {
+
+    }
+
     void WalkableArea::update(Engine &engine, sf::Time dt, const sf::Transform &parentTransform)
     {
         _worldTransform = parentTransform;

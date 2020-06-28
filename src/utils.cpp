@@ -89,7 +89,7 @@ namespace space
         return rand;
     }
 
-    sf::Color hsv(float hue, float saturation, float value)
+    sf::Color Utils::hsv(float hue, float saturation, float value)
     {
         auto C = saturation * value;
         auto X = C * (1 - abs(fmod(hue / 60.0f, 2) - 1));
