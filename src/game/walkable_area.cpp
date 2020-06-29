@@ -4,6 +4,7 @@
 #include "game/placeable_item.hpp"
 #include "game/character.hpp"
 #include "physics/polygon_collider.hpp"
+#include "utils.hpp"
 
 namespace space
 {
@@ -72,7 +73,7 @@ namespace space
 
     void WalkableArea::addCharacter(Character *character)
     {
-        character->transform().scale = 0.2f;
+        character->transform().scale = Utils::getInsideScale();
         _characters.push_back(character);
 
         character->addToPhysicsWorld(&_physicsWorld);

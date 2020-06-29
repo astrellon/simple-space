@@ -9,10 +9,14 @@
 namespace space
 {
     Ship::Ship(const ObjectId &id, const ShipDefinition &definition):
-        SpaceObject(id), definition(definition), _sprite(*definition.texture), _rotationSpeed(0), rotateInput(0)
+        SpaceObject(id), definition(definition), _sprite(*definition.texture), _interiorSprite(*definition.interiorTexture), _rotationSpeed(0), rotateInput(0)
     {
         auto size = definition.texture->getSize();
         _sprite.setOrigin(size.x / 2, size.y / 2);
+
+        size = definition.interiorTexture->getSize();
+        _interiorSprite.setOrigin(size.x / 2, size.y / 2);
+        _interiorSprite.setScale(Utils::getInsideScale(), Utils::getInsideScale());
 
         _collider = std::make_unique<PolygonCollider>(b2_staticBody);
 
@@ -45,9 +49,10 @@ namespace space
 
         if (engine.currentSession()->playerController().controlling() == ControlCharacter)
         {
+            target.draw(_interiorSprite, _worldTransform);
             _walkableArea.draw(engine, target);
         }
 
-        _collider->debugDraw(target, _worldTransform);
+        //_collider->debugDraw(target, _worldTransform);
     }
 }

@@ -176,7 +176,7 @@ namespace space
             auto zoomIn = _spriteScale < 4.0f;
             if (zoomIn)
             {
-                _spriteScale = 5.0f;
+                _spriteScale = 1.0f / Utils::getInsideScale();
                 _camera.followingRotationId("PLAYER");
                 _currentSession->playerController().controlling(ControlCharacter);
             }

@@ -72,6 +72,7 @@ namespace space
         return json {
             {"id", input.id},
             {"texturePath", input.texturePath},
+            {"interiorTexturePath", input.interiorTexturePath},
             {"name", input.name},
             {"maxRotation", input.maxRotation},
             {"maxSpeed", input.maxSpeed},
@@ -85,6 +86,7 @@ namespace space
         auto id = j.at("id").get<std::string>();
         auto input = std::make_unique<ShipDefinition>(id);
         j.at("texturePath").get_to(input->texturePath);
+        j.at("interiorTexturePath").get_to(input->interiorTexturePath);
         j.at("name").get_to(input->name);
         j.at("maxRotation").get_to(input->maxRotation);
         j.at("maxSpeed").get_to(input->maxSpeed);

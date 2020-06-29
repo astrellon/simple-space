@@ -7,5 +7,6 @@ namespace space
     void ShipDefinition::onPostLoad(Engine &engine)
     {
         engine.resourceManager().texture(texturePath, &texture);
+        engine.resourceManager().texture(interiorTexturePath, &interiorTexture);
     }
 }

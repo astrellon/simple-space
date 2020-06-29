@@ -15,6 +15,7 @@ namespace space
         public:
             // Fields
             std::string texturePath;
+            std::string interiorTexturePath;
             std::string name;
 
             float maxRotation;
@@ -23,6 +24,7 @@ namespace space
             float acceleration;
 
             const sf::Texture *texture;
+            const sf::Texture *interiorTexture;
 
             // Constructor
             ShipDefinition(const DefinitionId &id) : BaseDefinition(id) { }

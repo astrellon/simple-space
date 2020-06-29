@@ -42,6 +42,7 @@ namespace space
 
             // Location
             sf::Sprite _sprite;
+            sf::Sprite _interiorSprite;
 
             // Current speeds
             float _rotationSpeed;
