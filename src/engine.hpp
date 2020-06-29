@@ -61,6 +61,7 @@ namespace space
             Camera _camera;
 
             float _spriteScale;
+            float _cameraScale;
             std::unique_ptr<GameSession> _currentSession;
             sf::RenderWindow &_window;
             sf::Clock _timer;

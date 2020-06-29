@@ -16,7 +16,7 @@ namespace space
 {
     Engine::Engine(sf::RenderWindow &window) :
         _spriteScale(1.0f), _window(window), _deltaTime(sf::Time::Zero), _timeSinceStartOnUpdate(sf::Time::Zero),
-        _camera(*this), _enableBloom(true)
+        _camera(*this), _enableBloom(true), _cameraScale(2.0f)
     {
         _resourceManager = std::make_unique<ResourceManager>();
         _definitionManager = std::make_unique<DefinitionManager>();
@@ -148,7 +148,7 @@ namespace space
 
     void Engine::onResize(sf::Vector2f area)
     {
-        area *= 0.5f;
+        area *= 1.0f / _cameraScale;
 
         _camera.size(area);
 
