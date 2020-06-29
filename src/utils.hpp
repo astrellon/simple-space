@@ -24,6 +24,15 @@ namespace space
             static std::string filenameWithoutExt(const std::string &str);
             static std::string getFilenameExt(const std::string &str);
 
+            static inline float degreesToRadians(float input)
+            {
+                return input / 180.0f * M_PI;
+            }
+            static inline float radiansToDegrees(float input)
+            {
+                return input * 180.0f / M_PI;
+            }
+
             static inline float randf(float min = 0.0f, float max = 1.0f)
             {
                 std::uniform_real_distribution<float> dist(min, max);
