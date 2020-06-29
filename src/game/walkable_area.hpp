@@ -10,6 +10,7 @@ namespace space
     class PlaceableItem;
     class Character;
     class Engine;
+    class PolygonCollider;
 
     class PlacedItem
     {
@@ -43,6 +44,9 @@ namespace space
             // Methods
             void update(Engine &engine, sf::Time dt, const sf::Transform &parentTransform);
             void draw(Engine &engine, sf::RenderTarget &target);
+
+            void addStaticCollider(PolygonCollider &collider);
+            void removeStaticCollider(PolygonCollider &collider);
 
             void addCharacter(Character *character);
             void removeCharacter(Character *character);

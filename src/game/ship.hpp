@@ -10,6 +10,7 @@
 namespace space
 {
     class Engine;
+    class PolygonCollider;
 
     class Ship : public SpaceObject
     {
@@ -37,6 +38,7 @@ namespace space
         private:
             // Fields
             WalkableArea _walkableArea;
+            std::unique_ptr<PolygonCollider> _collider;
 
             // Location
             sf::Sprite _sprite;

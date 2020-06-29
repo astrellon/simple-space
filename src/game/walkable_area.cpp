@@ -3,6 +3,7 @@
 #include "engine.hpp"
 #include "game/placeable_item.hpp"
 #include "game/character.hpp"
+#include "physics/polygon_collider.hpp"
 
 namespace space
 {
@@ -21,20 +22,6 @@ namespace space
 
     WalkableArea::WalkableArea() : _physicsWorld(b2Vec2(0, 0))
     {
-        auto _physicsFixureDef = new b2FixtureDef();
-        auto shape = new b2PolygonShape();
-        shape->SetAsBox(32.0f, 1.0f);
-
-        _physicsFixureDef->shape = shape;
-        _physicsFixureDef->restitution = 0.0f;
-        _physicsFixureDef->friction = 0.9f;
-
-        auto _physicsBodyDef = new b2BodyDef();
-        _physicsBodyDef->type = b2_staticBody;
-        _physicsBodyDef->position = b2Vec2(0, -2.0f / 100.0f);
-
-        auto body = _physicsWorld.CreateBody(_physicsBodyDef);
-        body->CreateFixture(_physicsFixureDef);
     }
     WalkableArea::~WalkableArea()
     {
@@ -72,6 +59,15 @@ namespace space
         {
             character->draw(engine, target);
         }
+    }
+
+    void WalkableArea::addStaticCollider(PolygonCollider &collider)
+    {
+        collider.addToWorld(&_physicsWorld);
+    }
+    void WalkableArea::removeStaticCollider(PolygonCollider &collider)
+    {
+        collider.removeFromWorld(&_physicsWorld);
     }
 
     void WalkableArea::addCharacter(Character *character)

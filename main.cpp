@@ -24,6 +24,7 @@
 #include "src/game/planet.hpp"
 #include "src/game/star_system.hpp"
 #include "src/keyboard.hpp"
+#include "src/physics/polygon_collider.hpp"
 
 #include "earcut.hpp"
 
@@ -38,42 +39,6 @@ int main()
     sf::RenderWindow window(sf::VideoMode(1280, 800), "Space", sf::Style::Default, settings);
     window.setVerticalSyncEnabled(true);
     // window.setFramerateLimit(120);
-
-    using Point = std::array<double, 2>;
-    std::vector<std::vector<Point>> polygon;
-
-    // Fill polygon structure with actual data. Any winding order works.
-    // The first polyline defines the main polygon.
-    polygon.push_back({{100, 0}, {100, 100}, {0, 100}, {0, 0}});
-    // Following polylines define holes.
-    polygon.push_back({{75, 25}, {75, 75}, {25, 75}, {25, 25}});
-
-    std::vector<uint32_t> indices = mapbox::earcut<uint32_t>(polygon);
-
-    std::vector<sf::VertexArray *> polygons;
-    for (auto i = 0; i < indices.size(); i += 3)
-    {
-        auto v = new sf::VertexArray(sf::TrianglesFan, 3);
-        for (auto j = 0; j < 3; j++)
-        {
-            auto index = indices[i + j];
-            Point p;
-            if (index >= polygon[0].size())
-            {
-                p = polygon[1][index - polygon[0].size()];
-            }
-            else
-            {
-                p = polygon[0][index];
-            }
-
-            (*v)[j].position = sf::Vector2f(p[0], p[1]);
-            (*v)[j].color = space::Utils::hsv((float)i / (float)indices.size() * 360, 1, 1);
-            (*v)[j].color.a = 120;
-        }
-
-        polygons.push_back(v);
-    }
 
     glewInit();
 
@@ -157,15 +122,6 @@ int main()
 
         engine.update();
         engine.draw();
-
-        sf::Transform trans;
-        trans.translate(50, 50);
-        for (auto p : polygons)
-        {
-            window.draw(*p, trans);
-        }
-
-        window.display();
     }
 
     return 0;

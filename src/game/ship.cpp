@@ -4,6 +4,8 @@
 #include "../engine.hpp"
 #include "../game_session.hpp"
 
+#include "../physics/polygon_collider.hpp"
+
 namespace space
 {
     Ship::Ship(const ObjectId &id, const ShipDefinition &definition):
@@ -11,6 +13,16 @@ namespace space
     {
         auto size = definition.texture->getSize();
         _sprite.setOrigin(size.x / 2, size.y / 2);
+
+        _collider = std::make_unique<PolygonCollider>(b2_staticBody);
+
+        // Fill polygon structure with actual data. Any winding order works.
+        // The first polyline defines the main polygon.
+        _collider->setMainPolygon({{50, -50}, {50, 50}, {-50, 50}, {-50, -50}});
+        // Following polylines define holes.
+        _collider->setHole({{-4, -12}, {4, -12}, {10, 3}, {3, 12}, {-3, 12}, {-10, 3}}, 0);
+
+        _walkableArea.addStaticCollider(*_collider);
     }
 
     void Ship::update(Engine &engine, sf::Time dt, const sf::Transform &parentTransform)
@@ -35,5 +47,7 @@ namespace space
         {
             _walkableArea.draw(engine, target);
         }
+
+        _collider->debugDraw(target, _worldTransform);
     }
 }

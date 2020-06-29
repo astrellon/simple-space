@@ -234,6 +234,6 @@ namespace space
             _window.draw(sprite);
         }
 
-        //_window.display();
+        _window.display();
     }
 }
