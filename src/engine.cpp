@@ -114,7 +114,10 @@ namespace space
 
     void Engine::processEvent(const sf::Event &event)
     {
-        ImGui::SFML::ProcessEvent(event);
+        if (_initedImgui)
+        {
+            ImGui::SFML::ProcessEvent(event);
+        }
 
         if (event.type == sf::Event::Closed)
         {
@@ -162,7 +165,7 @@ namespace space
         {
             _initedImgui = true;
             ImGui::SFML::Init(_window, _sceneRenderTarget, true);
-            auto style = ImGui::GetStyle();
+            auto &style = ImGui::GetStyle();
             style.WindowRounding = 0;
             style.ChildRounding = 0;
             style.FrameRounding = 0;
@@ -178,7 +181,10 @@ namespace space
         _timeSinceStartOnUpdate = timeSinceStart();
         _timer.restart();
 
-        ImGui::SFML::Update(_cameraScale, _window, _sceneRenderTarget, _deltaTime);
+        if (_initedImgui)
+        {
+            ImGui::SFML::Update(_cameraScale, _window, _sceneRenderTarget, _deltaTime);
+        }
 
         DrawDebug::glDraw = 0;
     }
@@ -239,16 +245,19 @@ namespace space
             _currentSession->draw(_sceneRenderTarget);
         }
 
-        _sceneRenderTarget.display();
-
-        ImGui::Begin("Test Window");
-        if (ImGui::Button("It's a button"))
+        if (_initedImgui)
         {
-            std::cout << "Clicked!" << std::endl;
-        }
-        ImGui::End();
+            ImGui::Begin("Test Window");
+            if (ImGui::Button("It's a button"))
+            {
+                std::cout << "Clicked!" << std::endl;
+            }
+            ImGui::End();
 
-        ImGui::SFML::Render(_sceneRenderTarget);
+            ImGui::SFML::Render(_sceneRenderTarget);
+        }
+
+        _sceneRenderTarget.display();
 
         // Draw from render texture to window
         _window.setActive(true);
