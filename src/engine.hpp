@@ -48,6 +48,7 @@ namespace space
             void preUpdate();
             void update();
             void draw();
+            void shutdown();
 
         private:
             std::unique_ptr<ResourceManager> _resourceManager;
@@ -62,6 +63,7 @@ namespace space
 
             float _spriteScale;
             float _cameraScale;
+            bool _initedImgui;
             std::unique_ptr<GameSession> _currentSession;
             sf::RenderWindow &_window;
             sf::Clock _timer;

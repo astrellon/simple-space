@@ -124,5 +124,7 @@ int main()
         engine.draw();
     }
 
+    engine.shutdown();
+
     return 0;
 }

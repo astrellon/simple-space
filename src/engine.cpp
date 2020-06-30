@@ -11,12 +11,14 @@
 #include "debug/draw_debug.hpp"
 
 #include <SFML/OpenGL.hpp>
+#include "imgui/imgui.h"
+#include "imgui/imgui-SFML.h"
 
 namespace space
 {
     Engine::Engine(sf::RenderWindow &window) :
         _spriteScale(1.0f), _window(window), _deltaTime(sf::Time::Zero), _timeSinceStartOnUpdate(sf::Time::Zero),
-        _camera(*this), _enableBloom(true), _cameraScale(2.0f)
+        _camera(*this), _enableBloom(true), _cameraScale(2.0f), _initedImgui(false)
     {
         _resourceManager = std::make_unique<ResourceManager>();
         _definitionManager = std::make_unique<DefinitionManager>();
@@ -112,6 +114,8 @@ namespace space
 
     void Engine::processEvent(const sf::Event &event)
     {
+        ImGui::SFML::ProcessEvent(event);
+
         if (event.type == sf::Event::Closed)
         {
             _window.close();
@@ -153,6 +157,19 @@ namespace space
         _camera.size(area);
 
         _sceneRenderTarget.create(area.x, area.y);
+
+        if (!_initedImgui)
+        {
+            _initedImgui = true;
+            ImGui::SFML::Init(_window, _sceneRenderTarget, true);
+            auto style = ImGui::GetStyle();
+            style.WindowRounding = 0;
+            style.ChildRounding = 0;
+            style.FrameRounding = 0;
+            style.GrabRounding = 0;
+            style.PopupRounding = 0;
+            style.ScrollbarRounding = 0;
+        }
     }
 
     void Engine::preUpdate()
@@ -160,6 +177,8 @@ namespace space
         _deltaTime = _timer.getElapsedTime();
         _timeSinceStartOnUpdate = timeSinceStart();
         _timer.restart();
+
+        ImGui::SFML::Update(_cameraScale, _window, _sceneRenderTarget, _deltaTime);
 
         DrawDebug::glDraw = 0;
     }
@@ -204,14 +223,15 @@ namespace space
     {
         _sceneRenderTarget.setActive(true);
 
+        // Draw background
         _sceneRenderTarget.clear(sf::Color(20, 24, 46));
-
         for (auto &b : _backgrounds)
         {
             _sceneRenderTarget.setView(b->camera().view());
             b->draw(_sceneRenderTarget);
         }
 
+        // Draw main scene
         _sceneRenderTarget.setView(_camera.view());
 
         if (_currentSession.get())
@@ -221,6 +241,16 @@ namespace space
 
         _sceneRenderTarget.display();
 
+        ImGui::Begin("Test Window");
+        if (ImGui::Button("It's a button"))
+        {
+            std::cout << "Clicked!" << std::endl;
+        }
+        ImGui::End();
+
+        ImGui::SFML::Render(_sceneRenderTarget);
+
+        // Draw from render texture to window
         _window.setActive(true);
         _window.clear();
         if (_enableBloom)
@@ -235,5 +265,10 @@ namespace space
         }
 
         _window.display();
+    }
+
+    void Engine::shutdown()
+    {
+        ImGui::SFML::Shutdown();
     }
 }
