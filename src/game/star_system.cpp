@@ -48,6 +48,7 @@ namespace space
 
         if (showInternals && insideOfShip != nullptr)
         {
+            engine.overlay().draw(target, 0.5);
             insideOfShip->draw(engine, target);
         }
     }

@@ -7,6 +7,7 @@
 #include "star_background.hpp"
 #include "effects/bloom-effect.hpp"
 #include "effects/bloom-effect-2.hpp"
+#include "effects/overlay.hpp"
 
 #include <SFML/Graphics.hpp>
 
@@ -27,6 +28,8 @@ namespace space
             ResourceManager &resourceManager();
             DefinitionManager &definitionManager();
             Camera &camera();
+
+            Overlay &overlay() { return *_overlay; }
 
             float spriteScale() const;
             void spriteScale(float scale);
@@ -58,6 +61,7 @@ namespace space
             sf::RenderTexture _sceneRenderTarget;
             BloomEffect _bloomEffect;
             BloomEffect2 _bloomEffect2;
+            std::unique_ptr<Overlay> _overlay;
 
             Camera _camera;
 

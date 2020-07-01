@@ -99,6 +99,8 @@ namespace space
 
         _bloomEffect.init(*_resourceManager.get());
         _bloomEffect2.init(*_resourceManager.get());
+
+        _overlay = std::make_unique<Overlay>(*this);
     }
 
     void Engine::processEvents()
