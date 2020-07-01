@@ -21,7 +21,7 @@ namespace space
 
 
 
-    WalkableArea::WalkableArea() : _physicsWorld(b2Vec2(0, 0))
+    WalkableArea::WalkableArea() : _physicsWorld(b2Vec2(0, 0)), _partOfShip(nullptr)
     {
     }
     WalkableArea::~WalkableArea()
@@ -73,10 +73,16 @@ namespace space
 
     void WalkableArea::addCharacter(Character *character)
     {
+        if (character->insideArea() != nullptr)
+        {
+            character->insideArea()->removeCharacter(character);
+        }
+
         character->transform().scale = Utils::getInsideScale();
         _characters.push_back(character);
 
         character->addToPhysicsWorld(&_physicsWorld);
+        character->insideArea(this);
     }
     void WalkableArea::removeCharacter(Character *character)
     {
@@ -87,5 +93,6 @@ namespace space
         }
 
         character->removeFromPhysicsWorld(&_physicsWorld);
+        character->insideArea(nullptr);
     }
 } // namespace space

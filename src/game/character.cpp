@@ -10,7 +10,7 @@
 namespace space
 {
     Character::Character(const ObjectId &id, const CharacterDefinition &definition) :
-        SpaceObject(id), definition(definition), _rotationSpeed(0), rotateInput(0), _physicsBody(nullptr)
+        SpaceObject(id), definition(definition), _rotationSpeed(0), rotateInput(0), _physicsBody(nullptr), _insideArea(nullptr)
     {
         _physicsBodyDef.type = b2_dynamicBody;
         _physicsBodyDef.angularDamping = 0.5f;
@@ -18,10 +18,10 @@ namespace space
 
         auto shape = new b2PolygonShape();
         shape->SetAsBox(1.0f, 1.0f);
-        _physicsFixureDef.restitution = 0;
-        _physicsFixureDef.friction = 0.9f;
-        _physicsFixureDef.density = 5.0f;
-        _physicsFixureDef.shape = shape;
+        _physicsFixtureDef.restitution = 0;
+        _physicsFixtureDef.friction = 0.9f;
+        _physicsFixtureDef.density = 5.0f;
+        _physicsFixtureDef.shape = shape;
     }
 
     void Character::prePhysics(Engine &engine, sf::Time dt, const sf::Transform &parentTransform)
@@ -57,7 +57,7 @@ namespace space
     void Character::addToPhysicsWorld(b2World *world)
     {
         _physicsBody = world->CreateBody(&_physicsBodyDef);
-        _physicsBody->CreateFixture(&_physicsFixureDef);
+        _physicsBody->CreateFixture(&_physicsFixtureDef);
     }
     void Character::removeFromPhysicsWorld(b2World *world)
     {

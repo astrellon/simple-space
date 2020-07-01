@@ -3,8 +3,12 @@
 #include <algorithm>
 
 #include "space_object.hpp"
+#include "ship.hpp"
 #include "game_session.hpp"
 #include "planet.hpp"
+#include "engine.hpp"
+#include "helper.hpp"
+
 #include "../definitions/planet_definition.hpp"
 #include "../definitions/celestial_body_definition.hpp"
 
@@ -25,9 +29,26 @@ namespace space
 
     void StarSystem::draw(Engine &engine, sf::RenderTarget &target)
     {
+        auto showInternals = Helper::isControllingCharacter(engine);
+        auto insideOfShip = Helper::getShipPlayerIsInsideOf(engine);
+
+        if (insideOfShip != nullptr)
+        {
+            insideOfShip->showInternals(showInternals);
+        }
+
         for (auto obj : _objects)
         {
+            if (showInternals && dynamic_cast<Ship *>(obj) == insideOfShip)
+            {
+                continue;
+            }
             obj->draw(engine, target);
+        }
+
+        if (showInternals && insideOfShip != nullptr)
+        {
+            insideOfShip->draw(engine, target);
         }
     }
 

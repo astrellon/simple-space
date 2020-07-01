@@ -9,8 +9,9 @@
 namespace space
 {
     Ship::Ship(const ObjectId &id, const ShipDefinition &definition):
-        SpaceObject(id), definition(definition), _sprite(*definition.texture), _interiorSprite(*definition.interiorTexture), _rotationSpeed(0), rotateInput(0)
+        SpaceObject(id), definition(definition), _sprite(*definition.texture), _interiorSprite(*definition.interiorTexture), _rotationSpeed(0), rotateInput(0), _showInternals(false)
     {
+
         auto size = definition.texture->getSize();
         _sprite.setOrigin(size.x / 2, size.y / 2);
 
@@ -26,6 +27,7 @@ namespace space
         // Following polylines define holes.
         _collider->setHole({{-4, -12}, {4, -12}, {10, 3}, {3, 12}, {-3, 12}, {-10, 3}}, 0);
 
+        _walkableArea.partOfShip(this);
         _walkableArea.addStaticCollider(*_collider);
     }
 
@@ -47,7 +49,7 @@ namespace space
     {
         target.draw(_sprite, _worldTransform);
 
-        if (engine.currentSession()->playerController().controlling() == ControlCharacter)
+        if (_showInternals)
         {
             target.draw(_interiorSprite, _worldTransform);
             _walkableArea.draw(engine, target);

@@ -10,6 +10,7 @@
 namespace space
 {
     class Engine;
+    class WalkableArea;
 
     class Character : public SpaceObject
     {
@@ -29,6 +30,9 @@ namespace space
             virtual void update(Engine &engine, sf::Time dt, const sf::Transform &parentTransform);
             virtual void draw(Engine &engine, sf::RenderTarget &target);
 
+            void insideArea(WalkableArea *area) { _insideArea = area; }
+            WalkableArea *insideArea() const { return _insideArea; }
+
             void addToPhysicsWorld(b2World *world);
             void removeFromPhysicsWorld(b2World *world);
 
@@ -37,7 +41,8 @@ namespace space
             sf::Clock _timeSinceStart;
             float _rotationSpeed;
 
-            b2FixtureDef _physicsFixureDef;
+            WalkableArea *_insideArea;
+            b2FixtureDef _physicsFixtureDef;
             b2BodyDef _physicsBodyDef;
             b2Body *_physicsBody;
 

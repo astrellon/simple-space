@@ -10,6 +10,7 @@ namespace space
     class PlaceableItem;
     class Character;
     class Engine;
+    class Ship;
     class PolygonCollider;
 
     class PlacedItem
@@ -45,6 +46,9 @@ namespace space
             void update(Engine &engine, sf::Time dt, const sf::Transform &parentTransform);
             void draw(Engine &engine, sf::RenderTarget &target);
 
+            void partOfShip(Ship *ship) { _partOfShip = ship; }
+            Ship *partOfShip() const { return _partOfShip; }
+
             void addStaticCollider(PolygonCollider &collider);
             void removeStaticCollider(PolygonCollider &collider);
 
@@ -59,6 +63,7 @@ namespace space
             std::vector<Character *> _characters;
             std::vector<PlacedItem> _placedItems;
             sf::Transform _worldTransform;
+            Ship *_partOfShip;
 
             b2World _physicsWorld;
 
