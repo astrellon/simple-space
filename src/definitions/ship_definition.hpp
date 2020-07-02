@@ -16,6 +16,7 @@ namespace space
             // Fields
             std::string texturePath;
             std::string interiorTexturePath;
+            sf::Vector2i interiorTextureOffset;
             std::string name;
 
             float maxRotation;

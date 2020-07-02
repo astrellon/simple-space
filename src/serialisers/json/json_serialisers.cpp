@@ -87,6 +87,13 @@ namespace space
         auto input = std::make_unique<ShipDefinition>(id);
         j.at("texturePath").get_to(input->texturePath);
         j.at("interiorTexturePath").get_to(input->interiorTexturePath);
+
+        auto interiorTextureOffset = j.find("interiorTextureOffset");
+        if (interiorTextureOffset != j.end())
+        {
+            (*interiorTextureOffset)[0].get_to(input->interiorTextureOffset.x);
+            (*interiorTextureOffset)[1].get_to(input->interiorTextureOffset.y);
+        }
         j.at("name").get_to(input->name);
         j.at("maxRotation").get_to(input->maxRotation);
         j.at("maxSpeed").get_to(input->maxSpeed);
@@ -159,7 +166,7 @@ namespace space
         auto childrenJson = j.find("children");
         if (childrenJson != j.end())
         {
-            for (auto &childJson : j)
+            for (auto &childJson : *childrenJson)
             {
                 result->children.emplace_back(std::move(fromJsonCelestialBodyDefinition(childJson)));
             }

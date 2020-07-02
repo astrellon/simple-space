@@ -18,6 +18,7 @@ namespace space
         size = definition.interiorTexture->getSize();
         _interiorSprite.setOrigin(size.x / 2, size.y / 2);
         _interiorSprite.setScale(Utils::getInsideScale(), Utils::getInsideScale());
+        _interiorSprite.move(sf::Vector2f(definition.interiorTextureOffset) * 0.25f);
 
         _collider = std::make_unique<PolygonCollider>(b2_staticBody);
 
