@@ -4,7 +4,7 @@
 #include <math.h>
 
 #include "../utils.hpp"
-#include "../engine.hpp"
+#include "../game_session.hpp"
 #include "../space_transform.hpp"
 
 namespace space
@@ -24,7 +24,7 @@ namespace space
         _physicsFixtureDef.shape = shape;
     }
 
-    void Character::prePhysics(Engine &engine, sf::Time dt, const sf::Transform &parentTransform)
+    void Character::prePhysics(GameSession &session, sf::Time dt, const sf::Transform &parentTransform)
     {
         auto seconds = dt.asSeconds();
 
@@ -33,7 +33,7 @@ namespace space
         _physicsBody->ApplyForceToCenter(b2Vec2(movement.x, movement.y), true);
         _physicsBody->ApplyAngularImpulse(rotateInput, true);
     }
-    void Character::update(Engine &engine, sf::Time dt, const sf::Transform &parentTransform)
+    void Character::update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform)
     {
         auto pos = _physicsBody->GetPosition();
         auto rotation = _physicsBody->GetAngle();
@@ -44,7 +44,7 @@ namespace space
         updateWorldTransform(parentTransform);
     }
 
-    void Character::draw(Engine &engine, sf::RenderTarget &target)
+    void Character::draw(GameSession &session, sf::RenderTarget &target)
     {
         auto elapsedTime = _timeSinceStart.getElapsedTime().asSeconds() * 8;
         auto mod = std::fmod(elapsedTime, static_cast<double>(definition.tiles.length()));

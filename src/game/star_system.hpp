@@ -34,8 +34,8 @@ namespace space
             void addObject(SpaceObject *object);
             void removeObject(SpaceObject *object);
 
-            void update(Engine &engine, sf::Time dt);
-            void draw(Engine &engine, sf::RenderTarget &target);
+            void update(sf::Time dt);
+            void draw(sf::RenderTarget &target);
 
         private:
             // Fields

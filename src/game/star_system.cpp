@@ -7,7 +7,6 @@
 #include "game_session.hpp"
 #include "planet.hpp"
 #include "engine.hpp"
-#include "helper.hpp"
 
 #include "../definitions/planet_definition.hpp"
 #include "../definitions/celestial_body_definition.hpp"
@@ -19,18 +18,18 @@ namespace space
 
     }
 
-    void StarSystem::update(Engine &engine, sf::Time dt)
+    void StarSystem::update(sf::Time dt)
     {
         for (auto obj : _objects)
         {
-            obj->update(engine, dt, sf::Transform::Identity);
+            obj->update(_session, dt, sf::Transform::Identity);
         }
     }
 
-    void StarSystem::draw(Engine &engine, sf::RenderTarget &target)
+    void StarSystem::draw(sf::RenderTarget &target)
     {
-        auto showInternals = Helper::isControllingCharacter(engine);
-        auto insideOfShip = Helper::getShipPlayerIsInsideOf(engine);
+        auto showInternals = _session.isControllingCharacter();
+        auto insideOfShip = _session.getShipPlayerIsInsideOf();
 
         if (insideOfShip != nullptr)
         {
@@ -43,13 +42,13 @@ namespace space
             {
                 continue;
             }
-            obj->draw(engine, target);
+            obj->draw(_session, target);
         }
 
         if (showInternals && insideOfShip != nullptr)
         {
-            engine.overlay().draw(target, 0.3);
-            insideOfShip->draw(engine, target);
+            _session.engine().overlay().draw(target, 0.3);
+            insideOfShip->draw(_session, target);
         }
     }
 

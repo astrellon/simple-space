@@ -1,7 +1,6 @@
 #include "ship.hpp"
 
 #include "../utils.hpp"
-#include "../engine.hpp"
 #include "../game_session.hpp"
 
 #include "../physics/polygon_collider.hpp"
@@ -32,7 +31,7 @@ namespace space
         _walkableArea.addStaticCollider(*_collider);
     }
 
-    void Ship::update(Engine &engine, sf::Time dt, const sf::Transform &parentTransform)
+    void Ship::update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform)
     {
         auto seconds = dt.asSeconds();
         _speed += Utils::transformDirection(moveInput, _transform.getTransform()) * seconds * definition.acceleration;
@@ -43,17 +42,17 @@ namespace space
 
         updateWorldTransform(parentTransform);
 
-        _walkableArea.update(engine, dt, _worldTransform);
+        _walkableArea.update(session, dt, _worldTransform);
     }
 
-    void Ship::draw(Engine &engine, sf::RenderTarget &target)
+    void Ship::draw(GameSession &session, sf::RenderTarget &target)
     {
         target.draw(_sprite, _worldTransform);
 
         if (_showInternals)
         {
             target.draw(_interiorSprite, _worldTransform);
-            _walkableArea.draw(engine, target);
+            _walkableArea.draw(session, target);
         }
 
         //_collider->debugDraw(target, _worldTransform);

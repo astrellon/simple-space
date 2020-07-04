@@ -4,6 +4,9 @@
 
 namespace space
 {
+    class WalkableArea;
+    class GameSession;
+
     class PlaceableItem : public Item
     {
         public:
@@ -14,7 +17,8 @@ namespace space
             virtual ~PlaceableItem() { }
 
             // Methods
-            virtual void execute() { }
+            virtual void execute(GameSession &session, const sf::Vector2f &position, WalkableArea &parentArea) { }
             virtual void onPlaced() { }
+
     };
 } // space

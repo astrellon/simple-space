@@ -9,7 +9,7 @@
 
 namespace space
 {
-    class Engine;
+    class GameSession;
     class WalkableArea;
 
     class Character : public SpaceObject
@@ -26,9 +26,9 @@ namespace space
             Character(const ObjectId &id, const CharacterDefinition &definition);
 
             // Methods
-            virtual void prePhysics(Engine &engine, sf::Time dt, const sf::Transform &parentTransform);
-            virtual void update(Engine &engine, sf::Time dt, const sf::Transform &parentTransform);
-            virtual void draw(Engine &engine, sf::RenderTarget &target);
+            virtual void prePhysics(GameSession &session, sf::Time dt, const sf::Transform &parentTransform);
+            virtual void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform);
+            virtual void draw(GameSession &session, sf::RenderTarget &target);
 
             void insideArea(WalkableArea *area) { _insideArea = area; }
             WalkableArea *insideArea() const { return _insideArea; }

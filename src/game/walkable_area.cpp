@@ -32,24 +32,24 @@ namespace space
         }
     }
 
-    void WalkableArea::update(Engine &engine, sf::Time dt, const sf::Transform &parentTransform)
+    void WalkableArea::update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform)
     {
         _worldTransform = parentTransform;
 
         for (auto &character : _characters)
         {
-            character->prePhysics(engine, dt, parentTransform);
+            character->prePhysics(session, dt, parentTransform);
         }
 
         _physicsWorld.Step(1.0f / 60.0f, 4, 2);
 
         for (auto &character : _characters)
         {
-            character->update(engine, dt, parentTransform);
+            character->update(session, dt, parentTransform);
         }
     }
 
-    void WalkableArea::draw(Engine &engine, sf::RenderTarget &target)
+    void WalkableArea::draw(GameSession &session, sf::RenderTarget &target)
     {
         for (auto &placedItem : _placedItems)
         {
@@ -58,7 +58,7 @@ namespace space
 
         for (auto &character : _characters)
         {
-            character->draw(engine, target);
+            character->draw(session, target);
         }
     }
 

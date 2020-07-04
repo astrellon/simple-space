@@ -59,6 +59,16 @@ namespace space
 
             PlayerController &playerController() { return _playerController; }
 
+            void setPlayerControllingShip(Ship *ship);
+            void setPlayerControllingCharacter();
+
+            Engine &engine() { return _engine; }
+            const Engine &engine() const { return _engine; }
+
+            bool isControllingCharacter() const { return _playerController.controlling() == ControlCharacter; }
+            Ship *getPlayerShip() const { return _playerController.controllingShip(); }
+            Ship *getShipPlayerIsInsideOf() const;
+
             void update(sf::Time dt);
             void draw(sf::RenderTarget &target);
 

@@ -9,7 +9,7 @@
 
 namespace space
 {
-    class Engine;
+    class GameSession;
 
     class Planet : public CelestialBody
     {
@@ -21,8 +21,8 @@ namespace space
             Planet(const ObjectId &id, const PlanetDefinition &definition);
 
             // Methods
-            virtual void update(Engine &engine, sf::Time dt, const sf::Transform &parentTransform);
-            virtual void draw(Engine &engine, sf::RenderTarget &target);
+            virtual void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform);
+            virtual void draw(GameSession &session, sf::RenderTarget &target);
 
         private:
             // Fields

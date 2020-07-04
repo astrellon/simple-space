@@ -4,9 +4,12 @@
 #include "game/ship.hpp"
 #include "game/planet.hpp"
 #include "game/star_system.hpp"
+#include "game/character.hpp"
 #include "definitions/ship_definition.hpp"
 #include "definitions/planet_definition.hpp"
 #include "definitions/star_system_definition.hpp"
+#include "utils.hpp"
+#include "keyboard.hpp"
 
 #include <tmxlite/Map.hpp>
 
@@ -44,8 +47,50 @@ namespace space
         return false;
     }
 
+    void GameSession::setPlayerControllingShip(Ship *ship)
+    {
+        _engine.spriteScale(1.0f);
+        _engine.camera().followingRotation(false);
+        _engine.camera().scale(1.0f);
+        _playerController.controllingShip(ship);
+        _playerController.controlling(ControlShip);
+    }
+    void GameSession::setPlayerControllingCharacter()
+    {
+        auto scale = 1.0f / Utils::getInsideScale();
+        _engine.spriteScale(scale);
+        _engine.camera().followingRotationId(_playerController.controllingCharacter()->id);
+        _engine.camera().scale(scale);
+        _playerController.controlling(ControlCharacter);
+    }
+
+    Ship *GameSession::getShipPlayerIsInsideOf() const
+    {
+        const auto character = _playerController.controllingCharacter();
+        if (character == nullptr)
+        {
+            return nullptr;
+        }
+
+        const auto area = character->insideArea();
+        if (area == nullptr)
+        {
+            return nullptr;
+        }
+
+        return area->partOfShip();
+    }
+
     void GameSession::update(sf::Time dt)
     {
+        if (space::Keyboard::isKeyDown(sf::Keyboard::T))
+        {
+            if (_playerController.controlling() == ControlShip)
+            {
+                setPlayerControllingCharacter();
+            }
+        }
+
         _playerController.update(dt);
 
         if (_mapLayer.get() == nullptr)
@@ -63,7 +108,7 @@ namespace space
 
         if (_activeStarSystem)
         {
-            _activeStarSystem->update(_engine, dt);
+            _activeStarSystem->update(dt);
         }
     }
 
@@ -78,7 +123,7 @@ namespace space
 
         if (_activeStarSystem)
         {
-            _activeStarSystem->draw(_engine, target);
+            _activeStarSystem->draw(target);
         }
     }
 } // namespace town

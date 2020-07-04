@@ -9,7 +9,7 @@ namespace space
 {
     class PlaceableItem;
     class Character;
-    class Engine;
+    class GameSession;
     class Ship;
     class PolygonCollider;
 
@@ -43,8 +43,8 @@ namespace space
             ~WalkableArea();
 
             // Methods
-            void update(Engine &engine, sf::Time dt, const sf::Transform &parentTransform);
-            void draw(Engine &engine, sf::RenderTarget &target);
+            void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform);
+            void draw(GameSession &session, sf::RenderTarget &target);
 
             void partOfShip(Ship *ship) { _partOfShip = ship; }
             Ship *partOfShip() const { return _partOfShip; }

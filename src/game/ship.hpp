@@ -9,7 +9,7 @@
 
 namespace space
 {
-    class Engine;
+    class GameSession;
     class PolygonCollider;
 
     class Ship : public SpaceObject
@@ -35,8 +35,8 @@ namespace space
             bool showInternals() const { return _showInternals; }
             void showInternals(bool show) { _showInternals = show; }
 
-            virtual void update(Engine &engine, sf::Time dt, const sf::Transform &parentTransform);
-            virtual void draw(Engine &engine, sf::RenderTarget &target);
+            virtual void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform);
+            virtual void draw(GameSession &session, sf::RenderTarget &target);
 
         private:
             // Fields

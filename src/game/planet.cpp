@@ -2,7 +2,8 @@
 
 #include <iostream>
 
-#include "engine.hpp"
+#include "../engine.hpp"
+#include "../game_session.hpp"
 
 namespace space
 {
@@ -14,16 +15,16 @@ namespace space
         _renderTexture->setSmooth(false);
     }
 
-    void Planet::update(Engine &engine, sf::Time dt, const sf::Transform &parentTransform)
+    void Planet::update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform)
     {
         updateWorldTransform(parentTransform);
     }
 
-    void Planet::draw(Engine &engine, sf::RenderTarget &target)
+    void Planet::draw(GameSession &session, sf::RenderTarget &target)
     {
         if (_shader == nullptr)
         {
-            if (!engine.resourceManager().shader("planet", &_shader))
+            if (!session.engine().resourceManager().shader("planet", &_shader))
             {
                 std::cout << "Unable to find shader for planet" << std::endl;
             }
@@ -39,7 +40,7 @@ namespace space
         renderState.shader = _shader;
         renderState.blendMode = sf::BlendMode(sf::BlendMode::One, sf::BlendMode::SrcAlpha);
 
-        _shader->setUniform("timeSinceStart", engine.timeSinceStart().asSeconds());
+        _shader->setUniform("timeSinceStart", session.engine().timeSinceStart().asSeconds());
         _shader->setUniform("offset", 0.0f);
         _shader->setUniform("scale", definition.scale);
         _shader->setUniform("oscillateNoise", definition.oscillateNoise);

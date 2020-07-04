@@ -198,25 +198,6 @@ namespace space
             _currentSession->update(_deltaTime);
         }
 
-        if (space::Keyboard::isKeyDown(sf::Keyboard::T))
-        {
-            auto zoomIn = _spriteScale < 4.0f;
-            if (zoomIn)
-            {
-                _spriteScale = 1.0f / Utils::getInsideScale();
-                _camera.followingRotationId("PLAYER");
-                _currentSession->playerController().controlling(ControlCharacter);
-            }
-            else
-            {
-                _spriteScale = 1.0f;
-                _camera.followingRotation(false);
-                _currentSession->playerController().controlling(ControlShip);
-            }
-
-            _camera.scale(_spriteScale);
-        }
-
         _camera.update(_deltaTime);
 
         for (auto &b : _backgrounds)
