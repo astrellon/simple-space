@@ -6,7 +6,7 @@
 
 namespace space
 {
-    PlayerController::PlayerController() : _controlling(ControlNone)
+    PlayerController::PlayerController() : _controlling(ControlNone), _inventory()
     {
 
     }

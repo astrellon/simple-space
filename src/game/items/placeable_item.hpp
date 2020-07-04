@@ -10,7 +10,7 @@ namespace space
             // Fields
 
             // Constructor
-            PlaceableItem(const ItemDefinition &definition) : Item(definition) { }
+            PlaceableItem(ItemId id, const ItemDefinition &definition) : Item(id, definition) { }
             virtual ~PlaceableItem() { }
 
             // Methods

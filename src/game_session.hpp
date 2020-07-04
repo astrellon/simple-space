@@ -8,6 +8,7 @@
 #include "definitions/ship_definition.hpp"
 #include "definitions/planet_definition.hpp"
 #include "game/space_object.hpp"
+#include "game/items/item.hpp"
 
 #include "player_controller.hpp"
 #include "map_layer.hpp"
@@ -19,6 +20,7 @@ namespace space
     class Engine;
     class StarSystem;
     class StarSystemDefinition;
+    class Item;
 
     class GameSession
     {
@@ -40,6 +42,16 @@ namespace space
                 return result;
             }
 
+            template <typename T, typename... TArgs>
+            auto createItem(TArgs &&... args)
+            {
+                auto obj = std::make_unique<T>(std::forward<TArgs>(args)...);
+                auto result = obj.get();
+                _items.emplace_back(std::move(obj));
+
+                return result;
+            }
+
             bool tryGetSpaceObject(const ObjectId &id, SpaceObject **result);
 
             void activeStarSystem(StarSystem *activeStarSystem) { _activeStarSystem = activeStarSystem; }
@@ -55,6 +67,7 @@ namespace space
 
             std::vector<std::unique_ptr<SpaceObject>> _spaceObjects;
             std::vector<std::unique_ptr<StarSystem>> _starSystems;
+            std::vector<std::unique_ptr<Item>> _items;
             std::unique_ptr<MapLayer> _mapLayer;
 
             StarSystem *_activeStarSystem;

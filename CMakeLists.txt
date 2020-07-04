@@ -9,6 +9,7 @@ file(GLOB src_files
     "src/*.cpp"
     "src/effects/*.cpp"
     "src/game/*.cpp"
+    "src/game/items/*.cpp"
     "src/debug/*.cpp"
     "src/definitions/*.cpp"
     "src/serialisers/json/*.cpp"

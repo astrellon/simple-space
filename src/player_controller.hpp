@@ -2,6 +2,9 @@
 
 #include <SFML/System.hpp>
 
+#include "non_copyable.hpp"
+#include "game/inventory.hpp"
+
 namespace space
 {
     enum ControllingValue { ControlNone, ControlShip, ControlCharacter };
@@ -9,7 +12,7 @@ namespace space
     class Ship;
     class Character;
 
-    class PlayerController
+    class PlayerController : private NonCopyable
     {
         public:
             // Fields
@@ -19,6 +22,9 @@ namespace space
 
             // Methods
             void update(sf::Time dt);
+
+            Inventory &inventory() { return _inventory; }
+            const Inventory &inventory() const { return _inventory; }
 
             void controlling(ControllingValue value) { _controlling = value; }
             ControllingValue controlling() const { return _controlling; }
@@ -34,6 +40,7 @@ namespace space
             Ship *_ship;
             Character *_character;
             ControllingValue _controlling;
+            Inventory _inventory;
 
             // Methods
             void controlShip(sf::Time dt);

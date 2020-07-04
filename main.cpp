@@ -96,9 +96,10 @@ int main()
 
     ship->walkableArea().addCharacter(character);
 
-    gameSession->playerController().controllingCharacter(character);
-    gameSession->playerController().controllingShip(ship);
-    gameSession->playerController().controlling(space::ControlShip);
+    auto &player = gameSession->playerController();
+    player.controllingCharacter(character);
+    player.controllingShip(ship);
+    player.controlling(space::ControlShip);
 
     gameSession->activeStarSystem(starSystem);
 
