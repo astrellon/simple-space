@@ -53,6 +53,7 @@ namespace space
             std::vector<std::unique_ptr<PlacedItem>> _placedItems;
             sf::Transform _worldTransform;
             Ship *_partOfShip;
+            GameSession *_session;
 
             b2World _physicsWorld;
 

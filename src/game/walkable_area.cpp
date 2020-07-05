@@ -5,6 +5,7 @@
 #include "game/character.hpp"
 #include "physics/polygon_collider.hpp"
 #include "utils.hpp"
+#include "game_session.hpp"
 
 namespace space
 {
@@ -23,6 +24,7 @@ namespace space
     void WalkableArea::update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform)
     {
         _worldTransform = parentTransform;
+        _session = &session;
 
         for (auto &character : _characters)
         {
@@ -52,11 +54,11 @@ namespace space
 
     void WalkableArea::addStaticCollider(PolygonCollider &collider)
     {
-        //collider.addToWorld(&_physicsWorld);
+        collider.addToWorld(&_physicsWorld);
     }
     void WalkableArea::removeStaticCollider(PolygonCollider &collider)
     {
-        //collider.removeFromWorld(&_physicsWorld);
+        collider.removeFromWorld(&_physicsWorld);
     }
 
     void WalkableArea::addCharacter(Character *character)
@@ -86,7 +88,7 @@ namespace space
 
     void WalkableArea::addPlaceable(PlaceableItem *item, sf::Vector2f position)
     {
-        _placedItems.emplace_back(std::make_unique<PlacedItem>(item, position));
+        _placedItems.emplace_back(std::make_unique<PlacedItem>(item, position, *this));
         auto &placedItem = _placedItems.back();
         placedItem->addPhysics(_physicsWorld);
     }
@@ -126,6 +128,8 @@ namespace space
             return;
         }
 
+        _session->playerController().addCanInteractWith(item);
+
         std::cout << "Character can interact with " << item->item->definition.name << std::endl;
     }
     void WalkableArea::EndContact(b2Contact *contact)
@@ -147,6 +151,8 @@ namespace space
             std::cout << "No character in contact, ignoring" << std::endl;
             return;
         }
+
+        _session->playerController().removeCanInteractWith(item);
 
         std::cout << "Character outside range of interacting with " << item->item->definition.name << std::endl;
     }

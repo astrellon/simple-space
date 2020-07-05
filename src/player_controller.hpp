@@ -1,5 +1,6 @@
 #pragma once
 
+#include <vector>
 #include <SFML/System.hpp>
 
 #include "non_copyable.hpp"
@@ -11,6 +12,7 @@ namespace space
 
     class Ship;
     class Character;
+    class PlacedItem;
 
     class PlayerController : private NonCopyable
     {
@@ -35,12 +37,20 @@ namespace space
             void controllingCharacter(Character *character) { _character = character; }
             Character *controllingCharacter() const { return _character; }
 
+            void addCanInteractWith(PlacedItem *item);
+            void removeCanInteractWith(PlacedItem *item);
+
+            void interactWithClosest();
+
+            std::vector<PlacedItem *> &canInteractWith() { return _canInteractWith; }
+
         private:
             // Fields
             Ship *_ship;
             Character *_character;
             ControllingValue _controlling;
             Inventory _inventory;
+            std::vector<PlacedItem *> _canInteractWith;
 
             // Methods
             void controlShip(sf::Time dt);

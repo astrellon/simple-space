@@ -90,8 +90,26 @@ namespace space
         {
             rotateInput += 1;
         }
+        // if (Keyboard::isKeyPressed(sf::Keyboard::F))
+        // {
+        //     interactWithClosest();
+        // }
 
         _character->moveInput = moveInput;
         _character->rotateInput = rotateInput;
     }
+
+    void PlayerController::addCanInteractWith(PlacedItem *item)
+    {
+        _canInteractWith.push_back(item);
+    }
+    void PlayerController::removeCanInteractWith(PlacedItem *item)
+    {
+        auto find = std::find(_canInteractWith.begin(), _canInteractWith.end(), item);
+        if (find != _canInteractWith.end())
+        {
+            _canInteractWith.erase(find);
+        }
+    }
+
 } // namespace space

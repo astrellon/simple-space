@@ -13,6 +13,8 @@
 #include <SFML/OpenGL.hpp>
 #include "imgui/imgui.h"
 #include "imgui/imgui-SFML.h"
+#include "game/items/placed_item.hpp"
+#include "game/items/placeable_item.hpp"
 
 namespace space
 {
@@ -231,10 +233,18 @@ namespace space
         if (_initedImgui)
         {
             ImGui::Begin("Test Window");
-            if (ImGui::Button("It's a button"))
+
+            for (auto &canInteractWith : _currentSession->playerController().canInteractWith())
             {
-                std::cout << "Clicked!" << std::endl;
+                if (ImGui::Button(canInteractWith->item->definition.name.c_str()))
+                {
+                    canInteractWith->item->execute(*_currentSession, canInteractWith->transform().position, canInteractWith->area);
+                }
             }
+            // if (ImGui::Button("It's a button"))
+            // {
+            //     std::cout << "Clicked!" << std::endl;
+            // }
             ImGui::End();
 
             ImGui::SFML::Render(_sceneRenderTarget);

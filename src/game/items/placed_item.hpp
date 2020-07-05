@@ -11,19 +11,18 @@
 namespace space
 {
     class PlaceableItem;
-    class Character;
     class GameSession;
-    class Ship;
-    class PolygonCollider;
+    class WalkableArea;
 
     class PlacedItem : public SpaceObject
     {
         public:
             // Fields
-            PlaceableItem const *item;
+            PlaceableItem *item;
+            WalkableArea &area;
 
             // Constructor
-            PlacedItem(PlaceableItem const *item, const sf::Vector2f &position);
+            PlacedItem(PlaceableItem *item, const sf::Vector2f &position, WalkableArea &area);
             virtual ~PlacedItem();
 
             // Methods

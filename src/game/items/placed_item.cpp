@@ -8,7 +8,7 @@
 
 namespace space
 {
-    PlacedItem::PlacedItem(PlaceableItem const *item, const sf::Vector2f &position) : SpaceObject(Utils::makeObjectId(item->id)), item(item), _sprite(*item->definition.texture), _triggerSensor(nullptr)
+    PlacedItem::PlacedItem(PlaceableItem *item, const sf::Vector2f &position, WalkableArea &area) : SpaceObject(Utils::makeObjectId(item->id)), item(item), _sprite(*item->definition.texture), _triggerSensor(nullptr), area(area)
     {
         _transform.position = position;
         _sprite.setPosition(position);
