@@ -110,8 +110,17 @@ namespace space
     void WalkableArea::BeginContact(b2Contact *contact)
     {
         std::cout << "Contact started" << std::endl;
-        auto spaceObjectA = static_cast<SpaceObject *>(contact->GetFixtureA()->GetBody()->GetUserData());
-        auto spaceObjectB = static_cast<SpaceObject *>(contact->GetFixtureB()->GetBody()->GetUserData());
+
+        auto userDataA = contact->GetFixtureA()->GetBody()->GetUserData();
+        auto userDataB = contact->GetFixtureB()->GetBody()->GetUserData();
+
+        if (userDataA == nullptr || userDataB == nullptr)
+        {
+            return;
+        }
+
+        auto spaceObjectA = static_cast<SpaceObject *>(userDataA);
+        auto spaceObjectB = static_cast<SpaceObject *>(userDataB);
 
         auto item = dynamic_cast<PlacedItem *>(spaceObjectB);
         auto character = dynamic_cast<Character *>(spaceObjectA);
@@ -134,8 +143,16 @@ namespace space
     }
     void WalkableArea::EndContact(b2Contact *contact)
     {
-        auto spaceObjectA = static_cast<SpaceObject *>(contact->GetFixtureA()->GetBody()->GetUserData());
-        auto spaceObjectB = static_cast<SpaceObject *>(contact->GetFixtureB()->GetBody()->GetUserData());
+        auto userDataA = contact->GetFixtureA()->GetBody()->GetUserData();
+        auto userDataB = contact->GetFixtureB()->GetBody()->GetUserData();
+
+        if (userDataA == nullptr || userDataB == nullptr)
+        {
+            return;
+        }
+
+        auto spaceObjectA = static_cast<SpaceObject *>(userDataA);
+        auto spaceObjectB = static_cast<SpaceObject *>(userDataB);
 
         auto item = dynamic_cast<PlacedItem *>(spaceObjectB);
         auto character = dynamic_cast<Character *>(spaceObjectA);
