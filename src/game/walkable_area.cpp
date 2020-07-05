@@ -8,21 +8,9 @@
 
 namespace space
 {
-    PlacedItem::PlacedItem(PlaceableItem const &item, const sf::Vector2f &position) :
-        item(item), position(position), _sprite(*item.definition.texture)
-    {
-        _sprite.setPosition(position);
-    }
-
-    void PlacedItem::draw(sf::RenderTarget &target, const sf::Transform &parentTransform)
-    {
-        target.draw(_sprite, parentTransform);
-    }
-
-
-
     WalkableArea::WalkableArea() : _physicsWorld(b2Vec2(0, 0)), _partOfShip(nullptr)
     {
+        _physicsWorld.SetContactListener(this);
     }
     WalkableArea::~WalkableArea()
     {
@@ -53,7 +41,7 @@ namespace space
     {
         for (auto &placedItem : _placedItems)
         {
-            placedItem.draw(target, _worldTransform);
+            placedItem->draw(session, target);
         }
 
         for (auto &character : _characters)
@@ -64,11 +52,11 @@ namespace space
 
     void WalkableArea::addStaticCollider(PolygonCollider &collider)
     {
-        collider.addToWorld(&_physicsWorld);
+        //collider.addToWorld(&_physicsWorld);
     }
     void WalkableArea::removeStaticCollider(PolygonCollider &collider)
     {
-        collider.removeFromWorld(&_physicsWorld);
+        //collider.removeFromWorld(&_physicsWorld);
     }
 
     void WalkableArea::addCharacter(Character *character)
@@ -94,5 +82,72 @@ namespace space
 
         character->removeFromPhysicsWorld(&_physicsWorld);
         character->insideArea(nullptr);
+    }
+
+    void WalkableArea::addPlaceable(PlaceableItem *item, sf::Vector2f position)
+    {
+        _placedItems.emplace_back(std::make_unique<PlacedItem>(item, position));
+        auto &placedItem = _placedItems.back();
+        placedItem->addPhysics(_physicsWorld);
+    }
+    void WalkableArea::removePlaceable(ItemId id)
+    {
+        for (auto iter = _placedItems.begin(); iter != _placedItems.end(); ++iter)
+        {
+            if (iter->get()->item->id == id)
+            {
+                _placedItems.erase(iter);
+                iter->get()->removePhysics(_physicsWorld);
+                return;
+            }
+        }
+
+        std::cout << "Unable to find placeable item to remove it from walkable area: " << id << std::endl;
+    }
+
+    void WalkableArea::BeginContact(b2Contact *contact)
+    {
+        std::cout << "Contact started" << std::endl;
+        auto spaceObjectA = static_cast<SpaceObject *>(contact->GetFixtureA()->GetBody()->GetUserData());
+        auto spaceObjectB = static_cast<SpaceObject *>(contact->GetFixtureB()->GetBody()->GetUserData());
+
+        auto item = dynamic_cast<PlacedItem *>(spaceObjectB);
+        auto character = dynamic_cast<Character *>(spaceObjectA);
+
+        if (character == nullptr)
+        {
+            character = dynamic_cast<Character *>(spaceObjectB);
+            item = dynamic_cast<PlacedItem *>(spaceObjectA);
+        }
+
+        if (character == nullptr)
+        {
+            std::cout << "No character in contact, ignoring" << std::endl;
+            return;
+        }
+
+        std::cout << "Character can interact with " << item->item->definition.name << std::endl;
+    }
+    void WalkableArea::EndContact(b2Contact *contact)
+    {
+        auto spaceObjectA = static_cast<SpaceObject *>(contact->GetFixtureA()->GetBody()->GetUserData());
+        auto spaceObjectB = static_cast<SpaceObject *>(contact->GetFixtureB()->GetBody()->GetUserData());
+
+        auto item = dynamic_cast<PlacedItem *>(spaceObjectB);
+        auto character = dynamic_cast<Character *>(spaceObjectA);
+
+        if (character == nullptr)
+        {
+            character = dynamic_cast<Character *>(spaceObjectB);
+            item = dynamic_cast<PlacedItem *>(spaceObjectA);
+        }
+
+        if (character == nullptr)
+        {
+            std::cout << "No character in contact, ignoring" << std::endl;
+            return;
+        }
+
+        std::cout << "Character outside range of interacting with " << item->item->definition.name << std::endl;
     }
 } // namespace space

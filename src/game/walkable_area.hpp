@@ -5,6 +5,9 @@
 #include <SFML/Graphics.hpp>
 #include <Box2D/Box2D.h>
 
+#include "items/item.hpp"
+#include "items/placed_item.hpp"
+
 namespace space
 {
     class PlaceableItem;
@@ -13,27 +16,7 @@ namespace space
     class Ship;
     class PolygonCollider;
 
-    class PlacedItem
-    {
-        public:
-            // Fields
-            PlaceableItem const & item;
-            const sf::Vector2f position;
-
-            // Constructor
-            PlacedItem(PlaceableItem const &item, const sf::Vector2f &position);
-
-            // Methods
-            void draw(sf::RenderTarget &target, const sf::Transform &parentTransform);
-
-        private:
-            // Fields
-            sf::Sprite _sprite;
-
-            // Methods
-    };
-
-    class WalkableArea
+    class WalkableArea : public b2ContactListener
     {
         public:
             // Fields
@@ -56,12 +39,18 @@ namespace space
             void removeCharacter(Character *character);
 
             void addPlaceable(PlaceableItem *item, sf::Vector2f position);
-            void removePlaceable(PlaceableItem *item);
+            void removePlaceable(ItemId id);
+
+            b2World &physicsWorld() { return _physicsWorld; }
+
+            // b2ContactListener
+            virtual void BeginContact(b2Contact *contact);
+            virtual void EndContact(b2Contact *contact);
 
         private:
             // Fields
             std::vector<Character *> _characters;
-            std::vector<PlacedItem> _placedItems;
+            std::vector<std::unique_ptr<PlacedItem>> _placedItems;
             sf::Transform _worldTransform;
             Ship *_partOfShip;
 

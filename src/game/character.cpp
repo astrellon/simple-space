@@ -58,6 +58,8 @@ namespace space
     {
         _physicsBody = world->CreateBody(&_physicsBodyDef);
         _physicsBody->CreateFixture(&_physicsFixtureDef);
+
+        _physicsBody->SetUserData(this);
     }
     void Character::removeFromPhysicsWorld(b2World *world)
     {

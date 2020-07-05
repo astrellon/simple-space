@@ -16,6 +16,7 @@
 #include "src/definitions/ship_definition.hpp"
 #include "src/definitions/character_definition.hpp"
 #include "src/definitions/star_system_definition.hpp"
+#include "src/definitions/item_definition.hpp"
 #include "src/serialisers/json/json_serialisers.hpp"
 #include "src/serialisers/json/json.hpp"
 #include "src/definition_manager.hpp"
@@ -23,6 +24,7 @@
 #include "src/game/character.hpp"
 #include "src/game/planet.hpp"
 #include "src/game/star_system.hpp"
+#include "src/game/items/chair.hpp"
 #include "src/keyboard.hpp"
 #include "src/physics/polygon_collider.hpp"
 
@@ -95,6 +97,14 @@ int main()
     //starSystem->addObject(character);
 
     ship->walkableArea().addCharacter(character);
+
+    space::ItemDefinition chairDefinition("CHAIR_1");
+    chairDefinition.name = "Chair";
+    chairDefinition.texturePath = "data/items/chair.png";
+    chairDefinition.onPostLoad(engine);
+
+    auto chair = gameSession->createItem<space::Chair>(0, chairDefinition);
+    ship->walkableArea().addPlaceable(chair, sf::Vector2f(0, -10));
 
     auto &player = gameSession->playerController();
     player.controllingCharacter(character);

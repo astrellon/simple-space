@@ -10,6 +10,9 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 
+#include "game/space_object.hpp"
+#include "game/items/item.hpp"
+
 namespace space
 {
     class Utils
@@ -25,6 +28,13 @@ namespace space
 
             static std::string filenameWithoutExt(const std::string &str);
             static std::string getFilenameExt(const std::string &str);
+
+            static inline ObjectId makeObjectId(ItemId item)
+            {
+                std::stringstream ss;
+                ss << "ITEM_" << item;
+                return ss.str();
+            }
 
             static inline float degreesToRadians(float input)
             {
