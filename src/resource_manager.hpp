@@ -24,7 +24,6 @@ namespace space
             void loadEmbedded();
 
             // Fonts
-            const sf::Font *defaultFont() const { return _defaultFont.get(); }
             const FontMap &fonts() const { return _fonts; }
 
             bool font(const std::string &filename, const sf::Font **result);
@@ -60,7 +59,6 @@ namespace space
 
         private:
 
-            std::unique_ptr<sf::Font> _defaultFont;
             TextureMap _textures;
             ImageMap _images;
             FontMap _fonts;

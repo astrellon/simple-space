@@ -4,17 +4,11 @@
 #include <filesystem>
 
 #include "utils.hpp"
-#include "embeddedData/font.h"
 
 namespace space
 {
     void ResourceManager::loadEmbedded()
     {
-        _defaultFont = std::make_unique<sf::Font>();
-        if (!_defaultFont->loadFromMemory(LiberationSans_Regular_ttf, LiberationSans_Regular_ttf_len))
-        {
-            std::cout << "Error loading default font!" << std::endl;
-        }
     }
 
     // Fonts
@@ -30,7 +24,7 @@ namespace space
         auto loadFont = preloadFont(filename);
         if (loadFont == nullptr)
         {
-            *result = _defaultFont.get();
+            *result = nullptr;
             return false;
         }
 
