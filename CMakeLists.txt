@@ -13,8 +13,9 @@ file(GLOB src_files
     "src/debug/*.cpp"
     "src/definitions/*.cpp"
     "src/serialisers/json/*.cpp"
-    "src/physics/*.cpp",
+    "src/physics/*.cpp"
     "src/imgui/*.cpp"
+    "src/ui/*.cpp"
 )
 
 SET (CMAKE_CXX_FLAGS_RELEASE_INIT        "-O3 -DNDEBUG")

@@ -16,6 +16,8 @@
 #include "game/items/placed_item.hpp"
 #include "game/items/placeable_item.hpp"
 
+#include "ui/ui_interactables.hpp"
+
 namespace space
 {
     Engine::Engine(sf::RenderWindow &window) :
@@ -232,16 +234,7 @@ namespace space
 
         if (_initedImgui)
         {
-            ImGui::Begin("Interactables");
-
-            for (auto &canInteractWith : _currentSession->playerController().canInteractWith())
-            {
-                if (ImGui::Button(canInteractWith->item->definition.name.c_str()))
-                {
-                    canInteractWith->item->execute(*_currentSession, canInteractWith->transform().position, canInteractWith->area);
-                }
-            }
-            ImGui::End();
+            UIInteractables::drawInteractables(*_currentSession);
 
             ImGui::SFML::Render(_sceneRenderTarget);
         }
