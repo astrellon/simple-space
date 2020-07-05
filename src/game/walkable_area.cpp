@@ -26,6 +26,11 @@ namespace space
         _worldTransform = parentTransform;
         _session = &session;
 
+        for (auto &placedItem : _placedItems)
+        {
+            placedItem->update(session, dt, _worldTransform);
+        }
+
         for (auto &character : _characters)
         {
             character->prePhysics(session, dt, parentTransform);

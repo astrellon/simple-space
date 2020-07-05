@@ -232,7 +232,7 @@ namespace space
 
         if (_initedImgui)
         {
-            ImGui::Begin("Test Window");
+            ImGui::Begin("Interactables");
 
             for (auto &canInteractWith : _currentSession->playerController().canInteractWith())
             {
@@ -241,10 +241,6 @@ namespace space
                     canInteractWith->item->execute(*_currentSession, canInteractWith->transform().position, canInteractWith->area);
                 }
             }
-            // if (ImGui::Button("It's a button"))
-            // {
-            //     std::cout << "Clicked!" << std::endl;
-            // }
             ImGui::End();
 
             ImGui::SFML::Render(_sceneRenderTarget);

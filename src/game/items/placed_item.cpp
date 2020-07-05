@@ -11,7 +11,6 @@ namespace space
     PlacedItem::PlacedItem(PlaceableItem *item, const sf::Vector2f &position, WalkableArea &area) : SpaceObject(Utils::makeObjectId(item->id)), item(item), _sprite(*item->definition.texture), _triggerSensor(nullptr), area(area)
     {
         _transform.position = position;
-        _sprite.setPosition(position);
 
         _sprite.setOrigin(sf::Vector2f(item->definition.texture->getSize()) * 0.5f);
         _sprite.setScale(Utils::getInsideScale(), Utils::getInsideScale());
