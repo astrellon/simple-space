@@ -17,6 +17,7 @@
 #include "game/items/placeable_item.hpp"
 
 #include "ui/ui_interactables.hpp"
+#include "ui/ui_inventory.hpp"
 
 namespace space
 {
@@ -234,7 +235,8 @@ namespace space
 
         if (_initedImgui)
         {
-            UIInteractables::drawInteractables(*_currentSession);
+            UIInteractables::draw(*_currentSession);
+            UIInventory::draw(_currentSession->playerController());
 
             ImGui::SFML::Render(_sceneRenderTarget);
         }

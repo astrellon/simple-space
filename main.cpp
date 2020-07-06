@@ -101,13 +101,16 @@ int main()
     chairDefinition.texturePath = "data/items/chair.png";
     chairDefinition.onPostLoad(engine);
 
-    auto chair = gameSession->createItem<space::Chair>(0, chairDefinition);
-    ship->walkableArea().addPlaceable(chair, sf::Vector2f(0, -10));
-
     auto &player = gameSession->playerController();
     player.controllingCharacter(character);
     player.controllingShip(ship);
     player.controlling(space::ControlShip);
+
+    auto chair = gameSession->createItem<space::Chair>(0, chairDefinition);
+    player.inventory().addItem(chair);
+
+    chair = gameSession->createItem<space::Chair>(1, chairDefinition);
+    player.inventory().addItem(chair);
 
     gameSession->activeStarSystem(starSystem);
 

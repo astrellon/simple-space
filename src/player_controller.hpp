@@ -14,6 +14,7 @@ namespace space
     class Ship;
     class Character;
     class PlacedItem;
+    class PlaceableItem;
 
     class PlayerController : private NonCopyable
     {
@@ -45,6 +46,8 @@ namespace space
                 auto find = std::find(_canInteractWith.begin(), _canInteractWith.end(), item);
                 return find != _canInteractWith.end();
             }
+
+            void dropItem(PlaceableItem *placeableItem);
 
             void interactWithClosest();
 

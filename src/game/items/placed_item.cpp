@@ -17,7 +17,7 @@ namespace space
     }
     PlacedItem::~PlacedItem()
     {
-        assert(_triggerSensor != nullptr);
+        assert(_triggerSensor == nullptr);
     }
 
     void PlacedItem::addPhysics(b2World &world)

@@ -4,6 +4,9 @@
 #include "game/character.hpp"
 #include "keyboard.hpp"
 
+#include "game/items/item.hpp"
+#include "game/items/placeable_item.hpp"
+
 namespace space
 {
     PlayerController::PlayerController() : _controlling(ControlNone), _inventory()
@@ -110,6 +113,12 @@ namespace space
         {
             _canInteractWith.erase(find);
         }
+    }
+
+    void PlayerController::dropItem(PlaceableItem *placeableItem)
+    {
+        _inventory.removeItem(placeableItem);
+        _character->insideArea()->addPlaceable(placeableItem, _character->transform().position);
     }
 
 } // namespace space

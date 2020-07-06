@@ -3,12 +3,11 @@
 namespace space
 {
     class GameSession;
-    class PlayerController;
 
     class UIInteractables
     {
         public:
-            static void drawInteractables(GameSession &session);
+            static void draw(GameSession &session);
 
         private:
             UIInteractables();

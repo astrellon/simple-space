@@ -19,6 +19,11 @@ namespace space
         {
             character->removeFromPhysicsWorld(&_physicsWorld);
         }
+
+        for (auto &placedItem : _placedItems)
+        {
+            placedItem->removePhysics(_physicsWorld);
+        }
     }
 
     void WalkableArea::update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform)
@@ -109,8 +114,12 @@ namespace space
         {
             if (iter->get()->item->id == id)
             {
-                _placedItems.erase(iter);
+                if (_session != nullptr)
+                {
+                    _session->playerController().removeCanInteractWith(iter->get());
+                }
                 iter->get()->removePhysics(_physicsWorld);
+                _placedItems.erase(iter);
                 return;
             }
         }

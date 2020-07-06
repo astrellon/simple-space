@@ -61,6 +61,7 @@ namespace space
         auto scale = 1.0f / Utils::getInsideScale();
         _engine.spriteScale(scale);
         _engine.camera().followingRotationId(_playerController.controllingShip()->id);
+        _engine.camera().followingId(_playerController.controllingCharacter()->id);
         _engine.camera().scale(scale);
         _playerController.controlling(ControlCharacter);
     }
