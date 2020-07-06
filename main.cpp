@@ -93,8 +93,6 @@ int main()
     starSystem2->initFromDefinition();
 
     auto character = gameSession->createObject<space::Character>("PLAYER_CHAR", *playerCharDef);
-    //character->transform().scale = 0.2f;
-    //starSystem->addObject(character);
 
     ship->walkableArea().addCharacter(character);
 

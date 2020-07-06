@@ -51,6 +51,7 @@ namespace space
     {
         _engine.spriteScale(1.0f);
         _engine.camera().followingRotation(false);
+        _engine.camera().followingId(ship->id);
         _engine.camera().scale(1.0f);
         _playerController.controllingShip(ship);
         _playerController.controlling(ControlShip);
