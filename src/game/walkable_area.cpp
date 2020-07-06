@@ -104,6 +104,12 @@ namespace space
 
     void WalkableArea::addPlaceable(PlaceableItem *item, sf::Vector2f position)
     {
+        // Snap position to the inside pixel scaling.
+        position /= Utils::getInsideScale();
+        position.x = std::round(position.x);
+        position.y = std::round(position.y);
+        position *= Utils::getInsideScale();
+
         _placedItems.emplace_back(std::make_unique<PlacedItem>(item, position, *this));
         auto &placedItem = _placedItems.back();
         placedItem->addPhysics(_physicsWorld);
