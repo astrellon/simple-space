@@ -11,7 +11,7 @@ namespace space
 {
     WalkableArea::WalkableArea() : _physicsWorld(b2Vec2(0, 0)), _partOfShip(nullptr)
     {
-        _physicsWorld.SetContactListener(this);
+
     }
     WalkableArea::~WalkableArea()
     {
@@ -41,6 +41,12 @@ namespace space
         for (auto &character : _characters)
         {
             character->update(session, dt, parentTransform);
+        }
+
+        auto controllingCharacter = session.playerController().controllingCharacter();
+        if (controllingCharacter != nullptr && controllingCharacter->insideArea() == this)
+        {
+            checkForInteractables(session);
         }
     }
 
@@ -112,70 +118,35 @@ namespace space
         std::cout << "Unable to find placeable item to remove it from walkable area: " << id << std::endl;
     }
 
-    void WalkableArea::BeginContact(b2Contact *contact)
+    void WalkableArea::checkForInteractables(GameSession &session)
     {
-        std::cout << "Contact started" << std::endl;
+        auto &player = session.playerController();
 
-        auto userDataA = contact->GetFixtureA()->GetBody()->GetUserData();
-        auto userDataB = contact->GetFixtureB()->GetBody()->GetUserData();
-
-        if (userDataA == nullptr || userDataB == nullptr)
+        // Check existing items
+        auto playerPos = player.controllingCharacter()->transform().position;
+        for (auto item : player.canInteractWith())
         {
-            return;
+            auto dpos = item->transform().position - playerPos;
+            auto distance = dpos.x * dpos.x + dpos.y * dpos.y;
+            if (distance - item->interactRadiusSquared() > 0.0f)
+            {
+                player.removeCanInteractWith(item);
+            }
         }
 
-        auto spaceObjectA = static_cast<SpaceObject *>(userDataA);
-        auto spaceObjectB = static_cast<SpaceObject *>(userDataB);
-
-        auto item = dynamic_cast<PlacedItem *>(spaceObjectB);
-        auto character = dynamic_cast<Character *>(spaceObjectA);
-
-        if (character == nullptr)
+        for (auto &iter : _placedItems)
         {
-            character = dynamic_cast<Character *>(spaceObjectB);
-            item = dynamic_cast<PlacedItem *>(spaceObjectA);
+            if (player.canInteractWith(iter.get()))
+            {
+                continue;
+            }
+
+            auto dpos = iter->transform().position - playerPos;
+            auto distance = dpos.x * dpos.x + dpos.y * dpos.y;
+            if (distance - iter->interactRadiusSquared() < 0.0f)
+            {
+                player.addCanInteractWith(iter.get());
+            }
         }
-
-        if (character == nullptr)
-        {
-            std::cout << "No character in contact, ignoring" << std::endl;
-            return;
-        }
-
-        _session->playerController().addCanInteractWith(item);
-
-        std::cout << "Character can interact with " << item->item->definition.name << std::endl;
-    }
-    void WalkableArea::EndContact(b2Contact *contact)
-    {
-        auto userDataA = contact->GetFixtureA()->GetBody()->GetUserData();
-        auto userDataB = contact->GetFixtureB()->GetBody()->GetUserData();
-
-        if (userDataA == nullptr || userDataB == nullptr)
-        {
-            return;
-        }
-
-        auto spaceObjectA = static_cast<SpaceObject *>(userDataA);
-        auto spaceObjectB = static_cast<SpaceObject *>(userDataB);
-
-        auto item = dynamic_cast<PlacedItem *>(spaceObjectB);
-        auto character = dynamic_cast<Character *>(spaceObjectA);
-
-        if (character == nullptr)
-        {
-            character = dynamic_cast<Character *>(spaceObjectB);
-            item = dynamic_cast<PlacedItem *>(spaceObjectA);
-        }
-
-        if (character == nullptr)
-        {
-            std::cout << "No character in contact, ignoring" << std::endl;
-            return;
-        }
-
-        _session->playerController().removeCanInteractWith(item);
-
-        std::cout << "Character outside range of interacting with " << item->item->definition.name << std::endl;
     }
 } // namespace space

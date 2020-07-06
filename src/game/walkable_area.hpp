@@ -16,7 +16,7 @@ namespace space
     class Ship;
     class PolygonCollider;
 
-    class WalkableArea : public b2ContactListener
+    class WalkableArea
     {
         public:
             // Fields
@@ -43,10 +43,6 @@ namespace space
 
             b2World &physicsWorld() { return _physicsWorld; }
 
-            // b2ContactListener
-            virtual void BeginContact(b2Contact *contact);
-            virtual void EndContact(b2Contact *contact);
-
         private:
             // Fields
             std::vector<Character *> _characters;
@@ -58,5 +54,6 @@ namespace space
             b2World _physicsWorld;
 
             // Methods
+            void checkForInteractables(GameSession &session);
     };
 } // space

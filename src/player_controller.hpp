@@ -1,5 +1,6 @@
 #pragma once
 
+#include <algorithm>
 #include <vector>
 #include <SFML/System.hpp>
 
@@ -39,6 +40,11 @@ namespace space
 
             void addCanInteractWith(PlacedItem *item);
             void removeCanInteractWith(PlacedItem *item);
+            bool canInteractWith(PlacedItem *item) const
+            {
+                auto find = std::find(_canInteractWith.begin(), _canInteractWith.end(), item);
+                return find != _canInteractWith.end();
+            }
 
             void interactWithClosest();
 
