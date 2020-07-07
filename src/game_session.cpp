@@ -91,6 +91,11 @@ namespace space
             character->insideArea()->removeCharacter(character);
         }
 
+        if (character == _playerController.controllingCharacter())
+        {
+            _playerController.clearCanInteractWith();
+        }
+
         if (area != nullptr)
         {
             character->transform().position = position;

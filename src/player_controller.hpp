@@ -47,6 +47,7 @@ namespace space
                 return find != _canInteractWith.end();
             }
             std::vector<PlacedItem *> &canInteractWith() { return _canInteractWith; }
+            void clearCanInteractWith() { _canInteractWith.clear(); }
 
             void addShipInTeleportRange(Ship *ship);
             void removeShipInTeleportRange(Ship *ship);
@@ -56,6 +57,7 @@ namespace space
                 return find != _shipsInTeleportRange.end();
             }
             std::vector<Ship *> &shipsInTeleportRange() { return _shipsInTeleportRange; }
+            void clearShipsInTeleportRange() { _shipsInTeleportRange.clear(); }
 
             void dropItem(PlaceableItem *placeableItem);
 
