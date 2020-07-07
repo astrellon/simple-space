@@ -24,6 +24,12 @@ namespace space
         {
             obj->update(_session, dt, sf::Transform::Identity);
         }
+
+        auto controllingShip = _session.playerController().controllingShip();
+        if (controllingShip != nullptr && controllingShip->starSystem() == this)
+        {
+            checkForTeleportableShips();
+        }
     }
 
     void StarSystem::draw(sf::RenderTarget &target)
@@ -121,6 +127,39 @@ namespace space
         for (const auto &child : bodyDefinition->children)
         {
             createCelestialBody(child.get());
+        }
+    }
+
+    void StarSystem::checkForTeleportableShips()
+    {
+        auto &player = _session.playerController();
+
+        // Check existing items
+        auto playerPos = player.controllingShip()->transform().position;
+        for (auto ship : player.shipsInTeleportRange())
+        {
+            auto dpos = ship->transform().position - playerPos;
+            auto distance = dpos.x * dpos.x + dpos.y * dpos.y;
+            if (distance - (100.0f * 100.0f) > 0.0f)
+            {
+                player.removeShipInTeleportRange(ship);
+            }
+        }
+
+        for (auto obj : _objects)
+        {
+            auto ship = dynamic_cast<Ship *>(obj);
+            if (ship == nullptr || ship == player.controllingShip() || player.shipInTeleportRange(ship))
+            {
+                continue;
+            }
+
+            auto dpos = ship->transform().position - playerPos;
+            auto distance = dpos.x * dpos.x + dpos.y * dpos.y;
+            if (distance - (100.0f * 100.0f) < 0.0f)
+            {
+                player.addShipInTeleportRange(ship);
+            }
         }
     }
 } // namespace space

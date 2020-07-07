@@ -46,12 +46,20 @@ namespace space
                 auto find = std::find(_canInteractWith.begin(), _canInteractWith.end(), item);
                 return find != _canInteractWith.end();
             }
+            std::vector<PlacedItem *> &canInteractWith() { return _canInteractWith; }
+
+            void addShipInTeleportRange(Ship *ship);
+            void removeShipInTeleportRange(Ship *ship);
+            bool shipInTeleportRange(Ship *ship) const
+            {
+                auto find = std::find(_shipsInTeleportRange.begin(), _shipsInTeleportRange.end(), ship);
+                return find != _shipsInTeleportRange.end();
+            }
+            std::vector<Ship *> &shipsInTeleportRange() { return _shipsInTeleportRange; }
 
             void dropItem(PlaceableItem *placeableItem);
 
             void interactWithClosest();
-
-            std::vector<PlacedItem *> &canInteractWith() { return _canInteractWith; }
 
         private:
             // Fields
@@ -60,6 +68,7 @@ namespace space
             ControllingValue _controlling;
             Inventory _inventory;
             std::vector<PlacedItem *> _canInteractWith;
+            std::vector<Ship *> _shipsInTeleportRange;
 
             // Methods
             void controlShip(sf::Time dt);

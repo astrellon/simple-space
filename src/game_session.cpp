@@ -5,6 +5,7 @@
 #include "game/planet.hpp"
 #include "game/star_system.hpp"
 #include "game/character.hpp"
+#include "game/walkable_area.hpp"
 #include "definitions/ship_definition.hpp"
 #include "definitions/planet_definition.hpp"
 #include "definitions/star_system_definition.hpp"
@@ -81,6 +82,20 @@ namespace space
         }
 
         return area->partOfShip();
+    }
+
+    void GameSession::moveCharacter(Character *character, sf::Vector2f position, WalkableArea *area)
+    {
+        if (character->insideArea() != nullptr)
+        {
+            character->insideArea()->removeCharacter(character);
+        }
+
+        if (area != nullptr)
+        {
+            character->transform().position = position;
+            area->addCharacter(character);
+        }
     }
 
     void GameSession::update(sf::Time dt)

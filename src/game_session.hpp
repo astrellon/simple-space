@@ -21,6 +21,7 @@ namespace space
     class StarSystem;
     class StarSystemDefinition;
     class Item;
+    class WalkableArea;
 
     class GameSession
     {
@@ -68,6 +69,8 @@ namespace space
             bool isControllingCharacter() const { return _playerController.controlling() == ControlCharacter; }
             Ship *getPlayerShip() const { return _playerController.controllingShip(); }
             Ship *getShipPlayerIsInsideOf() const;
+
+            void moveCharacter(Character *character, sf::Vector2f position, WalkableArea *area);
 
             void update(sf::Time dt);
             void draw(sf::RenderTarget &target);

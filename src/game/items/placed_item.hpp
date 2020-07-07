@@ -42,4 +42,18 @@ namespace space
 
             // Methods
     };
+
+    template <typename T>
+    class PlacedItemPair
+    {
+        public:
+            // Fields
+            const PlacedItem *placed;
+            const T *item;
+
+            // Constructor
+            PlacedItemPair<T>(PlacedItem *placed, T *item) : placed(placed), item(item) { }
+
+            // Methods
+    };
 }

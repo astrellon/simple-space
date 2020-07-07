@@ -12,6 +12,10 @@ namespace space
     class GameSession;
     class PolygonCollider;
 
+    template <typename T>
+    class PlacedItemPair;
+    class Teleporter;
+
     class Ship : public SpaceObject
     {
         public:
@@ -34,6 +38,8 @@ namespace space
 
             bool showInternals() const { return _showInternals; }
             void showInternals(bool show) { _showInternals = show; }
+
+            std::vector<PlacedItemPair<Teleporter>> findTeleporters() const;
 
             virtual void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform);
             virtual void draw(GameSession &session, sf::RenderTarget &target);

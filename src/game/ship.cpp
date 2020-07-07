@@ -2,6 +2,10 @@
 
 #include "../utils.hpp"
 #include "../game_session.hpp"
+#include "walkable_area.hpp"
+
+#include "items/placed_item.hpp"
+#include "items/teleporter.hpp"
 
 #include "../physics/polygon_collider.hpp"
 
@@ -29,6 +33,24 @@ namespace space
 
         _walkableArea.partOfShip(this);
         _walkableArea.addStaticCollider(*_collider);
+    }
+
+    std::vector<PlacedItemPair<Teleporter>> Ship::findTeleporters() const
+    {
+        std::vector<PlacedItemPair<Teleporter>> result;
+
+        for (auto &placedItem : _walkableArea.placedItems())
+        {
+            auto teleporter = dynamic_cast<Teleporter *>(placedItem.get()->item);
+            if (teleporter == nullptr)
+            {
+                continue;
+            }
+
+            result.push_back(PlacedItemPair<Teleporter>(placedItem.get(), teleporter));
+        }
+
+        return result;
     }
 
     void Ship::update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform)

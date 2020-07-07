@@ -25,6 +25,7 @@
 #include "src/game/planet.hpp"
 #include "src/game/star_system.hpp"
 #include "src/game/items/chair.hpp"
+#include "src/game/items/teleporter.hpp"
 #include "src/keyboard.hpp"
 #include "src/physics/polygon_collider.hpp"
 
@@ -101,6 +102,11 @@ int main()
     chairDefinition.texturePath = "data/items/chair.png";
     chairDefinition.onPostLoad(engine);
 
+    space::ItemDefinition teleporterDefinition("TELEPORTER_1");
+    teleporterDefinition.name = "Teleporter";
+    teleporterDefinition.texturePath = "data/items/teleporter_still.png";
+    teleporterDefinition.onPostLoad(engine);
+
     auto &player = gameSession->playerController();
     player.controllingCharacter(character);
     player.controllingShip(ship);
@@ -109,8 +115,11 @@ int main()
     auto chair = gameSession->createItem<space::Chair>(0, chairDefinition);
     player.inventory().addItem(chair);
 
-    chair = gameSession->createItem<space::Chair>(1, chairDefinition);
-    player.inventory().addItem(chair);
+    auto teleporter = gameSession->createItem<space::Teleporter>(1, teleporterDefinition);
+    player.inventory().addItem(teleporter);
+
+    teleporter = gameSession->createItem<space::Teleporter>(2, teleporterDefinition);
+    ship2->walkableArea().addPlaceable(teleporter, sf::Vector2f(0, 0));
 
     gameSession->activeStarSystem(starSystem);
 

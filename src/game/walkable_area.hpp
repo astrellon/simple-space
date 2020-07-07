@@ -40,6 +40,7 @@ namespace space
 
             void addPlaceable(PlaceableItem *item, sf::Vector2f position);
             void removePlaceable(ItemId id);
+            const std::vector<std::unique_ptr<PlacedItem>> &placedItems() const { return _placedItems; }
 
             b2World &physicsWorld() { return _physicsWorld; }
 

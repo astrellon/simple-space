@@ -15,9 +15,11 @@
 #include "imgui/imgui-SFML.h"
 #include "game/items/placed_item.hpp"
 #include "game/items/placeable_item.hpp"
+#include "game/ship.hpp"
 
 #include "ui/ui_interactables.hpp"
 #include "ui/ui_inventory.hpp"
+#include "ui/ui_teleporter.hpp"
 
 namespace space
 {
@@ -237,6 +239,7 @@ namespace space
         {
             UIInteractables::draw(*_currentSession);
             UIInventory::draw(_currentSession->playerController());
+            UITeleporter::draw(*_currentSession, _currentSession->playerController().shipsInTeleportRange());
 
             ImGui::SFML::Render(_sceneRenderTarget);
         }

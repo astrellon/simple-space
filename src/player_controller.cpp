@@ -115,6 +115,19 @@ namespace space
         }
     }
 
+    void PlayerController::addShipInTeleportRange(Ship *ship)
+    {
+        _shipsInTeleportRange.push_back(ship);
+    }
+    void PlayerController::removeShipInTeleportRange(Ship *ship)
+    {
+        auto find = std::find(_shipsInTeleportRange.begin(), _shipsInTeleportRange.end(), ship);
+        if (find != _shipsInTeleportRange.end())
+        {
+            _shipsInTeleportRange.erase(find);
+        }
+    }
+
     void PlayerController::dropItem(PlaceableItem *placeableItem)
     {
         _inventory.removeItem(placeableItem);
