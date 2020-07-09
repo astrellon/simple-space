@@ -12,7 +12,7 @@
 namespace space
 {
     Ship::Ship(const ObjectId &id, const ShipDefinition &definition):
-        SpaceObject(id), definition(definition), _sprite(*definition.texture), _interiorSprite(*definition.interiorTexture), _rotationSpeed(0), rotateInput(0), _showInternals(false)
+        SpaceObject(id), definition(definition), _sprite(*definition.texture), _interiorSprite(*definition.interiorTexture), _rotationSpeed(0), rotateInput(0)
     {
 
         auto size = definition.texture->getSize();
@@ -80,7 +80,7 @@ namespace space
     {
         target.draw(_sprite, _worldTransform);
 
-        if (_showInternals)
+        if (session.getShipPlayerIsInsideOf() == this && session.isControllingCharacter())
         {
             target.draw(_interiorSprite, _worldTransform);
             _walkableArea.draw(session, target);

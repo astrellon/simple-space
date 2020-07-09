@@ -25,8 +25,8 @@ namespace space
             obj->update(_session, dt, sf::Transform::Identity);
         }
 
-        auto controllingShip = _session.playerController().controllingShip();
-        if (controllingShip != nullptr && controllingShip->starSystem() == this)
+        auto ship = _session.getShipPlayerIsInsideOf();
+        if (ship != nullptr && ship->starSystem() == this)
         {
             checkForTeleportableShips();
         }
@@ -36,11 +36,6 @@ namespace space
     {
         auto showInternals = _session.isControllingCharacter();
         auto insideOfShip = _session.getShipPlayerIsInsideOf();
-
-        if (insideOfShip != nullptr)
-        {
-            insideOfShip->showInternals(showInternals);
-        }
 
         for (auto obj : _objects)
         {
@@ -133,11 +128,18 @@ namespace space
     void StarSystem::checkForTeleportableShips()
     {
         auto &player = _session.playerController();
+        auto shipInsideOf = _session.getShipPlayerIsInsideOf();
 
         // Check existing items
         auto playerPos = player.controllingShip()->transform().position;
         for (auto ship : player.shipsInTeleportRange())
         {
+            if (ship == shipInsideOf)
+            {
+                player.removeShipInTeleportRange(ship);
+                continue;
+            }
+
             auto dpos = ship->transform().position - playerPos;
             auto distance = dpos.x * dpos.x + dpos.y * dpos.y;
             if (distance - (100.0f * 100.0f) > 0.0f)
@@ -149,7 +151,7 @@ namespace space
         for (auto obj : _objects)
         {
             auto ship = dynamic_cast<Ship *>(obj);
-            if (ship == nullptr || ship == player.controllingShip() || player.shipInTeleportRange(ship))
+            if (ship == nullptr || ship == shipInsideOf || player.shipInTeleportRange(ship))
             {
                 continue;
             }

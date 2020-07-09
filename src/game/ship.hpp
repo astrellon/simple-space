@@ -36,9 +36,6 @@ namespace space
             WalkableArea &walkableArea() { return _walkableArea; }
             const WalkableArea &walkableArea() const { return _walkableArea; }
 
-            bool showInternals() const { return _showInternals; }
-            void showInternals(bool show) { _showInternals = show; }
-
             std::vector<PlacedItemPair<Teleporter>> findTeleporters() const;
 
             virtual void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform);
@@ -48,7 +45,6 @@ namespace space
             // Fields
             WalkableArea _walkableArea;
             std::unique_ptr<PolygonCollider> _collider;
-            bool _showInternals;
 
             // Location
             sf::Sprite _sprite;

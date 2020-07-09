@@ -58,7 +58,12 @@ namespace space
 
             bool tryGetSpaceObject(const ObjectId &id, SpaceObject **result);
 
-            void activeStarSystem(StarSystem *activeStarSystem) { _activeStarSystem = activeStarSystem; }
+            void activeStarSystem(StarSystem *activeStarSystem)
+            {
+                _activeStarSystem = activeStarSystem;
+                _playerController.clearCanInteractWith();
+                _playerController.clearShipsInTeleportRange();
+            }
             StarSystem *activeStarSystem() const { return _activeStarSystem; }
 
             PlayerController &playerController() { return _playerController; }
