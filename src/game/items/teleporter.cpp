@@ -13,5 +13,14 @@ namespace space
             std::cout << "Using teleporter outside of ship" << std::endl;
             return;
         }
+
+        session.showTeleporters = true;
+    }
+
+    void Teleporter::onPlayerLeaves(GameSession &session)
+    {
+        PlaceableItem::onPlayerLeaves(session);
+
+        session.showTeleporters = false;
     }
 } // namespace space

@@ -12,11 +12,15 @@
 #include "utils.hpp"
 #include "keyboard.hpp"
 
+#include "ui/ui_interactables.hpp"
+#include "ui/ui_inventory.hpp"
+#include "ui/ui_teleporter.hpp"
+
 #include <tmxlite/Map.hpp>
 
 namespace space
 {
-    GameSession::GameSession(Engine &engine) : _engine(engine), _activeStarSystem(nullptr)
+    GameSession::GameSession(Engine &engine) : _engine(engine), _activeStarSystem(nullptr), showTeleporters(false)
     {
 
     }
@@ -141,6 +145,20 @@ namespace space
         if (_activeStarSystem)
         {
             _activeStarSystem->draw(target);
+        }
+    }
+
+    void GameSession::drawUI(sf::RenderTarget &target)
+    {
+        if (_playerController.controlling() != ControlShip)
+        {
+            UIInteractables::draw(*this);
+            UIInventory::draw(_playerController);
+        }
+
+        if (showTeleporters)
+        {
+            UITeleporter::draw(*this, _playerController.shipsInTeleportRange());
         }
     }
 } // namespace town

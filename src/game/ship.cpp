@@ -62,6 +62,15 @@ namespace space
         _transform.position += _speed * seconds;
         _transform.rotation += _rotationSpeed * seconds;
 
+        if (moveInput == sf::Vector2f())
+        {
+            _speed *= 0.98f;
+        }
+        if (rotateInput == 0.0f)
+        {
+            _rotationSpeed *= 0.98f;
+        }
+
         updateWorldTransform(parentTransform);
 
         _walkableArea.update(session, dt, _worldTransform);

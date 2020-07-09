@@ -55,6 +55,6 @@ namespace space
             b2World _physicsWorld;
 
             // Methods
-            void checkForInteractables(GameSession &session);
+            void checkForInteractables();
     };
 } // space

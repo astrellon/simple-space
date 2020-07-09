@@ -51,7 +51,7 @@ namespace space
         auto controllingCharacter = session.playerController().controllingCharacter();
         if (controllingCharacter != nullptr && controllingCharacter->insideArea() == this)
         {
-            checkForInteractables(session);
+            checkForInteractables();
         }
     }
 
@@ -123,6 +123,10 @@ namespace space
                 if (_session != nullptr)
                 {
                     _session->playerController().removeCanInteractWith(iter->get());
+                    if (iter->get()->item->isPlayerInRange())
+                    {
+                        iter->get()->item->onPlayerLeaves(*_session);
+                    }
                 }
                 iter->get()->removePhysics(_physicsWorld);
                 _placedItems.erase(iter);
@@ -133,9 +137,9 @@ namespace space
         std::cout << "Unable to find placeable item to remove it from walkable area: " << id << std::endl;
     }
 
-    void WalkableArea::checkForInteractables(GameSession &session)
+    void WalkableArea::checkForInteractables()
     {
-        auto &player = session.playerController();
+        auto &player = _session->playerController();
 
         // Check existing items
         auto playerPos = player.controllingCharacter()->transform().position;
@@ -146,6 +150,10 @@ namespace space
             if (distance - item->interactRadiusSquared() > 0.0f)
             {
                 player.removeCanInteractWith(item);
+                if (item->item->isPlayerInRange())
+                {
+                    item->item->onPlayerLeaves(*_session);
+                }
             }
         }
 
@@ -160,7 +168,13 @@ namespace space
             auto distance = dpos.x * dpos.x + dpos.y * dpos.y;
             if (distance - iter->interactRadiusSquared() < 0.0f)
             {
-                player.addCanInteractWith(iter.get());
+                if (player.addCanInteractWith(iter.get()))
+                {
+                    if (!iter->item->isPlayerInRange())
+                    {
+                        iter->item->onPlayerEnters(*_session);
+                    }
+                }
             }
         }
     }

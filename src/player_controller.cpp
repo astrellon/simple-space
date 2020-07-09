@@ -102,17 +102,27 @@ namespace space
         _character->rotateInput = rotateInput;
     }
 
-    void PlayerController::addCanInteractWith(PlacedItem *item)
+    bool PlayerController::addCanInteractWith(PlacedItem *item)
     {
-        _canInteractWith.push_back(item);
+        auto find = std::find(_canInteractWith.begin(), _canInteractWith.end(), item);
+        if (find == _canInteractWith.end())
+        {
+            _canInteractWith.push_back(item);
+            return true;
+        }
+
+        return false;
     }
-    void PlayerController::removeCanInteractWith(PlacedItem *item)
+    bool PlayerController::removeCanInteractWith(PlacedItem *item)
     {
         auto find = std::find(_canInteractWith.begin(), _canInteractWith.end(), item);
         if (find != _canInteractWith.end())
         {
             _canInteractWith.erase(find);
+            return true;
         }
+
+        return false;
     }
 
     void PlayerController::addShipInTeleportRange(Ship *ship)

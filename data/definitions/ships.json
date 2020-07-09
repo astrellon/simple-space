@@ -14,12 +14,13 @@
     {
         "type": "ship",
         "id": "SHIP_2",
-        "maxRotation": 5.0,
-        "maxSpeed": 5.0,
-        "turnRate": 5.0,
-        "acceleration": 5.0,
-        "name": "Ship Def 2",
+        "maxRotation": 4.0,
+        "maxSpeed": 4.0,
+        "turnRate": 75.0,
+        "acceleration": 75.0,
+        "name": "Ship 2",
         "texturePath": "data/textures/ships/ship1.png",
-        "interiorTexturePath": "data/textures/ships/ship1Interior3.png"
+        "interiorTexturePath": "data/textures/ships/ship1Interior3.png",
+        "interiorTextureOffset": [0, -8]
     }
 ]

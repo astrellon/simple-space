@@ -39,8 +39,8 @@ namespace space
             void controllingCharacter(Character *character) { _character = character; }
             Character *controllingCharacter() const { return _character; }
 
-            void addCanInteractWith(PlacedItem *item);
-            void removeCanInteractWith(PlacedItem *item);
+            bool addCanInteractWith(PlacedItem *item);
+            bool removeCanInteractWith(PlacedItem *item);
             bool canInteractWith(PlacedItem *item) const
             {
                 auto find = std::find(_canInteractWith.begin(), _canInteractWith.end(), item);

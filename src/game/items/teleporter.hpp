@@ -17,6 +17,7 @@ namespace space
 
             // Methods
             virtual void execute(GameSession &session, const sf::Vector2f &position, WalkableArea &parentArea);
+            virtual void onPlayerLeaves(GameSession &session);
 
             const std::string &name() const { return _name; }
             void name(const std::string &name) { _name = name; }

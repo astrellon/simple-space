@@ -26,6 +26,9 @@ namespace space
     class GameSession
     {
         public:
+            // Fields
+            bool showTeleporters;
+
             // Constructor
             GameSession(Engine &engine);
             ~GameSession();
@@ -74,6 +77,7 @@ namespace space
 
             void update(sf::Time dt);
             void draw(sf::RenderTarget &target);
+            void drawUI(sf::RenderTarget &target);
 
         private:
             Engine &_engine;
