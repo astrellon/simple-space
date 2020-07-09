@@ -142,7 +142,7 @@ namespace space
 
             auto dpos = ship->transform().position - playerPos;
             auto distance = dpos.x * dpos.x + dpos.y * dpos.y;
-            if (distance - (100.0f * 100.0f) > 0.0f)
+            if (distance - (150.0f * 150.0f) > 0.0f)
             {
                 player.removeShipInTeleportRange(ship);
             }
@@ -158,7 +158,7 @@ namespace space
 
             auto dpos = ship->transform().position - playerPos;
             auto distance = dpos.x * dpos.x + dpos.y * dpos.y;
-            if (distance - (100.0f * 100.0f) < 0.0f)
+            if (distance - (150.0f * 150.0f) < 0.0f)
             {
                 player.addShipInTeleportRange(ship);
             }

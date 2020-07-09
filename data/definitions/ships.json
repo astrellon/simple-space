@@ -2,11 +2,11 @@
     {
         "type": "ship",
         "id": "SHIP_1",
-        "maxRotation": 5.0,
+        "maxRotation": 8.0,
         "maxSpeed": 5.0,
-        "turnRate": 100.0,
+        "turnRate": 150.0,
         "acceleration": 100.0,
-        "name": "Ship Def",
+        "name": "Player Ship",
         "texturePath": "data/textures/ships/ship1.png",
         "interiorTexturePath": "data/textures/ships/ship1Interior3.png",
         "interiorTextureOffset": [0, -8]
@@ -18,7 +18,7 @@
         "maxSpeed": 4.0,
         "turnRate": 75.0,
         "acceleration": 75.0,
-        "name": "Ship 2",
+        "name": "Other Ship",
         "texturePath": "data/textures/ships/ship1.png",
         "interiorTexturePath": "data/textures/ships/ship1Interior3.png",
         "interiorTextureOffset": [0, -8]

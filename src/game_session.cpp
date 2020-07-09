@@ -65,7 +65,9 @@ namespace space
     {
         auto scale = 1.0f / Utils::getInsideScale();
         _engine.spriteScale(scale);
-        _engine.camera().followingRotationId(_playerController.controllingShip()->id);
+
+        auto shipInside = getShipPlayerIsInsideOf();
+        _engine.camera().followingRotationId(shipInside->id);
         _engine.camera().followingId(_playerController.controllingCharacter()->id);
         _engine.camera().scale(scale);
         _playerController.controlling(ControlCharacter);
@@ -95,15 +97,20 @@ namespace space
             character->insideArea()->removeCharacter(character);
         }
 
-        if (character == _playerController.controllingCharacter())
-        {
-            _playerController.clearCanInteractWith();
-        }
-
         if (area != nullptr)
         {
             character->transform().position = position;
             area->addCharacter(character);
+        }
+
+        if (character == _playerController.controllingCharacter())
+        {
+            _playerController.clearCanInteractWith();
+            if (_playerController.controlling() == ControlCharacter)
+            {
+                auto shipInside = getShipPlayerIsInsideOf();
+                _engine.camera().followingRotationId(shipInside->id);
+            }
         }
     }
 
