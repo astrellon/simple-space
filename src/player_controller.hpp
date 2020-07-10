@@ -39,6 +39,22 @@ namespace space
             void controllingCharacter(Character *character) { _character = character; }
             Character *controllingCharacter() const { return _character; }
 
+            void interactRangeObjects(float distance)
+            {
+                _interactRangeObjects = distance;
+                _interactRangeObjectsSquared = distance * distance;
+            }
+            float interactRangeObjects() const { return _interactRangeObjects; }
+            float interactRangeObjectsSquared() const { return _interactRangeObjectsSquared; }
+
+            void interactRangeShips(float distance)
+            {
+                _interactRangeShips = distance;
+                _interactRangeShipsSquared = distance * distance;
+            }
+            float interactRangeShips() const { return _interactRangeShips; }
+            float interactRangeShipsSquared() const { return _interactRangeShipsSquared; }
+
             bool addCanInteractWith(PlacedItem *item);
             bool removeCanInteractWith(PlacedItem *item);
             bool canInteractWith(PlacedItem *item) const
@@ -71,6 +87,11 @@ namespace space
             Inventory _inventory;
             std::vector<PlacedItem *> _canInteractWith;
             std::vector<Ship *> _shipsInTeleportRange;
+
+            float _interactRangeObjects;
+            float _interactRangeObjectsSquared;
+            float _interactRangeShips;
+            float _interactRangeShipsSquared;
 
             // Methods
             void controlShip(sf::Time dt);

@@ -29,8 +29,6 @@ namespace space
             void addPhysics(b2World &world);
             void removePhysics(b2World &world);
 
-            float interactRadiusSquared() const { return _interactRadiusSquared; }
-
             virtual void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform);
             virtual void draw(GameSession &session, sf::RenderTarget &target);
 
@@ -38,7 +36,6 @@ namespace space
             // Fields
             sf::Sprite _sprite;
             b2Body *_triggerSensor;
-            float _interactRadiusSquared;
 
             // Methods
     };

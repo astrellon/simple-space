@@ -9,9 +9,12 @@
 
 namespace space
 {
-    PlayerController::PlayerController() : _controlling(ControlNone), _inventory()
+    PlayerController::PlayerController() : _controlling(ControlNone), _inventory(),
+    _interactRangeObjects(0), _interactRangeObjectsSquared(0),
+    _interactRangeShips(0), _interactRangeShipsSquared(0)
     {
-
+        interactRangeObjects(10.0f);
+        interactRangeShips(150.0f);
     }
 
     void PlayerController::update(sf::Time dt)

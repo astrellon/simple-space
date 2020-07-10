@@ -147,7 +147,7 @@ namespace space
         {
             auto dpos = item->transform().position - playerPos;
             auto distance = dpos.x * dpos.x + dpos.y * dpos.y;
-            if (distance - item->interactRadiusSquared() > 0.0f)
+            if (distance - player.interactRangeObjectsSquared() > 0.0f)
             {
                 player.removeCanInteractWith(item);
                 if (item->item->isPlayerInRange())
@@ -166,7 +166,7 @@ namespace space
 
             auto dpos = iter->transform().position - playerPos;
             auto distance = dpos.x * dpos.x + dpos.y * dpos.y;
-            if (distance - iter->interactRadiusSquared() < 0.0f)
+            if (distance - player.interactRangeObjectsSquared() < 0.0f)
             {
                 if (player.addCanInteractWith(iter.get()))
                 {
