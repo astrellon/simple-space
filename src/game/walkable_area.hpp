@@ -15,6 +15,7 @@ namespace space
     class GameSession;
     class Ship;
     class PolygonCollider;
+    class PlanetSurface;
 
     class WalkableArea
     {
@@ -31,6 +32,9 @@ namespace space
 
             void partOfShip(Ship *ship) { _partOfShip = ship; }
             Ship *partOfShip() const { return _partOfShip; }
+
+            void partOfPlanet(PlanetSurface *planetSurface) { _partOfPlanet = planetSurface; }
+            PlanetSurface *partOfPlanet() const { return _partOfPlanet; }
 
             void addStaticCollider(PolygonCollider &collider);
             void removeStaticCollider(PolygonCollider &collider);
@@ -50,6 +54,7 @@ namespace space
             std::vector<std::unique_ptr<PlacedItem>> _placedItems;
             sf::Transform _worldTransform;
             Ship *_partOfShip;
+            PlanetSurface *_partOfPlanet;
             GameSession *_session;
 
             b2World _physicsWorld;

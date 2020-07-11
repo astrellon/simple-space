@@ -5,6 +5,14 @@
 
 #include "utils.hpp"
 
+#include "../../definitions/base_definition.hpp"
+#include "../../definitions/ship_definition.hpp"
+#include "../../definitions/character_definition.hpp"
+#include "../../definitions/celestial_body_definition.hpp"
+#include "../../definitions/planet_definition.hpp"
+#include "../../definitions/star_system_definition.hpp"
+#include "../../definitions/planet_surface_definition.hpp"
+
 using nlohmann::json;
 
 namespace space
@@ -32,6 +40,10 @@ namespace space
         else if (type == StarSystemDefinition::DefinitionType())
         {
             j = toJson(dynamic_cast<const StarSystemDefinition &>(input));
+        }
+        else if (type == PlanetSurfaceDefinition::DefinitionType())
+        {
+            j = toJson(dynamic_cast<const PlanetSurfaceDefinition &>(input));
         }
         else
         {
@@ -62,6 +74,10 @@ namespace space
         else if (type == StarSystemDefinition::DefinitionType())
         {
             return fromJsonStarSystemDefinition(j);
+        }
+        else if (type == PlanetSurfaceDefinition::DefinitionType())
+        {
+            return fromJsonPlanetSurfaceDefinition(j);
         }
 
         throw std::runtime_error("Oh no");
@@ -245,6 +261,25 @@ namespace space
         j.at("name").get_to(result->name);
 
         result->rootBody = fromJsonCelestialBodyDefinition(j.at("rootBody"));
+
+        return result;
+    }
+
+    json toJson(const PlanetSurfaceDefinition &input)
+    {
+        return json {
+            {"id", input.id},
+            {"name", input.name},
+            {"tmxMapPath", input.tmxMapPath}
+        };
+    }
+
+    std::unique_ptr<PlanetSurfaceDefinition> fromJsonPlanetSurfaceDefinition(const json &j)
+    {
+        auto id = j.at("id").get<std::string>();
+        auto result = std::make_unique<PlanetSurfaceDefinition>(id);
+        j.at("name").get_to(result->name);
+        j.at("tmxMapPath").get_to(result->tmxMapPath);
 
         return result;
     }

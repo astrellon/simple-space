@@ -1,19 +1,22 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
-
-#include "../../definitions/base_definition.hpp"
-#include "../../definitions/ship_definition.hpp"
-#include "../../definitions/character_definition.hpp"
-#include "../../definitions/celestial_body_definition.hpp"
-#include "../../definitions/planet_definition.hpp"
-#include "../../definitions/star_system_definition.hpp"
 #include "json.hpp"
 
 using nlohmann::json;
 
 namespace space
 {
+    class BaseDefinition;
+    class ShipDefinition;
+    class CharacterDefinition;
+    class CelestialBodyDefinition;
+    class OrbitPointCelestialDefinition;
+    class PlanetDefinition;
+    class StarSystemDefinition;
+    class PlanetSurfaceDefinition;
+    class CelestialBodyLocation;
+
     json toJson(const BaseDefinition &input);
     std::unique_ptr<BaseDefinition> fromJsonBaseDefinition(const json &j);
 
@@ -33,6 +36,9 @@ namespace space
 
     json toJson(const StarSystemDefinition &input);
     std::unique_ptr<StarSystemDefinition> fromJsonStarSystemDefinition(const json &j);
+
+    json toJson(const PlanetSurfaceDefinition &input);
+    std::unique_ptr<PlanetSurfaceDefinition> fromJsonPlanetSurfaceDefinition(const json &j);
 
     json toJson(const CelestialBodyLocation &input);
     CelestialBodyLocation fromJsonCelestialBodyLocation(const json &j);

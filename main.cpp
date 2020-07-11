@@ -16,6 +16,7 @@
 #include "src/definitions/ship_definition.hpp"
 #include "src/definitions/character_definition.hpp"
 #include "src/definitions/star_system_definition.hpp"
+#include "src/definitions/planet_surface_definition.hpp"
 #include "src/definitions/item_definition.hpp"
 #include "src/serialisers/json/json_serialisers.hpp"
 #include "src/serialisers/json/json.hpp"
@@ -24,6 +25,7 @@
 #include "src/game/character.hpp"
 #include "src/game/planet.hpp"
 #include "src/game/star_system.hpp"
+#include "src/game/planet_surface.hpp"
 #include "src/game/items/chair.hpp"
 #include "src/game/items/teleporter.hpp"
 #include "src/keyboard.hpp"
@@ -79,7 +81,12 @@ int main()
     const space::CharacterDefinition *playerCharDef;
     definitionManager.tryGet("PLAYER_CHAR", &playerCharDef);
 
+    const space::PlanetSurfaceDefinition *planetSurfaceDef;
+    definitionManager.tryGet("PLANET_GRASSY_1", &planetSurfaceDef);
+
     auto gameSession = engine.startGameSession();
+
+    auto planetSurface = gameSession->createPlanetSurface(*planetSurfaceDef);
 
     auto ship = gameSession->createObject<space::Ship>("PLAYER", *shipDef);
     auto ship2 = gameSession->createObject<space::Ship>("OTHER", *shipDef2);
@@ -95,7 +102,9 @@ int main()
 
     auto character = gameSession->createObject<space::Character>("PLAYER_CHAR", *playerCharDef);
 
-    ship->walkableArea().addCharacter(character);
+    planetSurface->walkableArea().addCharacter(character);
+
+    //ship->walkableArea().addCharacter(character);
 
     space::ItemDefinition chairDefinition("CHAIR_1");
     chairDefinition.name = "Chair";
@@ -109,8 +118,8 @@ int main()
 
     auto &player = gameSession->playerController();
     player.controllingCharacter(character);
-    player.controllingShip(ship);
-    player.controlling(space::ControlShip);
+    //player.controllingShip(ship);
+    player.controlling(space::ControlCharacter);
 
     auto chair = gameSession->createItem<space::Chair>(0, chairDefinition);
     player.inventory().addItem(chair);
@@ -121,9 +130,11 @@ int main()
     teleporter = gameSession->createItem<space::Teleporter>(2, teleporterDefinition);
     ship2->walkableArea().addPlaceable(teleporter, sf::Vector2f(0, 0));
 
-    gameSession->activeStarSystem(starSystem);
+    //gameSession->activeStarSystem(starSystem);
+    gameSession->activePlanetSurface(planetSurface);
 
-    engine.camera().followingId(character->id);
+    //engine.camera().followingId(character->id);
+    gameSession->setPlayerControllingCharacter();
 
     while (window.isOpen())
     {

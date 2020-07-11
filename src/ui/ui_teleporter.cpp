@@ -36,11 +36,17 @@ namespace space
 
                 if (ImGui::Button(label.c_str()))
                 {
-                    std::cout << "Teleport to: " << teleporter.item->name() << " @ " << teleporter.placed->area.partOfShip()->definition.name << std::endl;
+                    auto &area = teleporter.placed->area;
+                    if (area.partOfShip() == nullptr)
+                    {
+                        std::cout << "Teleport target not on ship!" << std::endl;
+                    }
+                    else
+                    {
+                        std::cout << "Teleport to: " << teleporter.item->name() << " @ " << area.partOfShip()->definition.name << std::endl;
 
-                    session.moveCharacter(session.playerController().controllingCharacter(), teleporter.placed->transform().position, &teleporter.placed->area);
-
-                    //player.dropItem(placeableItem);
+                        session.moveCharacter(session.playerController().controllingCharacter(), teleporter.placed->transform().position, &teleporter.placed->area);
+                    }
                 }
             }
         }

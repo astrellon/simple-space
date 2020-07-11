@@ -4,11 +4,13 @@
 #include "game/ship.hpp"
 #include "game/planet.hpp"
 #include "game/star_system.hpp"
+#include "game/planet_surface.hpp"
 #include "game/character.hpp"
 #include "game/walkable_area.hpp"
 #include "definitions/ship_definition.hpp"
 #include "definitions/planet_definition.hpp"
 #include "definitions/star_system_definition.hpp"
+#include "definitions/planet_surface_definition.hpp"
 #include "utils.hpp"
 #include "keyboard.hpp"
 
@@ -34,6 +36,14 @@ namespace space
         auto starSystem = std::make_unique<StarSystem>(*this, definition);
         auto result = starSystem.get();
         _starSystems.emplace_back(std::move(starSystem));
+
+        return result;
+    }
+    PlanetSurface *GameSession::createPlanetSurface(const PlanetSurfaceDefinition &definition)
+    {
+        auto planetSurface = std::make_unique<PlanetSurface>(*this, definition);
+        auto result = planetSurface.get();
+        _planetSurfaces.emplace_back(std::move(planetSurface));
 
         return result;
     }
@@ -66,10 +76,15 @@ namespace space
         auto scale = 1.0f / Utils::getInsideScale();
         _engine.spriteScale(scale);
 
+        auto &camera = _engine.camera();
+
         auto shipInside = getShipPlayerIsInsideOf();
-        _engine.camera().followingRotationId(shipInside->id);
-        _engine.camera().followingId(_playerController.controllingCharacter()->id);
-        _engine.camera().scale(scale);
+        if (shipInside)
+        {
+            camera.followingRotationId(shipInside->id);
+        }
+        camera.followingId(_playerController.controllingCharacter()->id);
+        camera.scale(scale);
         _playerController.controlling(ControlCharacter);
     }
 
@@ -143,6 +158,10 @@ namespace space
         {
             _activeStarSystem->update(dt);
         }
+        if (_activePlanetSurface)
+        {
+            _activePlanetSurface->update(dt);
+        }
     }
 
     void GameSession::draw(sf::RenderTarget &target)
@@ -157,6 +176,10 @@ namespace space
         if (_activeStarSystem)
         {
             _activeStarSystem->draw(target);
+        }
+        if (_activePlanetSurface)
+        {
+            _activePlanetSurface->draw(target);
         }
     }
 

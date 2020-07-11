@@ -20,6 +20,8 @@ namespace space
     class Engine;
     class StarSystem;
     class StarSystemDefinition;
+    class PlanetSurface;
+    class PlanetSurfaceDefinition;
     class Item;
     class WalkableArea;
 
@@ -35,6 +37,7 @@ namespace space
 
             // Methods
             StarSystem *createStarSystem(const StarSystemDefinition &definition);
+            PlanetSurface *createPlanetSurface(const PlanetSurfaceDefinition &definition);
 
             template <typename T, typename... TArgs>
             auto createObject(TArgs &&... args)
@@ -58,13 +61,23 @@ namespace space
 
             bool tryGetSpaceObject(const ObjectId &id, SpaceObject **result);
 
-            void activeStarSystem(StarSystem *activeStarSystem)
+            void activeStarSystem(StarSystem *starSystem)
             {
-                _activeStarSystem = activeStarSystem;
+                _activeStarSystem = starSystem;
+                _activePlanetSurface = nullptr;
                 _playerController.clearCanInteractWith();
                 _playerController.clearShipsInTeleportRange();
             }
             StarSystem *activeStarSystem() const { return _activeStarSystem; }
+
+            void activePlanetSurface(PlanetSurface *planetSurface)
+            {
+                _activePlanetSurface = planetSurface;
+                _activeStarSystem = nullptr;
+                _playerController.clearCanInteractWith();
+                _playerController.clearShipsInTeleportRange();
+            }
+            PlanetSurface *activePlanetSurface() const { return _activePlanetSurface; }
 
             PlayerController &playerController() { return _playerController; }
 
@@ -89,10 +102,12 @@ namespace space
 
             std::vector<std::unique_ptr<SpaceObject>> _spaceObjects;
             std::vector<std::unique_ptr<StarSystem>> _starSystems;
+            std::vector<std::unique_ptr<PlanetSurface>> _planetSurfaces;
             std::vector<std::unique_ptr<Item>> _items;
             std::unique_ptr<MapLayer> _mapLayer;
 
             StarSystem *_activeStarSystem;
+            PlanetSurface *_activePlanetSurface;
             PlayerController _playerController;
 
     };

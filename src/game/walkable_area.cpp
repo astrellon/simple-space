@@ -9,7 +9,7 @@
 
 namespace space
 {
-    WalkableArea::WalkableArea() : _physicsWorld(b2Vec2(0, 0)), _partOfShip(nullptr)
+    WalkableArea::WalkableArea() : _physicsWorld(b2Vec2(0, 0)), _partOfShip(nullptr), _partOfPlanet(nullptr)
     {
 
     }
