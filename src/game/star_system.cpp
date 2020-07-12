@@ -20,6 +20,8 @@ namespace space
 
     void StarSystem::update(sf::Time dt)
     {
+        _background->update(dt);
+
         for (auto obj : _objects)
         {
             obj->update(_session, dt, sf::Transform::Identity);
@@ -37,8 +39,11 @@ namespace space
         auto showInternals = _session.isControllingCharacter();
         auto insideOfShip = _session.getShipPlayerIsInsideOf();
 
+        _background->draw(target);
+
         for (auto obj : _objects)
         {
+            // Ignore rendering current inside ship here
             if (showInternals && dynamic_cast<Ship *>(obj) == insideOfShip)
             {
                 continue;
@@ -56,6 +61,7 @@ namespace space
     void StarSystem::initFromDefinition()
     {
         createCelestialBody(definition.rootBody.get());
+        _background = std::make_unique<StarBackground>(_session.engine(), definition.starBackgroundOptions);
     }
 
     void StarSystem::addObject(SpaceObject *object)

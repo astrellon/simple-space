@@ -16,6 +16,7 @@ namespace space
     class StarSystemDefinition;
     class PlanetSurfaceDefinition;
     class CelestialBodyLocation;
+    class StarBackgroundOptions;
 
     json toJson(const BaseDefinition &input);
     std::unique_ptr<BaseDefinition> fromJsonBaseDefinition(const json &j);
@@ -42,5 +43,10 @@ namespace space
 
     json toJson(const CelestialBodyLocation &input);
     CelestialBodyLocation fromJsonCelestialBodyLocation(const json &j);
+
+    json toJson(const StarBackgroundOptions &input);
+    StarBackgroundOptions fromJsonStarBackgroundOptions(const json &j);
+
+
 
 } // namespace space

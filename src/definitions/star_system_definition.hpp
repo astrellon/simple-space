@@ -5,6 +5,7 @@
 
 #include "base_definition.hpp"
 #include "celestial_body_definition.hpp"
+#include "star_background_options.hpp"
 
 namespace space
 {
@@ -15,6 +16,7 @@ namespace space
         public:
             // Fields
             std::string name;
+            StarBackgroundOptions starBackgroundOptions;
 
             std::unique_ptr<CelestialBodyDefinition> rootBody;
 

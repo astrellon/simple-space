@@ -5,11 +5,13 @@
 #include <SFML/Graphics.hpp>
 
 #include "layer_camera.hpp"
+#include "definitions/star_background_options.hpp"
 
 namespace space
 {
     class Engine;
     class StarBackgroundChunk;
+    class StarBackgroundLayer;
 
     class StarBackground
     {
@@ -17,29 +19,53 @@ namespace space
             // Fields
 
             // Constructor
-            StarBackground(Engine &engine, sf::Shader *shader, float area, int numParticles, float distanceScale);
+            StarBackground(Engine &engine, const StarBackgroundOptions &options);
 
             // Methods
-            void onResize(sf::Vector2f size);
+            void update(sf::Time dt);
+            void draw(sf::RenderTarget &target);
 
+            float area() const { return _options.area; }
+            int numParticles() const { return _options.numParticles; }
+            int numLayers() const { return _options.numLayers; }
+            sf::Color backgroundColour() const { return _options.backgroundColour; }
+            sf::Shader *shader() const { return _options.shader; }
+            Engine &engine() const { return _engine; }
+
+        private:
+            // Fields
+            Engine &_engine;
+            const StarBackgroundOptions &_options;
+            std::vector<std::unique_ptr<StarBackgroundLayer>> _layers;
+
+            // Methods
+    };
+
+    class StarBackgroundLayer
+    {
+        public:
+            // Fields
+
+            // Constructor
+            StarBackgroundLayer(StarBackground &parent, float distanceScale);
+
+            // Methods
             void update(sf::Time dt);
             void draw(sf::RenderTarget &target);
 
             void cameraCenter(sf::Vector2f center);
             LayerCamera &camera() { return _camera; }
 
-            float area() const { return _area; }
+            float area() const { return _parent.area(); }
+            int numParticles() const { return _parent.numParticles(); }
+
             float distanceScale() const { return _distanceScale; }
-            int numParticles() const { return _numParticles; }
 
         private:
             // Fields
-            Engine &_engine;
+            StarBackground &_parent;
             LayerCamera _camera;
-            sf::Shader *_shader;
-            float _area;
             float _distanceScale;
-            float _numParticles;
             std::vector<std::unique_ptr<StarBackgroundChunk>> _chunks;
 
             // Methods
@@ -52,7 +78,7 @@ namespace space
             // Fields
 
             // Constructor
-            StarBackgroundChunk(StarBackground &parent);
+            StarBackgroundChunk(StarBackgroundLayer &parent);
 
             // Methods
             void position(sf::Vector2i position);
@@ -65,7 +91,7 @@ namespace space
 
         private:
             // Fields
-            StarBackground &_parent;
+            StarBackgroundLayer &_parent;
             sf::VertexArray _vertices;
             sf::Vector2i _position;
             bool _active;

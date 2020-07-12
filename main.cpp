@@ -59,7 +59,7 @@ int main()
     resourceManager.preloadFonts("data/fonts");
     resourceManager.preloadMaps("data/maps");
 
-    engine.initBackground();
+    engine.initEffects();
 
     auto &definitionManager = engine.definitionManager();
     definitionManager.loadFolder("data/definitions");
@@ -102,9 +102,9 @@ int main()
 
     auto character = gameSession->createObject<space::Character>("PLAYER_CHAR", *playerCharDef);
 
-    planetSurface->walkableArea().addCharacter(character);
+    // planetSurface->walkableArea().addCharacter(character);
 
-    //ship->walkableArea().addCharacter(character);
+    ship->walkableArea().addCharacter(character);
 
     space::ItemDefinition chairDefinition("CHAIR_1");
     chairDefinition.name = "Chair";
@@ -118,8 +118,8 @@ int main()
 
     auto &player = gameSession->playerController();
     player.controllingCharacter(character);
-    //player.controllingShip(ship);
-    player.controlling(space::ControlCharacter);
+    player.controllingShip(ship);
+    player.controlling(space::ControlShip);
 
     auto chair = gameSession->createItem<space::Chair>(0, chairDefinition);
     player.inventory().addItem(chair);
@@ -130,11 +130,12 @@ int main()
     teleporter = gameSession->createItem<space::Teleporter>(2, teleporterDefinition);
     ship2->walkableArea().addPlaceable(teleporter, sf::Vector2f(0, 0));
 
-    //gameSession->activeStarSystem(starSystem);
-    gameSession->activePlanetSurface(planetSurface);
+    gameSession->activeStarSystem(starSystem);
+    // gameSession->activePlanetSurface(planetSurface);
 
     //engine.camera().followingId(character->id);
-    gameSession->setPlayerControllingCharacter();
+    // gameSession->setPlayerControllingCharacter();
+    gameSession->setPlayerControllingShip(ship);
 
     while (window.isOpen())
     {

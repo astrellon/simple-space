@@ -85,21 +85,8 @@ namespace space
         return _currentSession.get();
     }
 
-    void Engine::initBackground()
+    void Engine::initEffects()
     {
-        sf::Shader *starShader;
-        if (_resourceManager->shader("stars", &starShader))
-        {
-            for (auto i = 0; i < 7; i++)
-            {
-                _backgrounds.emplace_back(std::make_unique<StarBackground>(*this, starShader, 800, 200, 0.9f - (7 - i) * 0.1f));
-            }
-        }
-        else
-        {
-            std::cout << "Unable to load shader for stars" << std::endl;
-        }
-
         _bloomEffect.init(*_resourceManager.get());
         _bloomEffect2.init(*_resourceManager.get());
 
@@ -202,26 +189,11 @@ namespace space
         }
 
         _camera.update(_deltaTime);
-
-        for (auto &b : _backgrounds)
-        {
-            b->update(_deltaTime);
-        }
-
-        //std::cout << "FPS: " << 1.0f / _deltaTime.asSeconds() << std::endl;
     }
 
     void Engine::draw()
     {
         _sceneRenderTarget.setActive(true);
-
-        // Draw background
-        _sceneRenderTarget.clear(sf::Color(20, 24, 46));
-        for (auto &b : _backgrounds)
-        {
-            _sceneRenderTarget.setView(b->camera().view());
-            b->draw(_sceneRenderTarget);
-        }
 
         // Draw main scene
         _sceneRenderTarget.setView(_camera.view());

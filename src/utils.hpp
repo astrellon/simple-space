@@ -13,6 +13,8 @@
 #include "game/space_object.hpp"
 #include "game/items/item.hpp"
 
+#include "serialisers/json/json.hpp"
+
 namespace space
 {
     class Utils
@@ -28,6 +30,19 @@ namespace space
 
             static std::string filenameWithoutExt(const std::string &str);
             static std::string getFilenameExt(const std::string &str);
+
+            template <typename T>
+            static inline bool json_try_set(const nlohmann::json &j, const std::string &name, T &result)
+            {
+                auto find = j.find(name);
+                if (find != j.end())
+                {
+                    j.get_to(result);
+                    return true;
+                }
+
+                return false;
+            }
 
             static inline ObjectId makeObjectId(ItemId item)
             {

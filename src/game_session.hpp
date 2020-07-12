@@ -11,7 +11,6 @@
 #include "game/items/item.hpp"
 
 #include "player_controller.hpp"
-#include "map_layer.hpp"
 
 namespace space
 {
@@ -104,7 +103,6 @@ namespace space
             std::vector<std::unique_ptr<StarSystem>> _starSystems;
             std::vector<std::unique_ptr<PlanetSurface>> _planetSurfaces;
             std::vector<std::unique_ptr<Item>> _items;
-            std::unique_ptr<MapLayer> _mapLayer;
 
             StarSystem *_activeStarSystem;
             PlanetSurface *_activePlanetSurface;

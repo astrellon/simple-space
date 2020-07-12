@@ -3,6 +3,9 @@
         "type": "star-system",
         "id": "STAR_SYSTEM_1",
         "name": "Star System 1",
+        "starBackgroundOptions": {
+            "backgroundColour": "0x14182EFF"
+        },
         "rootBody": {
             "type": "planet",
             "id": "STAR_1",

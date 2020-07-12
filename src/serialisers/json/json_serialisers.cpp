@@ -12,6 +12,7 @@
 #include "../../definitions/planet_definition.hpp"
 #include "../../definitions/star_system_definition.hpp"
 #include "../../definitions/planet_surface_definition.hpp"
+#include "../../definitions/star_background_options.hpp"
 
 using nlohmann::json;
 
@@ -250,7 +251,8 @@ namespace space
         return json {
             {"id", input.id},
             {"name", input.name},
-            {"rootBody", toJson(*input.rootBody.get())}
+            {"rootBody", toJson(*input.rootBody.get())},
+            {"starBackgroundOptions", toJson(input.starBackgroundOptions)}
         };
     }
 
@@ -261,6 +263,7 @@ namespace space
         j.at("name").get_to(result->name);
 
         result->rootBody = fromJsonCelestialBodyDefinition(j.at("rootBody"));
+        result->starBackgroundOptions = fromJsonStarBackgroundOptions(j.at("starBackgroundOptions"));
 
         return result;
     }
@@ -299,6 +302,35 @@ namespace space
         j.at("distance").get_to(result.distance);
         j.at("influenceRadius").get_to(result.influenceRadius);
         j.at("angle").get_to(result.angle);
+
+        return result;
+    }
+
+    json toJson(const StarBackgroundOptions &input)
+    {
+        return json {
+            {"shaderName", input.shaderName},
+            {"backgroundColour", Utils::toHexString(input.backgroundColour)},
+            {"numLayers", input.numLayers},
+            {"numParticles", input.numParticles},
+            {"area", input.area}
+        };
+    }
+
+    StarBackgroundOptions fromJsonStarBackgroundOptions(const json &j)
+    {
+        StarBackgroundOptions result;
+
+        Utils::json_try_set(j, "shaderName", result.shaderName);
+        Utils::json_try_set(j, "area", result.area);
+        Utils::json_try_set(j, "numLayers", result.numLayers);
+        Utils::json_try_set(j, "numParticles", result.numParticles);
+
+        auto backgroundColourString = j.find("backgroundColour");
+        if (backgroundColourString != j.end())
+        {
+            result.backgroundColour = Utils::fromHexString(backgroundColourString->get<std::string>());
+        }
 
         return result;
     }

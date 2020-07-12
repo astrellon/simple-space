@@ -7,5 +7,6 @@ namespace space
     void StarSystemDefinition::onPostLoad(Engine &engine)
     {
         rootBody->onPostLoad(engine);
+        starBackgroundOptions.onPostLoad(engine);
     }
 } // namespace space

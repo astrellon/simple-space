@@ -3,6 +3,8 @@
         "type": "star-system",
         "id": "STAR_SYSTEM_2",
         "name": "Star System 2",
+        "starBackgroundOptions": {
+        },
         "rootBody": {
             "type": "planet",
             "id": "STAR_1",

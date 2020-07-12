@@ -4,7 +4,6 @@
 #include "resource_manager.hpp"
 #include "definition_manager.hpp"
 #include "camera.hpp"
-#include "star_background.hpp"
 #include "effects/bloom-effect.hpp"
 #include "effects/bloom-effect-2.hpp"
 #include "effects/overlay.hpp"
@@ -43,7 +42,7 @@ namespace space
             sf::Time timeSinceStart() const;
             sf::Time timeSinceStartOnUpdate() const;
 
-            void initBackground();
+            void initEffects();
 
             void onResize(sf::Vector2f area);
             void processEvents();
@@ -57,7 +56,6 @@ namespace space
             std::unique_ptr<ResourceManager> _resourceManager;
             std::unique_ptr<DefinitionManager> _definitionManager;
 
-            std::vector<std::unique_ptr<StarBackground>> _backgrounds;
             sf::RenderTexture _sceneRenderTarget;
             BloomEffect _bloomEffect;
             BloomEffect2 _bloomEffect2;

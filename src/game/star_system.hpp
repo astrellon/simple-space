@@ -4,9 +4,11 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 
 #include "../non_copyable.hpp"
 #include "../definitions/star_system_definition.hpp"
+#include "../star_background.hpp"
 
 namespace space
 {
@@ -41,6 +43,7 @@ namespace space
             // Fields
             std::vector<SpaceObject *> _objects;
             GameSession &_session;
+            std::unique_ptr<StarBackground> _background;
 
             // Methods
             void createCelestialBody(const CelestialBodyDefinition *bodyDefinition);

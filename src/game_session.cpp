@@ -141,19 +141,6 @@ namespace space
 
         _playerController.update(dt);
 
-        if (_mapLayer.get() == nullptr)
-        {
-            tmx::Map *map;
-            if (_engine.resourceManager().map("data/maps/test.tmx", &map))
-            {
-                _mapLayer = std::make_unique<MapLayer>(*map, 0);
-            }
-        }
-        else
-        {
-            // _mapLayer->update(dt);
-        }
-
         if (_activeStarSystem)
         {
             _activeStarSystem->update(dt);
@@ -166,13 +153,6 @@ namespace space
 
     void GameSession::draw(sf::RenderTarget &target)
     {
-        if (_mapLayer)
-        {
-            sf::RenderStates states;
-            //_mapLayer->draw(target, states);
-            // target.draw(*_mapLayer);
-        }
-
         if (_activeStarSystem)
         {
             _activeStarSystem->draw(target);
