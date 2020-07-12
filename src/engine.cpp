@@ -198,7 +198,7 @@ namespace space
         _sceneRenderTarget.setActive(true);
 
         // Draw main scene
-        //_sceneRenderTarget.setView(_camera.view());
+        _sceneRenderTarget.setView(_camera.view());
 
         if (_currentSession.get())
         {

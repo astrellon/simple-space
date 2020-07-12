@@ -152,6 +152,11 @@ int main()
             gameSession->activeStarSystem(starSystem2);
             starSystem2->addObject(ship);
         }
+        if (space::Keyboard::isKeyDown(sf::Keyboard::Num3))
+        {
+            gameSession->activePlanetSurface(planetSurface);
+            gameSession->moveCharacter(character, sf::Vector2f(), &planetSurface->walkableArea());
+        }
 
         engine.update();
         engine.draw();

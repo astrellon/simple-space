@@ -7,6 +7,7 @@ namespace space
     PlanetSurface::PlanetSurface(GameSession &session, const PlanetSurfaceDefinition &definition) : _session(session), definition(definition)
     {
         _mapLayer = std::make_unique<MapLayer>(*definition.tmxMap, 0);
+        _walkableArea.partOfPlanet(this);
     }
 
     void PlanetSurface::update(sf::Time dt)

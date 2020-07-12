@@ -123,8 +123,16 @@ namespace space
             _playerController.clearCanInteractWith();
             if (_playerController.controlling() == ControlCharacter)
             {
-                auto shipInside = getShipPlayerIsInsideOf();
-                _engine.camera().followingRotationId(shipInside->id);
+                if (area->partOfShip() != nullptr)
+                {
+                    _engine.camera().followingRotationId(area->partOfShip()->id);
+                    activeStarSystem(area->partOfShip()->starSystem());
+                }
+                else if (area->partOfPlanet() != nullptr)
+                {
+                    _engine.camera().followingRotation(false);
+                    activePlanetSurface(area->partOfPlanet());
+                }
             }
         }
     }
