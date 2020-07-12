@@ -41,6 +41,8 @@ namespace space
 
         _background->draw(target);
 
+        target.setView(_session.engine().camera().view());
+
         for (auto obj : _objects)
         {
             // Ignore rendering current inside ship here

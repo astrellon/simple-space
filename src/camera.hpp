@@ -28,6 +28,9 @@ namespace space
             void scale(float scale);
             float scale() const { return _scale;}
 
+            void zoomScale(float zoomScale);
+            float zoomScale() const { return _zoomScale;}
+
             void followingId(const ObjectId &id);
             const ObjectId &followingId() const { return _followingId; }
 
@@ -50,11 +53,14 @@ namespace space
             sf::View _view;
             sf::Vector2f _size;
             float _scale;
+            float _zoomScale;
+
             bool _following;
-            ObjectId _followingId;
             bool _followingRotation;
+            ObjectId _followingId;
             ObjectId _followingRotationId;
 
             // Methods
+            void updateViewSize();
     };
 } // space

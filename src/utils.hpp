@@ -26,7 +26,7 @@ namespace space
             static std::string &ltrim(std::string &str);
             static std::string &trim(std::string &str);
 
-            static inline float getInsideScale() { return 0.25f; }
+            static inline float getInsideScale() { return 1.0f / 4.0f; }
 
             static std::string filenameWithoutExt(const std::string &str);
             static std::string getFilenameExt(const std::string &str);

@@ -25,6 +25,8 @@ namespace space
     {
         _resourceManager = std::make_unique<ResourceManager>();
         _definitionManager = std::make_unique<DefinitionManager>();
+
+        _camera.zoomScale(_cameraScale);
     }
     Engine::~Engine()
     {
@@ -147,9 +149,9 @@ namespace space
 
     void Engine::onResize(sf::Vector2f area)
     {
-        area *= 1.0f / _cameraScale;
-
         _camera.size(area);
+
+        area *= 1.0f / _cameraScale;
 
         _sceneRenderTarget.create(area.x, area.y);
 
@@ -196,7 +198,7 @@ namespace space
         _sceneRenderTarget.setActive(true);
 
         // Draw main scene
-        _sceneRenderTarget.setView(_camera.view());
+        //_sceneRenderTarget.setView(_camera.view());
 
         if (_currentSession.get())
         {
@@ -225,7 +227,7 @@ namespace space
         else
         {
             sf::Sprite sprite(_sceneRenderTarget.getTexture());
-            sprite.setScale(2, 2);
+            sprite.setScale(_cameraScale, _cameraScale);
             _window.draw(sprite);
         }
 

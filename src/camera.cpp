@@ -5,7 +5,7 @@
 
 namespace space
 {
-    Camera::Camera(Engine &engine) : _engine(engine), _scale(1.0f), _following(false), _followingRotation(false)
+    Camera::Camera(Engine &engine) : _engine(engine), _scale(1.0f), _zoomScale(1.0f), _following(false), _followingRotation(false)
     {
 
     }
@@ -43,13 +43,19 @@ namespace space
     void Camera::scale(float scale)
     {
         _scale = scale;
-        _view.setSize(_size / _scale);
+        updateViewSize();
+    }
+
+    void Camera::zoomScale(float scale)
+    {
+        _zoomScale = scale;
+        updateViewSize();
     }
 
     void Camera::size(sf::Vector2f size)
     {
         _size = size;
-        _view.setSize(size / _scale);
+        updateViewSize();
     }
 
     void Camera::center(sf::Vector2f center)
@@ -96,5 +102,11 @@ namespace space
         }
 
         return 0.0f;
+    }
+
+    void Camera::updateViewSize()
+    {
+        auto size = _size / (_scale * _zoomScale);
+        _view.setSize(size);
     }
 }

@@ -5,7 +5,7 @@
 namespace space
 {
     StarBackgroundOptions::StarBackgroundOptions() :
-        shaderName("stars"), numLayers(7), numParticles(200), backgroundColour(0, 0, 0), area(800)
+        shaderName("stars"), numLayers(7), numParticles(100), backgroundColour(0, 0, 0), area(800)
     {
 
     }
