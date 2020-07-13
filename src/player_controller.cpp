@@ -1,15 +1,19 @@
 #include "player_controller.hpp"
 
+#include <SFML/Window.hpp>
+
 #include "game/ship.hpp"
 #include "game/character.hpp"
 #include "keyboard.hpp"
 
 #include "game/items/item.hpp"
 #include "game/items/placeable_item.hpp"
+#include "game/walkable_area.hpp"
+#include "game/star_system.hpp"
 
 namespace space
 {
-    PlayerController::PlayerController() : _controlling(ControlNone), _inventory(),
+    PlayerController::PlayerController(GameSession &session) : _session(session), _controlling(ControlNone), _inventory(),
     _interactRangeObjects(0), _interactRangeObjectsSquared(0),
     _interactRangeShips(0), _interactRangeShipsSquared(0)
     {
@@ -25,10 +29,18 @@ namespace space
         }
         if (_controlling == ControlShip)
         {
+            if (_ship && _ship->starSystem())
+            {
+                checkForTeleportableShips(_ship->transform().position, *_ship->starSystem());
+            }
             controlShip(dt);
         }
         else if (_controlling == ControlCharacter)
         {
+            if (_character && _character->insideArea())
+            {
+                checkForGroundInteractables(_character->transform().position, *_character->insideArea());
+            }
             controlCharacter(dt);
         }
     }
@@ -127,6 +139,11 @@ namespace space
 
         return false;
     }
+    bool PlayerController::canInteractWith(PlacedItem *item) const
+    {
+        auto find = std::find(_canInteractWith.begin(), _canInteractWith.end(), item);
+        return find != _canInteractWith.end();
+    }
 
     void PlayerController::addShipInTeleportRange(Ship *ship)
     {
@@ -140,6 +157,29 @@ namespace space
             _shipsInTeleportRange.erase(find);
         }
     }
+    bool PlayerController::shipInTeleportRange(Ship *ship) const
+    {
+        auto find = std::find(_shipsInTeleportRange.begin(), _shipsInTeleportRange.end(), ship);
+        return find != _shipsInTeleportRange.end();
+    }
+
+    void PlayerController::addPlanetInTeleportRange(Planet *planet)
+    {
+        _planetsInTeleportRange.push_back(planet);
+    }
+    void PlayerController::removePlanetInTeleportRange(Planet *planet)
+    {
+        auto find = std::find(_planetsInTeleportRange.begin(), _planetsInTeleportRange.end(), planet);
+        if (find != _planetsInTeleportRange.end())
+        {
+            _planetsInTeleportRange.erase(find);
+        }
+    }
+    bool PlayerController::planetInTeleportRange(Planet *planet) const
+    {
+        auto find = std::find(_planetsInTeleportRange.begin(), _planetsInTeleportRange.end(), planet);
+        return find != _planetsInTeleportRange.end();
+    }
 
     void PlayerController::dropItem(PlaceableItem *placeableItem)
     {
@@ -147,4 +187,81 @@ namespace space
         _character->insideArea()->addPlaceable(placeableItem, _character->transform().position);
     }
 
+    void PlayerController::checkForTeleportableShips(sf::Vector2f position, const StarSystem &starSystem)
+    {
+        auto shipInsideOf = _character->insideArea()->partOfShip();
+
+        // Check existing items
+        for (auto ship : _shipsInTeleportRange)
+        {
+            if (ship == shipInsideOf)
+            {
+                removeShipInTeleportRange(ship);
+                continue;
+            }
+
+            auto dpos = ship->transform().position - position;
+            auto distance = dpos.x * dpos.x + dpos.y * dpos.y;
+            if (distance - interactRangeShipsSquared() > 0.0f)
+            {
+                removeShipInTeleportRange(ship);
+            }
+        }
+
+        for (auto obj : starSystem.objects())
+        {
+            auto ship = dynamic_cast<Ship *>(obj);
+            if (ship == nullptr || ship == shipInsideOf || shipInTeleportRange(ship))
+            {
+                continue;
+            }
+
+            auto dpos = ship->transform().position - position;
+            auto distance = dpos.x * dpos.x + dpos.y * dpos.y;
+            if (distance - interactRangeShipsSquared() < 0.0f)
+            {
+                addShipInTeleportRange(ship);
+            }
+        }
+    }
+
+    void PlayerController::checkForGroundInteractables(sf::Vector2f position, const WalkableArea &area)
+    {
+        // Check existing items
+        auto playerPos = _character->transform().position;
+        for (auto item : canInteractWith())
+        {
+            auto dpos = item->transform().position - playerPos;
+            auto distance = dpos.x * dpos.x + dpos.y * dpos.y;
+            if (distance - interactRangeObjectsSquared() > 0.0f)
+            {
+                removeCanInteractWith(item);
+                if (item->item->isPlayerInRange())
+                {
+                    item->item->onPlayerLeaves(_session);
+                }
+            }
+        }
+
+        for (auto &iter : area.placedItems())
+        {
+            if (canInteractWith(iter.get()))
+            {
+                continue;
+            }
+
+            auto dpos = iter->transform().position - playerPos;
+            auto distance = dpos.x * dpos.x + dpos.y * dpos.y;
+            if (distance - interactRangeObjectsSquared() < 0.0f)
+            {
+                if (addCanInteractWith(iter.get()))
+                {
+                    if (!iter->item->isPlayerInRange())
+                    {
+                        iter->item->onPlayerEnters(_session);
+                    }
+                }
+            }
+        }
+    }
 } // namespace space

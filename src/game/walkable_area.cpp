@@ -47,12 +47,6 @@ namespace space
         {
             character->update(session, dt, parentTransform);
         }
-
-        auto controllingCharacter = session.playerController().controllingCharacter();
-        if (controllingCharacter != nullptr && controllingCharacter->insideArea() == this)
-        {
-            checkForInteractables();
-        }
     }
 
     void WalkableArea::draw(GameSession &session, sf::RenderTarget &target)
@@ -135,47 +129,5 @@ namespace space
         }
 
         std::cout << "Unable to find placeable item to remove it from walkable area: " << id << std::endl;
-    }
-
-    void WalkableArea::checkForInteractables()
-    {
-        auto &player = _session->playerController();
-
-        // Check existing items
-        auto playerPos = player.controllingCharacter()->transform().position;
-        for (auto item : player.canInteractWith())
-        {
-            auto dpos = item->transform().position - playerPos;
-            auto distance = dpos.x * dpos.x + dpos.y * dpos.y;
-            if (distance - player.interactRangeObjectsSquared() > 0.0f)
-            {
-                player.removeCanInteractWith(item);
-                if (item->item->isPlayerInRange())
-                {
-                    item->item->onPlayerLeaves(*_session);
-                }
-            }
-        }
-
-        for (auto &iter : _placedItems)
-        {
-            if (player.canInteractWith(iter.get()))
-            {
-                continue;
-            }
-
-            auto dpos = iter->transform().position - playerPos;
-            auto distance = dpos.x * dpos.x + dpos.y * dpos.y;
-            if (distance - player.interactRangeObjectsSquared() < 0.0f)
-            {
-                if (player.addCanInteractWith(iter.get()))
-                {
-                    if (!iter->item->isPlayerInRange())
-                    {
-                        iter->item->onPlayerEnters(*_session);
-                    }
-                }
-            }
-        }
     }
 } // namespace space

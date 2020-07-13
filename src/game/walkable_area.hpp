@@ -60,6 +60,5 @@ namespace space
             b2World _physicsWorld;
 
             // Methods
-            void checkForInteractables();
     };
 } // space

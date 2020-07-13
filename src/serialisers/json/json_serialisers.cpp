@@ -3,7 +3,7 @@
 #include <iostream>
 #include <stdexcept>
 
-#include "utils.hpp"
+#include "../../utils.hpp"
 
 #include "../../definitions/base_definition.hpp"
 #include "../../definitions/ship_definition.hpp"

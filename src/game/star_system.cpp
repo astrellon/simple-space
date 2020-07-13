@@ -26,12 +26,6 @@ namespace space
         {
             obj->update(_session, dt, sf::Transform::Identity);
         }
-
-        auto ship = _session.getShipPlayerIsInsideOf();
-        if (ship != nullptr && ship->starSystem() == this)
-        {
-            checkForTeleportableShips();
-        }
     }
 
     void StarSystem::draw(sf::RenderTarget &target)
@@ -130,46 +124,6 @@ namespace space
         for (const auto &child : bodyDefinition->children)
         {
             createCelestialBody(child.get());
-        }
-    }
-
-    void StarSystem::checkForTeleportableShips()
-    {
-        auto &player = _session.playerController();
-        auto shipInsideOf = _session.getShipPlayerIsInsideOf();
-
-        // Check existing items
-        auto playerPos = player.controllingShip()->transform().position;
-        for (auto ship : player.shipsInTeleportRange())
-        {
-            if (ship == shipInsideOf)
-            {
-                player.removeShipInTeleportRange(ship);
-                continue;
-            }
-
-            auto dpos = ship->transform().position - playerPos;
-            auto distance = dpos.x * dpos.x + dpos.y * dpos.y;
-            if (distance - player.interactRangeShipsSquared() > 0.0f)
-            {
-                player.removeShipInTeleportRange(ship);
-            }
-        }
-
-        for (auto obj : _objects)
-        {
-            auto ship = dynamic_cast<Ship *>(obj);
-            if (ship == nullptr || ship == shipInsideOf || player.shipInTeleportRange(ship))
-            {
-                continue;
-            }
-
-            auto dpos = ship->transform().position - playerPos;
-            auto distance = dpos.x * dpos.x + dpos.y * dpos.y;
-            if (distance - player.interactRangeShipsSquared() < 0.0f)
-            {
-                player.addShipInTeleportRange(ship);
-            }
         }
     }
 } // namespace space

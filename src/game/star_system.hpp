@@ -47,7 +47,6 @@ namespace space
 
             // Methods
             void createCelestialBody(const CelestialBodyDefinition *bodyDefinition);
-            void checkForTeleportableShips();
 
     };
 } // space
