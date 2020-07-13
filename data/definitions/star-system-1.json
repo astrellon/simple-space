@@ -35,7 +35,8 @@
                     "glowColour": "0x6090FFFF",
                     "name": "Planet 1",
                     "scale": 10,
-                    "texturePath": "data/textures/planetColours1.png"
+                    "texturePath": "data/textures/planetColours1.png",
+                    "planetSurfaceIds": [ "PLANET_GRASSY_1" ]
                 },
                 {
                     "type": "planet",

@@ -1,9 +1,11 @@
 #include "planet.hpp"
 
+#include <algorithm>
 #include <iostream>
 
 #include "../engine.hpp"
 #include "../game_session.hpp"
+#include "planet_surface.hpp"
 
 namespace space
 {
@@ -62,4 +64,16 @@ namespace space
         target.draw(sphereSprite, states);
     }
 
+    void Planet::addPlanetSurface(PlanetSurface *planetSurface)
+    {
+        _planetSurfaces.push_back(planetSurface);
+    }
+    void Planet::removePlanetSurface(PlanetSurface *planetSurface)
+    {
+        auto find = std::find(_planetSurfaces.begin(), _planetSurfaces.end(), planetSurface);
+        if (find != _planetSurfaces.end())
+        {
+            _planetSurfaces.erase(find);
+        }
+    }
 } // namespace space

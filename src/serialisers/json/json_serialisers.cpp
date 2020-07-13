@@ -235,10 +235,15 @@ namespace space
         j.at("size").get_to(result->size);
         j.at("scale").get_to(result->scale);
 
-        auto oscillateNoise = j.find("oscillateNoise");
-        if (oscillateNoise != j.end())
+        Utils::json_try_set(j, "oscillateNoise", result->oscillateNoise);
+
+        auto planetSurfaceIds = j.find("planetSurfaceIds");
+        if (planetSurfaceIds != j.end())
         {
-            oscillateNoise->get_to(result->oscillateNoise);
+            for (auto &idJson : *planetSurfaceIds)
+            {
+                result->planetSurfaceIds.push_back(idJson.get<std::string>());
+            }
         }
 
         result->glowColour = Utils::fromHexString(j.at("glowColour").get<std::string>());

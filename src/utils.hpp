@@ -37,7 +37,7 @@ namespace space
                 auto find = j.find(name);
                 if (find != j.end())
                 {
-                    j.get_to(result);
+                    find->get_to(result);
                     return true;
                 }
 

@@ -3,16 +3,20 @@
 #include <SFML/Graphics.hpp>
 
 #include <string>
+#include <vector>
 
 #include "celestial_body_definition.hpp"
 
 namespace space
 {
     class Engine;
+    class PlanetSurfaceDefinition;
 
     class PlanetDefinition : public CelestialBodyDefinition
     {
         public:
+            typedef std::vector<const PlanetSurfaceDefinition *> PlanetSurfaceDefinitionList;
+
             // Fields
             std::string texturePath;
             std::string name;
@@ -23,7 +27,11 @@ namespace space
             float scale;
             float oscillateNoise;
 
+            DefinitionIds planetSurfaceIds;
+
+            // Post Load Fields
             const sf::Texture *texture;
+            PlanetSurfaceDefinitionList planetSurfaceDefinitions;
 
             // Constructor
             PlanetDefinition(DefinitionId id) : CelestialBodyDefinition(id), oscillateNoise(0.0f) { }
