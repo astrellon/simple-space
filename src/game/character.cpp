@@ -58,6 +58,7 @@ namespace space
     {
         _physicsBody = world->CreateBody(&_physicsBodyDef);
         _physicsBody->CreateFixture(&_physicsFixtureDef);
+        _physicsBody->SetTransform(b2Vec2(_transform.position.x, _transform.position.y), Utils::degreesToRadians(_transform.rotation));
 
         _physicsBody->SetUserData(this);
     }

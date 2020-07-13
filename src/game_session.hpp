@@ -60,6 +60,19 @@ namespace space
 
             bool tryGetSpaceObject(const ObjectId &id, SpaceObject **result);
 
+            template <typename T>
+            bool tryGetSpaceObject(const ObjectId &id, T **result)
+            {
+                SpaceObject *temp;
+                if (tryGetSpaceObject(id, &temp))
+                {
+                    *result = dynamic_cast<T *>(temp);
+                    return *result != nullptr;
+                }
+
+                return false;
+            }
+
             void activeStarSystem(StarSystem *starSystem)
             {
                 _activeStarSystem = starSystem;
@@ -77,6 +90,8 @@ namespace space
                 _playerController.clearShipsInTeleportRange();
             }
             PlanetSurface *activePlanetSurface() const { return _activePlanetSurface; }
+
+            bool tryGetPlanetSurface(const DefinitionId &id, PlanetSurface **result) const;
 
             PlayerController &playerController() { return _playerController; }
 

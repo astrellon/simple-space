@@ -4,10 +4,10 @@
 
 namespace space
 {
-    PlanetSurface::PlanetSurface(GameSession &session, const PlanetSurfaceDefinition &definition) : _session(session), definition(definition)
+    PlanetSurface::PlanetSurface(GameSession &session, const PlanetSurfaceDefinition &definition) : _session(session), definition(definition), _partOfPlanet(nullptr)
     {
         _mapLayer = std::make_unique<MapLayer>(*definition.tmxMap, 0);
-        _walkableArea.partOfPlanet(this);
+        _walkableArea.partOfPlanetSurface(this);
     }
 
     void PlanetSurface::update(sf::Time dt)
@@ -22,6 +22,8 @@ namespace space
         sf::Transform trans;
         trans.scale(Utils::getInsideScale(), Utils::getInsideScale());
         states.transform = trans;
+
+        target.clear(sf::Color(60, 90, 70));
 
         target.draw(*_mapLayer, states);
         _walkableArea.draw(_session, target);

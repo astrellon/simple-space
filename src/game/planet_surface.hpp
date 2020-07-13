@@ -13,6 +13,7 @@ namespace space
 {
     class Character;
     class GameSession;
+    class Planet;
 
     class PlanetSurface : private NonCopyable
     {
@@ -30,10 +31,15 @@ namespace space
             void update(sf::Time dt);
             void draw(sf::RenderTarget &target);
 
+            void partOfPlanet(Planet *planet) { _partOfPlanet = planet; }
+            Planet *partOfPlanet() const { return _partOfPlanet; }
+
         private:
+
             // Fields
             GameSession &_session;
             WalkableArea _walkableArea;
+            Planet *_partOfPlanet;
             std::unique_ptr<MapLayer> _mapLayer;
 
             // Methods

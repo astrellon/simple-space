@@ -4,9 +4,9 @@
 
 #include "space_object.hpp"
 #include "ship.hpp"
-#include "game_session.hpp"
+#include "../game_session.hpp"
 #include "planet.hpp"
-#include "engine.hpp"
+#include "../engine.hpp"
 
 #include "../definitions/planet_definition.hpp"
 #include "../definitions/celestial_body_definition.hpp"

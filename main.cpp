@@ -130,6 +130,9 @@ int main()
     teleporter = gameSession->createItem<space::Teleporter>(2, teleporterDefinition);
     ship2->walkableArea().addPlaceable(teleporter, sf::Vector2f(0, 0));
 
+    teleporter = gameSession->createItem<space::Teleporter>(3, teleporterDefinition);
+    planetSurface->walkableArea().addPlaceable(teleporter, sf::Vector2f(50, 50));
+
     gameSession->activeStarSystem(starSystem);
     // gameSession->activePlanetSurface(planetSurface);
 

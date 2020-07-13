@@ -19,6 +19,19 @@ namespace space
 
     void Planet::update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform)
     {
+        if (!_initedSurfaces)
+        {
+            _initedSurfaces = true;
+
+            for (auto surfaceId : definition.planetSurfaceIds)
+            {
+                PlanetSurface *surface;
+                if (session.tryGetPlanetSurface(surfaceId, &surface))
+                {
+                    addPlanetSurface(surface);
+                }
+            }
+        }
         updateWorldTransform(parentTransform);
     }
 
@@ -67,6 +80,7 @@ namespace space
     void Planet::addPlanetSurface(PlanetSurface *planetSurface)
     {
         _planetSurfaces.push_back(planetSurface);
+        planetSurface->partOfPlanet(this);
     }
     void Planet::removePlanetSurface(PlanetSurface *planetSurface)
     {
@@ -74,6 +88,11 @@ namespace space
         if (find != _planetSurfaces.end())
         {
             _planetSurfaces.erase(find);
+        }
+
+        if (planetSurface->partOfPlanet() == this)
+        {
+            planetSurface->partOfPlanet(nullptr);
         }
     }
 } // namespace space

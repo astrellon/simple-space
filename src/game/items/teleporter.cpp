@@ -7,10 +7,9 @@ namespace space
 {
     void Teleporter::execute(GameSession &session, const sf::Vector2f &position, WalkableArea &parentArea)
     {
-        auto ship = parentArea.partOfShip();
-        if (ship == nullptr)
+        if (!parentArea.partOfShip() && !parentArea.partOfPlanetSurface())
         {
-            std::cout << "Using teleporter outside of ship" << std::endl;
+            std::cout << "Using teleporter outside of ship or planet" << std::endl;
             return;
         }
 

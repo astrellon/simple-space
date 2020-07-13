@@ -37,6 +37,7 @@ namespace space
             std::unique_ptr<sf::RenderTexture> _renderTexture;
             sf::Shader *_shader;
             PlanetSurfaceList _planetSurfaces;
+            bool _initedSurfaces;
 
             // Methods
     };

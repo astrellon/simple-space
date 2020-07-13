@@ -15,8 +15,6 @@ namespace space
     class PlanetDefinition : public CelestialBodyDefinition
     {
         public:
-            typedef std::vector<const PlanetSurfaceDefinition *> PlanetSurfaceDefinitionList;
-
             // Fields
             std::string texturePath;
             std::string name;
@@ -31,7 +29,6 @@ namespace space
 
             // Post Load Fields
             const sf::Texture *texture;
-            PlanetSurfaceDefinitionList planetSurfaceDefinitions;
 
             // Constructor
             PlanetDefinition(DefinitionId id) : CelestialBodyDefinition(id), oscillateNoise(0.0f) { }

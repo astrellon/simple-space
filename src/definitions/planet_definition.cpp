@@ -16,14 +16,5 @@ namespace space
 
         text->setRepeated(true);
         text->setSmooth(false);
-
-        for (auto &id : planetSurfaceIds)
-        {
-            const PlanetSurfaceDefinition *planetSurfaceDefinition = nullptr;
-            if (engine.definitionManager().tryGet(id, &planetSurfaceDefinition))
-            {
-                planetSurfaceDefinitions.push_back(planetSurfaceDefinition);
-            }
-        }
     }
 }

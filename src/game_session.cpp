@@ -128,13 +128,27 @@ namespace space
                     _engine.camera().followingRotationId(area->partOfShip()->id);
                     activeStarSystem(area->partOfShip()->starSystem());
                 }
-                else if (area->partOfPlanet() != nullptr)
+                else if (area->partOfPlanetSurface() != nullptr)
                 {
                     _engine.camera().followingRotation(false);
-                    activePlanetSurface(area->partOfPlanet());
+                    activePlanetSurface(area->partOfPlanetSurface());
                 }
             }
         }
+    }
+
+    bool GameSession::tryGetPlanetSurface(const DefinitionId &id, PlanetSurface **result) const
+    {
+        for (auto i = _planetSurfaces.begin(); i != _planetSurfaces.end(); ++i)
+        {
+            if (i->get()->definition.id == id)
+            {
+                *result = i->get();
+                return true;
+            }
+        }
+
+        return false;
     }
 
     void GameSession::update(sf::Time dt)
@@ -181,7 +195,7 @@ namespace space
 
         if (showTeleporters)
         {
-            UITeleporter::draw(*this, _playerController.shipsInTeleportRange());
+            UITeleporter::draw(*this, _playerController.shipsInTeleportRange(), _playerController.planetsInTeleportRange());
         }
     }
 } // namespace town

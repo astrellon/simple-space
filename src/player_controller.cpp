@@ -4,6 +4,8 @@
 
 #include "game/ship.hpp"
 #include "game/character.hpp"
+#include "game/planet.hpp"
+#include "game/planet_surface.hpp"
 #include "keyboard.hpp"
 
 #include "game/items/item.hpp"
@@ -27,12 +29,32 @@ namespace space
         {
             return;
         }
+
+        if (_character && _character->insideArea())
+        {
+            auto area = _character->insideArea();
+            auto planetSurface = area->partOfPlanetSurface();
+            if (planetSurface != nullptr && planetSurface->partOfPlanet() != nullptr)
+            {
+                auto onPlanet = area->partOfPlanetSurface()->partOfPlanet();
+                checkForTeleportableShips(onPlanet->transform().position, *onPlanet->starSystem());
+                checkForTeleportablePlanets(onPlanet->transform().position, *onPlanet->starSystem());
+            }
+            else if (area->partOfShip() != nullptr)
+            {
+                auto insideShip = area->partOfShip();
+                checkForTeleportableShips(insideShip->transform().position, *insideShip->starSystem());
+                checkForTeleportablePlanets(insideShip->transform().position, *insideShip->starSystem());
+            }
+        }
+        else
+        {
+            clearPlanetsInTeleportRange();
+            clearShipsInTeleportRange();
+        }
+
         if (_controlling == ControlShip)
         {
-            if (_ship && _ship->starSystem())
-            {
-                checkForTeleportableShips(_ship->transform().position, *_ship->starSystem());
-            }
             controlShip(dt);
         }
         else if (_controlling == ControlCharacter)
@@ -40,6 +62,10 @@ namespace space
             if (_character && _character->insideArea())
             {
                 checkForGroundInteractables(_character->transform().position, *_character->insideArea());
+            }
+            else
+            {
+                clearCanInteractWith();
             }
             controlCharacter(dt);
         }
@@ -221,6 +247,36 @@ namespace space
             if (distance - interactRangeShipsSquared() < 0.0f)
             {
                 addShipInTeleportRange(ship);
+            }
+        }
+    }
+
+    void PlayerController::checkForTeleportablePlanets(sf::Vector2f position, const StarSystem &starSystem)
+    {
+        // Check existing items
+        for (auto planet : _planetsInTeleportRange)
+        {
+            auto dpos = planet->transform().position - position;
+            auto distance = dpos.x * dpos.x + dpos.y * dpos.y;
+            if (distance - interactRangeShipsSquared() > 0.0f)
+            {
+                removePlanetInTeleportRange(planet);
+            }
+        }
+
+        for (auto obj : starSystem.objects())
+        {
+            auto planet = dynamic_cast<Planet *>(obj);
+            if (planet == nullptr || planetInTeleportRange(planet))
+            {
+                continue;
+            }
+
+            auto dpos = planet->transform().position - position;
+            auto distance = dpos.x * dpos.x + dpos.y * dpos.y;
+            if (distance - interactRangeShipsSquared() < 0.0f)
+            {
+                addPlanetInTeleportRange(planet);
             }
         }
     }

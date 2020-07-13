@@ -81,6 +81,7 @@ namespace space
 
             void checkForGroundInteractables(sf::Vector2f position, const WalkableArea &area);
             void checkForTeleportableShips(sf::Vector2f position, const StarSystem &starSystem);
+            void checkForTeleportablePlanets(sf::Vector2f position, const StarSystem &starSystem);
 
             void dropItem(PlaceableItem *placeableItem);
 

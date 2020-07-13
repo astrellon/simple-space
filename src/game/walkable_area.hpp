@@ -17,6 +17,10 @@ namespace space
     class PolygonCollider;
     class PlanetSurface;
 
+    template <typename T>
+    class PlacedItemPair;
+    class Teleporter;
+
     class WalkableArea
     {
         public:
@@ -30,11 +34,13 @@ namespace space
             void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform);
             void draw(GameSession &session, sf::RenderTarget &target);
 
+            std::vector<PlacedItemPair<Teleporter>> findTeleporters() const;
+
             void partOfShip(Ship *ship) { _partOfShip = ship; }
             Ship *partOfShip() const { return _partOfShip; }
 
-            void partOfPlanet(PlanetSurface *planetSurface) { _partOfPlanet = planetSurface; }
-            PlanetSurface *partOfPlanet() const { return _partOfPlanet; }
+            void partOfPlanetSurface(PlanetSurface *planetSurface) { _partOfPlanet = planetSurface; }
+            PlanetSurface *partOfPlanetSurface() const { return _partOfPlanet; }
 
             void addStaticCollider(PolygonCollider &collider);
             void removeStaticCollider(PolygonCollider &collider);

@@ -1,11 +1,12 @@
 #include "walkable_area.hpp"
 
-#include "engine.hpp"
-#include "game/items/placeable_item.hpp"
-#include "game/character.hpp"
-#include "physics/polygon_collider.hpp"
-#include "utils.hpp"
-#include "game_session.hpp"
+#include "../engine.hpp"
+#include "items/placeable_item.hpp"
+#include "items/teleporter.hpp"
+#include "character.hpp"
+#include "../physics/polygon_collider.hpp"
+#include "../utils.hpp"
+#include "../game_session.hpp"
 
 namespace space
 {
@@ -61,6 +62,25 @@ namespace space
             character->draw(session, target);
         }
     }
+
+    std::vector<PlacedItemPair<Teleporter>> WalkableArea::findTeleporters() const
+    {
+        std::vector<PlacedItemPair<Teleporter>> result;
+
+        for (auto &placedItem : _placedItems)
+        {
+            auto teleporter = dynamic_cast<Teleporter *>(placedItem.get()->item);
+            if (teleporter == nullptr)
+            {
+                continue;
+            }
+
+            result.push_back(PlacedItemPair<Teleporter>(placedItem.get(), teleporter));
+        }
+
+        return result;
+    }
+
 
     void WalkableArea::addStaticCollider(PolygonCollider &collider)
     {
