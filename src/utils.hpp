@@ -107,6 +107,20 @@ namespace space
                     mats[1] * direction.x + mats[5] * direction.y);
             }
 
+            static inline sf::Vector2f transformPoint(const sf::Vector2f &point, const sf::Transform &transform)
+            {
+                const auto mats = transform.getMatrix();
+
+                return sf::Vector2f(mats[0] * point.x + mats[4] * point.y + mats[12],
+                    mats[1] * point.x + mats[5] * point.y + mats[13]);
+            }
+
+            static inline sf::Vector2f getPosition(const sf::Transform &transform)
+            {
+                auto mat = transform.getMatrix();
+                return sf::Vector2f(mat[12], mat[13]);
+            }
+
             static sf::Color hsv(float hue, float saturation, float value);
 
             static inline sf::Vector2i floor(const sf::Vector2f & input)

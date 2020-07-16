@@ -6,6 +6,7 @@
 #include "space_object.hpp"
 #include "walkable_area.hpp"
 #include "../definitions/ship_definition.hpp"
+#include "../effects/engine_flame_effect.hpp"
 
 namespace space
 {
@@ -39,6 +40,7 @@ namespace space
             // Fields
             WalkableArea _walkableArea;
             std::unique_ptr<PolygonCollider> _collider;
+            std::vector<std::unique_ptr<EngineFlameEffect>> _engineEffects;
 
             // Location
             sf::Sprite _sprite;

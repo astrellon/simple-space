@@ -8,5 +8,10 @@ namespace space
     {
         engine.resourceManager().texture(texturePath, &texture);
         engine.resourceManager().texture(interiorTexturePath, &interiorTexture);
+
+        if (engineGlowTexturePath.size() > 0)
+        {
+            engine.resourceManager().texture(engineGlowTexturePath, &engineGlowTexture);
+        }
     }
 }

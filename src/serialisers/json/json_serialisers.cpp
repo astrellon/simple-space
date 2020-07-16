@@ -90,6 +90,7 @@ namespace space
             {"id", input.id},
             {"texturePath", input.texturePath},
             {"interiorTexturePath", input.interiorTexturePath},
+            {"engineGlowTexturePath", input.engineGlowTexturePath},
             {"name", input.name},
             {"maxRotation", input.maxRotation},
             {"maxSpeed", input.maxSpeed},
@@ -111,6 +112,8 @@ namespace space
             (*interiorTextureOffset)[0].get_to(input->interiorTextureOffset.x);
             (*interiorTextureOffset)[1].get_to(input->interiorTextureOffset.y);
         }
+
+        Utils::json_try_set(j, "engineGlowTexturePath", input->engineGlowTexturePath);
         j.at("name").get_to(input->name);
         j.at("maxRotation").get_to(input->maxRotation);
         j.at("maxSpeed").get_to(input->maxSpeed);

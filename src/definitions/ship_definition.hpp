@@ -16,6 +16,7 @@ namespace space
             // Fields
             std::string texturePath;
             std::string interiorTexturePath;
+            std::string engineGlowTexturePath;
             sf::Vector2i interiorTextureOffset;
             std::string name;
 
@@ -26,9 +27,10 @@ namespace space
 
             const sf::Texture *texture;
             const sf::Texture *interiorTexture;
+            const sf::Texture *engineGlowTexture;
 
             // Constructor
-            ShipDefinition(const DefinitionId &id) : BaseDefinition(id) { }
+            ShipDefinition(const DefinitionId &id) : BaseDefinition(id), texture(nullptr), interiorTexture(nullptr), engineGlowTexture(nullptr) { }
             virtual ~ShipDefinition() { }
 
             // Methods

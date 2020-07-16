@@ -32,16 +32,38 @@ namespace space
 
         _walkableArea.partOfShip(this);
         _walkableArea.addStaticCollider(*_collider);
+
+        if (definition.engineGlowTexture != nullptr)
+        {
+            _engineEffects.emplace_back(std::make_unique<EngineFlameEffect>(*this, *definition.engineGlowTexture, sf::Vector2f(-14, 14)));
+            _engineEffects.emplace_back(std::make_unique<EngineFlameEffect>(*this, *definition.engineGlowTexture, sf::Vector2f(14, 14)));
+        }
     }
 
     void Ship::update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform)
     {
         auto seconds = dt.asSeconds();
-        _speed += Utils::transformDirection(moveInput, _transform.getTransform()) * seconds * definition.acceleration;
         _rotationSpeed += rotateInput * seconds * definition.turnRate;
+        if (_rotationSpeed > definition.maxRotation)
+        {
+            _rotationSpeed = definition.maxRotation;
+        }
+        if (_rotationSpeed < -definition.maxRotation)
+        {
+            _rotationSpeed = -definition.maxRotation;
+        }
 
-        _transform.position += _speed * seconds;
         _transform.rotation += _rotationSpeed * seconds;
+
+        _speed += Utils::transformDirection(moveInput, _transform.getTransform()) * seconds * definition.acceleration;
+        auto length = _speed.x * _speed.x + _speed.y * _speed.y;
+        if (length > (definition.maxSpeed * definition.maxSpeed))
+        {
+            length = std::sqrt(length);
+            _speed /= length;
+            _speed *= definition.maxSpeed;
+        }
+        _transform.position += _speed * seconds;
 
         if (moveInput == sf::Vector2f())
         {
@@ -49,12 +71,17 @@ namespace space
         }
         if (rotateInput == 0.0f)
         {
-            _rotationSpeed *= 0.98f;
+            _rotationSpeed *= 0.95f;
         }
 
         updateWorldTransform(parentTransform);
 
         _walkableArea.update(session, dt, _worldTransform);
+
+        for (auto &engineEffect : _engineEffects)
+        {
+            engineEffect->update(session, dt, _worldTransform);
+        }
     }
 
     void Ship::draw(GameSession &session, sf::RenderTarget &target)
@@ -65,6 +92,11 @@ namespace space
         {
             target.draw(_interiorSprite, _worldTransform);
             _walkableArea.draw(session, target);
+        }
+
+        for (auto &engineEffect : _engineEffects)
+        {
+            engineEffect->draw(target);
         }
 
         //_collider->debugDraw(target, _worldTransform);
