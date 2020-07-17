@@ -14,6 +14,7 @@
 #include "game/items/item.hpp"
 
 #include "serialisers/json/json.hpp"
+#include "PerlinNoise.hpp"
 
 namespace space
 {
@@ -133,6 +134,15 @@ namespace space
                 return sf::Vector2i(std::ceil(input.x), std::ceil(input.y));
             }
 
+            static inline float clamp(float input, float lower, float upper)
+            {
+                return input < lower ? lower : (input > upper ? upper : input);
+            }
+            static inline float clamp01(float input)
+            {
+                return input < 0 ? 0 : (input > 1 ? 1 : input);
+            }
+
             static inline void setColour(sf::Color &target, const sf::Color &src)
             {
                 target.r = src.r;
@@ -165,12 +175,21 @@ namespace space
                 return sf::Color(r, g, b, a);
             }
 
+            static inline float perlin(float x)
+            {
+                return _perlinNoise.noise1D_0_1(x);
+            }
+            static inline float perlin(float x, float y)
+            {
+                return _perlinNoise.noise2D_0_1(x, y);
+            }
+
         private:
             Utils();
 
             static std::random_device _rd;
             static std::mt19937 _rand;
 
-            public:
+            static siv::PerlinNoise _perlinNoise;
     };
 } // town

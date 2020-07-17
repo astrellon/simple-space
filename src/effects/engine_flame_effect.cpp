@@ -20,11 +20,25 @@ namespace space
 
         _glow.setRotation(session.engine().camera().view().getRotation());
 
-        auto alpha = _parentShip.moveInput != sf::Vector2f() ? 255 : 0;
-        _glow.setColor(sf::Color(255, 255, 255, alpha));
+        auto engineOn = _parentShip.moveInput != sf::Vector2f();
+        auto seconds = dt.asSeconds();
+
+        _engineBrightness += engineOn ? seconds * 10.0f : seconds * -4.0f;
+        _engineBrightness = Utils::clamp01(_engineBrightness);
+
+        if (_engineBrightness >= 0.0f)
+        {
+            auto time = session.engine().timeSinceStart().asSeconds();
+            auto flux = Utils::clamp01(_engineBrightness - Utils::perlin(time * 7.0f) * 0.3f);
+
+            _glow.setColor(sf::Color(255, 255, 255, flux * 255));
+        }
     }
     void EngineFlameEffect::draw(sf::RenderTarget &target)
     {
-        target.draw(_glow);
+        if (_engineBrightness > 0.0f)
+        {
+            target.draw(_glow);
+        }
     }
 } // namespace space

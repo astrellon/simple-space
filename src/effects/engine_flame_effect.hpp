@@ -24,6 +24,7 @@ namespace space
             Ship &_parentShip;
             sf::Sprite _glow;
             sf::Vector2f _position;
+            float _engineBrightness;
 
             // Methods
     };

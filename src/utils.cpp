@@ -10,6 +10,7 @@ namespace space
 {
     std::random_device Utils::_rd;
     std::mt19937 Utils::_rand(Utils::_rd());
+    siv::PerlinNoise Utils::_perlinNoise(Utils::_rd());
 
     std::vector<std::string> Utils::split(const std::string &input, char delimiter, bool trimTokens)
     {

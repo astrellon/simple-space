@@ -35,8 +35,8 @@ namespace space
 
         if (definition.engineGlowTexture != nullptr)
         {
-            _engineEffects.emplace_back(std::make_unique<EngineFlameEffect>(*this, *definition.engineGlowTexture, sf::Vector2f(-14, 14)));
-            _engineEffects.emplace_back(std::make_unique<EngineFlameEffect>(*this, *definition.engineGlowTexture, sf::Vector2f(14, 14)));
+            _engineEffects.emplace_back(std::make_unique<EngineFlameEffect>(*this, *definition.engineGlowTexture, sf::Vector2f(-18, 14)));
+            _engineEffects.emplace_back(std::make_unique<EngineFlameEffect>(*this, *definition.engineGlowTexture, sf::Vector2f(18, 14)));
         }
     }
 
