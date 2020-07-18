@@ -16,6 +16,7 @@ namespace space
     class Engine;
     class SpaceObject;
     class GameSession;
+    class RenderCamera;
 
     class StarSystem : private NonCopyable
     {
@@ -37,7 +38,7 @@ namespace space
             void removeObject(SpaceObject *object);
 
             void update(sf::Time dt);
-            void draw(sf::RenderTarget &target);
+            void draw(RenderCamera &target);
 
         private:
             // Fields

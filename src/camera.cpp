@@ -12,6 +12,8 @@ namespace space
 
     void Camera::update(sf::Time dt)
     {
+        zoomScale(_engine.cameraScale());
+
         if (_following)
         {
             SpaceObject *followingObject;
@@ -42,14 +44,20 @@ namespace space
 
     void Camera::scale(float scale)
     {
-        _scale = scale;
-        updateViewSize();
+        if (scale != _scale)
+        {
+            _scale = scale;
+            updateViewSize();
+        }
     }
 
     void Camera::zoomScale(float scale)
     {
-        _zoomScale = scale;
-        updateViewSize();
+        if (scale != _zoomScale)
+        {
+            _zoomScale = scale;
+            updateViewSize();
+        }
     }
 
     void Camera::size(sf::Vector2f size)

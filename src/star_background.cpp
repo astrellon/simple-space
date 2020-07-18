@@ -45,7 +45,7 @@ namespace space
 
     // StarBackgroundLayer
     StarBackgroundLayer::StarBackgroundLayer(StarBackground &parent, float distanceScale) :
-          _parent(parent), _distanceScale(distanceScale), _camera(parent.engine().camera(), distanceScale)
+          _parent(parent), _distanceScale(distanceScale), _camera(parent.engine().sceneRender().camera(), distanceScale)
     {
 
     }

@@ -7,6 +7,7 @@
 #include "effects/bloom-effect.hpp"
 #include "effects/bloom-effect-2.hpp"
 #include "effects/overlay.hpp"
+#include "render_camera.hpp"
 
 #include <SFML/Graphics.hpp>
 
@@ -22,16 +23,16 @@ namespace space
 
             const ResourceManager &resourceManager() const;
             const DefinitionManager &definitionManager() const;
-            const Camera &camera() const;
-
             ResourceManager &resourceManager();
             DefinitionManager &definitionManager();
-            Camera &camera();
 
             Overlay &overlay() { return *_overlay; }
 
             float spriteScale() const;
             void spriteScale(float scale);
+
+            float cameraScale() const;
+            void cameraScale(float scale);
 
             sf::Vector2u windowSize() const;
 
@@ -41,6 +42,9 @@ namespace space
             sf::Time deltaTime() const;
             sf::Time timeSinceStart() const;
             sf::Time timeSinceStartOnUpdate() const;
+
+            RenderCamera &sceneRender() { return _sceneRender; }
+            RenderCamera &sceneRenderTransition() { return _sceneRenderTransition; }
 
             void initEffects();
 
@@ -56,12 +60,11 @@ namespace space
             std::unique_ptr<ResourceManager> _resourceManager;
             std::unique_ptr<DefinitionManager> _definitionManager;
 
-            sf::RenderTexture _sceneRenderTarget;
+            RenderCamera _sceneRender;
+            RenderCamera _sceneRenderTransition;
             BloomEffect _bloomEffect;
             BloomEffect2 _bloomEffect2;
             std::unique_ptr<Overlay> _overlay;
-
-            Camera _camera;
 
             float _spriteScale;
             float _cameraScale;

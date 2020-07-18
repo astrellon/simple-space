@@ -18,8 +18,6 @@ namespace space
         auto worldSpace = Utils::transformPoint(_position, parentTransform);
         _glow.setPosition(worldSpace);
 
-        _glow.setRotation(session.engine().camera().view().getRotation());
-
         auto engineOn = _parentShip.moveInput != sf::Vector2f();
         auto seconds = dt.asSeconds();
 

@@ -13,6 +13,7 @@
 #include "definitions/planet_surface_definition.hpp"
 #include "utils.hpp"
 #include "keyboard.hpp"
+#include "effects/transition.hpp"
 
 #include "ui/ui_interactables.hpp"
 #include "ui/ui_inventory.hpp"
@@ -65,9 +66,12 @@ namespace space
     void GameSession::setPlayerControllingShip(Ship *ship)
     {
         _engine.spriteScale(1.0f);
-        _engine.camera().followingRotation(false);
-        _engine.camera().followingId(ship->id);
-        _engine.camera().scale(1.0f);
+
+        auto &sceneRenderCamera = _engine.sceneRender().camera();
+        sceneRenderCamera.followingRotation(false);
+        sceneRenderCamera.followingId(ship->id);
+        sceneRenderCamera.scale(1.0f);
+
         _playerController.controllingShip(ship);
         _playerController.controlling(ControlShip);
     }
@@ -76,15 +80,15 @@ namespace space
         auto scale = 1.0f / Utils::getInsideScale();
         _engine.spriteScale(scale);
 
-        auto &camera = _engine.camera();
+        auto &sceneRenderCamera = _engine.sceneRender().camera();
 
         auto shipInside = getShipPlayerIsInsideOf();
         if (shipInside)
         {
-            camera.followingRotationId(shipInside->id);
+            sceneRenderCamera.followingRotationId(shipInside->id);
         }
-        camera.followingId(_playerController.controllingCharacter()->id);
-        camera.scale(scale);
+        sceneRenderCamera.followingId(_playerController.controllingCharacter()->id);
+        sceneRenderCamera.scale(scale);
         _playerController.controlling(ControlCharacter);
     }
 
@@ -125,12 +129,12 @@ namespace space
             {
                 if (area->partOfShip() != nullptr)
                 {
-                    _engine.camera().followingRotationId(area->partOfShip()->id);
+                    _engine.sceneRender().camera().followingRotationId(area->partOfShip()->id);
                     activeStarSystem(area->partOfShip()->starSystem());
                 }
                 else if (area->partOfPlanetSurface() != nullptr)
                 {
-                    _engine.camera().followingRotation(false);
+                    _engine.sceneRender().camera().followingRotation(false);
                     activePlanetSurface(area->partOfPlanetSurface());
                 }
             }
@@ -173,15 +177,22 @@ namespace space
         }
     }
 
-    void GameSession::draw(sf::RenderTarget &target)
+    void GameSession::draw()
     {
-        if (_activeStarSystem)
+        if (_transition.get())
         {
-            _activeStarSystem->draw(target);
+            // Handle transition
         }
-        if (_activePlanetSurface)
+        else
         {
-            _activePlanetSurface->draw(target);
+            if (_activeStarSystem)
+            {
+                _activeStarSystem->draw(_engine.sceneRender());
+            }
+            if (_activePlanetSurface)
+            {
+                _activePlanetSurface->draw(_engine.sceneRender());
+            }
         }
     }
 

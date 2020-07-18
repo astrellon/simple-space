@@ -23,6 +23,7 @@ namespace space
     class PlanetSurfaceDefinition;
     class Item;
     class WalkableArea;
+    class Transition;
 
     class GameSession
     {
@@ -107,8 +108,11 @@ namespace space
 
             void moveCharacter(Character *character, sf::Vector2f position, WalkableArea *area);
 
+            Transition *currentTransition() const { return _transition.get(); }
+            void setTransition(std::unique_ptr<Transition> &transition);
+
             void update(sf::Time dt);
-            void draw(sf::RenderTarget &target);
+            void draw();
             void drawUI(sf::RenderTarget &target);
 
         private:
@@ -122,6 +126,7 @@ namespace space
             StarSystem *_activeStarSystem;
             PlanetSurface *_activePlanetSurface;
             PlayerController _playerController;
+            std::unique_ptr<Transition> _transition;
 
     };
 } // town

@@ -4,9 +4,11 @@
 
 #include "space_object.hpp"
 #include "ship.hpp"
-#include "../game_session.hpp"
 #include "planet.hpp"
+
+#include "../game_session.hpp"
 #include "../engine.hpp"
+#include "../render_camera.hpp"
 
 #include "../definitions/planet_definition.hpp"
 #include "../definitions/celestial_body_definition.hpp"
@@ -28,14 +30,13 @@ namespace space
         }
     }
 
-    void StarSystem::draw(sf::RenderTarget &target)
+    void StarSystem::draw(RenderCamera &target)
     {
         auto showInternals = _session.isControllingCharacter();
         auto insideOfShip = _session.getShipPlayerIsInsideOf();
 
         _background->draw(target);
-
-        target.setView(_session.engine().camera().view());
+        target.preDraw();
 
         for (auto obj : _objects)
         {
