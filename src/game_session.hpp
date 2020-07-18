@@ -24,6 +24,7 @@ namespace space
     class Item;
     class WalkableArea;
     class Transition;
+    class TeleportScreenEffect;
 
     class GameSession
     {
@@ -110,6 +111,7 @@ namespace space
 
             Transition *currentTransition() const { return _transition.get(); }
             void setTransition(std::unique_ptr<Transition> &transition);
+            void setTransition(std::unique_ptr<Transition> &&transition);
 
             void update(sf::Time dt);
             void draw();
@@ -123,6 +125,7 @@ namespace space
             std::vector<std::unique_ptr<PlanetSurface>> _planetSurfaces;
             std::vector<std::unique_ptr<Item>> _items;
 
+            std::unique_ptr<TeleportScreenEffect> _teleportEffect;
             StarSystem *_activeStarSystem;
             PlanetSurface *_activePlanetSurface;
             PlayerController _playerController;

@@ -30,6 +30,7 @@
 #include "src/game/items/teleporter.hpp"
 #include "src/keyboard.hpp"
 #include "src/physics/polygon_collider.hpp"
+#include "src/effects/transition.hpp"
 
 #include "earcut.hpp"
 
@@ -139,6 +140,8 @@ int main()
     //engine.camera().followingId(character->id);
     // gameSession->setPlayerControllingCharacter();
     gameSession->setPlayerControllingShip(ship);
+
+    gameSession->setTransition(std::make_unique<space::Transition>(engine.timeSinceStart(), sf::Time::Zero, starSystem, planetSurface));
 
     while (window.isOpen())
     {

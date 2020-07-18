@@ -1,6 +1,7 @@
 #pragma once
 
 #include "camera.hpp"
+#include "non_copyable.hpp"
 
 #include <SFML/Graphics.hpp>
 
@@ -8,7 +9,7 @@ namespace space
 {
     class Engine;
 
-    class RenderCamera
+    class RenderCamera : private NonCopyable
     {
         public:
             // Fields

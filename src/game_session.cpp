@@ -14,6 +14,7 @@
 #include "utils.hpp"
 #include "keyboard.hpp"
 #include "effects/transition.hpp"
+#include "effects/teleport_screen_effect.hpp"
 
 #include "ui/ui_interactables.hpp"
 #include "ui/ui_inventory.hpp"
@@ -25,7 +26,8 @@ namespace space
 {
     GameSession::GameSession(Engine &engine) : _engine(engine), _activeStarSystem(nullptr), showTeleporters(false), _playerController(*this)
     {
-
+        _teleportEffect = std::make_unique<TeleportScreenEffect>();
+        _teleportEffect->init(engine.resourceManager());
     }
     GameSession::~GameSession()
     {
@@ -141,6 +143,15 @@ namespace space
         }
     }
 
+    void GameSession::setTransition(std::unique_ptr<Transition> &transition)
+    {
+        _transition = std::move(transition);
+    }
+    void GameSession::setTransition(std::unique_ptr<Transition> &&transition)
+    {
+        _transition = std::move(transition);
+    }
+
     bool GameSession::tryGetPlanetSurface(const DefinitionId &id, PlanetSurface **result) const
     {
         for (auto i = _planetSurfaces.begin(); i != _planetSurfaces.end(); ++i)
@@ -179,20 +190,28 @@ namespace space
 
     void GameSession::draw()
     {
+        auto &sceneRender = _engine.sceneRender();
         if (_transition.get())
         {
-            // Handle transition
+            auto &sceneRenderTransition = _engine.sceneRenderTransition();
+            if (_transition->fromPlanetSurface) _transition->fromPlanetSurface->draw(sceneRender);
+            else if (_transition->fromStarSystem) _transition->fromStarSystem->draw(sceneRender);
+
+            if (_transition->toPlanetSurface) _transition->toPlanetSurface->draw(sceneRenderTransition);
+            else if (_transition->toStarSystem) _transition->toStarSystem->draw(sceneRenderTransition);
+
+            sceneRenderTransition.texture().display();
+
+            sf::Texture *test;
+            _engine.resourceManager().texture("data/textures/ships/ship1.png", &test);
+
+            _teleportEffect->draw(test, sceneRender);
+            // _teleportEffect->draw(&sceneRenderTransition.texture().getTexture(), sceneRender);
         }
         else
         {
-            if (_activeStarSystem)
-            {
-                _activeStarSystem->draw(_engine.sceneRender());
-            }
-            if (_activePlanetSurface)
-            {
-                _activePlanetSurface->draw(_engine.sceneRender());
-            }
+            if (_activeStarSystem) _activeStarSystem->draw(sceneRender);
+            else if (_activePlanetSurface) _activePlanetSurface->draw(sceneRender);
         }
     }
 

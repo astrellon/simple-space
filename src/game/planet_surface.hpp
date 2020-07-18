@@ -14,6 +14,7 @@ namespace space
     class Character;
     class GameSession;
     class Planet;
+    class RenderCamera;
 
     class PlanetSurface : private NonCopyable
     {
@@ -29,7 +30,7 @@ namespace space
             const WalkableArea &walkableArea() const { return _walkableArea; }
 
             void update(sf::Time dt);
-            void draw(sf::RenderTarget &target);
+            void draw(RenderCamera &target);
 
             void partOfPlanet(Planet *planet) { _partOfPlanet = planet; }
             Planet *partOfPlanet() const { return _partOfPlanet; }

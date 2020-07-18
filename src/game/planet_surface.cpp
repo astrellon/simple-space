@@ -1,6 +1,7 @@
 #include "planet_surface.hpp"
 
 #include "../utils.hpp"
+#include "../render_camera.hpp"
 
 namespace space
 {
@@ -16,16 +17,18 @@ namespace space
         _walkableArea.update(_session, dt, sf::Transform::Identity);
     }
 
-    void PlanetSurface::draw(sf::RenderTarget &target)
+    void PlanetSurface::draw(RenderCamera &target)
     {
+        target.preDraw();
+
         sf::RenderStates states;
         sf::Transform trans;
         trans.scale(Utils::getInsideScale(), Utils::getInsideScale());
         states.transform = trans;
 
-        target.clear(sf::Color(60, 90, 70));
+        target.texture().clear(sf::Color(60, 90, 70));
 
-        target.draw(*_mapLayer, states);
+        target.texture().draw(*_mapLayer, states);
         _walkableArea.draw(_session, target);
     }
 } // namespace space

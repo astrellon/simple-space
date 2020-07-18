@@ -194,6 +194,11 @@ namespace space
         if (_currentSession.get())
         {
             _currentSession->draw();
+
+            if (_currentSession->currentTransition())
+            {
+
+            }
         }
 
         if (_initedImgui)
