@@ -7,6 +7,7 @@
 
 #include "engine.hpp"
 #include "utils.hpp"
+#include "render_camera.hpp"
 
 namespace space
 {
@@ -27,17 +28,16 @@ namespace space
         }
     }
 
-    void StarBackground::draw(sf::RenderTarget &target)
+    void StarBackground::draw(RenderCamera &renderCamera)
     {
-        //target.clear(sf::Color(20, 24, 46));
-        target.clear(_options.backgroundColour);
+        renderCamera.texture().clear(_options.backgroundColour);
         shader()->setUniform("timeSinceStart", _engine.timeSinceStart().asSeconds());
 
         glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
 
         for (auto &layer : _layers)
         {
-            layer->draw(target);
+            layer->draw(renderCamera);
         }
 
         glDisable(GL_VERTEX_PROGRAM_POINT_SIZE);
@@ -45,7 +45,7 @@ namespace space
 
     // StarBackgroundLayer
     StarBackgroundLayer::StarBackgroundLayer(StarBackground &parent, float distanceScale) :
-          _parent(parent), _distanceScale(distanceScale), _camera(parent.engine().sceneRender().camera(), distanceScale)
+          _parent(parent), _distanceScale(distanceScale), _camera(distanceScale)
     {
 
     }
@@ -81,15 +81,16 @@ namespace space
             }
         }
     }
-    void StarBackgroundLayer::draw(sf::RenderTarget &target)
+    void StarBackgroundLayer::draw(RenderCamera &renderCamera)
     {
         auto shader = _parent.shader();
         sf::RenderStates states;
         states.shader = shader;
 
-        target.setView(_camera.view());
+        _camera.preDraw(renderCamera);
+        renderCamera.texture().setView(_camera.view());
 
-        auto pointSize = std::max(1, static_cast<int>(std::roundf(_distanceScale * _camera.camera().scale())));
+        auto pointSize = std::max(1, static_cast<int>(std::roundf(_distanceScale * renderCamera.camera().scale())));
 
         shader->setUniform("distanceScale", _distanceScale);
         shader->setUniform("pointSize", pointSize);
@@ -101,7 +102,7 @@ namespace space
                 continue;
             }
 
-            chunk->draw(target, states);
+            chunk->draw(renderCamera.texture(), states);
         }
     }
 

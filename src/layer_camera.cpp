@@ -4,23 +4,27 @@
 
 namespace space
 {
-    LayerCamera::LayerCamera(const Camera &camera, float distanceScale) :
-        _camera(camera), _distanceScale(distanceScale), _scale(1.0f)
+    LayerCamera::LayerCamera(float distanceScale) :
+        _distanceScale(distanceScale), _scale(1.0f)
     {
 
     }
 
     void LayerCamera::update(sf::Time dt)
     {
-        _view.setCenter(_camera.center() * _distanceScale);
-        if (_camera.size() != _size || _camera.scale() != _scale)
+    }
+
+    void LayerCamera::preDraw(const Camera &camera)
+    {
+        _view.setCenter(camera.center() * _distanceScale);
+        if (camera.size() != _size || camera.scale() != _scale)
         {
-            size(_camera.size(), _camera.scale());
+            size(camera.size(), camera.scale());
         }
 
-        if (_camera.isFollowingRotation())
+        if (camera.isFollowingRotation())
         {
-            _view.setRotation(_camera.view().getRotation());
+            _view.setRotation(camera.view().getRotation());
         }
         else if (_view.getRotation() != 0.0f)
         {

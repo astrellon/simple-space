@@ -12,12 +12,12 @@ namespace space
             // Fields
 
             // Constructor
-            LayerCamera(const Camera &camera, float distanceScale);
+            LayerCamera(float distanceScale);
 
             // Methods
             void update(sf::Time dt);
+            void preDraw(const Camera &camera);
 
-            const Camera &camera() const { return _camera; }
             float distanceScale() const { return _distanceScale; }
             float scale() const { return _scale; }
 
@@ -25,7 +25,6 @@ namespace space
 
         private:
             // Fields
-            const Camera &_camera;
             sf::View _view;
             float _distanceScale;
             float _scale;

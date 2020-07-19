@@ -12,6 +12,7 @@ namespace space
     class Engine;
     class StarBackgroundChunk;
     class StarBackgroundLayer;
+    class RenderCamera;
 
     class StarBackground
     {
@@ -23,7 +24,7 @@ namespace space
 
             // Methods
             void update(sf::Time dt);
-            void draw(sf::RenderTarget &target);
+            void draw(RenderCamera &renderCamera);
 
             float area() const { return _options.area; }
             int numParticles() const { return _options.numParticles; }
@@ -51,7 +52,7 @@ namespace space
 
             // Methods
             void update(sf::Time dt);
-            void draw(sf::RenderTarget &target);
+            void draw(RenderCamera &renderCamera);
 
             void cameraCenter(sf::Vector2f center);
             LayerCamera &camera() { return _camera; }
