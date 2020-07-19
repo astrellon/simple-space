@@ -33,8 +33,8 @@ namespace space
 
         sf::RenderStates states;
         states.shader = _dissolve;
+        states.texture = texture;
 
-        _dissolve->setUniform("source", texture);
         _dissolve->setUniform("amount", 0.5f);
 
         target.draw(_vertices, states);

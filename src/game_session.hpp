@@ -24,7 +24,9 @@ namespace space
     class Item;
     class WalkableArea;
     class Transition;
+    class TransitionData;
     class TeleportScreenEffect;
+    class RenderCamera;
 
     class GameSession
     {
@@ -118,6 +120,7 @@ namespace space
             void drawUI(sf::RenderTarget &target);
 
         private:
+            // Fields
             Engine &_engine;
 
             std::vector<std::unique_ptr<SpaceObject>> _spaceObjects;
@@ -131,5 +134,7 @@ namespace space
             PlayerController _playerController;
             std::unique_ptr<Transition> _transition;
 
+            // Methods
+            void applyTransitionToCamera(const TransitionData &transitionData, RenderCamera &renderCamera);
     };
 } // town

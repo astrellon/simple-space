@@ -1,6 +1,7 @@
 #include "game_session.hpp"
 
 #include "engine.hpp"
+#include "render_camera.hpp"
 #include "game/ship.hpp"
 #include "game/planet.hpp"
 #include "game/star_system.hpp"
@@ -194,19 +195,13 @@ namespace space
         if (_transition.get())
         {
             auto &sceneRenderTransition = _engine.sceneRenderTransition();
-            if (_transition->fromPlanetSurface) _transition->fromPlanetSurface->draw(sceneRender);
-            else if (_transition->fromStarSystem) _transition->fromStarSystem->draw(sceneRender);
 
-            if (_transition->toPlanetSurface) _transition->toPlanetSurface->draw(sceneRenderTransition);
-            else if (_transition->toStarSystem) _transition->toStarSystem->draw(sceneRenderTransition);
+            applyTransitionToCamera(_transition->fromData, sceneRenderTransition);
+            applyTransitionToCamera(_transition->toData, sceneRender);
 
             sceneRenderTransition.texture().display();
 
-            sf::Texture *test;
-            _engine.resourceManager().texture("data/textures/ships/ship1.png", &test);
-
-            _teleportEffect->draw(test, sceneRender);
-            // _teleportEffect->draw(&sceneRenderTransition.texture().getTexture(), sceneRender);
+            _teleportEffect->draw(&sceneRenderTransition.texture().getTexture(), sceneRender);
         }
         else
         {
@@ -226,6 +221,39 @@ namespace space
         if (showTeleporters)
         {
             UITeleporter::draw(*this, _playerController.shipsInTeleportRange(), _playerController.planetsInTeleportRange());
+        }
+    }
+
+    void GameSession::applyTransitionToCamera(const TransitionData &transitionData, RenderCamera &renderCamera)
+    {
+        auto &camera = renderCamera.camera();
+        if (transitionData.followId.size() > 0)
+        {
+            camera.followingId(transitionData.followId);
+        }
+        else
+        {
+            camera.following(false);
+        }
+
+        if (transitionData.followRotationId.size() > 0)
+        {
+            camera.followingRotationId(transitionData.followRotationId);
+        }
+        else
+        {
+            camera.followingRotation(false);
+        }
+
+        camera.scale(transitionData.cameraScale);
+
+        if (transitionData.planetSurface)
+        {
+            transitionData.planetSurface->draw(renderCamera);
+        }
+        else if (transitionData.starSystem)
+        {
+            transitionData.starSystem->draw(renderCamera);
         }
     }
 } // namespace town
