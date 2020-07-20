@@ -2,6 +2,9 @@
 
 #include <iostream>
 
+#include "../game_session.hpp"
+#include "../engine.hpp"
+
 namespace space
 {
     TeleportScreenEffect::TeleportScreenEffect() : _dissolve(nullptr), _vertices(sf::Triangles, 6)
@@ -24,7 +27,7 @@ namespace space
         }
     }
 
-    void TeleportScreenEffect::draw(const sf::Texture *texture, sf::RenderTarget &target, float t)
+    void TeleportScreenEffect::draw(GameSession &session, const sf::Texture *texture, sf::RenderTarget &target, float t)
     {
         if (_dissolve == nullptr)
         {
@@ -36,6 +39,7 @@ namespace space
         states.texture = texture;
 
         _dissolve->setUniform("amount", 1.0f - t);
+        _dissolve->setUniform("timeSinceStart", session.engine().timeSinceStart().asSeconds());
 
         target.draw(_vertices, states);
     }

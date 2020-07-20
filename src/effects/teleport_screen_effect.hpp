@@ -8,6 +8,8 @@
 
 namespace space
 {
+    class GameSession;
+
     class TeleportScreenEffect
     {
         public:
@@ -16,7 +18,7 @@ namespace space
 
             // Methods
             void init(ResourceManager &resourceManager);
-            void draw(const sf::Texture *texture, sf::RenderTarget &target, float t);
+            void draw(GameSession &session, const sf::Texture *texture, sf::RenderTarget &target, float t);
 
         private:
             sf::Shader *_dissolve;

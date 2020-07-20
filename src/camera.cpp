@@ -5,7 +5,12 @@
 
 namespace space
 {
-    Camera::Camera(Engine &engine) : _engine(engine), _scale(1.0f), _zoomScale(1.0f), _following(false), _followingRotation(false)
+    CameraProps::CameraProps() : scale(1.0f), following(false), followingRotation(false)
+    {
+
+    }
+
+    Camera::Camera(Engine &engine) : _engine(engine), _zoomScale(1.0f)
     {
 
     }
@@ -14,10 +19,10 @@ namespace space
     {
         zoomScale(_engine.cameraScale());
 
-        if (_following)
+        if (_props.following)
         {
             SpaceObject *followingObject;
-            if (_engine.currentSession()->tryGetSpaceObject(_followingId, &followingObject))
+            if (_engine.currentSession()->tryGetSpaceObject(_props.followingId, &followingObject))
             {
                 auto trans = followingObject->worldTransform();
                 sf::Vector2f pos(trans.getMatrix()[12], trans.getMatrix()[13]);
@@ -26,10 +31,10 @@ namespace space
         }
 
         auto resetRotation = true;
-        if (_followingRotation)
+        if (_props.followingRotation)
         {
             SpaceObject *followingObject;
-            if (_engine.currentSession()->tryGetSpaceObject(_followingRotationId, &followingObject))
+            if (_engine.currentSession()->tryGetSpaceObject(_props.followingRotationId, &followingObject))
             {
                 resetRotation = false;
                 _view.setRotation(followingObject->transform().rotation);
@@ -44,9 +49,9 @@ namespace space
 
     void Camera::scale(float scale)
     {
-        if (scale != _scale)
+        if (scale != _props.scale)
         {
-            _scale = scale;
+            _props.scale = scale;
             updateViewSize();
         }
     }
@@ -71,26 +76,31 @@ namespace space
         _view.setCenter(center);
     }
 
+    void Camera::rotation(float rotation)
+    {
+        _view.setRotation(rotation);
+    }
+
     void Camera::followingId(const ObjectId &id)
     {
-        _followingId = id;
-        _following = true;
+        _props.followingId = id;
+        _props.following = true;
     }
 
     void Camera::following(bool following)
     {
-        _following = following;
+        _props.following = following;
     }
 
     void Camera::followingRotationId(const ObjectId &id)
     {
-        _followingRotationId = id;
-        _followingRotation = true;
+        _props.followingRotationId = id;
+        _props.followingRotation = true;
     }
 
     void Camera::followingRotation(bool following)
     {
-        _followingRotation = following;
+        _props.followingRotation = following;
     }
 
     const sf::View &Camera::view() const
@@ -100,10 +110,10 @@ namespace space
 
     float Camera::getRotation() const
     {
-        if (_followingRotation)
+        if (_props.followingRotation)
         {
             SpaceObject *followingObject;
-            if (_engine.currentSession()->tryGetSpaceObject(_followingRotationId, &followingObject))
+            if (_engine.currentSession()->tryGetSpaceObject(_props.followingRotationId, &followingObject))
             {
                 return followingObject->transform().rotation;
             }
@@ -112,9 +122,15 @@ namespace space
         return 0.0f;
     }
 
+    void Camera::cameraProps(const CameraProps &props)
+    {
+        _props = props;
+        updateViewSize();
+    }
+
     void Camera::updateViewSize()
     {
-        auto size = _size / (_scale * _zoomScale);
+        auto size = _size / (_props.scale * _zoomScale);
         _view.setSize(size);
     }
 }

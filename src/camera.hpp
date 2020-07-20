@@ -8,6 +8,21 @@ namespace space
 {
     class Engine;
 
+    class CameraProps
+    {
+        public:
+            // Fields
+            float scale;
+
+            bool following;
+            bool followingRotation;
+            ObjectId followingId;
+            ObjectId followingRotationId;
+
+            // Constructor
+            CameraProps();
+    };
+
     class Camera
     {
         public:
@@ -25,23 +40,29 @@ namespace space
             void center(sf::Vector2f center);
             sf::Vector2f center() const { return _view.getCenter(); }
 
+            void rotation(float rotation);
+            float rotation() const { return _view.getRotation(); }
+
             void scale(float scale);
-            float scale() const { return _scale;}
+            float scale() const { return _props.scale; }
 
             void zoomScale(float zoomScale);
-            float zoomScale() const { return _zoomScale;}
+            float zoomScale() const { return _zoomScale; }
 
             void followingId(const ObjectId &id);
-            const ObjectId &followingId() const { return _followingId; }
+            const ObjectId &followingId() const { return _props.followingId; }
 
             void following(bool follow);
-            bool isFollowing() const { return _following; }
+            bool isFollowing() const { return _props.following; }
 
             void followingRotationId(const ObjectId &id);
-            const ObjectId &followingRotationId() const { return _followingRotationId; }
+            const ObjectId &followingRotationId() const { return _props.followingRotationId; }
 
             void followingRotation(bool follow);
-            bool isFollowingRotation() const { return _followingRotation; }
+            bool isFollowingRotation() const { return _props.followingRotation; }
+
+            const CameraProps &cameraProps() const { return _props; }
+            void cameraProps(const CameraProps &props);
 
             float getRotation() const;
 
@@ -52,13 +73,9 @@ namespace space
             Engine &_engine;
             sf::View _view;
             sf::Vector2f _size;
-            float _scale;
             float _zoomScale;
 
-            bool _following;
-            bool _followingRotation;
-            ObjectId _followingId;
-            ObjectId _followingRotationId;
+            CameraProps _props;
 
             // Methods
             void updateViewSize();

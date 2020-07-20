@@ -50,7 +50,6 @@ namespace space
                         std::cout << "Teleport to: " << teleporter.item->name() << " @ " << area.partOfShip()->definition.name << std::endl;
 
                         session.moveCharacter(session.playerController().controllingCharacter(), teleporter.placed->transform().position, &teleporter.placed->area);
-                        session.activeStarSystem(area.partOfShip()->starSystem());
                     }
                 }
             }
@@ -89,7 +88,6 @@ namespace space
                             std::cout << "Teleport to: " << teleporter.item->name() << " @ " << area.partOfPlanetSurface()->definition.name << std::endl;
 
                             session.moveCharacter(session.playerController().controllingCharacter(), teleporter.placed->transform().position, &teleporter.placed->area);
-                            session.activePlanetSurface(area.partOfPlanetSurface());
                         }
                     }
                 }

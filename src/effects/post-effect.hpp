@@ -1,6 +1,6 @@
 #pragma once
 
-#include "non_copyable.hpp"
+#include "../non_copyable.hpp"
 
 #include <SFML/Graphics.hpp>
 

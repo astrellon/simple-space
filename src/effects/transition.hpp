@@ -4,7 +4,8 @@
 
 #include <SFML/System.hpp>
 
-#include "game/space_object.hpp"
+#include "../game/space_object.hpp"
+#include "../camera.hpp"
 
 namespace space
 {
@@ -19,13 +20,12 @@ namespace space
             StarSystem *starSystem;
             Ship *ship;
             PlanetSurface *planetSurface;
-            ObjectId followId;
-            ObjectId followRotationId;
-            float cameraScale;
             sf::Vector2f position;
+            float rotation;
+            CameraProps cameraProps;
 
             // Constructor
-            TransitionData() : ship(nullptr), starSystem(nullptr), planetSurface(nullptr), cameraScale(1.0f) { }
+            TransitionData() : ship(nullptr), starSystem(nullptr), planetSurface(nullptr), rotation(0.0f) { }
 
             // Methods
     };

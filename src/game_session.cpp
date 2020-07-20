@@ -206,14 +206,14 @@ namespace space
         {
             auto &sceneRenderTransition = _engine.sceneRenderTransition();
 
-            applyTransitionToCamera(_transition->fromData, sceneRenderTransition);
             applyTransitionToCamera(_transition->toData, sceneRender);
+            applyTransitionToCamera(_transition->fromData, sceneRenderTransition);
 
             sceneRenderTransition.texture().display();
 
             auto t = _transition->percent(_engine.timeSinceStart());
 
-            _teleportEffect->draw(&sceneRenderTransition.texture().getTexture(), sceneRender, t);
+            _teleportEffect->draw(*this, &sceneRenderTransition.texture().getTexture(), sceneRender, t);
 
             if (t >= 1.0f)
             {
@@ -246,26 +246,16 @@ namespace space
         renderCamera.transitionData = &transitionData;
 
         auto &camera = renderCamera.camera();
-        if (transitionData.followId.size() > 0)
+        camera.cameraProps(renderCamera.transitionData->cameraProps);
+
+        if (!transitionData.cameraProps.following)
         {
-            camera.followingId(transitionData.followId);
-        }
-        else
-        {
-            camera.following(false);
             camera.center(transitionData.position);
         }
-
-        if (transitionData.followRotationId.size() > 0)
+        if (!transitionData.cameraProps.followingRotation)
         {
-            camera.followingRotationId(transitionData.followRotationId);
+            camera.rotation(transitionData.rotation);
         }
-        else
-        {
-            camera.followingRotation(false);
-        }
-
-        camera.scale(transitionData.cameraScale);
 
         if (transitionData.planetSurface)
         {
@@ -279,16 +269,37 @@ namespace space
 
     void GameSession::createTransition(const WalkableArea *prevArea, const WalkableArea *area, const Character *character)
     {
-        auto transition = std::make_unique<Transition>(_engine.timeSinceStart(), sf::seconds(1));
+        auto transition = std::make_unique<Transition>(_engine.timeSinceStart(), sf::seconds(0.75));
 
         auto &fromData = transition->fromData;
         auto &toData = transition->toData;
 
+        fromData.cameraProps = _engine.sceneRender().camera().cameraProps();
+        toData.cameraProps = _engine.sceneRender().camera().cameraProps();
+
         applyAreaToTransitionData(prevArea, fromData);
-        fromData.position = Utils::getPosition(character->worldTransform());
+
+        if (fromData.cameraProps.following)
+        {
+            SpaceObject *followingObject;
+            if (tryGetSpaceObject(fromData.cameraProps.followingId, &followingObject))
+            {
+                fromData.position = Utils::getPosition(followingObject->worldTransform());
+            }
+            fromData.cameraProps.following = false;
+        }
+
+        if (fromData.cameraProps.followingRotation)
+        {
+            SpaceObject *followingObject;
+            if (tryGetSpaceObject(fromData.cameraProps.followingRotationId, &followingObject))
+            {
+                fromData.rotation = followingObject->transform().rotation;
+            }
+            fromData.cameraProps.followingRotation = false;
+        }
 
         applyAreaToTransitionData(area, toData);
-        transition->toData.followId = character->id;
 
         setTransition(transition);
     }
@@ -297,14 +308,15 @@ namespace space
     {
         if (area->partOfShip())
         {
-            data.cameraScale = 1.0f / Utils::getInsideScale();
             data.starSystem = area->partOfShip()->starSystem();
             data.ship = area->partOfShip();
+            data.cameraProps.followingRotationId = area->partOfShip()->id;
+            data.cameraProps.followingRotation = true;
         }
         else
         {
-            data.cameraScale = 1.0f / Utils::getInsideScale();
             data.planetSurface = area->partOfPlanetSurface();
+            data.cameraProps.followingRotation = false;
         }
     }
 } // namespace town
