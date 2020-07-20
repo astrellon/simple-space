@@ -133,17 +133,7 @@ namespace space
             {
                 if (prevArea != nullptr)
                 {
-                    auto transition = std::make_unique<Transition>(_engine.timeSinceStart(), sf::seconds(1));
-
-                    transition->fromData.starSystem = prevArea->partOfShip()->starSystem();
-                    transition->fromData.cameraScale = 1.0f / Utils::getInsideScale();
-                    transition->fromData.position = Utils::getPosition(character->worldTransform());
-
-                    transition->toData.starSystem = area->partOfShip()->starSystem();
-                    transition->toData.cameraScale = 1.0f / Utils::getInsideScale();
-                    transition->toData.followId = character->id;
-
-                    setTransition(transition);
+                    createTransition(prevArea, area, character);
                 }
 
                 if (area->partOfShip() != nullptr)
@@ -162,10 +152,14 @@ namespace space
 
     void GameSession::setTransition(std::unique_ptr<Transition> &transition)
     {
+        _engine.sceneRender().transitionData = nullptr;
+        _engine.sceneRenderTransition().transitionData = nullptr;
         _transition = std::move(transition);
     }
     void GameSession::setTransition(std::unique_ptr<Transition> &&transition)
     {
+        _engine.sceneRender().transitionData = nullptr;
+        _engine.sceneRenderTransition().transitionData = nullptr;
         _transition = std::move(transition);
     }
 
@@ -249,6 +243,8 @@ namespace space
 
     void GameSession::applyTransitionToCamera(const TransitionData &transitionData, RenderCamera &renderCamera)
     {
+        renderCamera.transitionData = &transitionData;
+
         auto &camera = renderCamera.camera();
         if (transitionData.followId.size() > 0)
         {
@@ -278,6 +274,37 @@ namespace space
         else if (transitionData.starSystem)
         {
             transitionData.starSystem->draw(renderCamera);
+        }
+    }
+
+    void GameSession::createTransition(const WalkableArea *prevArea, const WalkableArea *area, const Character *character)
+    {
+        auto transition = std::make_unique<Transition>(_engine.timeSinceStart(), sf::seconds(1));
+
+        auto &fromData = transition->fromData;
+        auto &toData = transition->toData;
+
+        applyAreaToTransitionData(prevArea, fromData);
+        fromData.position = Utils::getPosition(character->worldTransform());
+
+        applyAreaToTransitionData(area, toData);
+        transition->toData.followId = character->id;
+
+        setTransition(transition);
+    }
+
+    void GameSession::applyAreaToTransitionData(const WalkableArea *area, TransitionData &data) const
+    {
+        if (area->partOfShip())
+        {
+            data.cameraScale = 1.0f / Utils::getInsideScale();
+            data.starSystem = area->partOfShip()->starSystem();
+            data.ship = area->partOfShip();
+        }
+        else
+        {
+            data.cameraScale = 1.0f / Utils::getInsideScale();
+            data.planetSurface = area->partOfPlanetSurface();
         }
     }
 } // namespace town

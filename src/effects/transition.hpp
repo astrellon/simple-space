@@ -10,12 +10,14 @@ namespace space
 {
     class StarSystem;
     class PlanetSurface;
+    class Ship;
 
     class TransitionData
     {
         public:
             // Fields
             StarSystem *starSystem;
+            Ship *ship;
             PlanetSurface *planetSurface;
             ObjectId followId;
             ObjectId followRotationId;
@@ -23,7 +25,7 @@ namespace space
             sf::Vector2f position;
 
             // Constructor
-            TransitionData() : starSystem(nullptr), planetSurface(nullptr), cameraScale(1.0f) { }
+            TransitionData() : ship(nullptr), starSystem(nullptr), planetSurface(nullptr), cameraScale(1.0f) { }
 
             // Methods
     };

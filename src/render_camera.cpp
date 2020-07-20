@@ -4,7 +4,7 @@
 
 namespace space
 {
-    RenderCamera::RenderCamera(Engine &engine) : _camera(engine)
+    RenderCamera::RenderCamera(Engine &engine) : _camera(engine), transitionData(nullptr)
     {
 
     }

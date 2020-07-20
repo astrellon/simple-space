@@ -9,6 +9,7 @@
 #include "../game_session.hpp"
 #include "../engine.hpp"
 #include "../render_camera.hpp"
+#include "../effects/transition.hpp"
 
 #include "../definitions/planet_definition.hpp"
 #include "../definitions/celestial_body_definition.hpp"
@@ -32,8 +33,13 @@ namespace space
 
     void StarSystem::draw(RenderCamera &target)
     {
-        auto showInternals = _session.isControllingCharacter();
         auto insideOfShip = _session.getShipPlayerIsInsideOf();
+        auto showInternals = _session.isControllingCharacter();
+        if (target.transitionData && target.transitionData->ship)
+        {
+            insideOfShip = target.transitionData->ship;
+            showInternals = true;
+        }
 
         _background->draw(target);
         target.preDraw();
@@ -41,7 +47,7 @@ namespace space
         for (auto obj : _objects)
         {
             // Ignore rendering current inside ship here
-            if (showInternals && dynamic_cast<Ship *>(obj) == insideOfShip)
+            if (showInternals && obj->id == insideOfShip->id)
             {
                 continue;
             }

@@ -8,11 +8,13 @@
 namespace space
 {
     class Engine;
+    class TransitionData;
 
     class RenderCamera : private NonCopyable
     {
         public:
             // Fields
+            const TransitionData *transitionData;
 
             // Constructor
             RenderCamera(Engine &engine);
