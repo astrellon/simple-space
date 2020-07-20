@@ -16,7 +16,7 @@ namespace space
 
             // Methods
             void init(ResourceManager &resourceManager);
-            void draw(const sf::Texture *texture, sf::RenderTarget &target);
+            void draw(const sf::Texture *texture, sf::RenderTarget &target, float t);
 
         private:
             sf::Shader *_dissolve;

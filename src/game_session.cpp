@@ -114,6 +114,7 @@ namespace space
 
     void GameSession::moveCharacter(Character *character, sf::Vector2f position, WalkableArea *area)
     {
+        auto prevArea = character->insideArea();
         if (character->insideArea() != nullptr)
         {
             character->insideArea()->removeCharacter(character);
@@ -130,6 +131,21 @@ namespace space
             _playerController.clearCanInteractWith();
             if (_playerController.controlling() == ControlCharacter)
             {
+                if (prevArea != nullptr)
+                {
+                    auto transition = std::make_unique<Transition>(_engine.timeSinceStart(), sf::seconds(1));
+
+                    transition->fromData.starSystem = prevArea->partOfShip()->starSystem();
+                    transition->fromData.cameraScale = 1.0f / Utils::getInsideScale();
+                    transition->fromData.position = Utils::getPosition(character->worldTransform());
+
+                    transition->toData.starSystem = area->partOfShip()->starSystem();
+                    transition->toData.cameraScale = 1.0f / Utils::getInsideScale();
+                    transition->toData.followId = character->id;
+
+                    setTransition(transition);
+                }
+
                 if (area->partOfShip() != nullptr)
                 {
                     _engine.sceneRender().camera().followingRotationId(area->partOfShip()->id);
@@ -201,7 +217,14 @@ namespace space
 
             sceneRenderTransition.texture().display();
 
-            _teleportEffect->draw(&sceneRenderTransition.texture().getTexture(), sceneRender);
+            auto t = _transition->percent(_engine.timeSinceStart());
+
+            _teleportEffect->draw(&sceneRenderTransition.texture().getTexture(), sceneRender, t);
+
+            if (t >= 1.0f)
+            {
+                setTransition(nullptr);
+            }
         }
         else
         {
@@ -234,6 +257,7 @@ namespace space
         else
         {
             camera.following(false);
+            camera.center(transitionData.position);
         }
 
         if (transitionData.followRotationId.size() > 0)

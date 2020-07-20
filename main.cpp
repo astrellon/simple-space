@@ -141,17 +141,17 @@ int main()
     // gameSession->setPlayerControllingCharacter();
     gameSession->setPlayerControllingShip(ship);
 
-    auto transition = std::make_unique<space::Transition>(engine.timeSinceStart(), sf::Time::Zero);
+    // auto transition = std::make_unique<space::Transition>(engine.timeSinceStart(), sf::Time::Zero);
 
-    auto &transFrom = transition->fromData;
-    transFrom.starSystem = starSystem;
-    transFrom.followId = ship->id;
+    // auto &transFrom = transition->fromData;
+    // transFrom.starSystem = starSystem;
+    // transFrom.followId = ship->id;
 
-    auto &transTo = transition->toData;
-    transTo.planetSurface = planetSurface;
-    transTo.cameraScale = 1.0f / space::Utils::getInsideScale();
+    // auto &transTo = transition->toData;
+    // transTo.planetSurface = planetSurface;
+    // transTo.cameraScale = 1.0f / space::Utils::getInsideScale();
 
-    gameSession->setTransition(transition);
+    // gameSession->setTransition(transition);
 
     while (window.isOpen())
     {

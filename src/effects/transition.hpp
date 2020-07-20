@@ -46,5 +46,6 @@ namespace space
             }
 
             // Methods
+            float percent(const sf::Time &currentTime) const;
     };
 } // space

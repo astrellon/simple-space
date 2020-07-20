@@ -24,7 +24,7 @@ namespace space
         }
     }
 
-    void TeleportScreenEffect::draw(const sf::Texture *texture, sf::RenderTarget &target)
+    void TeleportScreenEffect::draw(const sf::Texture *texture, sf::RenderTarget &target, float t)
     {
         if (_dissolve == nullptr)
         {
@@ -35,7 +35,7 @@ namespace space
         states.shader = _dissolve;
         states.texture = texture;
 
-        _dissolve->setUniform("amount", 0.5f);
+        _dissolve->setUniform("amount", 1.0f - t);
 
         target.draw(_vertices, states);
     }
