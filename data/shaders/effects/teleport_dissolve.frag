@@ -6,7 +6,7 @@ out vec4 FragColor;
 
 uniform sampler2D source;
 uniform float amount;
-uniform float timeSinceStart;
+uniform float offset;
 
 float Hash(in vec2 p, in float localScale)
 {
@@ -62,11 +62,11 @@ void main()
     vec2 uv = gl_TexCoord[0].xy;
     uv -= 0.5;
 
-    float t = amount * amount;
     float len = 0.8-length(uv);
-    float a = t > len ? (clamp(t - len, 0, 1) / 0.1) : 0;
+    float a = amount > len ? (clamp(amount - len, 0, 1) / 0.1) : 0;
 
-    uv.x += timeSinceStart * 0.02;
+    uv += 1e5;
+    uv.x += offset;
     float noise = fBm(uv * 4);
 
     a = clamp(a * noise, 0, 1);

@@ -7,7 +7,7 @@
 
 namespace space
 {
-    TeleportScreenEffect::TeleportScreenEffect() : _dissolve(nullptr), _vertices(sf::Triangles, 6)
+    TeleportScreenEffect::TeleportScreenEffect() : _dissolve(nullptr), _vertices(sf::Triangles, 6), _offset(0.0f)
     {
         _vertices[0] = sf::Vertex(sf::Vector2f(-1, 1), sf::Vector2f(0, 1));
         _vertices[1] = sf::Vertex(sf::Vector2f(1, 1), sf::Vector2f(1, 1));
@@ -38,8 +38,12 @@ namespace space
         states.shader = _dissolve;
         states.texture = texture;
 
-        _dissolve->setUniform("amount", 1.0f - t);
-        _dissolve->setUniform("timeSinceStart", session.engine().timeSinceStart().asSeconds());
+        t = 1.0f - t;
+
+        auto easedT = std::pow(t, 6);
+
+        _dissolve->setUniform("amount", t);
+        _dissolve->setUniform("offset", _offset);
 
         target.draw(_vertices, states);
     }

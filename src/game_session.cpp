@@ -154,12 +154,14 @@ namespace space
     {
         _engine.sceneRender().transitionData = nullptr;
         _engine.sceneRenderTransition().transitionData = nullptr;
+        _teleportEffect->offset(Utils::randf(-1e3, 1e3));
         _transition = std::move(transition);
     }
     void GameSession::setTransition(std::unique_ptr<Transition> &&transition)
     {
         _engine.sceneRender().transitionData = nullptr;
         _engine.sceneRenderTransition().transitionData = nullptr;
+        _teleportEffect->offset(Utils::randf(-1e6, 1e6));
         _transition = std::move(transition);
     }
 
@@ -269,7 +271,7 @@ namespace space
 
     void GameSession::createTransition(const WalkableArea *prevArea, const WalkableArea *area, const Character *character)
     {
-        auto transition = std::make_unique<Transition>(_engine.timeSinceStart(), sf::seconds(0.75));
+        auto transition = std::make_unique<Transition>(_engine.timeSinceStart(), sf::seconds(1.2f));
 
         auto &fromData = transition->fromData;
         auto &toData = transition->toData;
