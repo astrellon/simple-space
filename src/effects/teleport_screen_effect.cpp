@@ -38,12 +38,16 @@ namespace space
         states.shader = _dissolve;
         states.texture = texture;
 
+        auto windowSize = session.engine().windowSize();
+        auto aspectRatio = static_cast<float>(windowSize.x) / static_cast<float>(windowSize.y);
+
         t = 1.0f - t;
 
-        auto easedT = std::pow(t, 6);
+        auto easedT = static_cast<float>(std::pow(t, 4));
 
-        _dissolve->setUniform("amount", t);
+        _dissolve->setUniform("amount", easedT);
         _dissolve->setUniform("offset", _offset);
+        _dissolve->setUniform("aspectRatio", aspectRatio);
 
         target.draw(_vertices, states);
     }

@@ -7,6 +7,7 @@ out vec4 FragColor;
 uniform sampler2D source;
 uniform float amount;
 uniform float offset;
+uniform float aspectRatio;
 
 float Hash(in vec2 p, in float localScale)
 {
@@ -61,24 +62,24 @@ void main()
 
     vec2 uv = gl_TexCoord[0].xy;
     uv -= 0.5;
+    uv.x *= aspectRatio;
+    uv /= aspectRatio;
 
     float len = 0.8-length(uv);
-    float a = amount > len ? (clamp(amount - len, 0, 1) / 0.1) : 0;
+    //float a = amount > len ? (clamp((amount - len) / 0.05, 0, 1)) : 0;
+    float a = clamp((amount - len) * 20, 0, 1);
 
-    uv += 1e5;
+    //uv += 1e5;
     uv.x += offset;
-    float noise = fBm(uv * 4);
-
-    a = clamp(a * noise, 0, 1);
-
-    if (a < 1 && a > 0.95)
+    float noise = round(fBm(uv * 4) * 4) * 0.25;
+    float noiseCutoff = amount - len < -0.05 ? 0 : 1;
+    a = clamp(a + noise * noiseCutoff, 0, 1);
+    // if (a < 1.2 && a > 1.0)
+    // {
+    //     FragColor = mix(vec4(1, 1, 1, 1), vec4(0.2, 0.4, 0.9, 0), (a - 1.0) / 0.2);
+    // }
+    // else
     {
-        FragColor = vec4(1, 1, 1, 1);
-    }
-    else
-    {
-        a = round(a * 2) / 2;
-
         FragColor = vec4(colour.rgb, colour.a * a);
     }
 }
