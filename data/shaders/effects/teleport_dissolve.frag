@@ -65,21 +65,18 @@ void main()
     uv.x *= aspectRatio;
     uv /= aspectRatio;
 
-    float len = 0.8-length(uv);
-    //float a = amount > len ? (clamp((amount - len) / 0.05, 0, 1)) : 0;
-    float a = clamp((amount - len) * 20, 0, 1);
+    float len = length(uv);
+    float dist = (len + amount - 0.5) * 3;
+    float power = -0.5f * (5 * (dist - 1)) * (5 * (dist - 1));
+    float a = pow(4, power);
+    float cutoff = (amount + 0.15) > (1 - len) ? 1 : 0;
+    float a2 = pow(a, 10);
 
-    //uv += 1e5;
+    uv += 1e5;
     uv.x += offset;
-    float noise = round(fBm(uv * 4) * 4) * 0.25;
-    float noiseCutoff = amount - len < -0.05 ? 0 : 1;
-    a = clamp(a + noise * noiseCutoff, 0, 1);
-    // if (a < 1.2 && a > 1.0)
-    // {
-    //     FragColor = mix(vec4(1, 1, 1, 1), vec4(0.2, 0.4, 0.9, 0), (a - 1.0) / 0.2);
-    // }
-    // else
-    {
-        FragColor = vec4(colour.rgb, colour.a * a);
-    }
+    float noise = fBm(uv * 3) * 0.75 + 0.5;
+    a *= noise;
+    a2 *= noise;
+
+    FragColor = vec4(colour.rgb, cutoff) + (vec4(0.2, 0.4, 0.9 , 1) * a) + (vec4(1, 1, 1, 1) * a2);
 }

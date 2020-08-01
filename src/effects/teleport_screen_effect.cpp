@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+#include <SFML/OpenGL.hpp>
+
 #include "../game_session.hpp"
 #include "../engine.hpp"
 
@@ -34,10 +36,6 @@ namespace space
             return;
         }
 
-        sf::RenderStates states;
-        states.shader = _dissolve;
-        states.texture = texture;
-
         auto windowSize = session.engine().windowSize();
         auto aspectRatio = static_cast<float>(windowSize.x) / static_cast<float>(windowSize.y);
 
@@ -45,9 +43,15 @@ namespace space
 
         auto easedT = static_cast<float>(std::pow(t, 4));
 
+        std::cout << t << std::endl;
+
         _dissolve->setUniform("amount", easedT);
+        _dissolve->setUniform("source", *texture);
         _dissolve->setUniform("offset", _offset);
         _dissolve->setUniform("aspectRatio", aspectRatio);
+
+        sf::RenderStates states;
+        states.shader = _dissolve;
 
         target.draw(_vertices, states);
     }

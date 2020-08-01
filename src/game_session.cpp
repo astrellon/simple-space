@@ -274,7 +274,7 @@ namespace space
         auto windowSize = _engine.windowSize();
         auto aspectRatio = static_cast<float>(windowSize.x) / static_cast<float>(windowSize.y);
 
-        auto transition = std::make_unique<Transition>(_engine.timeSinceStart(), sf::seconds(10.2f * aspectRatio));
+        auto transition = std::make_unique<Transition>(_engine.timeSinceStart(), sf::seconds(1.2f * aspectRatio));
 
         auto &fromData = transition->fromData;
         auto &toData = transition->toData;
