@@ -146,5 +146,6 @@ namespace space
 
             void createTransition(const WalkableArea *prevArea, const WalkableArea *area, const TeleportClone &teleportClone, const Character *character);
             void applyAreaToTransitionData(const WalkableArea *area, TransitionData &data) const;
+            void clearTeleportClone();
     };
 } // town

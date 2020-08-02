@@ -153,6 +153,8 @@ namespace space
             {
                 if (prevArea != nullptr)
                 {
+                    clearTeleportClone();
+
                     std::stringstream newId(character->id);
                     newId << "_TELEPORT_CLONE_";
                     newId << _engine.timeSinceStart().asMicroseconds();
@@ -192,6 +194,15 @@ namespace space
         _transition = std::move(nullptr);
     }
 
+    void GameSession::clearTeleportClone()
+    {
+        if (_playerController.teleportClone() != nullptr)
+        {
+            removeSpaceObject(_playerController.teleportClone()->id);
+            _playerController.teleportClone(nullptr);
+        }
+    }
+
     bool GameSession::tryGetPlanetSurface(const DefinitionId &id, PlanetSurface **result) const
     {
         for (auto i = _planetSurfaces.begin(); i != _planetSurfaces.end(); ++i)
@@ -226,6 +237,20 @@ namespace space
         {
             _activePlanetSurface->update(dt);
         }
+
+        if (_transition.get())
+        {
+            auto &fromData = _transition.get()->fromData;
+            auto &sceneRenderTransition = _engine.sceneRenderTransition();
+            if (fromData.planetSurface && fromData.planetSurface != _activePlanetSurface)
+            {
+                _transition->fromData.planetSurface->update(dt);
+            }
+            else if (fromData.starSystem && fromData.starSystem != _activeStarSystem)
+            {
+                _transition->fromData.starSystem->update(dt);
+            }
+        }
     }
 
     void GameSession::draw()
@@ -252,12 +277,7 @@ namespace space
             if (t >= 1.0f)
             {
                 clearTransition();
-
-                if (_playerController.teleportClone() != nullptr)
-                {
-                    removeSpaceObject(_playerController.teleportClone()->id);
-                    _playerController.teleportClone(nullptr);
-                }
+                clearTeleportClone();
             }
         }
         else
@@ -298,8 +318,6 @@ namespace space
             camera.rotation(transitionData.rotation);
         }
 
-        camera.update(sf::Time::Zero);
-
         if (transitionData.planetSurface)
         {
             transitionData.planetSurface->draw(renderCamera);
@@ -315,39 +333,17 @@ namespace space
         auto windowSize = _engine.windowSize();
         auto aspectRatio = static_cast<float>(windowSize.x) / static_cast<float>(windowSize.y);
 
-        auto transition = std::make_unique<Transition>(_engine.timeSinceStart(), sf::seconds(1.2f * aspectRatio));
+        auto transition = std::make_unique<Transition>(_engine.timeSinceStart(), sf::seconds(10.2f * aspectRatio));
 
         auto &fromData = transition->fromData;
         auto &toData = transition->toData;
 
-        fromData.cameraProps = _engine.sceneRender().camera().cameraProps();
-        toData.cameraProps = _engine.sceneRender().camera().cameraProps();
-
-        applyAreaToTransitionData(prevArea, fromData);
+        toData.cameraProps = fromData.cameraProps = _engine.sceneRender().camera().cameraProps();
 
         fromData.cameraProps.following = true;
         fromData.cameraProps.followingId = teleportClone.id;
 
-        // if (fromData.cameraProps.following)
-        // {
-        //     SpaceObject *followingObject;
-        //     if (tryGetSpaceObject(fromData.cameraProps.followingId, &followingObject))
-        //     {
-        //         fromData.position = Utils::getPosition(followingObject->worldTransform());
-        //     }
-        //     fromData.cameraProps.following = false;
-        // }
-
-        if (fromData.cameraProps.followingRotation)
-        {
-            SpaceObject *followingObject;
-            if (tryGetSpaceObject(fromData.cameraProps.followingRotationId, &followingObject))
-            {
-                fromData.rotation = followingObject->transform().rotation;
-            }
-            fromData.cameraProps.followingRotation = false;
-        }
-
+        applyAreaToTransitionData(prevArea, fromData);
         applyAreaToTransitionData(area, toData);
 
         setTransition(transition);
