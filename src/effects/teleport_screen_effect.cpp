@@ -43,8 +43,6 @@ namespace space
 
         auto easedT = static_cast<float>(std::pow(t, 4));
 
-        std::cout << t << std::endl;
-
         _dissolve->setUniform("amount", easedT);
         _dissolve->setUniform("source", *texture);
         _dissolve->setUniform("offset", _offset);

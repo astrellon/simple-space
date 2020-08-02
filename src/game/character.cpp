@@ -10,7 +10,7 @@
 namespace space
 {
     Character::Character(const ObjectId &id, const CharacterDefinition &definition) :
-        SpaceObject(id), definition(definition), _rotationSpeed(0), rotateInput(0), _physicsBody(nullptr), _insideArea(nullptr)
+        SpaceObject(id), definition(definition), _rotationSpeed(0), rotateInput(0), _physicsBody(nullptr), _insideArea(nullptr), _tileIndex(0)
     {
         _physicsBodyDef.type = b2_dynamicBody;
         _physicsBodyDef.angularDamping = 0.5f;
@@ -33,6 +33,7 @@ namespace space
         _physicsBody->ApplyForceToCenter(b2Vec2(movement.x, movement.y), true);
         _physicsBody->ApplyAngularImpulse(rotateInput, true);
     }
+
     void Character::update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform)
     {
         auto pos = _physicsBody->GetPosition();
@@ -42,15 +43,15 @@ namespace space
         _transform.rotation = Utils::radiansToDegrees(rotation);
 
         updateWorldTransform(parentTransform);
+
+        auto elapsedTime = _timeSinceStart.getElapsedTime().asSeconds() * 8;
+        auto mod = std::fmod(elapsedTime, static_cast<double>(definition.tiles.length()));
+        _tileIndex = static_cast<uint>(mod);
     }
 
     void Character::draw(GameSession &session, sf::RenderTarget &target)
     {
-        auto elapsedTime = _timeSinceStart.getElapsedTime().asSeconds() * 8;
-        auto mod = std::fmod(elapsedTime, static_cast<double>(definition.tiles.length()));
-        auto index = static_cast<uint>(mod);
-
-        auto sprite = definition.tiles.sprite(index);
+        auto sprite = definition.tiles.sprite(_tileIndex);
         target.draw(*sprite, _worldTransform);
     }
 

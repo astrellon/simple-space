@@ -88,10 +88,16 @@ namespace space
     {
         target.draw(_sprite, _worldTransform);
 
-        if (session.getShipPlayerIsInsideOf() == this && session.isControllingCharacter())
+        if (session.isControllingCharacter())
         {
-            target.draw(_interiorSprite, _worldTransform);
-            _walkableArea.draw(session, target);
+            auto drawPreTeleport = session.drawingPreTeleport();
+
+            if ((session.getShipPlayerIsInsideOf() == this && !drawPreTeleport) ||
+                (session.getShipPlayerCloneIsInsideOf() == this && drawPreTeleport))
+            {
+                target.draw(_interiorSprite, _worldTransform);
+                _walkableArea.draw(session, target);
+            }
         }
 
         for (auto &engineEffect : _engineEffects)

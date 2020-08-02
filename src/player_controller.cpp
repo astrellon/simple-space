@@ -17,7 +17,8 @@ namespace space
 {
     PlayerController::PlayerController(GameSession &session) : _session(session), _controlling(ControlNone), _inventory(),
     _interactRangeObjects(0), _interactRangeObjectsSquared(0),
-    _interactRangeShips(0), _interactRangeShipsSquared(0)
+    _interactRangeShips(0), _interactRangeShipsSquared(0),
+    _character(nullptr), _ship(nullptr), _teleportClone(nullptr)
     {
         interactRangeObjects(10.0f);
         interactRangeShips(150.0f);

@@ -27,6 +27,7 @@ namespace space
     class TransitionData;
     class TeleportScreenEffect;
     class RenderCamera;
+    class TeleportClone;
 
     class GameSession
     {
@@ -77,6 +78,8 @@ namespace space
                 return false;
             }
 
+            void removeSpaceObject(const ObjectId &id);
+
             void activeStarSystem(StarSystem *starSystem)
             {
                 _activeStarSystem = starSystem;
@@ -108,12 +111,15 @@ namespace space
             bool isControllingCharacter() const { return _playerController.controlling() == ControlCharacter; }
             Ship *getPlayerShip() const { return _playerController.controllingShip(); }
             Ship *getShipPlayerIsInsideOf() const;
+            Ship *getShipPlayerCloneIsInsideOf() const;
 
             void moveCharacter(Character *character, sf::Vector2f position, WalkableArea *area);
 
             Transition *currentTransition() const { return _transition.get(); }
             void setTransition(std::unique_ptr<Transition> &transition);
-            void setTransition(std::unique_ptr<Transition> &&transition);
+            void clearTransition();
+
+            bool drawingPreTeleport() const { return _drawingPreTeleport; }
 
             void update(sf::Time dt);
             void draw();
@@ -133,11 +139,12 @@ namespace space
             PlanetSurface *_activePlanetSurface;
             PlayerController _playerController;
             std::unique_ptr<Transition> _transition;
+            bool _drawingPreTeleport;
 
             // Methods
             void applyTransitionToCamera(const TransitionData &transitionData, RenderCamera &renderCamera);
 
-            void createTransition(const WalkableArea *prevArea, const WalkableArea *area, const Character *character);
+            void createTransition(const WalkableArea *prevArea, const WalkableArea *area, const TeleportClone &teleportClone, const Character *character);
             void applyAreaToTransitionData(const WalkableArea *area, TransitionData &data) const;
     };
 } // town

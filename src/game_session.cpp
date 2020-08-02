@@ -8,6 +8,7 @@
 #include "game/planet_surface.hpp"
 #include "game/character.hpp"
 #include "game/walkable_area.hpp"
+#include "game/teleport_clone.hpp"
 #include "definitions/ship_definition.hpp"
 #include "definitions/planet_definition.hpp"
 #include "definitions/star_system_definition.hpp"
@@ -25,7 +26,7 @@
 
 namespace space
 {
-    GameSession::GameSession(Engine &engine) : _engine(engine), _activeStarSystem(nullptr), showTeleporters(false), _playerController(*this)
+    GameSession::GameSession(Engine &engine) : _engine(engine), _activeStarSystem(nullptr), showTeleporters(false), _playerController(*this), _drawingPreTeleport(false)
     {
         _teleportEffect = std::make_unique<TeleportScreenEffect>();
         _teleportEffect->init(engine.resourceManager());
@@ -112,6 +113,23 @@ namespace space
         return area->partOfShip();
     }
 
+    Ship *GameSession::getShipPlayerCloneIsInsideOf() const
+    {
+        const auto character = _playerController.teleportClone();
+        if (character == nullptr)
+        {
+            return nullptr;
+        }
+
+        const auto area = character->insideArea();
+        if (area == nullptr)
+        {
+            return nullptr;
+        }
+
+        return area->partOfShip();
+    }
+
     void GameSession::moveCharacter(Character *character, sf::Vector2f position, WalkableArea *area)
     {
         auto prevArea = character->insideArea();
@@ -119,6 +137,8 @@ namespace space
         {
             character->insideArea()->removeCharacter(character);
         }
+
+        auto prevTransform = character->transform();
 
         if (area != nullptr)
         {
@@ -133,7 +153,14 @@ namespace space
             {
                 if (prevArea != nullptr)
                 {
-                    createTransition(prevArea, area, character);
+                    std::stringstream newId(character->id);
+                    newId << "_TELEPORT_CLONE_";
+                    newId << _engine.timeSinceStart().asMicroseconds();
+                    auto teleportClone = createObject<TeleportClone>(newId.str(), *character, prevTransform);
+                    _playerController.teleportClone(teleportClone);
+                    prevArea->addCharacter(teleportClone);
+
+                    createTransition(prevArea, area, *teleportClone, character);
                 }
 
                 if (area->partOfShip() != nullptr)
@@ -152,17 +179,17 @@ namespace space
 
     void GameSession::setTransition(std::unique_ptr<Transition> &transition)
     {
-        _engine.sceneRender().transitionData = nullptr;
-        _engine.sceneRenderTransition().transitionData = nullptr;
+        clearTransition();
         _teleportEffect->offset(Utils::randf(-1e3, 1e3));
         _transition = std::move(transition);
     }
-    void GameSession::setTransition(std::unique_ptr<Transition> &&transition)
+
+    void GameSession::clearTransition()
     {
+        std::cout << "Clearing transition" << std::endl;
         _engine.sceneRender().transitionData = nullptr;
         _engine.sceneRenderTransition().transitionData = nullptr;
-        _teleportEffect->offset(Utils::randf(-1e6, 1e6));
-        _transition = std::move(transition);
+        _transition = std::move(nullptr);
     }
 
     bool GameSession::tryGetPlanetSurface(const DefinitionId &id, PlanetSurface **result) const
@@ -208,8 +235,13 @@ namespace space
         {
             auto &sceneRenderTransition = _engine.sceneRenderTransition();
 
+            _drawingPreTeleport = false;
             applyTransitionToCamera(_transition->toData, sceneRender);
+
+            _drawingPreTeleport = true;
             applyTransitionToCamera(_transition->fromData, sceneRenderTransition);
+
+            _drawingPreTeleport = false;
 
             sceneRenderTransition.texture().display();
 
@@ -219,11 +251,18 @@ namespace space
 
             if (t >= 1.0f)
             {
-                setTransition(nullptr);
+                clearTransition();
+
+                if (_playerController.teleportClone() != nullptr)
+                {
+                    removeSpaceObject(_playerController.teleportClone()->id);
+                    _playerController.teleportClone(nullptr);
+                }
             }
         }
         else
         {
+            _drawingPreTeleport = false;
             if (_activeStarSystem) _activeStarSystem->draw(sceneRender);
             else if (_activePlanetSurface) _activePlanetSurface->draw(sceneRender);
         }
@@ -259,6 +298,8 @@ namespace space
             camera.rotation(transitionData.rotation);
         }
 
+        camera.update(sf::Time::Zero);
+
         if (transitionData.planetSurface)
         {
             transitionData.planetSurface->draw(renderCamera);
@@ -269,7 +310,7 @@ namespace space
         }
     }
 
-    void GameSession::createTransition(const WalkableArea *prevArea, const WalkableArea *area, const Character *character)
+    void GameSession::createTransition(const WalkableArea *prevArea, const WalkableArea *area, const TeleportClone &teleportClone, const Character *character)
     {
         auto windowSize = _engine.windowSize();
         auto aspectRatio = static_cast<float>(windowSize.x) / static_cast<float>(windowSize.y);
@@ -284,15 +325,18 @@ namespace space
 
         applyAreaToTransitionData(prevArea, fromData);
 
-        if (fromData.cameraProps.following)
-        {
-            SpaceObject *followingObject;
-            if (tryGetSpaceObject(fromData.cameraProps.followingId, &followingObject))
-            {
-                fromData.position = Utils::getPosition(followingObject->worldTransform());
-            }
-            fromData.cameraProps.following = false;
-        }
+        fromData.cameraProps.following = true;
+        fromData.cameraProps.followingId = teleportClone.id;
+
+        // if (fromData.cameraProps.following)
+        // {
+        //     SpaceObject *followingObject;
+        //     if (tryGetSpaceObject(fromData.cameraProps.followingId, &followingObject))
+        //     {
+        //         fromData.position = Utils::getPosition(followingObject->worldTransform());
+        //     }
+        //     fromData.cameraProps.following = false;
+        // }
 
         if (fromData.cameraProps.followingRotation)
         {
@@ -322,6 +366,39 @@ namespace space
         {
             data.planetSurface = area->partOfPlanetSurface();
             data.cameraProps.followingRotation = false;
+        }
+    }
+
+    void GameSession::removeSpaceObject(const ObjectId &id)
+    {
+        SpaceObject *obj;
+        if (!tryGetSpaceObject(id, &obj))
+        {
+            return;
+        }
+
+        if (obj->starSystem())
+        {
+            obj->starSystem()->removeObject(obj);
+        }
+
+        Character *character = dynamic_cast<Character *>(obj);
+        if (character != nullptr)
+        {
+            if (character->insideArea() != nullptr)
+            {
+                character->insideArea()->removeCharacter(character);
+            }
+        }
+
+        // Need to loop as the spaceObjects is a vector of unique_ptrs.
+        for (auto iter = _spaceObjects.begin(); iter != _spaceObjects.end(); ++iter)
+        {
+            if (iter->get() == obj)
+            {
+                _spaceObjects.erase(iter);
+                break;
+            }
         }
     }
 } // namespace town

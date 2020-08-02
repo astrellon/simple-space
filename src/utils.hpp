@@ -100,6 +100,12 @@ namespace space
                 return sf::Vector2f(x, y);
             }
 
+            static inline float parametricBlend(float t)
+            {
+                auto sqt = t * t;
+                return sqt / (2.0f * (sqt - t) + 1.0f);
+            }
+
             static inline sf::Vector2f transformDirection(const sf::Vector2f &direction, const sf::Transform &transform)
             {
                 const auto mats = transform.getMatrix();

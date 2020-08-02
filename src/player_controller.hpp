@@ -21,6 +21,7 @@ namespace space
     class StarSystem;
     class WalkableArea;
     class GameSession;
+    class TeleportClone;
 
     class PlayerController : private NonCopyable
     {
@@ -44,6 +45,9 @@ namespace space
 
             void controllingCharacter(Character *character) { _character = character; }
             Character *controllingCharacter() const { return _character; }
+
+            void teleportClone(TeleportClone *clone) { _teleportClone = clone; }
+            TeleportClone* teleportClone() const { return _teleportClone; }
 
             void interactRangeObjects(float distance)
             {
@@ -92,6 +96,7 @@ namespace space
             GameSession &_session;
             Ship *_ship;
             Character *_character;
+            TeleportClone *_teleportClone;
             ControllingValue _controlling;
             Inventory _inventory;
             std::vector<PlacedItem *> _canInteractWith;

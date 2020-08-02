@@ -33,6 +33,8 @@ namespace space
             void insideArea(WalkableArea *area) { _insideArea = area; }
             WalkableArea *insideArea() const { return _insideArea; }
 
+            int tileIndex() const { return _tileIndex; }
+
             void addToPhysicsWorld(b2World *world);
             void removeFromPhysicsWorld(b2World *world);
 
@@ -40,6 +42,7 @@ namespace space
             // Fields
             sf::Clock _timeSinceStart;
             float _rotationSpeed;
+            int _tileIndex;
 
             WalkableArea *_insideArea;
             b2FixtureDef _physicsFixtureDef;
