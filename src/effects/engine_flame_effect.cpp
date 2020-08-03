@@ -7,7 +7,7 @@
 
 namespace space
 {
-    EngineFlameEffect::EngineFlameEffect(Ship &parentShip, const sf::Texture &texture, sf::Vector2f position) : _parentShip(parentShip), _glow(texture), _position(position)
+    EngineFlameEffect::EngineFlameEffect(Ship &parentShip, const sf::Texture &texture, sf::Vector2f position) : _parentShip(parentShip), _glow(texture), _position(position), _engineBrightness(0.0f)
     {
         auto size = texture.getSize();
         _glow.setOrigin(size.x / 2, size.y / 2);

@@ -17,7 +17,7 @@ namespace space
             const TransitionData *transitionData;
 
             // Constructor
-            RenderCamera(Engine &engine);
+            RenderCamera(Engine &engine, std::string debugName);
 
             // Methods
             Camera &camera() { return _camera; }

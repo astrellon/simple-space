@@ -10,7 +10,7 @@ namespace space
 
     }
 
-    Camera::Camera(Engine &engine) : _engine(engine), _zoomScale(1.0f)
+    Camera::Camera(Engine &engine, std::string debugName) : debugName(debugName), _engine(engine), _zoomScale(1.0f)
     {
 
     }
@@ -27,6 +27,11 @@ namespace space
                 auto trans = followingObject->worldTransform();
                 sf::Vector2f pos(trans.getMatrix()[12], trans.getMatrix()[13]);
                 _view.setCenter(pos);
+                //std::cout << "Camera [" << debugName << "]: " << pos.x << ", " << pos.y << std::endl;
+            }
+            else
+            {
+                std::cout << "Camera [" << debugName << "]: Not found!" << std::endl;
             }
         }
 

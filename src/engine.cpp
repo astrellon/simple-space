@@ -21,7 +21,7 @@ namespace space
 {
     Engine::Engine(sf::RenderWindow &window) :
         _spriteScale(1.0f), _window(window), _deltaTime(sf::Time::Zero), _timeSinceStartOnUpdate(sf::Time::Zero),
-        _enableBloom(true), _cameraScale(2.0f), _initedImgui(false), _sceneRender(*this), _sceneRenderTransition(*this)
+        _enableBloom(true), _cameraScale(2.0f), _initedImgui(false), _sceneRender(*this, "SceneRender"), _sceneRenderTransition(*this, "SceneRenderTrans")
     {
         _resourceManager = std::make_unique<ResourceManager>();
         _definitionManager = std::make_unique<DefinitionManager>();

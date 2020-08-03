@@ -7,6 +7,7 @@ namespace space
         public:
             // Fields
             static int glDraw;
+            static bool slow;
 
             // Constructor
 

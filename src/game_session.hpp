@@ -143,6 +143,7 @@ namespace space
 
             // Methods
             void applyTransitionToCamera(const TransitionData &transitionData, RenderCamera &renderCamera);
+            void drawTransitionWithCamera(const TransitionData &transitionData, RenderCamera &renderCamera);
 
             void createTransition(const WalkableArea *prevArea, const WalkableArea *area, const TeleportClone &teleportClone, const Character *character);
             void applyAreaToTransitionData(const WalkableArea *area, TransitionData &data) const;

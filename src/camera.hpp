@@ -27,9 +27,10 @@ namespace space
     {
         public:
             // Fields
+            const std::string debugName;
 
             // Constructor
-            Camera(Engine &engine);
+            Camera(Engine &engine, std::string debugName);
 
             // Methods
             void update(sf::Time dt);

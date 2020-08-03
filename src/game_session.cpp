@@ -240,16 +240,21 @@ namespace space
 
         if (_transition.get())
         {
-            auto &fromData = _transition.get()->fromData;
-            auto &sceneRenderTransition = _engine.sceneRenderTransition();
+            auto &fromData = _transition->fromData;
             if (fromData.planetSurface && fromData.planetSurface != _activePlanetSurface)
             {
-                _transition->fromData.planetSurface->update(dt);
+                fromData.planetSurface->update(dt);
             }
             else if (fromData.starSystem && fromData.starSystem != _activeStarSystem)
             {
-                _transition->fromData.starSystem->update(dt);
+                fromData.starSystem->update(dt);
             }
+
+            auto &sceneRender = _engine.sceneRender();
+            auto &sceneRenderTransition = _engine.sceneRenderTransition();
+
+            applyTransitionToCamera(_transition->toData, sceneRender);
+            applyTransitionToCamera(_transition->fromData, sceneRenderTransition);
         }
     }
 
@@ -261,10 +266,10 @@ namespace space
             auto &sceneRenderTransition = _engine.sceneRenderTransition();
 
             _drawingPreTeleport = false;
-            applyTransitionToCamera(_transition->toData, sceneRender);
+            drawTransitionWithCamera(_transition->toData, sceneRender);
 
             _drawingPreTeleport = true;
-            applyTransitionToCamera(_transition->fromData, sceneRenderTransition);
+            drawTransitionWithCamera(_transition->fromData, sceneRenderTransition);
 
             _drawingPreTeleport = false;
 
@@ -317,7 +322,10 @@ namespace space
         {
             camera.rotation(transitionData.rotation);
         }
+    }
 
+    void GameSession::drawTransitionWithCamera(const TransitionData &transitionData, RenderCamera &renderCamera)
+    {
         if (transitionData.planetSurface)
         {
             transitionData.planetSurface->draw(renderCamera);
@@ -333,7 +341,7 @@ namespace space
         auto windowSize = _engine.windowSize();
         auto aspectRatio = static_cast<float>(windowSize.x) / static_cast<float>(windowSize.y);
 
-        auto transition = std::make_unique<Transition>(_engine.timeSinceStart(), sf::seconds(10.2f * aspectRatio));
+        auto transition = std::make_unique<Transition>(_engine.timeSinceStart(), sf::seconds(2.2f * aspectRatio));
 
         auto &fromData = transition->fromData;
         auto &toData = transition->toData;

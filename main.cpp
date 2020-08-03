@@ -31,6 +31,7 @@
 #include "src/keyboard.hpp"
 #include "src/physics/polygon_collider.hpp"
 #include "src/effects/transition.hpp"
+#include "src/debug/draw_debug.hpp"
 
 #include "earcut.hpp"
 
@@ -173,9 +174,18 @@ int main()
             gameSession->activePlanetSurface(planetSurface);
             gameSession->moveCharacter(character, sf::Vector2f(), &planetSurface->walkableArea());
         }
+        if (space::Keyboard::isKeyDown(sf::Keyboard::P))
+        {
+            space::DrawDebug::slow = !space::DrawDebug::slow;
+        }
 
         engine.update();
         engine.draw();
+
+        if (space::DrawDebug::slow)
+        {
+            std::this_thread::sleep_for(std::chrono::milliseconds(250));
+        }
     }
 
     engine.shutdown();

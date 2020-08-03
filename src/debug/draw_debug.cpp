@@ -3,4 +3,5 @@
 namespace space
 {
     int DrawDebug::glDraw = 0;
+    bool DrawDebug::slow = false;
 } // namespace space

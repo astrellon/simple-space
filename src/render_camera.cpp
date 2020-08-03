@@ -4,7 +4,7 @@
 
 namespace space
 {
-    RenderCamera::RenderCamera(Engine &engine) : _camera(engine), transitionData(nullptr)
+    RenderCamera::RenderCamera(Engine &engine, std::string debugName) : _camera(engine, debugName), transitionData(nullptr)
     {
 
     }
