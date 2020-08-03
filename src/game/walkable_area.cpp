@@ -101,8 +101,8 @@ namespace space
         character->transform().scale = Utils::getInsideScale();
         _characters.push_back(character);
 
-        character->addToPhysicsWorld(&_physicsWorld);
         character->insideArea(this);
+        character->addToPhysicsWorld(&_physicsWorld);
     }
     void WalkableArea::removeCharacter(Character *character)
     {

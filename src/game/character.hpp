@@ -45,8 +45,6 @@ namespace space
             int _tileIndex;
 
             WalkableArea *_insideArea;
-            b2FixtureDef _physicsFixtureDef;
-            b2BodyDef _physicsBodyDef;
             b2Body *_physicsBody;
 
             // Methods

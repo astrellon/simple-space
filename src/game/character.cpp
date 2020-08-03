@@ -6,32 +6,35 @@
 #include "../utils.hpp"
 #include "../game_session.hpp"
 #include "../space_transform.hpp"
+#include "walkable_area.hpp"
 
 namespace space
 {
     Character::Character(const ObjectId &id, const CharacterDefinition &definition) :
         SpaceObject(id), definition(definition), _rotationSpeed(0), rotateInput(0), _physicsBody(nullptr), _insideArea(nullptr), _tileIndex(0)
     {
-        _physicsBodyDef.type = b2_dynamicBody;
-        _physicsBodyDef.angularDamping = 0.5f;
-        _physicsBodyDef.linearDamping = 0.5f;
-
-        auto shape = new b2PolygonShape();
-        shape->SetAsBox(1.0f, 1.0f);
-        _physicsFixtureDef.restitution = 0;
-        _physicsFixtureDef.friction = 0.9f;
-        _physicsFixtureDef.density = 5.0f;
-        _physicsFixtureDef.shape = shape;
     }
 
     void Character::prePhysics(GameSession &session, sf::Time dt, const sf::Transform &parentTransform)
     {
         auto seconds = dt.asSeconds();
 
-        auto movement = moveInput / definition.speed * 50000.0f;
 
-        _physicsBody->ApplyForceToCenter(b2Vec2(movement.x, movement.y), true);
-        _physicsBody->ApplyAngularImpulse(rotateInput, true);
+        if (_insideArea && _insideArea->partOfPlanetSurface())
+        {
+            auto movement = moveInput / definition.speed * 2500.0f;
+            b2Vec2 b2movement(movement.x, movement.y);
+
+            _physicsBody->SetLinearVelocity(b2movement);
+        }
+        else
+        {
+            auto movement = moveInput / definition.speed * 50000.0f;
+            b2Vec2 b2movement(movement.x, movement.y);
+
+            _physicsBody->ApplyForceToCenter(b2movement, true);
+            _physicsBody->ApplyAngularImpulse(rotateInput, true);
+        }
     }
 
     void Character::update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform)
@@ -57,8 +60,29 @@ namespace space
 
     void Character::addToPhysicsWorld(b2World *world)
     {
-        _physicsBody = world->CreateBody(&_physicsBodyDef);
-        _physicsBody->CreateFixture(&_physicsFixtureDef);
+        b2BodyDef bodyDef;
+        bodyDef.type = b2_dynamicBody;
+        bodyDef.angularDamping = 0.5f;
+        bodyDef.linearDamping = 0.5f;
+
+        b2PolygonShape shape;
+        shape.SetAsBox(1.0f, 1.0f);
+
+        b2FixtureDef fixtureDef;
+
+        fixtureDef.restitution = 0;
+        fixtureDef.friction = 0.9f;
+        fixtureDef.density = 5.0f;
+        fixtureDef.shape = &shape;
+
+        if (_insideArea && _insideArea->partOfPlanetSurface())
+        {
+            bodyDef.fixedRotation = true;
+            _transform.rotation = 0;
+        }
+
+        _physicsBody = world->CreateBody(&bodyDef);
+        _physicsBody->CreateFixture(&fixtureDef);
         _physicsBody->SetTransform(b2Vec2(_transform.position.x, _transform.position.y), Utils::degreesToRadians(_transform.rotation));
 
         _physicsBody->SetUserData(this);
