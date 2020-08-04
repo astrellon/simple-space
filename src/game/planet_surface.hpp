@@ -41,7 +41,7 @@ namespace space
             GameSession &_session;
             WalkableArea _walkableArea;
             Planet *_partOfPlanet;
-            std::unique_ptr<MapLayer> _mapLayer;
+            std::vector<std::unique_ptr<MapLayer>> _mapLayers;
 
             // Methods
     };

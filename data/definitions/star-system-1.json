@@ -51,7 +51,8 @@
                     "name": "Planet 2",
                     "scale": 10,
                     "glowColour": "0xc9eae1FF",
-                    "texturePath": "data/textures/planetColours2.png"
+                    "texturePath": "data/textures/planetColours2.png",
+                    "planetSurfaceIds": [ "PLANET_SANDY_1" ]
                 }
             ]
         }

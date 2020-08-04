@@ -83,12 +83,16 @@ int main()
     const space::CharacterDefinition *playerCharDef;
     definitionManager.tryGet("PLAYER_CHAR", &playerCharDef);
 
-    const space::PlanetSurfaceDefinition *planetSurfaceDef;
-    definitionManager.tryGet("PLANET_GRASSY_1", &planetSurfaceDef);
+    const space::PlanetSurfaceDefinition *planetGrassySurfaceDef;
+    definitionManager.tryGet("PLANET_GRASSY_1", &planetGrassySurfaceDef);
+
+    const space::PlanetSurfaceDefinition *planetSandySurfaceDef;
+    definitionManager.tryGet("PLANET_SANDY_1", &planetSandySurfaceDef);
 
     auto gameSession = engine.startGameSession();
 
-    auto planetSurface = gameSession->createPlanetSurface(*planetSurfaceDef);
+    auto planetGrassySurface = gameSession->createPlanetSurface(*planetGrassySurfaceDef);
+    auto planetSandySurface = gameSession->createPlanetSurface(*planetSandySurfaceDef);
 
     auto ship = gameSession->createObject<space::Ship>("PLAYER", *shipDef);
     auto ship2 = gameSession->createObject<space::Ship>("OTHER", *shipDef2);
@@ -103,8 +107,6 @@ int main()
     starSystem2->initFromDefinition();
 
     auto character = gameSession->createObject<space::Character>("PLAYER_CHAR", *playerCharDef);
-
-    // planetSurface->walkableArea().addCharacter(character);
 
     ship->walkableArea().addCharacter(character);
 
@@ -126,6 +128,9 @@ int main()
     auto chair = gameSession->createItem<space::Chair>(0, chairDefinition);
     player.inventory().addItem(chair);
 
+    chair = gameSession->createItem<space::Chair>(5, chairDefinition);
+    ship2->walkableArea().addPlaceable(chair, sf::Vector2f(0, -10));
+
     auto teleporter = gameSession->createItem<space::Teleporter>(1, teleporterDefinition);
     player.inventory().addItem(teleporter);
 
@@ -133,7 +138,10 @@ int main()
     ship2->walkableArea().addPlaceable(teleporter, sf::Vector2f(0, 0));
 
     teleporter = gameSession->createItem<space::Teleporter>(3, teleporterDefinition);
-    planetSurface->walkableArea().addPlaceable(teleporter, sf::Vector2f(50, 50));
+    planetGrassySurface->walkableArea().addPlaceable(teleporter, sf::Vector2f(50, 50));
+
+    teleporter = gameSession->createItem<space::Teleporter>(4, teleporterDefinition);
+    planetSandySurface->walkableArea().addPlaceable(teleporter, sf::Vector2f(50, 50));
 
     gameSession->activeStarSystem(starSystem);
     // gameSession->activePlanetSurface(planetSurface);
@@ -171,8 +179,8 @@ int main()
         }
         if (space::Keyboard::isKeyDown(sf::Keyboard::Num3))
         {
-            gameSession->activePlanetSurface(planetSurface);
-            gameSession->moveCharacter(character, sf::Vector2f(), &planetSurface->walkableArea());
+            gameSession->activePlanetSurface(planetGrassySurface);
+            gameSession->moveCharacter(character, sf::Vector2f(), &planetGrassySurface->walkableArea());
         }
         if (space::Keyboard::isKeyDown(sf::Keyboard::P))
         {

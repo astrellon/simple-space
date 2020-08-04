@@ -3,6 +3,6 @@
         "type": "planet-surface",
         "id": "PLANET_GRASSY_1",
         "name": "Planet Grassy",
-        "tmxMapPath": "data/maps/test.tmx"
+        "tmxMapPath": "data/maps/planet1.tmx"
     }
 ]

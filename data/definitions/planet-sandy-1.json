@@ -1,0 +1,8 @@
+[
+    {
+        "type": "planet-surface",
+        "id": "PLANET_SANDY_1",
+        "name": "Planet Sandy",
+        "tmxMapPath": "data/maps/planet2.tmx"
+    }
+]

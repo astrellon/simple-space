@@ -78,6 +78,8 @@ namespace space
 
         _playerController.controllingShip(ship);
         _playerController.controlling(ControlShip);
+
+        clearTransition();
     }
     void GameSession::setPlayerControllingCharacter()
     {
@@ -94,6 +96,8 @@ namespace space
         sceneRenderCamera.followingId(_playerController.controllingCharacter()->id);
         sceneRenderCamera.scale(scale);
         _playerController.controlling(ControlCharacter);
+
+        clearTransition();
     }
 
     Ship *GameSession::getShipPlayerIsInsideOf() const
@@ -190,7 +194,15 @@ namespace space
     {
         std::cout << "Clearing transition" << std::endl;
         _engine.sceneRender().transitionData = nullptr;
-        _engine.sceneRenderTransition().transitionData = nullptr;
+
+        auto &renderTrans = _engine.sceneRenderTransition();
+        renderTrans.transitionData = nullptr;
+
+        auto cameraProps = renderTrans.camera().cameraProps();
+        cameraProps.following = false;
+        cameraProps.followingRotation = false;
+        renderTrans.camera().cameraProps(cameraProps);
+
         _transition = std::move(nullptr);
     }
 
