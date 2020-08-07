@@ -18,6 +18,7 @@
 #include "src/definitions/star_system_definition.hpp"
 #include "src/definitions/planet_surface_definition.hpp"
 #include "src/definitions/item_definition.hpp"
+#include "src/definitions/dialogue.hpp"
 #include "src/serialisers/json/json_serialisers.hpp"
 #include "src/serialisers/json/json.hpp"
 #include "src/definition_manager.hpp"
@@ -149,6 +150,16 @@ int main()
     //engine.camera().followingId(character->id);
     // gameSession->setPlayerControllingCharacter();
     gameSession->setPlayerControllingShip(ship);
+
+    const space::Dialogue *dialogue;
+    if (definitionManager.tryGet("DIAG_1", &dialogue))
+    {
+        gameSession->dialogueManager().startDialogue(dialogue);
+    }
+    else
+    {
+        std::cout << "Could not find dialogue" << std::endl;
+    }
 
     // auto transition = std::make_unique<space::Transition>(engine.timeSinceStart(), sf::Time::Zero);
 

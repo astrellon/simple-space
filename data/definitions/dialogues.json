@@ -1,0 +1,10 @@
+[
+    {
+        "type": "dialogue",
+        "id": "DIAG_1",
+        "text": [
+            "Hello there how are you?",
+            "Woop woop!"
+        ]
+    }
+]

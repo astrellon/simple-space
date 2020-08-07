@@ -21,6 +21,7 @@
 #include "ui/ui_interactables.hpp"
 #include "ui/ui_inventory.hpp"
 #include "ui/ui_teleporter.hpp"
+#include "ui/ui_dialogue.hpp"
 
 #include <tmxlite/Map.hpp>
 
@@ -317,6 +318,8 @@ namespace space
         {
             UITeleporter::draw(*this, _playerController.shipsInTeleportRange(), _playerController.planetsInTeleportRange());
         }
+
+        UIDialogue::draw(_dialogueManager);
     }
 
     void GameSession::applyTransitionToCamera(const TransitionData &transitionData, RenderCamera &renderCamera)

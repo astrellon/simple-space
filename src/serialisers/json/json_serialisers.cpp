@@ -13,6 +13,7 @@
 #include "../../definitions/star_system_definition.hpp"
 #include "../../definitions/planet_surface_definition.hpp"
 #include "../../definitions/star_background_options.hpp"
+#include "../../definitions/dialogue.hpp"
 
 using nlohmann::json;
 
@@ -45,6 +46,10 @@ namespace space
         else if (type == PlanetSurfaceDefinition::DefinitionType())
         {
             j = toJson(dynamic_cast<const PlanetSurfaceDefinition &>(input));
+        }
+        else if (type == Dialogue::DefinitionType())
+        {
+            j = toJson(dynamic_cast<const Dialogue &>(input));
         }
         else
         {
@@ -80,6 +85,10 @@ namespace space
         {
             return fromJsonPlanetSurfaceDefinition(j);
         }
+        else if (type == Dialogue::DefinitionType())
+        {
+            return fromJsonDialogue(j);
+        }
 
         throw std::runtime_error("Oh no");
     }
@@ -90,6 +99,9 @@ namespace space
             {"id", input.id},
             {"texturePath", input.texturePath},
             {"interiorTexturePath", input.interiorTexturePath},
+            {"interiorTextureOffset", json {
+                input.interiorTextureOffset.x, input.interiorTextureOffset.y}
+            },
             {"engineGlowTexturePath", input.engineGlowTexturePath},
             {"name", input.name},
             {"maxRotation", input.maxRotation},
@@ -293,6 +305,37 @@ namespace space
         j.at("tmxMapPath").get_to(result->tmxMapPath);
 
         return result;
+    }
+
+    json toJson(const Dialogue &input)
+    {
+        json textJson = {};
+        for (auto &line : input.text)
+        {
+            textJson.push_back(line);
+        }
+
+        return json {
+            {"id", input.id},
+            {"text", textJson}
+        };
+    }
+
+    std::unique_ptr<Dialogue> fromJsonDialogue(const json &j)
+    {
+        auto id = j.at("id").get<std::string>();
+        std::vector<std::string> text;
+
+        auto textJson = j.find("text");
+        if (textJson != j.end())
+        {
+            for (auto &lineJson : *textJson)
+            {
+                text.push_back(lineJson.get<std::string>());
+            }
+        }
+
+        return std::make_unique<Dialogue>(id, text);
     }
 
     json toJson(const CelestialBodyLocation &input)

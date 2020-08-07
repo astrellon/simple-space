@@ -10,6 +10,7 @@
 #include "game/space_object.hpp"
 #include "game/items/item.hpp"
 
+#include "dialogue_manager.hpp"
 #include "player_controller.hpp"
 
 namespace space
@@ -121,6 +122,8 @@ namespace space
 
             bool drawingPreTeleport() const { return _drawingPreTeleport; }
 
+            DialogueManager &dialogueManager() { return _dialogueManager; }
+
             void update(sf::Time dt);
             void draw();
             void drawUI(sf::RenderTarget &target);
@@ -139,6 +142,7 @@ namespace space
             PlanetSurface *_activePlanetSurface;
             PlayerController _playerController;
             std::unique_ptr<Transition> _transition;
+            DialogueManager _dialogueManager;
             bool _drawingPreTeleport;
 
             // Methods
