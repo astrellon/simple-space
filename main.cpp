@@ -33,6 +33,7 @@
 #include "src/physics/polygon_collider.hpp"
 #include "src/effects/transition.hpp"
 #include "src/debug/draw_debug.hpp"
+#include "src/controllers/npc_controller.hpp"
 
 #include "earcut.hpp"
 
@@ -83,6 +84,9 @@ int main()
 
     const space::CharacterDefinition *playerCharDef;
     definitionManager.tryGet("PLAYER_CHAR", &playerCharDef);
+
+    const space::CharacterDefinition *gregCharDef;
+    definitionManager.tryGet("GREG_CHAR", &gregCharDef);
 
     const space::PlanetSurfaceDefinition *planetGrassySurfaceDef;
     definitionManager.tryGet("PLANET_GRASSY_1", &planetGrassySurfaceDef);
@@ -151,15 +155,10 @@ int main()
     // gameSession->setPlayerControllingCharacter();
     gameSession->setPlayerControllingShip(ship);
 
-    const space::Dialogue *dialogue;
-    if (definitionManager.tryGet("DIAG_1", &dialogue))
-    {
-        gameSession->dialogueManager().startDialogue(dialogue);
-    }
-    else
-    {
-        std::cout << "Could not find dialogue" << std::endl;
-    }
+    auto npc = gameSession->createNpcController();
+    auto npcCharacter = gameSession->createObject<space::Character>("GREG", *gregCharDef);
+    ship2->walkableArea().addCharacter(npcCharacter);
+    npc->controllingCharacter(npcCharacter);
 
     // auto transition = std::make_unique<space::Transition>(engine.timeSinceStart(), sf::Time::Zero);
 

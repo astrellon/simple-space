@@ -17,6 +17,7 @@
 #include "keyboard.hpp"
 #include "effects/transition.hpp"
 #include "effects/teleport_screen_effect.hpp"
+#include "controllers/npc_controller.hpp"
 
 #include "ui/ui_interactables.hpp"
 #include "ui/ui_inventory.hpp"
@@ -39,19 +40,20 @@ namespace space
 
     StarSystem *GameSession::createStarSystem(const StarSystemDefinition &definition)
     {
-        auto starSystem = std::make_unique<StarSystem>(*this, definition);
-        auto result = starSystem.get();
-        _starSystems.emplace_back(std::move(starSystem));
-
-        return result;
+        auto &result = _starSystems.emplace_back(std::make_unique<StarSystem>(*this, definition));
+        return result.get();
     }
+
     PlanetSurface *GameSession::createPlanetSurface(const PlanetSurfaceDefinition &definition)
     {
-        auto planetSurface = std::make_unique<PlanetSurface>(*this, definition);
-        auto result = planetSurface.get();
-        _planetSurfaces.emplace_back(std::move(planetSurface));
+        auto &result = _planetSurfaces.emplace_back(std::make_unique<PlanetSurface>(*this, definition));
+        return result.get();
+    }
 
-        return result;
+    NpcController *GameSession::createNpcController()
+    {
+        auto &result = _npcControllers.emplace_back(std::make_unique<NpcController>(*this));
+        return result.get();
     }
 
     bool GameSession::tryGetSpaceObject(const ObjectId &id, SpaceObject **result)

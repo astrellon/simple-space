@@ -29,6 +29,7 @@ namespace space
     class TeleportScreenEffect;
     class RenderCamera;
     class TeleportClone;
+    class NpcController;
 
     class GameSession
     {
@@ -43,6 +44,7 @@ namespace space
             // Methods
             StarSystem *createStarSystem(const StarSystemDefinition &definition);
             PlanetSurface *createPlanetSurface(const PlanetSurfaceDefinition &definition);
+            NpcController *createNpcController();
 
             template <typename T, typename... TArgs>
             auto createObject(TArgs &&... args)
@@ -141,6 +143,7 @@ namespace space
             StarSystem *_activeStarSystem;
             PlanetSurface *_activePlanetSurface;
             PlayerController _playerController;
+            std::vector<std::unique_ptr<NpcController>> _npcControllers;
             std::unique_ptr<Transition> _transition;
             DialogueManager _dialogueManager;
             bool _drawingPreTeleport;
