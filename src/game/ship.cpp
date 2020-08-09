@@ -8,6 +8,8 @@
 
 #include "../physics/polygon_collider.hpp"
 
+#include "../debug/draw_debug.hpp"
+
 namespace space
 {
     Ship::Ship(const ObjectId &id, const ShipDefinition &definition):
@@ -26,17 +28,29 @@ namespace space
 
         // Fill polygon structure with actual data. Any winding order works.
         // The first polyline defines the main polygon.
-        _collider->setMainPolygon({{50, -50}, {50, 50}, {-50, 50}, {-50, -50}});
+        auto maxSize = std::max(size.x, size.y) * 0.52f;
+        _collider->setMainPolygon({{maxSize, -maxSize}, {maxSize, maxSize}, {-maxSize, maxSize}, {-maxSize, -maxSize}});
+
         // Following polylines define holes.
-        _collider->setHole({{-4, -12}, {4, -12}, {10, 3}, {3, 12}, {-3, 12}, {-10, 3}}, 0);
+        if (definition.interiorPolygon.size() <= 2)
+        {
+            _collider->setHole({{-4, -12}, {4, -12}, {10, 3}, {3, 12}, {-3, 12}, {-10, 3}}, 0);
+        }
+        else
+        {
+            _collider->setHole(definition.interiorPolygon, 0);
+        }
 
         _walkableArea.partOfShip(this);
         _walkableArea.addStaticCollider(*_collider);
 
         if (definition.engineGlowTexture != nullptr)
         {
-            _engineEffects.emplace_back(std::make_unique<EngineFlameEffect>(*this, *definition.engineGlowTexture, sf::Vector2f(-18, 14)));
-            _engineEffects.emplace_back(std::make_unique<EngineFlameEffect>(*this, *definition.engineGlowTexture, sf::Vector2f(18, 14)));
+            auto &texture = *definition.engineGlowTexture;
+            for (auto &placement : definition.enginePlacements)
+            {
+                _engineEffects.emplace_back(std::make_unique<EngineFlameEffect>(*this, texture, placement));
+            }
         }
     }
 
@@ -105,6 +119,9 @@ namespace space
             engineEffect->draw(target);
         }
 
-        //_collider->debugDraw(target, _worldTransform);
+        if (DrawDebug::showPolygons)
+        {
+            _collider->debugDraw(target, _worldTransform);
+        }
     }
 }

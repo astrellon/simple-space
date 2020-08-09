@@ -8,15 +8,6 @@
 
 namespace mapbox {
 
-namespace util {
-
-template <std::size_t I, typename T> struct nth {
-    inline static typename std::tuple_element<I, T>::type
-    get(const T& t) { return std::get<I>(t); };
-};
-
-}
-
 namespace detail {
 
 template <typename N = uint32_t>
@@ -198,10 +189,10 @@ Earcut<N>::linkedList(const Ring& points, const bool clockwise) {
     for (i = 0, j = len > 0 ? len - 1 : 0; i < len; j = i++) {
         const auto& p1 = points[i];
         const auto& p2 = points[j];
-        const double p20 = util::nth<0, Point>::get(p2);
-        const double p10 = util::nth<0, Point>::get(p1);
-        const double p11 = util::nth<1, Point>::get(p1);
-        const double p21 = util::nth<1, Point>::get(p2);
+        const double p20 = p2.x;
+        const double p10 = p1.x;
+        const double p11 = p1.y;
+        const double p21 = p2.y;
         sum += (p20 - p10) * (p11 + p21);
     }
 
@@ -779,7 +770,7 @@ Earcut<N>::splitPolygon(Node* a, Node* b) {
 template <typename N> template <typename Point>
 typename Earcut<N>::Node*
 Earcut<N>::insertNode(std::size_t i, const Point& pt, Node* last) {
-    Node* p = nodes.construct(static_cast<N>(i), util::nth<0, Point>::get(pt), util::nth<1, Point>::get(pt));
+    Node* p = nodes.construct(static_cast<N>(i), pt.x, pt.y);
 
     if (!last) {
         p->prev = p;

@@ -95,6 +95,13 @@ namespace space
 
     json toJson(const ShipDefinition &input)
     {
+        json interiorPolygon, enginePlacements;
+        for (auto &pos : input.interiorPolygon)
+            interiorPolygon.push_back(json { pos.x, pos.y });
+
+        for (auto &pos : input.enginePlacements)
+            enginePlacements.push_back(json { pos.x, pos.y });
+
         return json {
             {"id", input.id},
             {"texturePath", input.texturePath},
@@ -108,31 +115,53 @@ namespace space
             {"maxSpeed", input.maxSpeed},
             {"turnRate", input.turnRate},
             {"acceleration", input.acceleration},
+            {"interiorPolygon", interiorPolygon},
+            {"enginePlacements", enginePlacements}
         };
     }
 
     std::unique_ptr<ShipDefinition> fromJsonShipDefinition(const json &j)
     {
         auto id = j.at("id").get<std::string>();
-        auto input = std::make_unique<ShipDefinition>(id);
-        j.at("texturePath").get_to(input->texturePath);
-        j.at("interiorTexturePath").get_to(input->interiorTexturePath);
+        auto result = std::make_unique<ShipDefinition>(id);
+        j.at("texturePath").get_to(result->texturePath);
+        j.at("interiorTexturePath").get_to(result->interiorTexturePath);
 
         auto interiorTextureOffset = j.find("interiorTextureOffset");
         if (interiorTextureOffset != j.end())
         {
-            (*interiorTextureOffset)[0].get_to(input->interiorTextureOffset.x);
-            (*interiorTextureOffset)[1].get_to(input->interiorTextureOffset.y);
+            (*interiorTextureOffset)[0].get_to(result->interiorTextureOffset.x);
+            (*interiorTextureOffset)[1].get_to(result->interiorTextureOffset.y);
         }
 
-        Utils::json_try_set(j, "engineGlowTexturePath", input->engineGlowTexturePath);
-        j.at("name").get_to(input->name);
-        j.at("maxRotation").get_to(input->maxRotation);
-        j.at("maxSpeed").get_to(input->maxSpeed);
-        j.at("turnRate").get_to(input->turnRate);
-        j.at("acceleration").get_to(input->acceleration);
+        auto interiorPolygon = j.find("interiorPolygon");
+        if (interiorPolygon != j.end())
+        {
+            for (auto &child : *interiorPolygon)
+            {
+                sf::Vector2f pos(child[0].get<float>(), child[1].get<float>());
+                result->interiorPolygon.push_back(pos);
+            }
+        }
 
-        return input;
+        auto enginePlacements = j.find("enginePlacements");
+        if (enginePlacements != j.end())
+        {
+            for (auto &child : *enginePlacements)
+            {
+                sf::Vector2f pos(child[0].get<float>(), child[1].get<float>());
+                result->enginePlacements.push_back(pos);
+            }
+        }
+
+        Utils::json_try_set(j, "engineGlowTexturePath", result->engineGlowTexturePath);
+        j.at("name").get_to(result->name);
+        j.at("maxRotation").get_to(result->maxRotation);
+        j.at("maxSpeed").get_to(result->maxSpeed);
+        j.at("turnRate").get_to(result->turnRate);
+        j.at("acceleration").get_to(result->acceleration);
+
+        return result;
     }
 
     json toJson(const CharacterDefinition &input)

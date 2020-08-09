@@ -36,7 +36,6 @@ namespace space
             for (auto j = 0; j < 3; j++)
             {
                 auto index = _indices[i + j];
-                Point p;
                 size_t k = 0;
 
                 // The index will be into the polygons list as if it were flat.
@@ -49,9 +48,7 @@ namespace space
                     k++;
                 }
 
-                p = _polygon[k][index];
-
-                vertexArray[j].position = sf::Vector2f(p[0], p[1]);
+                vertexArray[j].position = _polygon[k][index];
                 vertexArray[j].color = Utils::hsv((float)i / (float)_indices.size() * 360, 1, 1);
                 vertexArray[j].color.a = 120;
             }
@@ -76,7 +73,6 @@ namespace space
             for (auto j = 0; j < 3; j++)
             {
                 auto index = _indices[i + j];
-                Point p;
                 size_t k = 0;
 
                 while (index >= _polygon[k].size())
@@ -85,9 +81,8 @@ namespace space
                     k++;
                 }
 
-                p = _polygon[k][index];
-
-                points.push_back(b2Vec2(p[0], p[1]));
+                auto p = _polygon[k][index];
+                points.push_back(b2Vec2(p.x, p.y));
             }
 
             shape.Set(points.data(), 3);

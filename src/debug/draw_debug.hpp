@@ -8,6 +8,7 @@ namespace space
             // Fields
             static int glDraw;
             static bool slow;
+            static bool showPolygons;
 
             // Constructor
 

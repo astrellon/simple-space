@@ -195,7 +195,7 @@ int main()
         }
         if (space::Keyboard::isKeyDown(sf::Keyboard::P))
         {
-            space::DrawDebug::slow = !space::DrawDebug::slow;
+            space::DrawDebug::showPolygons = !space::DrawDebug::showPolygons;
         }
 
         engine.update();

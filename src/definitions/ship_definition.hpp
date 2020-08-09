@@ -25,6 +25,9 @@ namespace space
             float maxSpeed;
             float acceleration;
 
+            std::vector<sf::Vector2f> interiorPolygon;
+            std::vector<sf::Vector2f> enginePlacements;
+
             const sf::Texture *texture;
             const sf::Texture *interiorTexture;
             const sf::Texture *engineGlowTexture;

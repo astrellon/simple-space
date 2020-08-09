@@ -5,8 +5,7 @@
 #include <SFML/Graphics.hpp>
 #include <Box2D/Box2D.h>
 
-using Point = std::array<float, 2>;
-using Points = std::vector<Point>;
+using Points = std::vector<sf::Vector2f>;
 using Polygon = std::vector<Points>;
 
 namespace space
