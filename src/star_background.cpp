@@ -90,7 +90,7 @@ namespace space
         _camera.preDraw(renderCamera);
         renderCamera.texture().setView(_camera.view());
 
-        auto pointSize = std::max(1, static_cast<int>(std::roundf(_distanceScale * renderCamera.camera().scale())));
+        auto pointSize = std::max(1, static_cast<int>(std::roundf(0.4f * _distanceScale * renderCamera.camera().scale())));
 
         shader->setUniform("distanceScale", _distanceScale);
         shader->setUniform("pointSize", pointSize);

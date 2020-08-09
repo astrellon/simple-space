@@ -8,8 +8,7 @@
         "acceleration": 250.0,
         "name": "Player Ship",
         "texturePath": "data/textures/ships/ship1.png",
-        "interiorTexturePath": "data/textures/ships/ship1Interior3.png",
-        "interiorTextureOffset": [0, -8],
+        "interiorTexturePath": "data/textures/ships/ship1Interior4.png",
         "engineGlowTexturePath": "data/textures/ships/engineGlow.png"
     },
     {
@@ -21,8 +20,7 @@
         "acceleration": 200.0,
         "name": "Other Ship",
         "texturePath": "data/textures/ships/ship1.png",
-        "interiorTexturePath": "data/textures/ships/ship1Interior3.png",
-        "interiorTextureOffset": [0, -8],
+        "interiorTexturePath": "data/textures/ships/ship1Interior4.png",
         "engineGlowTexturePath": "data/textures/ships/engineGlow.png"
     }
 ]

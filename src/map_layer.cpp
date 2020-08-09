@@ -3,6 +3,7 @@
 #include <SFML/System.hpp>
 
 #include "resource_manager.hpp"
+#include "utils.hpp"
 
 namespace space
 {
@@ -119,8 +120,8 @@ namespace space
 
     void MapLayer::updateVisibility(const sf::View& view) const
     {
-        auto viewCorner = view.getCenter() * 4.0f;
-        auto size = view.getSize() * 4.0f;
+        auto viewCorner = view.getCenter() / Utils::getInsideScale();
+        auto size = view.getSize() / Utils::getInsideScale();
         viewCorner -= size / 2.f;
 
         int posX = static_cast<int>(std::floor(viewCorner.x / m_chunkSize.x));
