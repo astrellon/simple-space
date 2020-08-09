@@ -28,7 +28,7 @@ namespace space
 
         // Fill polygon structure with actual data. Any winding order works.
         // The first polyline defines the main polygon.
-        auto maxSize = std::max(size.x, size.y) * 0.52f;
+        auto maxSize = std::max(size.x, size.y) * 0.252f;
         _collider->setMainPolygon({{maxSize, -maxSize}, {maxSize, maxSize}, {-maxSize, maxSize}, {-maxSize, -maxSize}});
 
         // Following polylines define holes.

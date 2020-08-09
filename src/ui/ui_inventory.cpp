@@ -8,7 +8,7 @@
 #include "../game/items/placeable_item.hpp"
 #include "../game/items/placed_item.hpp"
 #include "../game/inventory.hpp"
-#include "../player_controller.hpp"
+#include "../controllers/player_controller.hpp"
 
 namespace space
 {

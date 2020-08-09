@@ -16,6 +16,7 @@ file(GLOB src_files
     "src/physics/*.cpp"
     "src/imgui/*.cpp"
     "src/ui/*.cpp"
+    "src/controllers/*.cpp"
 )
 
 SET (CMAKE_CXX_FLAGS_RELEASE_INIT "-O3 -DNDEBUG")

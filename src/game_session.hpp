@@ -11,7 +11,7 @@
 #include "game/items/item.hpp"
 
 #include "dialogue_manager.hpp"
-#include "player_controller.hpp"
+#include "controllers/player_controller.hpp"
 
 namespace space
 {

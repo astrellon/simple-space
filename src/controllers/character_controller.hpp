@@ -4,8 +4,8 @@
 #include <vector>
 #include <SFML/System.hpp>
 
-#include "non_copyable.hpp"
-#include "game/inventory.hpp"
+#include "../non_copyable.hpp"
+#include "../game/inventory.hpp"
 
 namespace space
 {
@@ -23,16 +23,16 @@ namespace space
     class GameSession;
     class TeleportClone;
 
-    class PlayerController : private NonCopyable
+    class CharacterController : private NonCopyable
     {
         public:
             // Fields
 
             // Constructor
-            PlayerController(GameSession &session);
+            CharacterController(GameSession &session);
 
             // Methods
-            void update(sf::Time dt);
+            virtual void update(sf::Time dt) = 0;
 
             Inventory &inventory() { return _inventory; }
             const Inventory &inventory() const { return _inventory; }
@@ -91,7 +91,7 @@ namespace space
 
             void interactWithClosest();
 
-        private:
+        protected:
             // Fields
             GameSession &_session;
             Ship *_ship;
@@ -109,7 +109,5 @@ namespace space
             float _interactRangeShipsSquared;
 
             // Methods
-            void controlShip(sf::Time dt);
-            void controlCharacter(sf::Time dt);
     };
 } // space

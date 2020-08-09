@@ -9,7 +9,7 @@
 #include "../game/items/placed_item.hpp"
 #include "../game/walkable_area.hpp"
 #include "../game_session.hpp"
-#include "../player_controller.hpp"
+#include "../controllers/player_controller.hpp"
 
 namespace space
 {
