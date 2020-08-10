@@ -8,6 +8,8 @@
 #include "../space_object.hpp"
 #include "item.hpp"
 
+#include "../interactions/interactable.hpp"
+
 namespace space
 {
     class PlaceableItem;

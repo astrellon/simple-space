@@ -22,6 +22,7 @@ namespace space
     class WalkableArea;
     class GameSession;
     class TeleportClone;
+    class Interactable;
 
     class CharacterController : private NonCopyable
     {
@@ -65,10 +66,10 @@ namespace space
             float interactRangeShips() const { return _interactRangeShips; }
             float interactRangeShipsSquared() const { return _interactRangeShipsSquared; }
 
-            bool addCanInteractWith(PlacedItem *item);
-            bool removeCanInteractWith(PlacedItem *item);
-            bool canInteractWith(PlacedItem *item) const;
-            std::vector<PlacedItem *> &canInteractWith() { return _canInteractWith; }
+            bool addCanInteractWith(Interactable *item);
+            bool removeCanInteractWith(Interactable *item);
+            bool canInteractWith(Interactable *item) const;
+            std::vector<Interactable *> &canInteractWith() { return _canInteractWith; }
             void clearCanInteractWith() { _canInteractWith.clear(); }
 
             void addShipInTeleportRange(Ship *ship);
@@ -99,7 +100,7 @@ namespace space
             TeleportClone *_teleportClone;
             ControllingValue _controlling;
             Inventory _inventory;
-            std::vector<PlacedItem *> _canInteractWith;
+            std::vector<Interactable *> _canInteractWith;
             std::vector<Ship *> _shipsInTeleportRange;
             std::vector<Planet *> _planetsInTeleportRange;
 
@@ -109,5 +110,6 @@ namespace space
             float _interactRangeShipsSquared;
 
             // Methods
+            void checkInRangeOfInteractable(Interactable *interactable);
     };
 } // space

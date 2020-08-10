@@ -19,27 +19,20 @@ namespace space
 
         for (auto canInteractWith : session.playerController().canInteractWith())
         {
-            ImGui::Text("%s", canInteractWith->item->definition.name.c_str());
-            ImGui::SameLine();
+            ImGui::Text("%s", canInteractWith->name().c_str());
 
-            std::stringstream useSs;
-            useSs << "Use##" << canInteractWith->id;
-            auto label = useSs.str();
-
-            if (ImGui::Button(label.c_str()))
+            for (auto &interaction : canInteractWith->interactions())
             {
-                canInteractWith->item->execute(session, canInteractWith->transform().position, canInteractWith->area);
-            }
+                ImGui::SameLine();
 
-            std::stringstream pickupSs;
-            pickupSs << "Pickup##" << canInteractWith->id;
-            label = pickupSs.str();
+                std::stringstream useSs;
+                useSs << interaction->label() << "##" << canInteractWith->parentObject()->id;
+                auto label = useSs.str();
 
-            ImGui::SameLine();
-            if (ImGui::Button(label.c_str()))
-            {
-                session.playerController().inventory().addItem(canInteractWith->item);
-                canInteractWith->area.removePlaceable(canInteractWith->item->id);
+                if (ImGui::Button(label.c_str()))
+                {
+                    interaction->execute(session);
+                }
             }
         }
         ImGui::End();

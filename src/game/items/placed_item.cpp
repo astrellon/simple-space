@@ -1,8 +1,10 @@
 #include "placed_item.hpp"
 
-#include "../../engine.hpp"
 #include "placeable_item.hpp"
 #include "../character.hpp"
+#include "../interactions/pickup_action.hpp"
+#include "../interactions/use_item_action.hpp"
+#include "../../engine.hpp"
 #include "../../physics/polygon_collider.hpp"
 #include "../../utils.hpp"
 
@@ -14,6 +16,20 @@ namespace space
 
         _sprite.setOrigin(sf::Vector2f(item->definition.texture->getSize()) * 0.5f);
         _sprite.setScale(Utils::getInsideScale(), Utils::getInsideScale());
+
+        _interactable.createInteraction<UseItemAction>(this);
+        _interactable.createInteraction<PickupAction>(this);
+
+        _interactable.setOnPlayerEnters([item](GameSession &session)
+        {
+            item->onPlayerEnters(session);
+        });
+        _interactable.setOnPlayerLeaves([item](GameSession &session)
+        {
+            item->onPlayerLeaves(session);
+        });
+
+        _interactable.name(item->definition.name);
     }
     PlacedItem::~PlacedItem()
     {

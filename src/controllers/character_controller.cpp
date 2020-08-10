@@ -22,7 +22,7 @@ namespace space
         interactRangeShips(150.0f);
     }
 
-    bool CharacterController::addCanInteractWith(PlacedItem *item)
+    bool CharacterController::addCanInteractWith(Interactable *item)
     {
         auto find = std::find(_canInteractWith.begin(), _canInteractWith.end(), item);
         if (find == _canInteractWith.end())
@@ -33,7 +33,7 @@ namespace space
 
         return false;
     }
-    bool CharacterController::removeCanInteractWith(PlacedItem *item)
+    bool CharacterController::removeCanInteractWith(Interactable *item)
     {
         auto find = std::find(_canInteractWith.begin(), _canInteractWith.end(), item);
         if (find != _canInteractWith.end())
@@ -44,7 +44,7 @@ namespace space
 
         return false;
     }
-    bool CharacterController::canInteractWith(PlacedItem *item) const
+    bool CharacterController::canInteractWith(Interactable *item) const
     {
         auto find = std::find(_canInteractWith.begin(), _canInteractWith.end(), item);
         return find != _canInteractWith.end();
@@ -164,37 +164,43 @@ namespace space
     {
         // Check existing items
         auto playerPos = _character->transform().position;
-        for (auto item : canInteractWith())
+        for (auto interactable : canInteractWith())
         {
-            auto dpos = item->transform().position - playerPos;
+            auto dpos = interactable->parentObject()->transform().position - playerPos;
             auto distance = dpos.x * dpos.x + dpos.y * dpos.y;
             if (distance - interactRangeObjectsSquared() > 0.0f)
             {
-                removeCanInteractWith(item);
-                if (item->item->isPlayerInRange())
+                removeCanInteractWith(interactable);
+                if (interactable->isPlayerInRange())
                 {
-                    item->item->onPlayerLeaves(_session);
+                    interactable->onPlayerLeaves(_session);
                 }
             }
         }
 
         for (auto &iter : area.placedItems())
         {
-            if (canInteractWith(iter.get()))
-            {
-                continue;
-            }
+            checkInRangeOfInteractable(&iter->interactable());
+        }
+    }
 
-            auto dpos = iter->transform().position - playerPos;
-            auto distance = dpos.x * dpos.x + dpos.y * dpos.y;
-            if (distance - interactRangeObjectsSquared() < 0.0f)
+    void CharacterController::checkInRangeOfInteractable(Interactable *interactable)
+    {
+        if (canInteractWith(interactable))
+        {
+            return;
+        }
+
+        auto playerPos = _character->transform().position;
+        auto dpos = interactable->parentObject()->transform().position - playerPos;
+        auto distance = dpos.x * dpos.x + dpos.y * dpos.y;
+        if (distance - interactRangeObjectsSquared() < 0.0f)
+        {
+            if (addCanInteractWith(interactable))
             {
-                if (addCanInteractWith(iter.get()))
+                if (!interactable->isPlayerInRange())
                 {
-                    if (!iter->item->isPlayerInRange())
-                    {
-                        iter->item->onPlayerEnters(_session);
-                    }
+                    interactable->onPlayerEnters(_session);
                 }
             }
         }

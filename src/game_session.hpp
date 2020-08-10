@@ -49,6 +49,7 @@ namespace space
             template <typename T, typename... TArgs>
             auto createObject(TArgs &&... args)
             {
+                // We want the return type to stay as type T and not SpaceObject, so we use this round-about way.
                 auto obj = std::make_unique<T>(std::forward<TArgs>(args)...);
                 auto result = obj.get();
                 _spaceObjects.emplace_back(std::move(obj));

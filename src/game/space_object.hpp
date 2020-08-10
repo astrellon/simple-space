@@ -6,6 +6,7 @@
 
 #include "../non_copyable.hpp"
 #include "../space_transform.hpp"
+#include "interactions/interactable.hpp"
 
 namespace space
 {
@@ -21,7 +22,7 @@ namespace space
             const ObjectId id;
 
             // Constructor
-            SpaceObject(const ObjectId &id) : id(id), _insideStarSystem(nullptr) { }
+            SpaceObject(const ObjectId &id) : id(id), _insideStarSystem(nullptr), _interactable(this) { }
             virtual ~SpaceObject() { }
 
             // Methods
@@ -36,11 +37,14 @@ namespace space
             virtual void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform) = 0;
             virtual void draw(GameSession &session, sf::RenderTarget &target) = 0;
 
+            Interactable &interactable() { return _interactable; }
+
         protected:
             // Fields
             SpaceTransform _transform;
             sf::Transform _worldTransform;
             StarSystem *_insideStarSystem;
+            Interactable _interactable;
 
             // Methods
             void updateWorldTransform(const sf::Transform &parentTransform)

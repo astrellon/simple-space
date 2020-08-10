@@ -136,7 +136,7 @@ namespace space
             {
                 if (_session != nullptr)
                 {
-                    _session->playerController().removeCanInteractWith(iter->get());
+                    _session->playerController().removeCanInteractWith(&iter->get()->interactable());
                     if (iter->get()->item->isPlayerInRange())
                     {
                         iter->get()->item->onPlayerLeaves(*_session);
