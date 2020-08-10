@@ -13,6 +13,7 @@ namespace space
     Character::Character(const ObjectId &id, const CharacterDefinition &definition) :
         SpaceObject(id), definition(definition), _rotationSpeed(0), rotateInput(0), _physicsBody(nullptr), _insideArea(nullptr), _tileIndex(0)
     {
+        _interactable.name(definition.name);
     }
 
     void Character::prePhysics(GameSession &session, sf::Time dt, const sf::Transform &parentTransform)

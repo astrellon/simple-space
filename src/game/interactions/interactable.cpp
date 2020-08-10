@@ -8,6 +8,20 @@ namespace space
 
     }
 
+    bool Interactable::removeInteraction(Interaction *interaction)
+    {
+        for (auto iter = _interactions.begin(); iter != _interactions.end(); ++iter)
+        {
+            if (iter->get() == interaction)
+            {
+                _interactions.erase(iter);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     void Interactable::onPlayerEnters(GameSession &session)
     {
         _playerInRange = true;

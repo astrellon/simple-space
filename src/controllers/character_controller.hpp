@@ -41,10 +41,10 @@ namespace space
             void controlling(ControllingValue value) { _controlling = value; }
             ControllingValue controlling() const { return _controlling; }
 
-            void controllingShip(Ship *ship) { _ship = ship; }
+            virtual void controllingShip(Ship *ship) { _ship = ship; }
             Ship *controllingShip() const { return _ship; }
 
-            void controllingCharacter(Character *character) { _character = character; }
+            virtual void controllingCharacter(Character *character) { _character = character; }
             Character *controllingCharacter() const { return _character; }
 
             void teleportClone(TeleportClone *clone) { _teleportClone = clone; }

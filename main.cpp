@@ -94,6 +94,9 @@ int main()
     const space::PlanetSurfaceDefinition *planetSandySurfaceDef;
     definitionManager.tryGet("PLANET_SANDY_1", &planetSandySurfaceDef);
 
+    const space::Dialogue *diag1;
+    definitionManager.tryGet("DIAG_1", &diag1);
+
     auto gameSession = engine.startGameSession();
 
     auto planetGrassySurface = gameSession->createPlanetSurface(*planetGrassySurfaceDef);
@@ -159,6 +162,7 @@ int main()
     auto npcCharacter = gameSession->createObject<space::Character>("GREG", *gregCharDef);
     ship2->walkableArea().addCharacter(npcCharacter);
     npc->controllingCharacter(npcCharacter);
+    npc->dialogue(diag1);
 
     // auto transition = std::make_unique<space::Transition>(engine.timeSinceStart(), sf::Time::Zero);
 

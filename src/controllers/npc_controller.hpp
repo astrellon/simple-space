@@ -6,6 +6,9 @@
 
 namespace space
 {
+    class Dialogue;
+    class Interaction;
+
     class NpcController : public CharacterController
     {
         public:
@@ -16,5 +19,13 @@ namespace space
 
             // Methods
             virtual void update(sf::Time dt);
+
+            void dialogue(const Dialogue *dialogue);
+            const Dialogue *dialogue() const { return _dialogue; }
+
+        private:
+            // Fields
+            const Dialogue *_dialogue;
+            Interaction *_startDialogueAction;
     };
 } // space

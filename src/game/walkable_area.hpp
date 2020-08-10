@@ -47,6 +47,7 @@ namespace space
 
             void addCharacter(Character *character);
             void removeCharacter(Character *character);
+            const std::vector<Character *> characters() const { return _characters; }
 
             void addPlaceable(PlaceableItem *item, sf::Vector2f position);
             void removePlaceable(ItemId id);

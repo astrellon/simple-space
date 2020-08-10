@@ -182,6 +182,15 @@ namespace space
         {
             checkInRangeOfInteractable(&iter->interactable());
         }
+
+        for (auto &iter : area.characters())
+        {
+            if (iter == _character)
+            {
+                continue;
+            }
+            checkInRangeOfInteractable(&iter->interactable());
+        }
     }
 
     void CharacterController::checkInRangeOfInteractable(Interactable *interactable)

@@ -33,6 +33,8 @@ namespace space
                 return result;
             }
 
+            bool removeInteraction(Interaction *interaction);
+
             void onPlayerEnters(GameSession &session);
             void onPlayerLeaves(GameSession &session);
 
