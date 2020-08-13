@@ -21,7 +21,9 @@ namespace space
 
             // Methods
             Camera &camera() { return _camera; }
+            const Camera &camera() const { return _camera; }
             sf::RenderTexture &texture() { return _texture; }
+            const sf::RenderTexture &texture() const { return _texture; }
 
             void update(sf::Time dt);
             void onResize(sf::Vector2f area, float cameraScale);

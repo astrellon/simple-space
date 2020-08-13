@@ -14,6 +14,7 @@
 namespace space
 {
     class GameSession;
+    class UIManager;
 
     class Engine : private NonCopyable
     {
@@ -21,10 +22,13 @@ namespace space
             Engine(sf::RenderWindow &window);
             ~Engine();
 
-            const ResourceManager &resourceManager() const;
-            const DefinitionManager &definitionManager() const;
-            ResourceManager &resourceManager();
-            DefinitionManager &definitionManager();
+            const ResourceManager &resourceManager() const { return *_resourceManager.get(); }
+            const DefinitionManager &definitionManager() const { return *_definitionManager.get(); }
+            const UIManager &uiManager() const { return *_uiManager.get(); }
+
+            ResourceManager &resourceManager() { return *_resourceManager.get(); }
+            DefinitionManager &definitionManager() { return *_definitionManager.get(); }
+            UIManager &uiManager() { return *_uiManager.get(); }
 
             Overlay &overlay() { return *_overlay; }
 
@@ -35,6 +39,7 @@ namespace space
             void cameraScale(float scale);
 
             sf::Vector2u windowSize() const;
+            sf::Vector2u renderSize() const;
 
             GameSession *currentSession() const;
             GameSession *startGameSession();
@@ -59,6 +64,7 @@ namespace space
         private:
             std::unique_ptr<ResourceManager> _resourceManager;
             std::unique_ptr<DefinitionManager> _definitionManager;
+            std::unique_ptr<UIManager> _uiManager;
 
             RenderCamera _sceneRender;
             RenderCamera _sceneRenderTransition;

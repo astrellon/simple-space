@@ -35,6 +35,9 @@
 #include "src/debug/draw_debug.hpp"
 #include "src/controllers/npc_controller.hpp"
 
+#include "src/ui/ui_manager.hpp"
+#include "src/ui/ui_dialogue.hpp"
+
 #include "earcut.hpp"
 
 #include <tmxlite/Map.hpp>
@@ -163,6 +166,8 @@ int main()
     ship2->walkableArea().addCharacter(npcCharacter);
     npc->controllingCharacter(npcCharacter);
     npc->dialogue(diag1);
+
+    engine.uiManager().createWindow<space::UIDialogue>();
 
     // auto transition = std::make_unique<space::Transition>(engine.timeSinceStart(), sf::Time::Zero);
 

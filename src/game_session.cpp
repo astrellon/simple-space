@@ -321,7 +321,7 @@ namespace space
             UITeleporter::draw(*this, _playerController.shipsInTeleportRange(), _playerController.planetsInTeleportRange());
         }
 
-        UIDialogue::draw(_dialogueManager);
+        //UIDialogue::draw(_dialogueManager);
     }
 
     void GameSession::applyTransitionToCamera(const TransitionData &transitionData, RenderCamera &renderCamera)

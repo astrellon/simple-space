@@ -17,6 +17,8 @@
 #include "game/items/placeable_item.hpp"
 #include "game/ship.hpp"
 
+#include "ui/ui_manager.hpp"
+
 namespace space
 {
     Engine::Engine(sf::RenderWindow &window) :
@@ -25,30 +27,11 @@ namespace space
     {
         _resourceManager = std::make_unique<ResourceManager>();
         _definitionManager = std::make_unique<DefinitionManager>();
+        _uiManager = std::make_unique<UIManager>();
     }
     Engine::~Engine()
     {
 
-    }
-
-    const ResourceManager &Engine::resourceManager() const
-    {
-        return *_resourceManager.get();
-    }
-
-    const DefinitionManager &Engine::definitionManager() const
-    {
-        return *_definitionManager.get();
-    }
-
-    ResourceManager &Engine::resourceManager()
-    {
-        return *_resourceManager.get();
-    }
-
-    DefinitionManager &Engine::definitionManager()
-    {
-        return *_definitionManager.get();
     }
 
     float Engine::spriteScale() const
@@ -72,6 +55,11 @@ namespace space
     sf::Vector2u Engine::windowSize() const
     {
         return _window.getSize();
+    }
+
+    sf::Vector2u Engine::renderSize() const
+    {
+        return _sceneRender.texture().getSize();
     }
 
     GameSession *Engine::currentSession() const
@@ -198,6 +186,7 @@ namespace space
 
         if (_initedImgui)
         {
+            _uiManager->draw(*this);
             if (_currentSession.get())
             {
                 _currentSession->drawUI(_sceneRender.texture());

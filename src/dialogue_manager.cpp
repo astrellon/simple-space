@@ -13,6 +13,7 @@ namespace space
     {
         _inDialogue = dialogue != nullptr;
         _current = dialogue;
+        _nextPage = 0;
         nextLine();
     }
 

@@ -1,15 +1,22 @@
 #pragma once
 
+#include "ui_window.hpp"
+
 namespace space
 {
-    class DialogueManager;
+    class Engine;
 
-    class UIDialogue
+    class UIDialogue : public UIWindow
     {
         public:
-            static void draw(DialogueManager &manager);
-
-        private:
+            // Constructors
             UIDialogue();
+
+        protected:
+            // Methods
+            virtual void checkOpen(Engine &engine);
+            virtual void checkPosition(Engine &engine);
+            virtual void doDraw(Engine &engine);
+
     };
 } // space
