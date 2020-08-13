@@ -37,6 +37,8 @@
 
 #include "src/ui/ui_manager.hpp"
 #include "src/ui/ui_dialogue.hpp"
+#include "src/ui/ui_inventory.hpp"
+#include "src/ui/ui_interactables.hpp"
 
 #include "earcut.hpp"
 
@@ -48,7 +50,7 @@ int main()
     settings.majorVersion = 3;
     settings.minorVersion = 0;
 
-    sf::RenderWindow window(sf::VideoMode(1280, 800), "Space", sf::Style::Default, settings);
+    sf::RenderWindow window(sf::VideoMode(1920, 1080), "Space", sf::Style::Default, settings);
     window.setVerticalSyncEnabled(true);
     // window.setFramerateLimit(120);
 
@@ -168,6 +170,8 @@ int main()
     npc->dialogue(diag1);
 
     engine.uiManager().createWindow<space::UIDialogue>();
+    engine.uiManager().createWindow<space::UIInventory>();
+    engine.uiManager().createWindow<space::UIInteractables>();
 
     // auto transition = std::make_unique<space::Transition>(engine.timeSinceStart(), sf::Time::Zero);
 

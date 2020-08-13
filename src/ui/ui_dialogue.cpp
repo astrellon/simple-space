@@ -11,7 +11,7 @@ namespace space
 {
     UIDialogue::UIDialogue() : UIWindow("Dialogue")
     {
-        size = ImVec2(500, 200);
+        size = ImVec2(400, 120);
     }
 
     void UIDialogue::checkOpen(Engine &engine)
@@ -29,7 +29,7 @@ namespace space
     {
         auto renderSize = engine.renderSize();
         position.x = (renderSize.x - size.x) * 0.5;
-        position.y = renderSize.y - size.y - 50;
+        position.y = renderSize.y - size.y - 20;
     }
 
     void UIDialogue::doDraw(Engine &engine)

@@ -1,15 +1,21 @@
 #pragma once
 
+#include "ui_window.hpp"
+
 namespace space
 {
-    class GameSession;
+    class Engine;
 
-    class UIInteractables
+    class UIInteractables : public UIWindow
     {
         public:
-            static void draw(GameSession &session);
-
-        private:
+            // Constructors
             UIInteractables();
+
+        protected:
+            // Methods
+            virtual void checkOpen(Engine &engine);
+            virtual void checkPosition(Engine &engine);
+            virtual void doDraw(Engine &engine);
     };
 } // space

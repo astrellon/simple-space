@@ -310,18 +310,10 @@ namespace space
 
     void GameSession::drawUI(sf::RenderTarget &target)
     {
-        if (_playerController.controlling() != ControlShip)
-        {
-            UIInteractables::draw(*this);
-            UIInventory::draw(_playerController);
-        }
-
         if (showTeleporters)
         {
             UITeleporter::draw(*this, _playerController.shipsInTeleportRange(), _playerController.planetsInTeleportRange());
         }
-
-        //UIDialogue::draw(_dialogueManager);
     }
 
     void GameSession::applyTransitionToCamera(const TransitionData &transitionData, RenderCamera &renderCamera)

@@ -9,15 +9,45 @@
 #include "../game/items/placed_item.hpp"
 #include "../game/walkable_area.hpp"
 #include "../game_session.hpp"
+#include "../engine.hpp"
 #include "../controllers/player_controller.hpp"
 
 namespace space
 {
-    void UIInteractables::draw(GameSession &session)
+    UIInteractables::UIInteractables() : UIWindow("Interactables")
     {
-        ImGui::Begin("Interactables");
+        size = ImVec2(160, 160);
+        position.x = 20;
+    }
 
-        for (auto canInteractWith : session.playerController().canInteractWith())
+    void UIInteractables::checkOpen(Engine &engine)
+    {
+        if (!engine.currentSession())
+        {
+            isOpen = false;
+            return;
+        }
+
+        auto &player = engine.currentSession()->playerController();
+        isOpen = player.controlling() != ControlShip;
+    }
+    void UIInteractables::checkPosition(Engine &engine)
+    {
+        auto renderSize = engine.renderSize();
+        position.y = renderSize.y - size.y - 20;
+    }
+    void UIInteractables::doDraw(Engine &engine)
+    {
+        ImGui::Text("Interactables");
+
+        if (!engine.currentSession())
+        {
+            return;
+        }
+
+        auto &session = *engine.currentSession();
+        auto &player = session.playerController();
+        for (auto canInteractWith : player.canInteractWith())
         {
             ImGui::Text("%s", canInteractWith->name().c_str());
 
@@ -35,6 +65,5 @@ namespace space
                 }
             }
         }
-        ImGui::End();
     }
 } // namespace space

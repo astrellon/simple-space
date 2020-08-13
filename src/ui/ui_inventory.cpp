@@ -9,12 +9,39 @@
 #include "../game/items/placed_item.hpp"
 #include "../game/inventory.hpp"
 #include "../controllers/player_controller.hpp"
+#include "../engine.hpp"
+#include "../game_session.hpp"
 
 namespace space
 {
-    void UIInventory::draw(PlayerController &player)
+    UIInventory::UIInventory() : UIWindow("Inventory")
     {
-        ImGui::Begin("Inventory");
+        size = ImVec2(160, 200);
+        position = ImVec2(20, 20);
+    }
+
+    void UIInventory::checkOpen(Engine &engine)
+    {
+        if (!engine.currentSession())
+        {
+            isOpen = false;
+            return;
+        }
+
+        auto &player = engine.currentSession()->playerController();
+        isOpen = player.controlling() != ControlShip;
+    }
+
+    void UIInventory::doDraw(Engine &engine)
+    {
+        ImGui::Text("Inventory");
+
+        if (!engine.currentSession())
+        {
+            return;
+        }
+
+        auto &player = engine.currentSession()->playerController();
         for (auto &item : player.inventory().items())
         {
             ImGui::Text("%s", item->definition.name.c_str());
@@ -35,7 +62,5 @@ namespace space
                 }
             }
         }
-
-        ImGui::End();
     }
 } // namespace space
