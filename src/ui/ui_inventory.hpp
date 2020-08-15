@@ -14,7 +14,7 @@ namespace space
 
         protected:
             // Methods
-            virtual void checkOpen(Engine &engine);
+            virtual bool isOpen(Engine &engine);
             virtual void doDraw(Engine &engine);
 
     };

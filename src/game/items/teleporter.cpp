@@ -2,6 +2,9 @@
 
 #include "../walkable_area.hpp"
 #include "../../game_session.hpp"
+#include "../../engine.hpp"
+#include "../../ui/ui_manager.hpp"
+#include "../../ui/ui_teleporter.hpp"
 
 namespace space
 {
@@ -13,13 +16,14 @@ namespace space
             return;
         }
 
-        session.showTeleporters = true;
+        auto &teleporter = session.engine().uiManager().uiTeleporter();
+        teleporter.controller(&session.playerController());
     }
 
     void Teleporter::onPlayerLeaves(GameSession &session)
     {
         PlaceableItem::onPlayerLeaves(session);
 
-        session.showTeleporters = false;
+        session.engine().uiManager().uiTeleporter().controller(nullptr);
     }
 } // namespace space

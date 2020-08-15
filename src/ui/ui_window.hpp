@@ -16,7 +16,6 @@ namespace space
             // Fields
             ImVec2 position;
             ImVec2 size;
-            bool isOpen;
             const std::string windowName;
 
             // Constructor
@@ -27,7 +26,7 @@ namespace space
 
         protected:
             // Methods
-            virtual void checkOpen(Engine &engine) { }
+            virtual bool isOpen(Engine &engine) { return false; }
             virtual void checkPosition(Engine &engine) { }
             virtual void doDraw(Engine &engine) = 0;
 

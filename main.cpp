@@ -34,11 +34,7 @@
 #include "src/effects/transition.hpp"
 #include "src/debug/draw_debug.hpp"
 #include "src/controllers/npc_controller.hpp"
-
 #include "src/ui/ui_manager.hpp"
-#include "src/ui/ui_dialogue.hpp"
-#include "src/ui/ui_inventory.hpp"
-#include "src/ui/ui_interactables.hpp"
 
 #include "earcut.hpp"
 
@@ -69,6 +65,7 @@ int main()
     resourceManager.preloadMaps("data/maps");
 
     engine.initEffects();
+    engine.uiManager().initDefaultWindows();
 
     auto &definitionManager = engine.definitionManager();
     definitionManager.loadFolder("data/definitions");
@@ -168,10 +165,6 @@ int main()
     ship2->walkableArea().addCharacter(npcCharacter);
     npc->controllingCharacter(npcCharacter);
     npc->dialogue(diag1);
-
-    engine.uiManager().createWindow<space::UIDialogue>();
-    engine.uiManager().createWindow<space::UIInventory>();
-    engine.uiManager().createWindow<space::UIInteractables>();
 
     // auto transition = std::make_unique<space::Transition>(engine.timeSinceStart(), sf::Time::Zero);
 

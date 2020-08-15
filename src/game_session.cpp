@@ -19,16 +19,11 @@
 #include "effects/teleport_screen_effect.hpp"
 #include "controllers/npc_controller.hpp"
 
-#include "ui/ui_interactables.hpp"
-#include "ui/ui_inventory.hpp"
-#include "ui/ui_teleporter.hpp"
-#include "ui/ui_dialogue.hpp"
-
 #include <tmxlite/Map.hpp>
 
 namespace space
 {
-    GameSession::GameSession(Engine &engine) : _engine(engine), _activeStarSystem(nullptr), showTeleporters(false), _playerController(*this), _drawingPreTeleport(false)
+    GameSession::GameSession(Engine &engine) : _engine(engine), _activeStarSystem(nullptr), _playerController(*this), _drawingPreTeleport(false)
     {
         _teleportEffect = std::make_unique<TeleportScreenEffect>();
         _teleportEffect->init(engine.resourceManager());
@@ -310,10 +305,6 @@ namespace space
 
     void GameSession::drawUI(sf::RenderTarget &target)
     {
-        if (showTeleporters)
-        {
-            UITeleporter::draw(*this, _playerController.shipsInTeleportRange(), _playerController.planetsInTeleportRange());
-        }
     }
 
     void GameSession::applyTransitionToCamera(const TransitionData &transitionData, RenderCamera &renderCamera)

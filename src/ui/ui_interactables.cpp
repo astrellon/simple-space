@@ -20,22 +20,23 @@ namespace space
         position.x = 20;
     }
 
-    void UIInteractables::checkOpen(Engine &engine)
+    bool UIInteractables::isOpen(Engine &engine)
     {
         if (!engine.currentSession())
         {
-            isOpen = false;
-            return;
+            return false;
         }
 
         auto &player = engine.currentSession()->playerController();
-        isOpen = player.controlling() != ControlShip;
+        return player.controlling() != ControlShip && !engine.currentSession()->dialogueManager().isInDialogue();
     }
+
     void UIInteractables::checkPosition(Engine &engine)
     {
         auto renderSize = engine.renderSize();
         position.y = renderSize.y - size.y - 20;
     }
+
     void UIInteractables::doDraw(Engine &engine)
     {
         ImGui::Text("Interactables");

@@ -2,18 +2,35 @@
 
 #include <vector>
 
+#include "ui_window.hpp"
+
 namespace space
 {
     class Ship;
     class Planet;
-    class GameSession;
+    class CharacterController;
 
-    class UITeleporter
+    class UITeleporter : public UIWindow
     {
         public:
-            static void draw(GameSession &session, const std::vector<Ship *> &ships, const std::vector<Planet *> &planets);
+            // Fields
+
+            // Constructor
+            UITeleporter();
+
+            // Methods
+            void controller(CharacterController *controller) { _characterController = controller; }
+            CharacterController *controller() const { return _characterController; }
+
+        protected:
+            // Methods
+            virtual bool isOpen(Engine &engine);
+            virtual void checkPosition(Engine &engine);
+            virtual void doDraw(Engine &engine);
 
         private:
-            UITeleporter();
+            // Fields
+            CharacterController *_characterController;
+
     };
 } // space

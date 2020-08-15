@@ -14,15 +14,14 @@ namespace space
         size = ImVec2(400, 120);
     }
 
-    void UIDialogue::checkOpen(Engine &engine)
+    bool UIDialogue::isOpen(Engine &engine)
     {
         if (!engine.currentSession())
         {
-            isOpen = false;
-            return;
+            return false;
         }
 
-        isOpen = engine.currentSession()->dialogueManager().isInDialogue();
+        return engine.currentSession()->dialogueManager().isInDialogue();
     }
 
     void UIDialogue::checkPosition(Engine &engine)

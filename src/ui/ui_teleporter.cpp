@@ -11,13 +11,41 @@
 #include "../game/ship.hpp"
 #include "../game/planet.hpp"
 #include "../game/planet_surface.hpp"
+
 #include "../game_session.hpp"
+#include "../engine.hpp"
+
+#include "ui_manager.hpp"
 
 namespace space
 {
-    void UITeleporter::draw(GameSession &session, const std::vector<Ship *> &ships, const std::vector<Planet *> &planets)
+    UITeleporter::UITeleporter() : UIWindow("Teleporters"), _characterController(nullptr)
     {
-        ImGui::Begin("Teleporters");
+        size = ImVec2(160, 160);
+        position = ImVec2(20, 20);
+    }
+
+    bool UITeleporter::isOpen(Engine &engine)
+    {
+        if (!engine.currentSession())
+        {
+            return false;
+        }
+
+        return !engine.currentSession()->dialogueManager().isInDialogue() && _characterController != nullptr;
+    }
+
+    void UITeleporter::checkPosition(Engine &engine)
+    {
+        auto renderSize = engine.renderSize();
+        position.y = renderSize.y - size.y - 190;
+    }
+
+    void UITeleporter::doDraw(Engine &engine)
+    {
+        auto session = engine.currentSession();
+        auto ships = _characterController->shipsInTeleportRange();
+        auto planets = _characterController->planetsInTeleportRange();
 
         ImGui::Text("Ships:");
 
@@ -49,7 +77,7 @@ namespace space
                     {
                         std::cout << "Teleport to: " << teleporter.item->name() << " @ " << area.partOfShip()->definition.name << std::endl;
 
-                        session.moveCharacter(session.playerController().controllingCharacter(), teleporter.placed->transform().position, &teleporter.placed->area);
+                        session->moveCharacter(_characterController->controllingCharacter(), teleporter.placed->transform().position, &teleporter.placed->area);
                     }
                 }
             }
@@ -87,13 +115,11 @@ namespace space
                         {
                             std::cout << "Teleport to: " << teleporter.item->name() << " @ " << area.partOfPlanetSurface()->definition.name << std::endl;
 
-                            session.moveCharacter(session.playerController().controllingCharacter(), teleporter.placed->transform().position, &teleporter.placed->area);
+                            session->moveCharacter(_characterController->controllingCharacter(), teleporter.placed->transform().position, &teleporter.placed->area);
                         }
                     }
                 }
             }
         }
-
-        ImGui::End();
     }
 } // namespace space

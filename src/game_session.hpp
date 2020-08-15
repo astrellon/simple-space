@@ -35,7 +35,6 @@ namespace space
     {
         public:
             // Fields
-            bool showTeleporters;
 
             // Constructor
             GameSession(Engine &engine);

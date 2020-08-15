@@ -5,15 +5,13 @@
 namespace space
 {
     UIWindow::UIWindow(const std::string &windowName)
-        : windowName(windowName), position(100, 100), size(100, 100), isOpen(false)
+        : windowName(windowName), position(100, 100), size(100, 100)
     {
 
     }
     void UIWindow::draw(Engine &engine)
     {
-        checkOpen(engine);
-
-        if (!isOpen)
+        if (!isOpen(engine))
         {
             return;
         }

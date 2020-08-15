@@ -9,12 +9,18 @@ namespace space
 {
     class Engine;
 
+    class UIInteractables;
+    class UIInventory;
+    class UITeleporter;
+    class UIDialogue;
+
     class UIManager
     {
         public:
             // Fields
 
             // Constructor
+            UIManager();
 
             // Methods
             template <typename T, typename... TArgs>
@@ -28,11 +34,21 @@ namespace space
                 return result;
             }
 
+            void initDefaultWindows();
             void draw(Engine &engine);
+
+            UIInteractables &uiInteractables() { return *_uiInteractables; }
+            UIInventory &uiInventory() { return *_uiInventory; }
+            UITeleporter &uiTeleporter() { return *_uiTeleporter; }
+            UIDialogue &uiDialogue() { return *_uiDialogue; }
 
         private:
             // Fields
             std::vector<std::unique_ptr<UIWindow>> _uiWindows;
+            UIInteractables *_uiInteractables;
+            UIInventory *_uiInventory;
+            UITeleporter *_uiTeleporter;
+            UIDialogue *_uiDialogue;
 
             // Methods
     };
