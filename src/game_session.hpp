@@ -115,6 +115,7 @@ namespace space
             bool tryGetPlanetSurface(const DefinitionId &id, PlanetSurface **result) const;
 
             PlayerController &playerController() { return _playerController; }
+            const PlayerController &playerController() const { return _playerController; }
 
             void setPlayerControllingShip(Ship *ship);
             void setPlayerControllingCharacter();

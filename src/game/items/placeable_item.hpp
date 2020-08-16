@@ -17,6 +17,9 @@ namespace space
             virtual ~PlaceableItem() { }
 
             // Methods
+            static const std::string ItemType() { return "placeable-item"; }
+            virtual std::string type() const { return ItemType(); }
+
             virtual void execute(GameSession &session, const sf::Vector2f &position, WalkableArea &parentArea) { }
             virtual void onPlaced() { }
 

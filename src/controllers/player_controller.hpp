@@ -15,6 +15,9 @@ namespace space
             PlayerController(GameSession &session);
 
             // Methods
+            static const std::string ControllerType() { return "player"; }
+            virtual std::string type() const { return ControllerType(); }
+
             virtual void update(sf::Time dt);
 
         private:
