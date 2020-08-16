@@ -26,6 +26,9 @@ namespace space
             Character(const ObjectId &id, const CharacterDefinition &definition);
 
             // Methods
+            static const std::string SpaceObjectType() { return CharacterDefinition::DefinitionType(); }
+            virtual std::string type() const { return SpaceObjectType(); }
+
             virtual void prePhysics(GameSession &session, sf::Time dt, const sf::Transform &parentTransform);
             virtual void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform);
             virtual void draw(GameSession &session, sf::RenderTarget &target);
@@ -41,7 +44,6 @@ namespace space
         private:
             // Fields
             sf::Clock _timeSinceStart;
-            float _rotationSpeed;
             int _tileIndex;
 
             WalkableArea *_insideArea;

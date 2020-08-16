@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 
@@ -27,6 +29,9 @@ namespace space
             Ship(const ObjectId &id, const ShipDefinition &definition);
 
             // Methods
+            static const std::string SpaceObjectType() { return ShipDefinition::DefinitionType(); }
+            virtual std::string type() const { return SpaceObjectType(); }
+
             float rotationSpeed() const { return _rotationSpeed; }
             sf::Vector2f speed() const { return _speed; }
 

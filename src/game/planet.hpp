@@ -25,6 +25,9 @@ namespace space
             Planet(const ObjectId &id, const PlanetDefinition &definition);
 
             // Methods
+            static const std::string SpaceObjectType() { return PlanetDefinition::DefinitionType(); }
+            virtual std::string type() const { return SpaceObjectType(); }
+
             virtual void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform);
             virtual void draw(GameSession &session, sf::RenderTarget &target);
 

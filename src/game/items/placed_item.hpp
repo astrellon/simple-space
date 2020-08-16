@@ -28,6 +28,9 @@ namespace space
             virtual ~PlacedItem();
 
             // Methods
+            static const std::string SpaceObjectType() { return "placed-item"; }
+            virtual std::string type() const { return SpaceObjectType(); }
+
             void addPhysics(b2World &world);
             void removePhysics(b2World &world);
 

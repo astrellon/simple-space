@@ -3,6 +3,8 @@
 #include <iostream>
 #include <stdexcept>
 
+#include "json_common.hpp"
+
 #include "../../utils.hpp"
 
 #include "../../definitions/base_definition.hpp"
@@ -95,28 +97,19 @@ namespace space
 
     json toJson(const ShipDefinition &input)
     {
-        json interiorPolygon, enginePlacements;
-        for (auto &pos : input.interiorPolygon)
-            interiorPolygon.push_back(json { pos.x, pos.y });
-
-        for (auto &pos : input.enginePlacements)
-            enginePlacements.push_back(json { pos.x, pos.y });
-
         return json {
             {"id", input.id},
             {"texturePath", input.texturePath},
             {"interiorTexturePath", input.interiorTexturePath},
-            {"interiorTextureOffset", json {
-                input.interiorTextureOffset.x, input.interiorTextureOffset.y}
-            },
+            {"interiorTextureOffset", toJson(input.interiorTextureOffset)},
             {"engineGlowTexturePath", input.engineGlowTexturePath},
             {"name", input.name},
             {"maxRotation", input.maxRotation},
             {"maxSpeed", input.maxSpeed},
             {"turnRate", input.turnRate},
             {"acceleration", input.acceleration},
-            {"interiorPolygon", interiorPolygon},
-            {"enginePlacements", enginePlacements}
+            {"interiorPolygon", toJsonArray(input.interiorPolygon)},
+            {"enginePlacements", toJsonArray(input.enginePlacements)}
         };
     }
 
@@ -205,16 +198,10 @@ namespace space
 
     json toJson(const OrbitPointCelestialDefinition &input)
     {
-        json childrenJson;
-        for (auto &child : input.children)
-        {
-            childrenJson.push_back(toJson(*child.get()));
-        }
-
         return json {
             {"id", input.id},
             {"location", toJson(input.location)},
-            {"children", childrenJson}
+            {"children", toJsonArray(input.children)}
         };
     }
 
@@ -238,17 +225,11 @@ namespace space
 
     json toJson(const PlanetDefinition &input)
     {
-        json childrenJson;
-        for (auto &child : input.children)
-        {
-            childrenJson.push_back(toJson(*child.get()));
-        }
-
         return json
         {
             {"id", input.id},
             {"location", toJson(input.location)},
-            {"children", childrenJson},
+            {"children", toJsonArray(input.children)},
             {"texturePath", input.texturePath},
             {"name", input.name},
             {"rotationRate", input.rotationRate},
@@ -338,15 +319,9 @@ namespace space
 
     json toJson(const Dialogue &input)
     {
-        json textJson = {};
-        for (auto &line : input.text)
-        {
-            textJson.push_back(line);
-        }
-
         return json {
             {"id", input.id},
-            {"text", textJson}
+            {"text", toJsonArray(input.text)}
         };
     }
 

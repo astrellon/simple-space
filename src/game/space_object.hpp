@@ -26,6 +26,8 @@ namespace space
             virtual ~SpaceObject() { }
 
             // Methods
+            virtual std::string type() const = 0;
+
             const SpaceTransform &transform() const { return _transform; }
             SpaceTransform &transform() { return _transform; }
 
