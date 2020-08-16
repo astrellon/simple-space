@@ -187,11 +187,6 @@ namespace space
         if (_initedImgui)
         {
             _uiManager->draw(*this);
-            if (_currentSession.get())
-            {
-                _currentSession->drawUI(_sceneRender.texture());
-            }
-
             ImGui::SFML::Render(_sceneRender.texture());
         }
 

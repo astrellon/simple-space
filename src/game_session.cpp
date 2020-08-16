@@ -303,10 +303,6 @@ namespace space
         }
     }
 
-    void GameSession::drawUI(sf::RenderTarget &target)
-    {
-    }
-
     void GameSession::applyTransitionToCamera(const TransitionData &transitionData, RenderCamera &renderCamera)
     {
         renderCamera.transitionData = &transitionData;

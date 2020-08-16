@@ -128,7 +128,6 @@ namespace space
 
             void update(sf::Time dt);
             void draw();
-            void drawUI(sf::RenderTarget &target);
 
         private:
             // Fields
