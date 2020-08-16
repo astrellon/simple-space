@@ -19,7 +19,7 @@
 #include "src/definitions/planet_surface_definition.hpp"
 #include "src/definitions/item_definition.hpp"
 #include "src/definitions/dialogue.hpp"
-#include "src/serialisers/json/json_serialisers.hpp"
+#include "src/serialisers/json/json_serialisers_definitions.hpp"
 #include "src/serialisers/json/json.hpp"
 #include "src/definition_manager.hpp"
 #include "src/game/ship.hpp"

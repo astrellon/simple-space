@@ -45,6 +45,7 @@ namespace space
     json toJson(const Dialogue &input);
     std::unique_ptr<Dialogue> fromJsonDialogue(const json &j);
 
+
     json toJson(const CelestialBodyLocation &input);
     CelestialBodyLocation fromJsonCelestialBodyLocation(const json &j);
 

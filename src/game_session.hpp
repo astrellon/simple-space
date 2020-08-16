@@ -35,12 +35,23 @@ namespace space
     {
         public:
             // Fields
+            typedef std::vector<std::unique_ptr<SpaceObject>> SpaceObjectList;
+            typedef std::vector<std::unique_ptr<StarSystem>> StarSystemList;
+            typedef std::vector<std::unique_ptr<PlanetSurface>> PlanetSurfaceList;
+            typedef std::vector<std::unique_ptr<Item>> ItemList;
+            typedef std::vector<std::unique_ptr<NpcController>> NpcControllerList;
 
             // Constructor
             GameSession(Engine &engine);
             ~GameSession();
 
             // Methods
+            const SpaceObjectList &spaceObjects() const { return _spaceObjects; }
+            const StarSystemList &starSystems() const { return _starSystems; }
+            const PlanetSurfaceList &planetSurfaces() const { return _planetSurfaces; }
+            const ItemList &items() const { return _items; }
+            const NpcControllerList &npcControllers() const { return _npcControllers; }
+
             StarSystem *createStarSystem(const StarSystemDefinition &definition);
             PlanetSurface *createPlanetSurface(const PlanetSurfaceDefinition &definition);
             NpcController *createNpcController();
@@ -133,16 +144,16 @@ namespace space
             // Fields
             Engine &_engine;
 
-            std::vector<std::unique_ptr<SpaceObject>> _spaceObjects;
-            std::vector<std::unique_ptr<StarSystem>> _starSystems;
-            std::vector<std::unique_ptr<PlanetSurface>> _planetSurfaces;
-            std::vector<std::unique_ptr<Item>> _items;
+            SpaceObjectList _spaceObjects;
+            StarSystemList _starSystems;
+            PlanetSurfaceList _planetSurfaces;
+            ItemList _items;
+            NpcControllerList _npcControllers;
 
             std::unique_ptr<TeleportScreenEffect> _teleportEffect;
             StarSystem *_activeStarSystem;
             PlanetSurface *_activePlanetSurface;
             PlayerController _playerController;
-            std::vector<std::unique_ptr<NpcController>> _npcControllers;
             std::unique_ptr<Transition> _transition;
             DialogueManager _dialogueManager;
             bool _drawingPreTeleport;
