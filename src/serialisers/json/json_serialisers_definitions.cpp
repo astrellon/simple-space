@@ -130,19 +130,14 @@ namespace space
         j.at("texturePath").get_to(result->texturePath);
         j.at("interiorTexturePath").get_to(result->interiorTexturePath);
 
-        auto interiorTextureOffset = j.find("interiorTextureOffset");
-        if (interiorTextureOffset != j.end())
-        {
-            (*interiorTextureOffset)[0].get_to(result->interiorTextureOffset.x);
-            (*interiorTextureOffset)[1].get_to(result->interiorTextureOffset.y);
-        }
+        Utils::json_try_set(j, "interiorTextureOffset", result->interiorTextureOffset);
 
         auto interiorPolygon = j.find("interiorPolygon");
         if (interiorPolygon != j.end())
         {
             for (auto &child : *interiorPolygon)
             {
-                sf::Vector2f pos(child[0].get<float>(), child[1].get<float>());
+                auto pos = fromJsonVector2<float>(child);
                 result->interiorPolygon.push_back(pos);
             }
         }

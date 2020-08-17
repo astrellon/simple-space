@@ -29,6 +29,11 @@ namespace space
             result["height"] = input.height();
         }
 
+        if (input.offset() != sf::Vector2f())
+        {
+            result["offset"] = toJson(input.offset());
+        }
+
         return result;
     }
     PhysicsShape fromJsonPhysicsShape(const json &j)
@@ -45,6 +50,12 @@ namespace space
         else if (result.type() == PhysicsShape::Circle)
         {
             result.radius(j.at("radius").get<float>());
+        }
+
+        auto offsetFind = j.find("offset");
+        if (offsetFind != j.end())
+        {
+            result.offset(fromJsonVector2<float>(*offsetFind));
         }
 
         return result;

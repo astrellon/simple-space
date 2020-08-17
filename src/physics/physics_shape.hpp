@@ -1,5 +1,7 @@
 #pragma once
 
+#include <SFML/System.hpp>
+
 #include <string>
 
 namespace space
@@ -14,6 +16,8 @@ namespace space
             PhysicsShape() : _type(PhysicsShapeType::Unknown), _width(0), _height(0) { }
 
             // Methods
+            sf::Vector2f offset() const { return _offset; }
+            void offset(const sf::Vector2f &offset) { _offset = offset; }
             float radius() const { return _width; }
             void radius(float radius) { _width = radius; }
 
@@ -49,5 +53,6 @@ namespace space
             PhysicsShapeType _type;
             float _width;
             float _height;
+            sf::Vector2f _offset;
     };
 } // space

@@ -3,12 +3,29 @@
         "type": "placeable-item",
         "id": "CHAIR_1",
         "name": "Chair",
-        "texturePath": "data/items/chair.png"
+        "texturePath": "data/items/chair.png",
+        "physicsShape": {
+            "type": "circle",
+            "radius": 2,
+            "offset": [0, -0.5]
+        }
     },
     {
         "type": "placeable-item",
         "id": "TELEPORTER_1",
         "name": "Teleporter",
         "texturePath": "data/items/teleporter_still.png"
+    },
+    {
+        "type": "placeable-item",
+        "id": "TREE_1",
+        "name": "Tree",
+        "texturePath": "data/textures/tree1.png",
+        "canPickup": false,
+        "physicsShape": {
+            "type": "circle",
+            "radius": 2
+        }
     }
+
 ]

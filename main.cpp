@@ -105,6 +105,9 @@ int main()
     const space::PlaceableItemDefinition *teleporterDef;
     definitionManager.tryGet("TELEPORTER_1", &teleporterDef);
 
+    const space::PlaceableItemDefinition *treeDef;
+    definitionManager.tryGet("TREE_1", &treeDef);
+
     auto gameSession = engine.startGameSession();
 
     auto planetGrassySurface = gameSession->createPlanetSurface(*planetGrassySurfaceDef);

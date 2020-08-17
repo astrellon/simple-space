@@ -14,7 +14,10 @@
 #include "game/items/item.hpp"
 
 #include "serialisers/json/json.hpp"
+#include "serialisers/json/json_common.hpp"
 #include "PerlinNoise.hpp"
+
+using nlohmann::json;
 
 namespace space
 {
@@ -33,12 +36,25 @@ namespace space
             static std::string getFilenameExt(const std::string &str);
 
             template <typename T>
-            static inline bool json_try_set(const nlohmann::json &j, const std::string &name, T &result)
+            static bool json_try_set(const json &j, const std::string &name, T &result)
             {
                 auto find = j.find(name);
                 if (find != j.end())
                 {
                     find->get_to(result);
+                    return true;
+                }
+
+                return false;
+            }
+
+            template <typename T>
+            static bool json_try_set(const json &j, const std::string &name, sf::Vector2<T> &result)
+            {
+                auto find = j.find(name);
+                if (find != j.end())
+                {
+                    result = fromJsonVector2<T>(*find);
                     return true;
                 }
 

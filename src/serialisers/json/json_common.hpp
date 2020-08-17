@@ -20,6 +20,15 @@ namespace space
         return json { input.x, input.y };
     }
 
+    template<typename T>
+    sf::Vector2<T> fromJsonVector2(const json &j)
+    {
+        auto x = j[0].get<T>();
+        auto y = j[1].get<T>();
+
+        return sf::Vector2<T>(x, y);
+    }
+
     template <typename T>
     json toJsonArray(const std::vector<T> &input)
     {
