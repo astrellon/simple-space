@@ -8,6 +8,8 @@
 #include <memory>
 #include <string>
 
+#include "../../physics/physics_shape.hpp"
+
 using nlohmann::json;
 
 namespace space
@@ -42,4 +44,8 @@ namespace space
 
     template <>
     json toJsonArray(const std::vector<std::string> &input);
+
+    json toJson(const PhysicsShape &input);
+    PhysicsShape fromJsonPhysicsShape(const json &j);
+
 } // namespace space

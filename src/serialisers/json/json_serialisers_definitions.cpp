@@ -354,11 +354,18 @@ namespace space
 
     json toJson(const PlaceableItemDefinition &input)
     {
-        return json {
+        auto result = json {
             {"id", input.id},
             {"texturePath", input.texturePath},
             {"canPickup", input.canPickup}
         };
+
+        if (input.physicsShape.type() != PhysicsShape::Unknown)
+        {
+            result["physicsShape"] = toJson(input.physicsShape);
+        }
+
+        return result;
     }
 
     std::unique_ptr<PlaceableItemDefinition> fromJsonPlaceableItemDefinition(const json &j)
@@ -369,6 +376,11 @@ namespace space
         j.at("texturePath").get_to(result->texturePath);
         Utils::json_try_set(j, "canPickup", result->canPickup);
 
+        auto physicsShapeFind = j.find("physicsShape");
+        if (physicsShapeFind != j.end())
+        {
+            result->physicsShape = fromJsonPhysicsShape(*physicsShapeFind);
+        }
 
         return result;
     }

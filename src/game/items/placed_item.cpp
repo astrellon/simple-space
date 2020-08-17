@@ -10,7 +10,7 @@
 
 namespace space
 {
-    PlacedItem::PlacedItem(PlaceableItem *item, const sf::Vector2f &position, WalkableArea &area) : SpaceObject(Utils::makeObjectId(item->id)), item(item), _sprite(*item->definition.texture), _triggerSensor(nullptr), area(area)
+    PlacedItem::PlacedItem(PlaceableItem *item, const sf::Vector2f &position, WalkableArea &area) : SpaceObject(Utils::makeObjectId(item->id)), item(item), _sprite(*item->definition.texture), _collider(nullptr), area(area)
     {
         _transform.position = position;
 
@@ -33,30 +33,49 @@ namespace space
     }
     PlacedItem::~PlacedItem()
     {
-        assert(_triggerSensor == nullptr);
+        assert(_collider == nullptr);
     }
 
     void PlacedItem::addPhysics(b2World &world)
     {
-        b2CircleShape shape;
-        shape.m_radius = 5.0f;
+        auto &physicsShape = item->placeableDefinition.physicsShape;
+        if (physicsShape.type() == PhysicsShape::Unknown)
+        {
+            return;
+        }
 
         b2FixtureDef fixtureDef;
-        fixtureDef.shape = &shape;
-        fixtureDef.isSensor = true;
+        b2CircleShape circleShape;
+        b2PolygonShape polygonShape;
+
+        if (physicsShape.type() == PhysicsShape::Circle)
+        {
+            circleShape.m_radius = physicsShape.radius();
+            fixtureDef.shape = &circleShape;
+        }
+        else if (physicsShape.type() == PhysicsShape::Rectangle)
+        {
+            polygonShape.SetAsBox(physicsShape.width(), physicsShape.height());
+            fixtureDef.shape = &polygonShape;
+        }
 
         b2BodyDef bodyDef;
         bodyDef.type = b2_staticBody;
         bodyDef.position = b2Vec2(_transform.position.x, _transform.position.y);
 
-        _triggerSensor = world.CreateBody(&bodyDef);
-        _triggerSensor->CreateFixture(&fixtureDef);
-        _triggerSensor->SetUserData(this);
+        _collider = world.CreateBody(&bodyDef);
+        _collider->CreateFixture(&fixtureDef);
+        _collider->SetUserData(this);
     }
     void PlacedItem::removePhysics(b2World &world)
     {
-        world.DestroyBody(_triggerSensor);
-        _triggerSensor = nullptr;
+        if (_collider == nullptr)
+        {
+            return;
+        }
+
+        world.DestroyBody(_collider);
+        _collider = nullptr;
     }
 
     void PlacedItem::update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform)

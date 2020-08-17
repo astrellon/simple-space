@@ -1,6 +1,7 @@
 #pragma once
 
 #include "item_definition.hpp"
+#include "../physics/physics_shape.hpp"
 
 namespace space
 {
@@ -9,6 +10,7 @@ namespace space
         public:
             // Fields
             bool canPickup;
+            PhysicsShape physicsShape;
 
             // Constructor
             PlaceableItemDefinition(DefinitionId id) : ItemDefinition(id) { }

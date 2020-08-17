@@ -40,7 +40,7 @@ namespace space
         private:
             // Fields
             sf::Sprite _sprite;
-            b2Body *_triggerSensor;
+            b2Body *_collider;
 
             // Methods
     };

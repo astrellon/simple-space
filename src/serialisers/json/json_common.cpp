@@ -12,4 +12,42 @@ namespace space
         }
         return result;
     }
+
+    json toJson(const PhysicsShape &input)
+    {
+        auto result = json {
+            {"type", PhysicsShape::toString(input.type())}
+        };
+
+        if (input.type() == PhysicsShape::Circle)
+        {
+            result["radius"] = input.radius();
+        }
+        else if (input.type() == PhysicsShape::Rectangle)
+        {
+            result["width"] = input.width();
+            result["height"] = input.height();
+        }
+
+        return result;
+    }
+    PhysicsShape fromJsonPhysicsShape(const json &j)
+    {
+        PhysicsShape result;
+        auto typeString = j.at("type").get<std::string>();
+        result.type(PhysicsShape::fromString(typeString));
+
+        if (result.type() == PhysicsShape::Rectangle)
+        {
+            result.width(j.at("width").get<float>());
+            result.height(j.at("height").get<float>());
+        }
+        else if (result.type() == PhysicsShape::Circle)
+        {
+            result.radius(j.at("radius").get<float>());
+        }
+
+        return result;
+
+    }
 } // namespace space
