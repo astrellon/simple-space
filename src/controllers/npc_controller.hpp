@@ -18,6 +18,9 @@ namespace space
             NpcController(GameSession &session);
 
             // Methods
+            static const std::string ControllerType() { return "npc"; }
+            virtual std::string type() const { return ControllerType(); }
+
             virtual void update(sf::Time dt);
 
             void dialogue(const Dialogue *dialogue);

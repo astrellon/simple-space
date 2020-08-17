@@ -21,5 +21,6 @@ namespace space
             virtual ~Item() { }
 
             // Methods
+            virtual std::string type() const = 0;
     };
 } // space

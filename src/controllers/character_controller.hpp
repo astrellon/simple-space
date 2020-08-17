@@ -33,6 +33,8 @@ namespace space
             CharacterController(GameSession &session);
 
             // Methods
+            virtual std::string type() const = 0;
+
             virtual void update(sf::Time dt) = 0;
 
             Inventory &inventory() { return _inventory; }
