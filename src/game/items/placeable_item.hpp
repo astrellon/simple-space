@@ -1,6 +1,7 @@
 #pragma once
 
 #include "item.hpp"
+#include "../../definitions/placeable_item_definition.hpp"
 
 namespace space
 {
@@ -11,9 +12,10 @@ namespace space
     {
         public:
             // Fields
+            const PlaceableItemDefinition &placeableDefinition;
 
             // Constructor
-            PlaceableItem(ItemId id, const ItemDefinition &definition) : Item(id, definition), _playerInRange(false) { }
+            PlaceableItem(ItemId id, const PlaceableItemDefinition &definition) : Item(id, definition), placeableDefinition(definition), _playerInRange(false) { }
             virtual ~PlaceableItem() { }
 
             // Methods

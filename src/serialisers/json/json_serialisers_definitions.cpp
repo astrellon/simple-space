@@ -16,6 +16,8 @@
 #include "../../definitions/planet_surface_definition.hpp"
 #include "../../definitions/star_background_options.hpp"
 #include "../../definitions/dialogue.hpp"
+#include "../../definitions/item_definition.hpp"
+#include "../../definitions/placeable_item_definition.hpp"
 
 using nlohmann::json;
 
@@ -52,6 +54,10 @@ namespace space
         else if (type == Dialogue::DefinitionType())
         {
             j = toJson(dynamic_cast<const Dialogue &>(input));
+        }
+        else if (type == PlaceableItemDefinition::DefinitionType())
+        {
+            j = toJson(dynamic_cast<const PlaceableItemDefinition &>(input));
         }
         else
         {
@@ -90,6 +96,10 @@ namespace space
         else if (type == Dialogue::DefinitionType())
         {
             return fromJsonDialogue(j);
+        }
+        else if (type == PlaceableItemDefinition::DefinitionType())
+        {
+            return fromJsonPlaceableItemDefinition(j);
         }
 
         throw std::runtime_error("Oh no");
@@ -340,6 +350,27 @@ namespace space
         }
 
         return std::make_unique<Dialogue>(id, text);
+    }
+
+    json toJson(const PlaceableItemDefinition &input)
+    {
+        return json {
+            {"id", input.id},
+            {"texturePath", input.texturePath},
+            {"canPickup", input.canPickup}
+        };
+    }
+
+    std::unique_ptr<PlaceableItemDefinition> fromJsonPlaceableItemDefinition(const json &j)
+    {
+        auto id = j.at("id").get<std::string>();
+        auto result = std::make_unique<PlaceableItemDefinition>(id);
+        j.at("name").get_to(result->name);
+        j.at("texturePath").get_to(result->texturePath);
+        Utils::json_try_set(j, "canPickup", result->canPickup);
+
+
+        return result;
     }
 
     json toJson(const CelestialBodyLocation &input)

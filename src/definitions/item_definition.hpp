@@ -25,9 +25,6 @@ namespace space
             virtual ~ItemDefinition() { }
 
             // Methods
-            static const std::string DefinitionType() { return "item"; }
-            std::string type() const { return DefinitionType(); }
-
             virtual void onPostLoad(Engine &engine);
     };
 } // space

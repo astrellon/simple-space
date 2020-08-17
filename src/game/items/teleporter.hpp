@@ -12,7 +12,7 @@ namespace space
             // Fields
 
             // Constructor
-            Teleporter(ItemId id, const ItemDefinition &definition) : PlaceableItem(id, definition) { }
+            Teleporter(ItemId id, const PlaceableItemDefinition &definition) : PlaceableItem(id, definition) { }
             virtual ~Teleporter() { }
 
             // Methods

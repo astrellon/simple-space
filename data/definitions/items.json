@@ -1,0 +1,14 @@
+[
+    {
+        "type": "placeable-item",
+        "id": "CHAIR_1",
+        "name": "Chair",
+        "texturePath": "data/items/chair.png"
+    },
+    {
+        "type": "placeable-item",
+        "id": "TELEPORTER_1",
+        "name": "Teleporter",
+        "texturePath": "data/items/teleporter_still.png"
+    }
+]

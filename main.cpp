@@ -99,6 +99,12 @@ int main()
     const space::Dialogue *diag1;
     definitionManager.tryGet("DIAG_1", &diag1);
 
+    const space::PlaceableItemDefinition *chairDef;
+    definitionManager.tryGet("CHAIR_1", &chairDef);
+
+    const space::PlaceableItemDefinition *teleporterDef;
+    definitionManager.tryGet("TELEPORTER_1", &teleporterDef);
+
     auto gameSession = engine.startGameSession();
 
     auto planetGrassySurface = gameSession->createPlanetSurface(*planetGrassySurfaceDef);
@@ -120,37 +126,27 @@ int main()
 
     ship->walkableArea().addCharacter(character);
 
-    space::ItemDefinition chairDefinition("CHAIR_1");
-    chairDefinition.name = "Chair";
-    chairDefinition.texturePath = "data/items/chair.png";
-    chairDefinition.onPostLoad(engine);
-
-    space::ItemDefinition teleporterDefinition("TELEPORTER_1");
-    teleporterDefinition.name = "Teleporter";
-    teleporterDefinition.texturePath = "data/items/teleporter_still.png";
-    teleporterDefinition.onPostLoad(engine);
-
     auto &player = gameSession->playerController();
     player.controllingCharacter(character);
     player.controllingShip(ship);
     player.controlling(space::ControlShip);
 
-    auto chair = gameSession->createItem<space::Chair>(0, chairDefinition);
+    auto chair = gameSession->createItem<space::Chair>(0, *chairDef);
     player.inventory().addItem(chair);
 
-    chair = gameSession->createItem<space::Chair>(5, chairDefinition);
+    chair = gameSession->createItem<space::Chair>(5, *chairDef);
     ship2->walkableArea().addPlaceable(chair, sf::Vector2f(0, -10));
 
-    auto teleporter = gameSession->createItem<space::Teleporter>(1, teleporterDefinition);
+    auto teleporter = gameSession->createItem<space::Teleporter>(1, *teleporterDef);
     player.inventory().addItem(teleporter);
 
-    teleporter = gameSession->createItem<space::Teleporter>(2, teleporterDefinition);
+    teleporter = gameSession->createItem<space::Teleporter>(2, *teleporterDef);
     ship2->walkableArea().addPlaceable(teleporter, sf::Vector2f(0, 0));
 
-    teleporter = gameSession->createItem<space::Teleporter>(3, teleporterDefinition);
+    teleporter = gameSession->createItem<space::Teleporter>(3, *teleporterDef);
     planetGrassySurface->walkableArea().addPlaceable(teleporter, sf::Vector2f(50, 50));
 
-    teleporter = gameSession->createItem<space::Teleporter>(4, teleporterDefinition);
+    teleporter = gameSession->createItem<space::Teleporter>(4, *teleporterDef);
     planetSandySurface->walkableArea().addPlaceable(teleporter, sf::Vector2f(50, 50));
 
     gameSession->activeStarSystem(starSystem);

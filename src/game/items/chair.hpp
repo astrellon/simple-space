@@ -10,7 +10,7 @@ namespace space
             // Fields
 
             // Constructor
-            Chair(ItemId id, const ItemDefinition &definition) : PlaceableItem(id, definition) { }
+            Chair(ItemId id, const PlaceableItemDefinition &definition) : PlaceableItem(id, definition) { }
             virtual ~Chair() { }
 
             // Methods
