@@ -36,6 +36,18 @@ namespace space
             static std::string getFilenameExt(const std::string &str);
 
             template <typename T>
+            static inline bool remove(std::vector<T> &list, T item)
+            {
+                auto find = std::find(list.begin(), list.end(), item);
+                if (find != list.end())
+                {
+                    list.erase(find);
+                    return true;
+                }
+                return false;
+            }
+
+            template <typename T>
             static bool json_try_set(const json &j, const std::string &name, T &result)
             {
                 auto find = j.find(name);

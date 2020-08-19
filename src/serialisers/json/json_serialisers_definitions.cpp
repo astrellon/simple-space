@@ -377,6 +377,12 @@ namespace space
             result->physicsShape = fromJsonPhysicsShape(*physicsShapeFind);
         }
 
+        std::string drawLayerString;
+        if (Utils::json_try_set(j, "drawLayer", drawLayerString))
+        {
+            result->drawLayer = DrawLayers::fromString(drawLayerString);
+        }
+
         return result;
     }
 

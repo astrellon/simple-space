@@ -15,6 +15,7 @@ namespace space
     class PlaceableItem;
     class GameSession;
     class WalkableArea;
+    class DrawLayer;
 
     class PlacedItem : public SpaceObject
     {
@@ -22,9 +23,10 @@ namespace space
             // Fields
             PlaceableItem *item;
             WalkableArea &area;
+            DrawLayer &onLayer;
 
             // Constructor
-            PlacedItem(PlaceableItem *item, const sf::Vector2f &position, WalkableArea &area);
+            PlacedItem(PlaceableItem *item, const sf::Vector2f &position, WalkableArea &area, DrawLayer &onLayer);
             virtual ~PlacedItem();
 
             // Methods

@@ -2,6 +2,7 @@
 
 #include "item_definition.hpp"
 #include "../physics/physics_shape.hpp"
+#include "../game/draw_layers.hpp"
 
 namespace space
 {
@@ -11,9 +12,10 @@ namespace space
             // Fields
             bool canPickup;
             PhysicsShape physicsShape;
+            DrawLayers::Type drawLayer;
 
             // Constructor
-            PlaceableItemDefinition(DefinitionId id) : ItemDefinition(id) { }
+            PlaceableItemDefinition(DefinitionId id) : ItemDefinition(id), drawLayer(DrawLayers::Main) { }
             virtual ~PlaceableItemDefinition() { }
 
             // Methods

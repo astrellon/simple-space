@@ -16,7 +16,8 @@
         "id": "TELEPORTER_1",
         "name": "Teleporter",
         "texturePath": "data/items/teleporter_still.png",
-        "canPickup": true
+        "canPickup": true,
+        "drawLayer": "background"
     },
     {
         "type": "placeable-item",

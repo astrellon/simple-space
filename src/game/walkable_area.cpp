@@ -12,7 +12,7 @@ namespace space
 {
     WalkableArea::WalkableArea() : _physicsWorld(b2Vec2(0, 0)), _partOfShip(nullptr), _partOfPlanet(nullptr)
     {
-
+        _main.sortEveryDraw = true;
     }
     WalkableArea::~WalkableArea()
     {
@@ -52,15 +52,9 @@ namespace space
 
     void WalkableArea::draw(GameSession &session, sf::RenderTarget &target)
     {
-        for (auto &placedItem : _placedItems)
-        {
-            placedItem->draw(session, target);
-        }
-
-        for (auto &character : _characters)
-        {
-            character->draw(session, target);
-        }
+        _background.draw(session, target);
+        _main.draw(session, target);
+        _foreground.draw(session, target);
     }
 
     std::vector<PlacedItemPair<Teleporter>> WalkableArea::findTeleporters() const
@@ -100,17 +94,15 @@ namespace space
 
         character->transform().scale = Utils::getInsideScale();
         _characters.push_back(character);
+        _main.addObject(character);
 
         character->insideArea(this);
         character->addToPhysicsWorld(&_physicsWorld);
     }
     void WalkableArea::removeCharacter(Character *character)
     {
-        auto find = std::find(_characters.begin(), _characters.end(), character);
-        if (find != _characters.end())
-        {
-            _characters.erase(find);
-        }
+        Utils::remove(_characters, character);
+        _main.removeObject(character);
 
         character->removeFromPhysicsWorld(&_physicsWorld);
         character->insideArea(nullptr);
@@ -118,36 +110,67 @@ namespace space
 
     void WalkableArea::addPlaceable(PlaceableItem *item, sf::Vector2f position)
     {
+        DrawLayer *layer;
+        if (!tryGetLayer(item->placeableDefinition.drawLayer, &layer))
+        {
+            return;
+        }
+
         // Snap position to the inside pixel scaling.
         position /= Utils::getInsideScale();
         position.x = std::round(position.x);
         position.y = std::round(position.y);
         position *= Utils::getInsideScale();
 
-        _placedItems.emplace_back(std::make_unique<PlacedItem>(item, position, *this));
-        auto &placedItem = _placedItems.back();
+        auto &placedItem = _placedItems.emplace_back(std::make_unique<PlacedItem>(item, position, *this, *layer));
+        layer->addObject(placedItem.get());
         placedItem->addPhysics(_physicsWorld);
     }
+
     void WalkableArea::removePlaceable(ItemId id)
     {
         for (auto iter = _placedItems.begin(); iter != _placedItems.end(); ++iter)
         {
-            if (iter->get()->item->id == id)
+            auto placed = iter->get();
+            if (placed->item->id == id)
             {
                 if (_session != nullptr)
                 {
-                    _session->playerController().removeCanInteractWith(&iter->get()->interactable());
-                    if (iter->get()->item->isPlayerInRange())
+                    _session->playerController().removeCanInteractWith(&placed->interactable());
+                    if (placed->item->isPlayerInRange())
                     {
-                        iter->get()->item->onPlayerLeaves(*_session);
+                        placed->item->onPlayerLeaves(*_session);
                     }
                 }
-                iter->get()->removePhysics(_physicsWorld);
+
+                placed->onLayer.removeObject(placed);
+                placed->removePhysics(_physicsWorld);
                 _placedItems.erase(iter);
                 return;
             }
         }
 
         std::cout << "Unable to find placeable item to remove it from walkable area: " << id << std::endl;
+    }
+
+    bool WalkableArea::tryGetLayer(DrawLayers::Type layerType, DrawLayer **result)
+    {
+        if (layerType == DrawLayers::Background)
+        {
+            *result = &_background;
+            return true;
+        }
+        else if (layerType == DrawLayers::Main)
+        {
+            *result = &_main;
+            return true;
+        }
+        else if (layerType == DrawLayers::Foreground)
+        {
+            *result = &_foreground;
+            return true;
+        }
+
+        return false;
     }
 } // namespace space

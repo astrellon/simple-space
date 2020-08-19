@@ -7,6 +7,8 @@
 
 #include "items/item.hpp"
 #include "items/placed_item.hpp"
+#include "draw_layer.hpp"
+#include "draw_layers.hpp"
 
 namespace space
 {
@@ -66,6 +68,11 @@ namespace space
 
             b2World _physicsWorld;
 
+            DrawLayer _background;
+            DrawLayer _main;
+            DrawLayer _foreground;
+
             // Methods
+            bool tryGetLayer(DrawLayers::Type layerType, DrawLayer **result);
     };
 } // space
