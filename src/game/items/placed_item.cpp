@@ -18,7 +18,10 @@ namespace space
         _sprite.setScale(Utils::getInsideScale(), Utils::getInsideScale());
 
         _interactable.createInteraction<UseItemAction>(this);
-        _interactable.createInteraction<PickupAction>(this);
+        if (item->placeableDefinition.canPickup)
+        {
+            _interactable.createInteraction<PickupAction>(this);
+        }
 
         _interactable.setOnPlayerEnters([item](GameSession &session)
         {

@@ -140,6 +140,9 @@ int main()
     chair = gameSession->createItem<space::Chair>(5, *chairDef);
     ship2->walkableArea().addPlaceable(chair, sf::Vector2f(0, -10));
 
+    auto tree = gameSession->createItem<space::PlaceableItem>(10, *treeDef);
+    planetGrassySurface->walkableArea().addPlaceable(tree, sf::Vector2f(100, 50));
+
     auto teleporter = gameSession->createItem<space::Teleporter>(1, *teleporterDef);
     player.inventory().addItem(teleporter);
 
@@ -164,18 +167,6 @@ int main()
     ship2->walkableArea().addCharacter(npcCharacter);
     npc->controllingCharacter(npcCharacter);
     npc->dialogue(diag1);
-
-    // auto transition = std::make_unique<space::Transition>(engine.timeSinceStart(), sf::Time::Zero);
-
-    // auto &transFrom = transition->fromData;
-    // transFrom.starSystem = starSystem;
-    // transFrom.followId = ship->id;
-
-    // auto &transTo = transition->toData;
-    // transTo.planetSurface = planetSurface;
-    // transTo.cameraScale = 1.0f / space::Utils::getInsideScale();
-
-    // gameSession->setTransition(transition);
 
     while (window.isOpen())
     {

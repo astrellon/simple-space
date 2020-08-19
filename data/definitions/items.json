@@ -8,13 +8,15 @@
             "type": "circle",
             "radius": 2,
             "offset": [0, -0.5]
-        }
+        },
+        "canPickup": true
     },
     {
         "type": "placeable-item",
         "id": "TELEPORTER_1",
         "name": "Teleporter",
-        "texturePath": "data/items/teleporter_still.png"
+        "texturePath": "data/items/teleporter_still.png",
+        "canPickup": true
     },
     {
         "type": "placeable-item",
