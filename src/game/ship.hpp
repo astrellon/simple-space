@@ -27,23 +27,27 @@ namespace space
 
             // Constructor
             Ship(const ObjectId &id, const ShipDefinition &definition);
+            Ship(const ObjectId &id, const ShipDefinition &definition, std::unique_ptr<WalkableArea> walkableArea);
 
             // Methods
             static const std::string SpaceObjectType() { return ShipDefinition::DefinitionType(); }
             virtual std::string type() const { return SpaceObjectType(); }
 
             float rotationSpeed() const { return _rotationSpeed; }
-            sf::Vector2f speed() const { return _speed; }
+            void rotationSpeed(float rotationSpeed) { _rotationSpeed = rotationSpeed; }
 
-            WalkableArea &walkableArea() { return _walkableArea; }
-            const WalkableArea &walkableArea() const { return _walkableArea; }
+            sf::Vector2f speed() const { return _speed; }
+            void speed(const sf::Vector2f &speed) { _speed = speed; }
+
+            WalkableArea &walkableArea() { return *_walkableArea.get(); }
+            const WalkableArea &walkableArea() const { return *_walkableArea.get(); }
 
             virtual void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform);
             virtual void draw(GameSession &session, sf::RenderTarget &target);
 
         private:
             // Fields
-            WalkableArea _walkableArea;
+            std::unique_ptr<WalkableArea> _walkableArea;
             std::unique_ptr<PolygonCollider> _collider;
             std::vector<std::unique_ptr<EngineFlameEffect>> _engineEffects;
 

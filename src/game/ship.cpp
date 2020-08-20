@@ -12,10 +12,14 @@
 
 namespace space
 {
-    Ship::Ship(const ObjectId &id, const ShipDefinition &definition):
-        SpaceObject(id), definition(definition), _sprite(*definition.texture), _interiorSprite(*definition.interiorTexture), _rotationSpeed(0), rotateInput(0)
+    Ship::Ship(const ObjectId &id, const ShipDefinition &definition) : Ship(id, definition, std::make_unique<WalkableArea>())
     {
 
+    }
+
+    Ship::Ship(const ObjectId &id, const ShipDefinition &definition, std::unique_ptr<WalkableArea> walkableArea):
+        SpaceObject(id), definition(definition), _sprite(*definition.texture), _interiorSprite(*definition.interiorTexture), _rotationSpeed(0), rotateInput(0), _walkableArea(std::move(walkableArea))
+    {
         auto size = definition.texture->getSize();
         _sprite.setOrigin(size.x / 2, size.y / 2);
 
@@ -41,8 +45,8 @@ namespace space
             _collider->setHole(definition.interiorPolygon, 0);
         }
 
-        _walkableArea.partOfShip(this);
-        _walkableArea.addStaticCollider(*_collider);
+        _walkableArea->partOfShip(this);
+        _walkableArea->addStaticCollider(*_collider);
 
         if (definition.engineGlowTexture != nullptr)
         {
@@ -90,7 +94,7 @@ namespace space
 
         updateWorldTransform(parentTransform);
 
-        _walkableArea.update(session, dt, _worldTransform);
+        _walkableArea->update(session, dt, _worldTransform);
 
         for (auto &engineEffect : _engineEffects)
         {
@@ -112,7 +116,7 @@ namespace space
             {
                 target.draw(_interiorSprite, _worldTransform);
                 DrawDebug::glDraw++;
-                _walkableArea.draw(session, target);
+                _walkableArea->draw(session, target);
             }
         }
 

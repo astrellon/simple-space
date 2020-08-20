@@ -7,14 +7,19 @@
 
 namespace space
 {
-    PlanetSurface::PlanetSurface(GameSession &session, const PlanetSurfaceDefinition &definition) : _session(session), definition(definition), _partOfPlanet(nullptr)
+    PlanetSurface::PlanetSurface(GameSession &session, const PlanetSurfaceDefinition &definition) : PlanetSurface(session, definition, std::make_unique<WalkableArea>())
+    {
+
+    }
+
+    PlanetSurface::PlanetSurface(GameSession &session, const PlanetSurfaceDefinition &definition, std::unique_ptr<WalkableArea> walkableArea) : _session(session), definition(definition), _partOfPlanet(nullptr), _walkableArea(std::move(walkableArea))
     {
         const auto &layers = definition.tmxMap->getLayers();
         for (auto i = 0; i < layers.size(); i++)
         {
             _mapLayers.emplace_back(std::make_unique<MapLayer>(*definition.tmxMap, session.engine().resourceManager(), i));
         }
-        _walkableArea.partOfPlanetSurface(this);
+        _walkableArea->partOfPlanetSurface(this);
     }
 
     void PlanetSurface::update(sf::Time dt)
@@ -24,7 +29,7 @@ namespace space
             mapLayer->update(dt);
         }
 
-        _walkableArea.update(_session, dt, sf::Transform::Identity);
+        _walkableArea->update(_session, dt, sf::Transform::Identity);
     }
 
     void PlanetSurface::draw(RenderCamera &target)
@@ -42,6 +47,6 @@ namespace space
         {
             target.texture().draw(*mapLayer, states);
         }
-        _walkableArea.draw(_session, target);
+        _walkableArea->draw(_session, target);
     }
 } // namespace space

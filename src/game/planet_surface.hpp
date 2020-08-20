@@ -24,10 +24,11 @@ namespace space
 
             // Constructor
             PlanetSurface(GameSession &session, const PlanetSurfaceDefinition &definition);
+            PlanetSurface(GameSession &session, const PlanetSurfaceDefinition &definition, std::unique_ptr<WalkableArea> walkableArea);
 
             // Methods
-            WalkableArea &walkableArea() { return _walkableArea; }
-            const WalkableArea &walkableArea() const { return _walkableArea; }
+            WalkableArea &walkableArea() { return *_walkableArea.get(); }
+            const WalkableArea &walkableArea() const { return *_walkableArea.get(); }
 
             void update(sf::Time dt);
             void draw(RenderCamera &target);
@@ -39,7 +40,7 @@ namespace space
 
             // Fields
             GameSession &_session;
-            WalkableArea _walkableArea;
+            std::unique_ptr<WalkableArea> _walkableArea;
             Planet *_partOfPlanet;
             std::vector<std::unique_ptr<MapLayer>> _mapLayers;
 

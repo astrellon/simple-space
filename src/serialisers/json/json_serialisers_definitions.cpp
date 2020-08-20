@@ -28,41 +28,31 @@ namespace space
         json j;
         auto type = input.type();
         if (type == ShipDefinition::DefinitionType())
-        {
             j = toJson(dynamic_cast<const ShipDefinition &>(input));
-        }
+
         else if (type == CharacterDefinition::DefinitionType())
-        {
             j = toJson(dynamic_cast<const CharacterDefinition &>(input));
-        }
+
         else if (type == PlanetDefinition::DefinitionType())
-        {
             j = toJson(dynamic_cast<const PlanetDefinition &>(input));
-        }
+
         else if (type == OrbitPointCelestialDefinition::DefinitionType())
-        {
             j = toJson(dynamic_cast<const OrbitPointCelestialDefinition &>(input));
-        }
+
         else if (type == StarSystemDefinition::DefinitionType())
-        {
             j = toJson(dynamic_cast<const StarSystemDefinition &>(input));
-        }
+
         else if (type == PlanetSurfaceDefinition::DefinitionType())
-        {
             j = toJson(dynamic_cast<const PlanetSurfaceDefinition &>(input));
-        }
+
         else if (type == Dialogue::DefinitionType())
-        {
             j = toJson(dynamic_cast<const Dialogue &>(input));
-        }
+
         else if (type == PlaceableItemDefinition::DefinitionType())
-        {
             j = toJson(dynamic_cast<const PlaceableItemDefinition &>(input));
-        }
+
         else
-        {
             std::cout << "Error!" << std::endl;
-        }
 
         j["type"] = type;
         return j;
@@ -73,34 +63,26 @@ namespace space
         auto type = j.at("type").get<std::string>();
 
         if (type == ShipDefinition::DefinitionType())
-        {
             return fromJsonShipDefinition(j);
-        }
-        else if (type == CharacterDefinition::DefinitionType())
-        {
+
+        if (type == CharacterDefinition::DefinitionType())
             return fromJsonCharacterDefinition(j);
-        }
-        else if (type == PlanetDefinition::DefinitionType() ||
+
+        if (type == PlanetDefinition::DefinitionType() ||
             type == OrbitPointCelestialDefinition::DefinitionType())
-        {
             return fromJsonCelestialBodyDefinition(j);
-        }
-        else if (type == StarSystemDefinition::DefinitionType())
-        {
+
+        if (type == StarSystemDefinition::DefinitionType())
             return fromJsonStarSystemDefinition(j);
-        }
-        else if (type == PlanetSurfaceDefinition::DefinitionType())
-        {
+
+        if (type == PlanetSurfaceDefinition::DefinitionType())
             return fromJsonPlanetSurfaceDefinition(j);
-        }
-        else if (type == Dialogue::DefinitionType())
-        {
+
+        if (type == Dialogue::DefinitionType())
             return fromJsonDialogue(j);
-        }
-        else if (type == PlaceableItemDefinition::DefinitionType())
-        {
+
+        if (type == PlaceableItemDefinition::DefinitionType())
             return fromJsonPlaceableItemDefinition(j);
-        }
 
         throw std::runtime_error("Oh no");
     }
@@ -137,7 +119,7 @@ namespace space
         {
             for (auto &child : *interiorPolygon)
             {
-                auto pos = fromJsonVector2<float>(child);
+                auto pos = fromJsonVector2f(child);
                 result->interiorPolygon.push_back(pos);
             }
         }

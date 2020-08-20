@@ -9,24 +9,38 @@
 #include <string>
 
 #include "../../physics/physics_shape.hpp"
+#include "../../space_transform.hpp"
 
 using nlohmann::json;
 
 namespace space
 {
     template<typename T>
-    json toJson(const sf::Vector2<T> &input)
+    inline json toJson(const sf::Vector2<T> &input)
     {
         return json { input.x, input.y };
     }
 
     template<typename T>
-    sf::Vector2<T> fromJsonVector2(const json &j)
+    inline sf::Vector2<T> fromJsonVector2(const json &j)
     {
         auto x = j[0].get<T>();
         auto y = j[1].get<T>();
 
         return sf::Vector2<T>(x, y);
+    }
+
+    inline sf::Vector2f fromJsonVector2f(const json &j)
+    {
+        return fromJsonVector2<float>(j);
+    }
+    inline sf::Vector2i fromJsonVector2i(const json &j)
+    {
+        return fromJsonVector2<int>(j);
+    }
+    inline sf::Vector2u fromJsonVector2u(const json &j)
+    {
+        return fromJsonVector2<unsigned int>(j);
     }
 
     template <typename T>
@@ -56,5 +70,8 @@ namespace space
 
     json toJson(const PhysicsShape &input);
     PhysicsShape fromJsonPhysicsShape(const json &j);
+
+    json toJson(const SpaceTransform &input);
+    SpaceTransform fromJsonTransform(const json &j);
 
 } // namespace space

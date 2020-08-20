@@ -16,6 +16,8 @@ namespace space
 
             // Constructor
             SpaceTransform() : rotation(0), scale(1) { }
+            SpaceTransform(float rotation, sf::Vector2f position, float scale) :
+                rotation(rotation), position(position), scale(scale) { }
 
             // Methods
             inline const sf::Transform &getTransform()

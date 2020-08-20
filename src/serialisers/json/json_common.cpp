@@ -55,10 +55,26 @@ namespace space
         auto offsetFind = j.find("offset");
         if (offsetFind != j.end())
         {
-            result.offset(fromJsonVector2<float>(*offsetFind));
+            result.offset(fromJsonVector2f(*offsetFind));
         }
 
         return result;
+    }
 
+    json toJson(const SpaceTransform &input)
+    {
+        return json {
+            {"rotation", input.rotation},
+            {"position", toJson(input.position)},
+            {"scale", input.scale}
+        };
+    }
+    SpaceTransform fromJsonTransform(const json &j)
+    {
+        auto rotation = j.at("rotation").get<float>();
+        auto position = fromJsonVector2f(j.at("position"));
+        auto scale = j.at("scale").get<float>();
+
+        return SpaceTransform(rotation, position, scale);
     }
 } // namespace space

@@ -77,6 +77,21 @@ namespace space
                 return result;
             }
 
+            bool tryGetItem(const ItemId &id, Item **result);
+
+            template <typename T>
+            bool tryGetItem(const ItemId &id, T **result)
+            {
+                Item *temp;
+                if (tryGetItem(id, &temp))
+                {
+                    *result = dynamic_cast<T *>(temp);
+                    return *result != nullptr;
+                }
+
+                return false;
+            }
+
             bool tryGetSpaceObject(const ObjectId &id, SpaceObject **result);
 
             template <typename T>

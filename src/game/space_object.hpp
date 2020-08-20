@@ -31,6 +31,9 @@ namespace space
             const SpaceTransform &transform() const { return _transform; }
             SpaceTransform &transform() { return _transform; }
 
+            void transform(const SpaceTransform &transform) { _transform = transform; }
+            void transform(const SpaceTransform &&transform) { _transform = transform; }
+
             const sf::Transform &worldTransform() const { return _worldTransform; }
 
             void starSystem(StarSystem *starSystem) { _insideStarSystem = starSystem; }

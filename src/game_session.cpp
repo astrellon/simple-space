@@ -51,6 +51,19 @@ namespace space
         return result.get();
     }
 
+    bool GameSession::tryGetItem(const ItemId &id, Item **result)
+    {
+        for (auto &item : _items)
+        {
+            if (item->id == id)
+            {
+                *result = item.get();
+                return true;
+            }
+        }
+
+        return false;
+    }
     bool GameSession::tryGetSpaceObject(const ObjectId &id, SpaceObject **result)
     {
         for (auto &obj : _spaceObjects)
