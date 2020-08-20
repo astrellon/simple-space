@@ -101,6 +101,7 @@ namespace space
     void Ship::draw(GameSession &session, sf::RenderTarget &target)
     {
         target.draw(_sprite, _worldTransform);
+        DrawDebug::glDraw++;
 
         if (session.isControllingCharacter())
         {
@@ -110,6 +111,7 @@ namespace space
                 (session.getShipPlayerCloneIsInsideOf() == this && drawPreTeleport))
             {
                 target.draw(_interiorSprite, _worldTransform);
+                DrawDebug::glDraw++;
                 _walkableArea.draw(session, target);
             }
         }

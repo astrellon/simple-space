@@ -8,13 +8,15 @@
 #include "../../physics/polygon_collider.hpp"
 #include "../../utils.hpp"
 
+#include "../../debug/draw_debug.hpp"
+
 namespace space
 {
     PlacedItem::PlacedItem(PlaceableItem *item, const sf::Vector2f &position, WalkableArea &area, DrawLayer &onLayer) : SpaceObject(Utils::makeObjectId(item->id)), item(item), _sprite(*item->definition.texture), _collider(nullptr), area(area), onLayer(onLayer)
     {
         _transform.position = position;
 
-        _sprite.setOrigin(sf::Vector2f(item->definition.texture->getSize()) * 0.5f);
+        _sprite.setOrigin(sf::Vector2f(item->definition.texture->getSize()) * 0.5f + item->definition.textureOffset);
         _sprite.setScale(Utils::getInsideScale(), Utils::getInsideScale());
 
         _interactable.createInteraction<UseItemAction>(this);
@@ -89,5 +91,27 @@ namespace space
     void PlacedItem::draw(GameSession &session, sf::RenderTarget &target)
     {
         target.draw(_sprite, _worldTransform);
+        DrawDebug::glDraw++;
+
+        if (DrawDebug::showPolygons)
+        {
+            auto &physicsShape = item->placeableDefinition.physicsShape;
+            if (physicsShape.type() == PhysicsShape::Circle)
+            {
+                sf::CircleShape shape;
+                shape.setRadius(physicsShape.radius());
+                shape.setFillColor(sf::Color(255, 120, 100, 120));
+                shape.setPosition(sf::Vector2f(-physicsShape.radius(), -physicsShape.radius()));
+                target.draw(shape, _worldTransform);
+            }
+            else if (physicsShape.type() == PhysicsShape::Rectangle)
+            {
+                sf::RectangleShape shape;
+                shape.setSize(sf::Vector2f(physicsShape.width(), physicsShape.height()));
+                shape.setFillColor(sf::Color(120, 255, 100, 120));
+                shape.setPosition(sf::Vector2f(-physicsShape.width() * 0.5f, -physicsShape.height() * 0.5f));
+                target.draw(shape, _worldTransform);
+            }
+        }
     }
 }

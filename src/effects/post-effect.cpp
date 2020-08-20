@@ -1,5 +1,7 @@
 #include "post-effect.hpp"
 
+#include "../debug/draw_debug.hpp"
+
 namespace space
 {
     PostEffect::PostEffect() : _vertices(sf::Triangles, 6)
@@ -26,6 +28,7 @@ namespace space
         states.blendMode = sf::BlendNone;
 
         output.draw(_vertices, states);
+        DrawDebug::glDraw++;
     }
 
     bool PostEffect::isSupported()

@@ -4,6 +4,7 @@
 #include "../engine.hpp"
 #include "../utils.hpp"
 #include "../game/ship.hpp"
+#include "../debug/draw_debug.hpp"
 
 namespace space
 {
@@ -37,6 +38,7 @@ namespace space
         if (_engineBrightness > 0.0f)
         {
             target.draw(_glow);
+            DrawDebug::glDraw++;
         }
     }
 } // namespace space

@@ -18,6 +18,7 @@
 #include "game/ship.hpp"
 
 #include "ui/ui_manager.hpp"
+#include "ui/ui_debug.hpp"
 
 namespace space
 {
@@ -174,6 +175,11 @@ namespace space
 
         _sceneRender.update(_deltaTime);
         _sceneRenderTransition.update(_deltaTime);
+
+        if (Keyboard::isKeyDown(sf::Keyboard::Tilde))
+        {
+            DrawDebug::showUIWindow = !DrawDebug::showUIWindow;
+        }
     }
 
     void Engine::draw()
@@ -187,6 +193,7 @@ namespace space
         if (_initedImgui)
         {
             _uiManager->draw(*this);
+            UIDebug::draw(*this);
             ImGui::SFML::Render(_sceneRender.texture());
         }
 
@@ -203,6 +210,8 @@ namespace space
         {
             sf::Sprite sprite(_sceneRender.texture().getTexture());
             sprite.setScale(_cameraScale, _cameraScale);
+
+            DrawDebug::glDraw++;
             _window.draw(sprite);
         }
 

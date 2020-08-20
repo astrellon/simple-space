@@ -8,6 +8,7 @@
 #include "engine.hpp"
 #include "utils.hpp"
 #include "render_camera.hpp"
+#include "debug/draw_debug.hpp"
 
 namespace space
 {
@@ -173,5 +174,6 @@ namespace space
     void StarBackgroundChunk::draw(sf::RenderTarget &target, sf::RenderStates &states)
     {
         target.draw(_vertices, states);
+        DrawDebug::glDraw++;
     }
 } // namespace space

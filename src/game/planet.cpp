@@ -6,6 +6,7 @@
 #include "../engine.hpp"
 #include "../game_session.hpp"
 #include "planet_surface.hpp"
+#include "../debug/draw_debug.hpp"
 
 namespace space
 {
@@ -66,6 +67,7 @@ namespace space
 
         _renderTexture->clear();
         _renderTexture->draw(sprite, renderState);
+        DrawDebug::glDraw++;
         _renderTexture->display();
 
         sf::Sprite sphereSprite(_renderTexture->getTexture());
@@ -75,6 +77,7 @@ namespace space
         states.transform = _worldTransform;
 
         target.draw(sphereSprite, states);
+        DrawDebug::glDraw++;
     }
 
     void Planet::addPlanetSurface(PlanetSurface *planetSurface)

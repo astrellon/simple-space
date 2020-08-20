@@ -9,6 +9,7 @@ namespace space
             static int glDraw;
             static bool slow;
             static bool showPolygons;
+            static bool showUIWindow;
 
             // Constructor
 

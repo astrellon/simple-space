@@ -2,6 +2,7 @@
 
 #include "../game_session.hpp"
 #include "../engine.hpp"
+#include "../debug/draw_debug.hpp"
 
 #include "character.hpp"
 
@@ -37,6 +38,7 @@ namespace space
 
         auto sprite = definition.tiles.sprite(_cloneFound->tileIndex());
         target.draw(*sprite, _worldTransform);
+        DrawDebug::glDraw++;
     }
 
     bool TeleportClone::tryGetClone(GameSession &session, Character **result)

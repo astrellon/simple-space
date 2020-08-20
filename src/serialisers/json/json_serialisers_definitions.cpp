@@ -355,6 +355,11 @@ namespace space
             {"canPickup", input.canPickup}
         };
 
+        if (input.textureOffset != sf::Vector2f())
+        {
+            result["textureOffset"] = toJson(input.textureOffset);
+        }
+
         if (input.physicsShape.type() != PhysicsShape::Unknown)
         {
             result["physicsShape"] = toJson(input.physicsShape);
@@ -370,6 +375,7 @@ namespace space
         j.at("name").get_to(result->name);
         j.at("texturePath").get_to(result->texturePath);
         Utils::json_try_set(j, "canPickup", result->canPickup);
+        Utils::json_try_set(j, "textureOffset", result->textureOffset);
 
         auto physicsShapeFind = j.find("physicsShape");
         if (physicsShapeFind != j.end())

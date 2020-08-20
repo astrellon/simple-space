@@ -6,6 +6,7 @@
 
 #include "../game_session.hpp"
 #include "../engine.hpp"
+#include "../debug/draw_debug.hpp"
 
 namespace space
 {
@@ -52,5 +53,6 @@ namespace space
         states.shader = _dissolve;
 
         target.draw(_vertices, states);
+        DrawDebug::glDraw++;
     }
 } // namespace space

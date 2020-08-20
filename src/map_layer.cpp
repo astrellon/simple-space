@@ -5,6 +5,8 @@
 #include "resource_manager.hpp"
 #include "utils.hpp"
 
+#include "debug/draw_debug.hpp"
+
 namespace space
 {
     MapLayer::MapLayer(const tmx::Map& map, ResourceManager &resourceManager, std::size_t idx)
@@ -459,6 +461,7 @@ namespace space
     void MapLayer::Chunk::ChunkArray::draw(sf::RenderTarget& rt, sf::RenderStates states) const
     {
         states.texture = &m_texture;
+        DrawDebug::glDraw++;
         rt.draw(m_vertices.data(), m_vertices.size(), sf::Triangles, states);
     }
 

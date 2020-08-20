@@ -7,6 +7,7 @@
 #include "../game_session.hpp"
 #include "../space_transform.hpp"
 #include "walkable_area.hpp"
+#include "../debug/draw_debug.hpp"
 
 namespace space
 {
@@ -57,6 +58,16 @@ namespace space
     {
         auto sprite = definition.tiles.sprite(_tileIndex);
         target.draw(*sprite, _worldTransform);
+        DrawDebug::glDraw++;
+
+        if (DrawDebug::showPolygons)
+        {
+            sf::RectangleShape shape;
+            shape.setFillColor(sf::Color(100, 120, 255, 120));
+            shape.setSize(sf::Vector2f(20, 20));
+            shape.setPosition(sf::Vector2f(-10, -10));
+            target.draw(shape, _worldTransform);
+        }
     }
 
     void Character::addToPhysicsWorld(b2World *world)
@@ -67,7 +78,7 @@ namespace space
         bodyDef.linearDamping = 0.5f;
 
         b2PolygonShape shape;
-        shape.SetAsBox(1.0f, 1.0f);
+        shape.SetAsBox(1, 1);
 
         b2FixtureDef fixtureDef;
 

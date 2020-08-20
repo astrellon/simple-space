@@ -24,6 +24,7 @@
         "id": "TREE_1",
         "name": "Tree",
         "texturePath": "data/textures/tree1.png",
+        "textureOffset": [3, 67],
         "canPickup": false,
         "physicsShape": {
             "type": "circle",
