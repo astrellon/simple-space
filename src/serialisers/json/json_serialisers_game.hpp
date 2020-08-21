@@ -32,16 +32,16 @@ namespace space
 
     json toJsonBase(const SpaceObject &input);
     json toJson(const SpaceObject &input);
-    std::unique_ptr<SpaceObject> fromJsonSpaceObject(const json &j, GameSession &session);
+    bool addFromJsonSpaceObject(const json &j, GameSession &session);
 
     json toJson(const Character &input);
-    std::unique_ptr<Character> fromJsonCharacter(const json &j, GameSession &session);
+    bool addFromJsonCharacter(const json &j, GameSession &session);
 
     json toJson(const Ship &input);
-    std::unique_ptr<Ship> fromJsonShip(const json &j, GameSession &session);
+    bool addFromJsonShip(const json &j, GameSession &session);
 
     json toJson(const Planet &input);
-    std::unique_ptr<Planet> fromJsonPlanet(const json &j, GameSession &session);
+    bool addFromJsonPlanet(const json &j, GameSession &session);
 
     json toJson(const PlacedItem &input);
     bool addFromJsonPlacedItem(const json &j, GameSession &session, WalkableArea &area);
@@ -50,17 +50,31 @@ namespace space
     std::unique_ptr<WalkableArea> fromJsonWalkableArea(const json &j, GameSession &session);
 
     json toJson(const StarSystem &input);
+    bool addFromJsonStarSystem(const json &j, GameSession &session);
+
     json toJson(const PlanetSurface &input);
+    bool addFromJsonPlanetSurface(const json &j, GameSession &session);
 
     json toJson(const Inventory &input);
+    std::unique_ptr<Inventory> fromJsonInventory(const json &j, GameSession &session);
 
     json toJsonBase(const CharacterController &input);
+    bool addFromJsonCharacterControllerBase(const json &j, GameSession &session, CharacterController &controller);
+
     json toJson(const CharacterController &input);
+    bool addFromJsonCharacterController(const json &j, GameSession &session);
+
     json toJson(const NpcController &input);
+    bool addFromJsonNpcController(const json &j, GameSession &session);
+
     json toJson(const PlayerController &input);
+    bool addFromJsonPlayerController(const json &j, GameSession &session);
 
     json toJsonBase(const Item &item);
     json toJson(const Item &item);
+    bool addFromJsonItem(const json &j, GameSession &session);
+
     json toJson(const PlaceableItem &item);
+    bool addFromJsonPlaceableItem(const json &j, GameSession &session);
 
 }

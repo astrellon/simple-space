@@ -54,6 +54,7 @@ namespace space
 
             StarSystem *createStarSystem(const StarSystemDefinition &definition);
             PlanetSurface *createPlanetSurface(const PlanetSurfaceDefinition &definition);
+            PlanetSurface *createPlanetSurface(const PlanetSurfaceDefinition &definition, std::unique_ptr<WalkableArea> walkableArea);
             NpcController *createNpcController();
 
             template <typename T, typename... TArgs>
@@ -127,6 +128,7 @@ namespace space
             }
             PlanetSurface *activePlanetSurface() const { return _activePlanetSurface; }
 
+            bool tryGetStarSystem(const DefinitionId &id, StarSystem **result) const;
             bool tryGetPlanetSurface(const DefinitionId &id, PlanetSurface **result) const;
 
             PlayerController &playerController() { return _playerController; }

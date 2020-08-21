@@ -13,7 +13,7 @@
 
 namespace space
 {
-    CharacterController::CharacterController(GameSession &session) : _session(session), _controlling(ControlNone), _inventory(),
+    CharacterController::CharacterController(GameSession &session) : _session(session), _controlling(ControlNone), _inventory(std::make_unique<Inventory>()),
     _interactRangeObjects(0), _interactRangeObjectsSquared(0),
     _interactRangeShips(0), _interactRangeShipsSquared(0),
     _character(nullptr), _ship(nullptr), _teleportClone(nullptr)
@@ -88,7 +88,7 @@ namespace space
 
     void CharacterController::dropItem(PlaceableItem *placeableItem)
     {
-        _inventory.removeItem(placeableItem);
+        _inventory->removeItem(placeableItem);
         _character->insideArea()->addPlaceable(placeableItem, _character->transform().position);
     }
 

@@ -44,6 +44,11 @@ namespace space
         auto &result = _planetSurfaces.emplace_back(std::make_unique<PlanetSurface>(*this, definition));
         return result.get();
     }
+    PlanetSurface *GameSession::createPlanetSurface(const PlanetSurfaceDefinition &definition, std::unique_ptr<WalkableArea> walkableArea)
+    {
+        auto &result = _planetSurfaces.emplace_back(std::make_unique<PlanetSurface>(*this, definition, std::move(walkableArea)));
+        return result.get();
+    }
 
     NpcController *GameSession::createNpcController()
     {
@@ -226,6 +231,19 @@ namespace space
         }
     }
 
+    bool GameSession::tryGetStarSystem(const DefinitionId &id, StarSystem **result) const
+    {
+        for (auto i = _starSystems.begin(); i != _starSystems.end(); ++i)
+        {
+            if (i->get()->definition.id == id)
+            {
+                *result = i->get();
+                return true;
+            }
+        }
+
+        return false;
+    }
     bool GameSession::tryGetPlanetSurface(const DefinitionId &id, PlanetSurface **result) const
     {
         for (auto i = _planetSurfaces.begin(); i != _planetSurfaces.end(); ++i)

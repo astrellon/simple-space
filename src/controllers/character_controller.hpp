@@ -37,8 +37,9 @@ namespace space
 
             virtual void update(sf::Time dt) = 0;
 
-            Inventory &inventory() { return _inventory; }
-            const Inventory &inventory() const { return _inventory; }
+            Inventory &inventory() { return *_inventory.get(); }
+            const Inventory &inventory() const { return *_inventory.get(); }
+            void inventory(std::unique_ptr<Inventory> inventory) { _inventory = std::move(inventory); }
 
             void controlling(ControllingValue value) { _controlling = value; }
             ControllingValue controlling() const { return _controlling; }
@@ -101,7 +102,7 @@ namespace space
             Character *_character;
             TeleportClone *_teleportClone;
             ControllingValue _controlling;
-            Inventory _inventory;
+            std::unique_ptr<Inventory> _inventory;
             std::vector<Interactable *> _canInteractWith;
             std::vector<Ship *> _shipsInTeleportRange;
             std::vector<Planet *> _planetsInTeleportRange;
