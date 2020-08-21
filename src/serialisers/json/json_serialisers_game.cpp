@@ -313,7 +313,7 @@ namespace space
 
         return json {
             {"definitionId", input.definition.id},
-            {"spaceObjectIds", }
+            {"spaceObjectIds", spaceObjectIds}
         };
     }
     bool addFromJsonStarSystem(const json &j, GameSession &session)

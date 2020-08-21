@@ -19,6 +19,8 @@
 #include "effects/teleport_screen_effect.hpp"
 #include "controllers/npc_controller.hpp"
 
+#include "serialisers/json/json_serialisers_game.hpp"
+
 #include <tmxlite/Map.hpp>
 
 namespace space
@@ -256,6 +258,14 @@ namespace space
         }
 
         return false;
+    }
+
+    void GameSession::saveGame()
+    {
+        auto json = toJson(*this);
+        std::ofstream output("saveGame.json");
+        output << json;
+        output.close();
     }
 
     void GameSession::update(sf::Time dt)

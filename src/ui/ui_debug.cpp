@@ -1,8 +1,8 @@
 #include "ui_debug.hpp"
 
 #include "../engine.hpp"
-#include "../effects/transition.hpp"
 #include "../game_session.hpp"
+#include "../effects/transition.hpp"
 #include "../imgui/imgui.h"
 #include "../debug/draw_debug.hpp"
 
@@ -28,6 +28,11 @@ namespace space
         else
         {
             ImGui::Text("No transition");
+        }
+
+        if (engine.currentSession() && ImGui::Button("Save"))
+        {
+            engine.currentSession()->saveGame();
         }
         ImGui::End();
     }

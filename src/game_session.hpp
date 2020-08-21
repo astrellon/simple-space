@@ -155,6 +155,8 @@ namespace space
 
             DialogueManager &dialogueManager() { return _dialogueManager; }
 
+            void saveGame();
+
             void update(sf::Time dt);
             void draw();
 
