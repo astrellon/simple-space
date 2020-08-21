@@ -5,7 +5,7 @@ A simple space game written in C++ and SFML.
 
 Ubuntu
 ```sh
-sudo apt install g++ build-essential cmake libsfml-dev libglew-dev libbox2d-dev
+sudo apt install g++ build-essential cmake libsfml-dev libglew-dev libbox2d-dev doctest-dev
 ```
 
 You will also need to pull the git submodules.
