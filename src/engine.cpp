@@ -22,9 +22,9 @@
 
 namespace space
 {
-    Engine::Engine(sf::RenderWindow &window) :
+    Engine::Engine(sf::RenderWindow *window) :
         _spriteScale(1.0f), _window(window), _deltaTime(sf::Time::Zero), _timeSinceStartOnUpdate(sf::Time::Zero),
-        _enableBloom(true), _cameraScale(2.0f), _initedImgui(false), _sceneRender(*this, "SceneRender"), _sceneRenderTransition(*this, "SceneRenderTrans")
+        _enableBloom(true), _cameraScale(2.0f), _initedImgui(false), _sceneRender(*this, "SceneRender"), _sceneRenderTransition(*this, "SceneRenderTrans"), _headlessMode(window == nullptr)
     {
         _resourceManager = std::make_unique<ResourceManager>();
         _definitionManager = std::make_unique<DefinitionManager>();
@@ -55,7 +55,11 @@ namespace space
 
     sf::Vector2u Engine::windowSize() const
     {
-        return _window.getSize();
+        if (_headlessMode)
+        {
+            return sf::Vector2u(800, 600);
+        }
+        return _window->getSize();
     }
 
     sf::Vector2u Engine::renderSize() const
@@ -83,10 +87,15 @@ namespace space
 
     void Engine::processEvents()
     {
-        sf::Event event;
         Keyboard::resetKeys();
 
-        while (_window.pollEvent(event))
+        if (_headlessMode)
+        {
+            return;
+        }
+
+        sf::Event event;
+        while (_window->pollEvent(event))
         {
             processEvent(event);
         }
@@ -101,7 +110,7 @@ namespace space
 
         if (event.type == sf::Event::Closed)
         {
-            _window.close();
+            _window->close();
         }
         // catch the resize events
         else if (event.type == sf::Event::Resized)
@@ -138,10 +147,10 @@ namespace space
         _sceneRender.onResize(area, _cameraScale);
         _sceneRenderTransition.onResize(area, _cameraScale);
 
-        if (!_initedImgui)
+        if (!_headlessMode && !_initedImgui)
         {
             _initedImgui = true;
-            ImGui::SFML::Init(_window, _sceneRender.texture(), true);
+            ImGui::SFML::Init(*_window, _sceneRender.texture(), true);
             auto &style = ImGui::GetStyle();
             style.WindowRounding = 0;
             style.ChildRounding = 0;
@@ -160,7 +169,7 @@ namespace space
 
         if (_initedImgui)
         {
-            ImGui::SFML::Update(_cameraScale, _window, _sceneRender.texture(), _deltaTime);
+            ImGui::SFML::Update(_cameraScale, *_window, _sceneRender.texture(), _deltaTime);
         }
 
         DrawDebug::glDraw = 0;
@@ -184,6 +193,11 @@ namespace space
 
     void Engine::draw()
     {
+        if (_headlessMode)
+        {
+            return;
+        }
+
         // Draw main scene
         if (_currentSession.get())
         {
@@ -200,11 +214,11 @@ namespace space
         _sceneRender.texture().display();
 
         // Draw from render texture to window
-        _window.setActive(true);
-        _window.clear();
+        _window->setActive(true);
+        _window->clear();
         if (_enableBloom)
         {
-            _bloomEffect.apply(_sceneRender.texture(), _window);
+            _bloomEffect.apply(_sceneRender.texture(), *_window);
         }
         else
         {
@@ -212,10 +226,10 @@ namespace space
             sprite.setScale(_cameraScale, _cameraScale);
 
             DrawDebug::glDraw++;
-            _window.draw(sprite);
+            _window->draw(sprite);
         }
 
-        _window.display();
+        _window->display();
     }
 
     void Engine::shutdown()

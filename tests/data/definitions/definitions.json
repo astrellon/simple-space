@@ -1,0 +1,28 @@
+[
+    {
+        "type": "ship",
+        "id": "SHIP_1",
+        "maxRotation": 180.0,
+        "maxSpeed": 200.0,
+        "turnRate": 180.0,
+        "acceleration": 250.0,
+        "name": "Player Ship",
+        "texturePath": "data/textures/shuttle.png",
+        "interiorTexturePath": "data/textures/shuttleInterior.png",
+        "interiorPolygon": [
+            [-4, -12], [4, -12], [10, 3], [3, 12], [-3, 12], [-10, 3]
+        ],
+        "enginePlacements": [
+            [-18, 14], [18, 14]
+        ],
+        "engineGlowTexturePath": "data/textures/engineGlow.png"
+    },
+    {
+        "type": "character",
+        "id": "PLAYER_CHAR",
+        "spriteSize": 32,
+        "speed": 50,
+        "name": "Player",
+        "texturePath": "data/textures/doggo2.png"
+    }
+]

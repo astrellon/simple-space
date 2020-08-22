@@ -19,7 +19,7 @@ namespace space
     class Engine : private NonCopyable
     {
         public:
-            Engine(sf::RenderWindow &window);
+            Engine(sf::RenderWindow *window);
             ~Engine();
 
             const ResourceManager &resourceManager() const { return *_resourceManager.get(); }
@@ -37,6 +37,8 @@ namespace space
 
             float cameraScale() const;
             void cameraScale(float scale);
+
+            bool isHeadless() const { return _headlessMode; }
 
             sf::Vector2u windowSize() const;
             sf::Vector2u renderSize() const;
@@ -76,7 +78,8 @@ namespace space
             float _cameraScale;
             bool _initedImgui;
             std::unique_ptr<GameSession> _currentSession;
-            sf::RenderWindow &_window;
+            sf::RenderWindow *_window;
+            bool _headlessMode;
             sf::Clock _timer;
             sf::Clock _timerSinceStart;
             sf::Time _deltaTime;

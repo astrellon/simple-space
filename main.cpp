@@ -52,7 +52,7 @@ int main()
 
     glewInit();
 
-    space::Engine engine(window);
+    space::Engine engine(&window);
     engine.spriteScale(2.0f);
 
     space::ResourceManager &resourceManager = engine.resourceManager();
