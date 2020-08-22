@@ -28,7 +28,7 @@ namespace space
     class PlanetSurface;
 
     json toJson(const GameSession &input);
-    std::unique_ptr<GameSession> fromGameSession(Engine &engine, const json &j);
+    std::unique_ptr<GameSession> fromJsonGameSession(Engine &engine, const json &j);
 
     json toJsonBase(const SpaceObject &input);
     json toJson(const SpaceObject &input);
@@ -39,9 +39,6 @@ namespace space
 
     json toJson(const Ship &input);
     bool addFromJsonShip(const json &j, GameSession &session);
-
-    json toJson(const Planet &input);
-    bool addFromJsonPlanet(const json &j, GameSession &session);
 
     json toJson(const PlacedItem &input);
     bool addFromJsonPlacedItem(const json &j, GameSession &session, WalkableArea &area);

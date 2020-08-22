@@ -5,6 +5,7 @@
 #include "../interactions/pickup_action.hpp"
 #include "../interactions/use_item_action.hpp"
 #include "../../engine.hpp"
+#include "../../game_session.hpp"
 #include "../../physics/polygon_collider.hpp"
 #include "../../utils.hpp"
 
@@ -12,10 +13,25 @@
 
 namespace space
 {
-    PlacedItem::PlacedItem(PlaceableItem *item, const sf::Vector2f &position, WalkableArea &area, DrawLayer &onLayer) : SpaceObject(Utils::makeObjectId(item->id)), item(item), _sprite(*item->definition.texture), _collider(nullptr), area(area), onLayer(onLayer)
+    PlacedItem::PlacedItem(PlaceableItem *item, const sf::Vector2f &position, WalkableArea &area, DrawLayer &onLayer) : PlacedItem(item->id, position, area, onLayer)
     {
+        this->item = item;
         _transform.position = position;
 
+        processItem();
+    }
+    PlacedItem::PlacedItem(const ItemId &itemId, const sf::Vector2f &position, WalkableArea &area, DrawLayer &onLayer) : SpaceObject(Utils::makeObjectId(itemId)),  _collider(nullptr), area(area), onLayer(onLayer), item(nullptr)
+    {
+        _transform.position = position;
+    }
+    PlacedItem::~PlacedItem()
+    {
+        assert(_collider == nullptr);
+    }
+
+    void PlacedItem::processItem()
+    {
+        _sprite.setTexture(*item->definition.texture);
         _sprite.setOrigin(sf::Vector2f(item->definition.texture->getSize()) * 0.5f + item->definition.textureOffset);
         _sprite.setScale(Utils::getInsideScale(), Utils::getInsideScale());
 
@@ -24,6 +40,8 @@ namespace space
         {
             _interactable.createInteraction<PickupAction>(this);
         }
+
+        auto item = this->item;
 
         _interactable.setOnPlayerEnters([item](GameSession &session)
         {
@@ -35,10 +53,6 @@ namespace space
         });
 
         _interactable.name(item->definition.name);
-    }
-    PlacedItem::~PlacedItem()
-    {
-        assert(_collider == nullptr);
     }
 
     void PlacedItem::addPhysics(b2World &world)
@@ -111,6 +125,21 @@ namespace space
                 shape.setFillColor(sf::Color(120, 255, 100, 120));
                 shape.setPosition(sf::Vector2f(-physicsShape.width() * 0.5f, -physicsShape.height() * 0.5f));
                 target.draw(shape, _worldTransform);
+            }
+        }
+    }
+
+    void PlacedItem::onPostLoad(GameSession &session)
+    {
+        if (item == nullptr)
+        {
+            if (session.tryGetItem(_itemId, &item))
+            {
+                processItem();
+            }
+            else
+            {
+                std::cout << "Unable to find item '" << _itemId << "'for placed item: " << id << std::endl;
             }
         }
     }

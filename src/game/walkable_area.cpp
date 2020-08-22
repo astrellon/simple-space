@@ -57,6 +57,41 @@ namespace space
         _foreground.draw(session, target);
     }
 
+    void WalkableArea::onPostLoad(GameSession &session)
+    {
+        for (auto &id : _onPostLoadCharacters)
+        {
+            Character *character;
+            if (session.tryGetSpaceObject<Character>(id, &character))
+            {
+                addCharacter(character);
+            }
+            else
+            {
+                std::cout << "Unable to find character '" << id << "' for walkable area" << std::endl;
+            }
+        }
+
+        _onPostLoadCharacters.clear();
+
+        for (auto &pair : _onPostLoadPlaceables)
+        {
+            auto itemId = std::get<0>(pair);
+            auto position = std::get<1>(pair);
+
+            PlaceableItem *item;
+            if (!session.tryGetItem<PlaceableItem>(itemId, &item))
+            {
+                std::cout << "Unable to find placeable item for placed item: " << itemId << std::endl;
+                continue;
+            }
+
+            addPlaceable(item, position);
+        }
+
+        _onPostLoadPlaceables.clear();
+    }
+
     std::vector<PlacedItemPair<Teleporter>> WalkableArea::findTeleporters() const
     {
         std::vector<PlacedItemPair<Teleporter>> result;

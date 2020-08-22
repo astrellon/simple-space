@@ -35,6 +35,7 @@ namespace space
             // Methods
             void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform);
             void draw(GameSession &session, sf::RenderTarget &target);
+            void onPostLoad(GameSession &session);
 
             std::vector<PlacedItemPair<Teleporter>> findTeleporters() const;
 
@@ -46,6 +47,9 @@ namespace space
 
             void addStaticCollider(PolygonCollider &collider);
             void removeStaticCollider(PolygonCollider &collider);
+
+            void addPostLoadCharacter(const ObjectId &id) { _onPostLoadCharacters.push_back(id); }
+            void addPostLoadPlaceable(ItemId id, sf::Vector2f position) { _onPostLoadPlaceables.emplace_back(id, position); }
 
             void addCharacter(Character *character);
             void removeCharacter(Character *character);
@@ -59,6 +63,9 @@ namespace space
 
         private:
             // Fields
+            std::vector<ObjectId> _onPostLoadCharacters;
+            std::vector<std::tuple<ItemId, sf::Vector2f>> _onPostLoadPlaceables;
+
             std::vector<Character *> _characters;
             std::vector<std::unique_ptr<PlacedItem>> _placedItems;
             sf::Transform _worldTransform;

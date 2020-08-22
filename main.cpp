@@ -20,6 +20,7 @@
 #include "src/definitions/item_definition.hpp"
 #include "src/definitions/dialogue.hpp"
 #include "src/serialisers/json/json_serialisers_definitions.hpp"
+#include "src/serialisers/json/json_serialisers_game.hpp"
 #include "src/serialisers/json/json.hpp"
 #include "src/definition_manager.hpp"
 #include "src/game/ship.hpp"
@@ -35,6 +36,8 @@
 #include "src/debug/draw_debug.hpp"
 #include "src/controllers/npc_controller.hpp"
 #include "src/ui/ui_manager.hpp"
+
+
 
 #include "earcut.hpp"
 
@@ -72,6 +75,14 @@ int main()
 
     definitionManager.onPostLoad(engine);
 
+    std::ifstream startingGameFile("data/startingGame.json");
+    nlohmann::json startingGameJson;
+    startingGameFile >> startingGameJson;
+
+    auto gameSession = space::fromJsonGameSession(engine, startingGameJson);
+    engine.currentSession(std::move(gameSession));
+
+    /*
     const space::ShipDefinition *shipDef;
     definitionManager.tryGet("SHIP_1", &shipDef);
 
@@ -167,27 +178,13 @@ int main()
     ship2->walkableArea().addCharacter(npcCharacter);
     npc->controllingCharacter(npcCharacter);
     npc->dialogue(diag1);
+    */
 
     while (window.isOpen())
     {
         engine.processEvents();
         engine.preUpdate();
 
-        if (space::Keyboard::isKeyDown(sf::Keyboard::Num1))
-        {
-            gameSession->activeStarSystem(starSystem);
-            starSystem->addObject(ship);
-        }
-        if (space::Keyboard::isKeyDown(sf::Keyboard::Num2))
-        {
-            gameSession->activeStarSystem(starSystem2);
-            starSystem2->addObject(ship);
-        }
-        if (space::Keyboard::isKeyDown(sf::Keyboard::Num3))
-        {
-            gameSession->activePlanetSurface(planetGrassySurface);
-            gameSession->moveCharacter(character, sf::Vector2f(), &planetGrassySurface->walkableArea());
-        }
         if (space::Keyboard::isKeyDown(sf::Keyboard::P))
         {
             space::DrawDebug::showPolygons = !space::DrawDebug::showPolygons;

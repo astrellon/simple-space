@@ -32,6 +32,7 @@ namespace space
 
             void update(sf::Time dt);
             void draw(RenderCamera &target);
+            void onPostLoad(GameSession &session);
 
             void partOfPlanet(Planet *planet) { _partOfPlanet = planet; }
             Planet *partOfPlanet() const { return _partOfPlanet; }

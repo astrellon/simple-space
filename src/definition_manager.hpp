@@ -31,7 +31,7 @@ namespace space
             void onPostLoad(Engine &engine);
 
             template<typename TDef>
-            bool tryGet(const std::string &id, const TDef **result) const
+            bool tryGet(const DefinitionId &id, const TDef **result) const
             {
                 auto find = _definitions.find(id);
                 if (find == _definitions.end())

@@ -60,7 +60,10 @@ namespace space
         json result;
         for (auto &iter : input)
         {
-            result.push_back(toJson(*iter.get()));
+            auto j = toJson(*iter.get());
+
+            if (!j.is_null())
+                result.push_back(j);
         }
         return result;
     }

@@ -30,13 +30,16 @@ namespace space
 
             virtual void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform);
             virtual void draw(GameSession &session, sf::RenderTarget &target);
+            virtual void onPostLoad(GameSession &sesion);
 
+            void addPostLoadPlanetSurfaceId(const DefinitionId &id) { _onPostLoadPlanetSurfaceIds.push_back(id); }
             void addPlanetSurface(PlanetSurface *planetSurface);
             void removePlanetSurface(PlanetSurface *PlanetSurface);
             const PlanetSurfaceList &planetSurfaces() const { return _planetSurfaces; }
 
         private:
             // Fields
+            std::vector<DefinitionId> _onPostLoadPlanetSurfaceIds;
             std::unique_ptr<sf::RenderTexture> _renderTexture;
             sf::Shader *_shader;
             PlanetSurfaceList _planetSurfaces;

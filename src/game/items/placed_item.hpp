@@ -26,6 +26,7 @@ namespace space
             DrawLayer &onLayer;
 
             // Constructor
+            PlacedItem(const ItemId &itemId, const sf::Vector2f &position, WalkableArea &area, DrawLayer &onLayer);
             PlacedItem(PlaceableItem *item, const sf::Vector2f &position, WalkableArea &area, DrawLayer &onLayer);
             virtual ~PlacedItem();
 
@@ -38,13 +39,16 @@ namespace space
 
             virtual void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform);
             virtual void draw(GameSession &session, sf::RenderTarget &target);
+            virtual void onPostLoad(GameSession &session);
 
         private:
             // Fields
+            ItemId _itemId;
             sf::Sprite _sprite;
             b2Body *_collider;
 
             // Methods
+            void processItem();
     };
 
     template <typename T>

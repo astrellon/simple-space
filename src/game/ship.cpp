@@ -130,4 +130,9 @@ namespace space
             _collider->debugDraw(target, _worldTransform);
         }
     }
+    void Ship::onPostLoad(GameSession &session)
+    {
+        SpaceObject::onPostLoad(session);
+        _walkableArea->onPostLoad(session);
+    }
 }

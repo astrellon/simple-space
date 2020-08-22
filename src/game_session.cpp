@@ -344,6 +344,15 @@ namespace space
         }
     }
 
+    void GameSession::onPostLoad()
+    {
+        for (auto &spaceObject : _spaceObjects)
+            spaceObject->onPostLoad(*this);
+
+        for (auto &planetSurface : _planetSurfaces)
+            planetSurface->onPostLoad(*this);
+    }
+
     void GameSession::applyTransitionToCamera(const TransitionData &transitionData, RenderCamera &renderCamera)
     {
         renderCamera.transitionData = &transitionData;

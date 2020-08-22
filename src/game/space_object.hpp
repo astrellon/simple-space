@@ -7,6 +7,7 @@
 #include "../non_copyable.hpp"
 #include "../space_transform.hpp"
 #include "interactions/interactable.hpp"
+#include "../definitions/base_definition.hpp"
 
 namespace space
 {
@@ -36,11 +37,14 @@ namespace space
 
             const sf::Transform &worldTransform() const { return _worldTransform; }
 
+            void starSystemId(const DefinitionId &id) { _insideStarSystemId = id; }
             void starSystem(StarSystem *starSystem) { _insideStarSystem = starSystem; }
             StarSystem *starSystem() const { return _insideStarSystem; }
 
             virtual void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform) = 0;
             virtual void draw(GameSession &session, sf::RenderTarget &target) = 0;
+
+            virtual void onPostLoad(GameSession &session);
 
             Interactable &interactable() { return _interactable; }
 
@@ -48,6 +52,7 @@ namespace space
             // Fields
             SpaceTransform _transform;
             sf::Transform _worldTransform;
+            DefinitionId _insideStarSystemId;
             StarSystem *_insideStarSystem;
             Interactable _interactable;
 

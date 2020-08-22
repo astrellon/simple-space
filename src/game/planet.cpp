@@ -79,6 +79,22 @@ namespace space
         target.draw(sphereSprite, states);
         DrawDebug::glDraw++;
     }
+    void Planet::onPostLoad(GameSession &session)
+    {
+        for (auto &id : _onPostLoadPlanetSurfaceIds)
+        {
+            PlanetSurface *planetSurface;
+            if (!session.tryGetPlanetSurface(id, &planetSurface))
+            {
+                std::cout << "Unable to find planet surface: " << id << std::endl;
+                continue;
+            }
+
+            addPlanetSurface(planetSurface);
+        }
+
+        _onPostLoadPlanetSurfaceIds.clear();
+    }
 
     void Planet::addPlanetSurface(PlanetSurface *planetSurface)
     {

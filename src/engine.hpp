@@ -44,6 +44,7 @@ namespace space
             sf::Vector2u renderSize() const;
 
             GameSession *currentSession() const;
+            void currentSession(std::unique_ptr<GameSession> session);
             GameSession *startGameSession();
 
             sf::Time deltaTime() const;

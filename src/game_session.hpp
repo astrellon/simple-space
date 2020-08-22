@@ -159,6 +159,7 @@ namespace space
 
             void update(sf::Time dt);
             void draw();
+            void onPostLoad();
 
         private:
             // Fields

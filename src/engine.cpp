@@ -71,6 +71,10 @@ namespace space
     {
         return _currentSession.get();
     }
+    void Engine::currentSession(std::unique_ptr<GameSession> session)
+    {
+        _currentSession = std::move(session);
+    }
     GameSession *Engine::startGameSession()
     {
         _currentSession = std::make_unique<GameSession>(*this);

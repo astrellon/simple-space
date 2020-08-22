@@ -13,6 +13,8 @@ namespace space
     {
         public:
             // Fields
+            static const ItemId UnknownId;
+
             const ItemId id;
             const ItemDefinition &definition;
 

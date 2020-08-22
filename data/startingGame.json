@@ -1,0 +1,211 @@
+{
+    "activeStarSystem": "STAR_SYSTEM_1",
+    "items": [
+        {
+            "definitionId": "CHAIR_1",
+            "id": 0,
+            "type": "placeable-item"
+        },
+        {
+            "definitionId": "CHAIR_1",
+            "id": 5,
+            "type": "placeable-item"
+        },
+        {
+            "definitionId": "TREE_1",
+            "id": 10,
+            "type": "placeable-item"
+        },
+        {
+            "definitionId": "TELEPORTER_1",
+            "id": 1,
+            "type": "placeable-item"
+        },
+        {
+            "definitionId": "TELEPORTER_1",
+            "id": 2,
+            "type": "placeable-item"
+        },
+        {
+            "definitionId": "TELEPORTER_1",
+            "id": 3,
+            "type": "placeable-item"
+        },
+        {
+            "definitionId": "TELEPORTER_1",
+            "id": 4,
+            "type": "placeable-item"
+        }
+    ],
+    "npcControllers": [
+        {
+            "controlling": 0,
+            "controllingCharacter": "GREG",
+            "dialogue": "DIAG_1",
+            "inventory": {
+                "items": null
+            }
+        }
+    ],
+    "planetSurfaces": [
+        {
+            "planetId": "SS_PLANET_1",
+            "definitionId": "PLANET_GRASSY_1",
+            "walkableArea": {
+                "characterIds": null,
+                "placedItems": [
+                    {
+                        "itemId": 10,
+                        "position": [
+                            100.0,
+                            50.0
+                        ],
+                        "type": "placed-item"
+                    },
+                    {
+                        "itemId": 3,
+                        "position": [
+                            50.0,
+                            50.0
+                        ],
+                        "type": "placed-item"
+                    }
+                ]
+            }
+        },
+        {
+            "planetId": "SS_PLANET_2",
+            "definitionId": "PLANET_SANDY_1",
+            "walkableArea": {
+                "characterIds": null,
+                "placedItems": [
+                    {
+                        "itemId": 4,
+                        "position": [
+                            50.0,
+                            50.0
+                        ],
+                        "type": "placed-item"
+                    }
+                ]
+            }
+        }
+    ],
+    "playerController": {
+        "controlling": 1,
+        "controllingCharacter": "PLAYER_CHAR",
+        "controllingShip": "PLAYER",
+        "inventory": {
+            "items": [
+                0,
+                1
+            ]
+        }
+    },
+    "spaceObjects": [
+        {
+            "definitionId": "SHIP_1",
+            "id": "PLAYER",
+            "rotationSpeed": 0.0,
+            "speed": [
+                0.0,
+                0.0
+            ],
+            "transform": {
+                "position": [
+                    0.0,
+                    0.0
+                ],
+                "rotation": 0.0,
+                "scale": 1.0
+            },
+            "type": "ship",
+            "walkableArea": {
+                "characterIds": [
+                    "PLAYER_CHAR"
+                ],
+                "placedItems": null
+            }
+        },
+        {
+            "definitionId": "SHIP_2",
+            "id": "OTHER",
+            "rotationSpeed": 0.0,
+            "speed": [
+                0.0,
+                0.0
+            ],
+            "transform": {
+                "position": [
+                    200.0,
+                    0.0
+                ],
+                "rotation": 0.0,
+                "scale": 1.0
+            },
+            "type": "ship",
+            "walkableArea": {
+                "characterIds": [
+                    "GREG"
+                ],
+                "placedItems": [
+                    {
+                        "itemId": 5,
+                        "position": [
+                            0.0,
+                            -10.0
+                        ],
+                        "type": "placed-item"
+                    },
+                    {
+                        "itemId": 2,
+                        "position": [
+                            0.0,
+                            0.0
+                        ],
+                        "type": "placed-item"
+                    }
+                ]
+            }
+        },
+        {
+            "definitionId": "PLAYER_CHAR",
+            "id": "PLAYER_CHAR",
+            "transform": {
+                "position": [
+                    0.0,
+                    0.0
+                ],
+                "rotation": 0.0,
+                "scale": 0.1666666716337204
+            },
+            "type": "character"
+        },
+        {
+            "definitionId": "GREG_CHAR",
+            "id": "GREG",
+            "transform": {
+                "position": [
+                    0.0,
+                    0.0
+                ],
+                "rotation": 0.0,
+                "scale": 0.1666666716337204
+            },
+            "type": "character"
+        }
+    ],
+    "starSystems": [
+        {
+            "definitionId": "STAR_SYSTEM_1",
+            "spaceObjectIds": [
+                "PLAYER",
+                "OTHER"
+            ]
+        },
+        {
+            "definitionId": "STAR_SYSTEM_2",
+            "spaceObjectIds": []
+        }
+    ]
+}
