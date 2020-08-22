@@ -96,6 +96,8 @@ namespace space
             }
         }
 
+        addFromJsonPlayerController(j.at("playerController"), *result);
+
         result->onPostLoad();
 
         return std::move(result);
@@ -385,6 +387,7 @@ namespace space
     {
         auto controlling = j.at("controlling").get<ControllingValue>();
         ObjectId controllingCharacterId, controllingShipId;
+        controller.controlling(controlling);
 
         if (Utils::json_try_set(j, "controllingCharacter", controllingCharacterId))
         {

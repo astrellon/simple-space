@@ -82,6 +82,17 @@ int main()
     auto gameSession = space::fromJsonGameSession(engine, startingGameJson);
     engine.currentSession(std::move(gameSession));
 
+    auto session = engine.currentSession();
+    auto &player = session->playerController();
+    if (player.controlling() == space::ControlShip)
+    {
+        session->setPlayerControllingShip(player.controllingShip());
+    }
+    else if (player.controlling() == space::ControlCharacter)
+    {
+        session->setPlayerControllingCharacter();
+    }
+
     /*
     const space::ShipDefinition *shipDef;
     definitionManager.tryGet("SHIP_1", &shipDef);
