@@ -20,6 +20,7 @@ namespace space
         _dialogue = dialogue;
         if (!_character)
         {
+            std::cout << "Unable to attach dialogue without a character" << std::endl;
             return;
         }
 

@@ -15,5 +15,8 @@ namespace space
 
             // Methods
             virtual void execute(GameSession &session, const sf::Vector2f &position, WalkableArea &parentArea);
+
+            static const std::string ItemType() { return "chair"; }
+            virtual std::string type() const { return ItemType(); }
     };
 } // space

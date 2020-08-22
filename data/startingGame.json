@@ -4,12 +4,12 @@
         {
             "definitionId": "CHAIR_1",
             "id": 0,
-            "type": "placeable-item"
+            "type": "chair"
         },
         {
             "definitionId": "CHAIR_1",
             "id": 5,
-            "type": "placeable-item"
+            "type": "chair"
         },
         {
             "definitionId": "TREE_1",
@@ -19,22 +19,22 @@
         {
             "definitionId": "TELEPORTER_1",
             "id": 1,
-            "type": "placeable-item"
+            "type": "teleporter"
         },
         {
             "definitionId": "TELEPORTER_1",
             "id": 2,
-            "type": "placeable-item"
+            "type": "teleporter"
         },
         {
             "definitionId": "TELEPORTER_1",
             "id": 3,
-            "type": "placeable-item"
+            "type": "teleporter"
         },
         {
             "definitionId": "TELEPORTER_1",
             "id": 4,
-            "type": "placeable-item"
+            "type": "teleporter"
         }
     ],
     "npcControllers": [

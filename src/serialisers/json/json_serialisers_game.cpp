@@ -16,6 +16,8 @@
 #include "../../game/walkable_area.hpp"
 #include "../../game/items/placed_item.hpp"
 #include "../../game/items/placeable_item.hpp"
+#include "../../game/items/chair.hpp"
+#include "../../game/items/teleporter.hpp"
 #include "../../physics/polygon_collider.hpp"
 
 #include "../../controllers/character_controller.hpp"
@@ -444,7 +446,27 @@ namespace space
     bool addFromJsonNpcController(const json &j, GameSession &session)
     {
         auto controller = session.createNpcController();
-        return addFromJsonCharacterControllerBase(j, session, *controller);
+        if (!addFromJsonCharacterControllerBase(j, session, *controller))
+        {
+            return false;
+        }
+
+        auto dialogueId = j.find("dialogue");
+        if (dialogueId != j.end())
+        {
+            auto id = dialogueId->get<std::string>();
+            const Dialogue *dialogue;
+            if (session.engine().definitionManager().tryGet<Dialogue>(id, &dialogue))
+            {
+                controller->dialogue(dialogue);
+            }
+            else
+            {
+                std::cout << "Unable to find dialogue '" << id << "' for NPC" << std::endl;
+            }
+        }
+
+        return true;
     }
 
     json toJson(const PlayerController &input)
@@ -474,9 +496,11 @@ namespace space
     json toJson(const Item &item)
     {
         if (item.type() == PlaceableItem::ItemType())
-        {
             return toJson(dynamic_cast<const PlaceableItem &>(item));
-        }
+        if (item.type() == Chair::ItemType())
+            return toJson(dynamic_cast<const Chair &>(item));
+        if (item.type() == Teleporter::ItemType())
+            return toJson(dynamic_cast<const Teleporter &>(item));
 
         throw std::runtime_error("Unknown item type");
     }
@@ -486,6 +510,10 @@ namespace space
         auto type = j.at("type").get<std::string>();
         if (type == PlaceableItem::ItemType())
             return addFromJsonPlaceableItem(j, session);
+        if (type == Chair::ItemType())
+            return addFromJsonChair(j, session);
+        if (type == Teleporter::ItemType())
+            return addFromJsonTeleporter(j, session);
 
         throw std::runtime_error("Unknown item type");
     }
@@ -508,6 +536,50 @@ namespace space
         }
 
         session.createItem<PlaceableItem>(id, *definition);
+
+        return true;
+    }
+
+    json toJson(const Chair &item)
+    {
+        return toJsonBase(item);
+    }
+
+    bool addFromJsonChair(const json &j, GameSession &session)
+    {
+        auto id = j.at("id").get<ItemId>();
+        auto definitionId = j.at("definitionId").get<DefinitionId>();
+
+        const PlaceableItemDefinition *definition;
+        if (!session.engine().definitionManager().tryGet(definitionId, &definition))
+        {
+            std::cout << "Unable to find placeable item definition " << definitionId << " for chair " << id << std::endl;
+            return false;
+        }
+
+        session.createItem<Chair>(id, *definition);
+
+        return true;
+    }
+
+    json toJson(const Teleporter &item)
+    {
+        return toJsonBase(item);
+    }
+
+    bool addFromJsonTeleporter(const json &j, GameSession &session)
+    {
+        auto id = j.at("id").get<ItemId>();
+        auto definitionId = j.at("definitionId").get<DefinitionId>();
+
+        const PlaceableItemDefinition *definition;
+        if (!session.engine().definitionManager().tryGet(definitionId, &definition))
+        {
+            std::cout << "Unable to find placeable item definition " << definitionId << " for teleporter " << id << std::endl;
+            return false;
+        }
+
+        session.createItem<Teleporter>(id, *definition);
 
         return true;
     }
