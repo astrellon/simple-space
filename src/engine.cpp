@@ -74,6 +74,15 @@ namespace space
     void Engine::currentSession(std::unique_ptr<GameSession> session)
     {
         _currentSession = std::move(session);
+        auto &player = _currentSession->playerController();
+        if (player.controlling() == space::ControlShip)
+        {
+            _currentSession->setPlayerControllingShip(player.controllingShip());
+        }
+        else if (player.controlling() == space::ControlCharacter)
+        {
+            _currentSession->setPlayerControllingCharacter();
+        }
     }
     GameSession *Engine::startGameSession()
     {

@@ -7,10 +7,6 @@
 
 namespace space
 {
-    void ResourceManager::loadEmbedded()
-    {
-    }
-
     // Fonts
     bool ResourceManager::font(const std::string &filename, const sf::Font **result)
     {

@@ -21,7 +21,6 @@ namespace space
             typedef std::map<std::string, std::unique_ptr<tmx::Map>> TmxMap;
 
             // Methods
-            void loadEmbedded();
 
             // Fonts
             const FontMap &fonts() const { return _fonts; }
