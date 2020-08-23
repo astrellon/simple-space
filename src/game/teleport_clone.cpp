@@ -27,6 +27,13 @@ namespace space
         _transform.rotation = _preTeleport.rotation + diffRotation;
 
         updateWorldTransform(parentTransform);
+
+        if (_sprite.currentAnimation() != _cloneFound->sprite().currentAnimation())
+        {
+            _sprite.sequence(_cloneFound->sprite().currentAnimation(), true);
+        }
+        _sprite.animationTime = _cloneFound->sprite().animationTime;
+        _sprite.update(sf::Time::Zero);
     }
 
     void TeleportClone::draw(GameSession &session, sf::RenderTarget &target)
@@ -36,8 +43,7 @@ namespace space
             return;
         }
 
-        auto sprite = definition.tiles.sprite(_cloneFound->tileIndex());
-        target.draw(*sprite, _worldTransform);
+        target.draw(_sprite, _worldTransform);
         DrawDebug::glDraw++;
     }
 

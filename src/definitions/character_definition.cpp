@@ -1,12 +1,12 @@
 #include "character_definition.hpp"
 
 #include "../engine.hpp"
+#include "animated_texture.hpp"
 
 namespace space
 {
     void CharacterDefinition::onPostLoad(Engine &engine)
     {
-        engine.resourceManager().texture(texturePath, &texture);
-        tiles.init(texture, spriteSize, true);
+        engine.definitionManager().tryGet(animatedTextureId, &texture);
     }
 } // namespace space

@@ -12,9 +12,10 @@
 namespace space
 {
     Character::Character(const ObjectId &id, const CharacterDefinition &definition) :
-        SpaceObject(id), definition(definition), rotateInput(0), _physicsBody(nullptr), _insideArea(nullptr), _tileIndex(0)
+        SpaceObject(id), definition(definition), rotateInput(0), _physicsBody(nullptr), _insideArea(nullptr), _sprite(*definition.texture)
     {
         _interactable.name(definition.name);
+        _sprite.sequence("idle", true);
     }
 
     void Character::prePhysics(GameSession &session, sf::Time dt, const sf::Transform &parentTransform)
@@ -49,15 +50,12 @@ namespace space
 
         updateWorldTransform(parentTransform);
 
-        auto elapsedTime = _timeSinceStart.getElapsedTime().asSeconds() * 8;
-        auto mod = std::fmod(elapsedTime, static_cast<double>(definition.tiles.length()));
-        _tileIndex = static_cast<uint>(mod);
+        _sprite.update(dt);
     }
 
     void Character::draw(GameSession &session, sf::RenderTarget &target)
     {
-        auto sprite = definition.tiles.sprite(_tileIndex);
-        target.draw(*sprite, _worldTransform);
+        target.draw(_sprite, _worldTransform);
         DrawDebug::glDraw++;
 
         if (DrawDebug::showPolygons)

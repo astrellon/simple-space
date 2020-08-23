@@ -1,6 +1,11 @@
 #include "definition_manager.hpp"
 
 #include <filesystem>
+#include <iostream>
+#include <fstream>
+
+#include "serialisers/json/json.hpp"
+#include "serialisers/json/json_serialisers_definitions.hpp"
 
 #include "utils.hpp"
 

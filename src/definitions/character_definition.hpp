@@ -10,18 +10,19 @@
 namespace space
 {
     class Engine;
+    class AnimatedTexture;
 
     class CharacterDefinition : public BaseDefinition
     {
         public:
             // Fields
-            std::string texturePath;
+            std::string animatedTextureId;
             std::string name;
             uint spriteSize;
             float speed;
 
-            const sf::Texture *texture;
-            Tiles tiles;
+            const AnimatedTexture *texture;
+            //Tiles tiles;
 
             // Constructor
             CharacterDefinition(const DefinitionId &id) : BaseDefinition(id) { }

@@ -19,6 +19,8 @@ namespace space
     class StarBackgroundOptions;
     class Dialogue;
     class PlaceableItemDefinition;
+    class AnimatedTexture;
+    class AnimationSequence;
 
     json toJson(const BaseDefinition &input);
     std::unique_ptr<BaseDefinition> fromJsonBaseDefinition(const json &j);
@@ -48,6 +50,12 @@ namespace space
 
     json toJson(const PlaceableItemDefinition &input);
     std::unique_ptr<PlaceableItemDefinition> fromJsonPlaceableItemDefinition(const json &j);
+
+    json toJson(const AnimatedTexture &input);
+    std::unique_ptr<AnimatedTexture> fromJsonAnimatedTexture(const json &j);
+
+    json toJson(const AnimationSequence &input);
+    AnimationSequence fromJsonAnimationSequence(const json &j);
 
     json toJson(const CelestialBodyLocation &input);
     CelestialBodyLocation fromJsonCelestialBodyLocation(const json &j);

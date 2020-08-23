@@ -71,6 +71,9 @@ namespace space
     template <>
     json toJsonArray(const std::vector<std::string> &input);
 
+    template <>
+    json toJsonArray(const std::vector<uint> &input);
+
     json toJson(const PhysicsShape &input);
     PhysicsShape fromJsonPhysicsShape(const json &j);
 

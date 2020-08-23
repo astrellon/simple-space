@@ -1,11 +1,23 @@
 [
     {
+        "type": "animated-texture",
+        "id": "DOG_SPRITE",
+        "texturePath": "data/textures/characters/doggo2.png",
+        "spriteSize": [32, 32],
+        "sequences": {
+            "idle": {
+                "frameTiming": 0.1,
+                "range": [0, 3]
+            }
+        }
+    },
+    {
         "type": "character",
         "id": "PLAYER_CHAR",
         "spriteSize": 32,
         "speed": 50,
         "name": "Player",
-        "texturePath": "data/textures/characters/doggo2.png"
+        "animatedTextureId": "DOG_SPRITE"
     },
     {
         "type": "character",
@@ -13,6 +25,6 @@
         "spriteSize": 32,
         "speed": 50,
         "name": "Greg",
-        "texturePath": "data/textures/characters/doggo2.png"
+        "animatedTextureId": "DOG_SPRITE"
     }
 ]

@@ -3,16 +3,10 @@
 #include <memory>
 #include <string>
 #include <map>
-#include <iostream>
-#include <fstream>
 #include <vector>
-
-#include "serialisers/json/json.hpp"
-#include "serialisers/json/json_serialisers_definitions.hpp"
 
 #include "non_copyable.hpp"
 #include "definitions/base_definition.hpp"
-#include "definitions/ship_definition.hpp"
 
 namespace space
 {

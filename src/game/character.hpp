@@ -5,7 +5,7 @@
 
 #include "space_object.hpp"
 #include "../definitions/character_definition.hpp"
-#include "../tiles.hpp"
+#include "../animated_sprite.hpp"
 
 namespace space
 {
@@ -36,18 +36,16 @@ namespace space
             void insideArea(WalkableArea *area) { _insideArea = area; }
             WalkableArea *insideArea() const { return _insideArea; }
 
-            int tileIndex() const { return _tileIndex; }
+            const AnimatedSprite &sprite() const { return _sprite; }
 
             void addToPhysicsWorld(b2World *world);
             void removeFromPhysicsWorld(b2World *world);
 
-        private:
+        protected:
             // Fields
-            sf::Clock _timeSinceStart;
-            int _tileIndex;
-
             WalkableArea *_insideArea;
             b2Body *_physicsBody;
+            AnimatedSprite _sprite;
 
             // Methods
     };

@@ -18,6 +18,7 @@
 #include "../../definitions/dialogue.hpp"
 #include "../../definitions/item_definition.hpp"
 #include "../../definitions/placeable_item_definition.hpp"
+#include "../../definitions/animated_texture.hpp"
 
 using nlohmann::json;
 
@@ -51,6 +52,9 @@ namespace space
         else if (type == PlaceableItemDefinition::DefinitionType())
             j = toJson(dynamic_cast<const PlaceableItemDefinition &>(input));
 
+        else if (type == AnimatedTexture::DefinitionType())
+            j = toJson(dynamic_cast<const AnimatedTexture &>(input));
+
         else
             std::cout << "Error!" << std::endl;
 
@@ -83,6 +87,9 @@ namespace space
 
         if (type == PlaceableItemDefinition::DefinitionType())
             return fromJsonPlaceableItemDefinition(j);
+
+        if (type == AnimatedTexture::DefinitionType())
+            return fromJsonAnimatedTexture(j);
 
         throw std::runtime_error("Oh no");
     }
@@ -148,7 +155,7 @@ namespace space
     {
         return json {
             {"id", input.id},
-            {"texturePath", input.texturePath},
+            {"animatedTextureId", input.animatedTextureId},
             {"name", input.name},
             {"spriteSize", input.spriteSize},
             {"speed", input.speed},
@@ -159,7 +166,7 @@ namespace space
     {
         auto id = j.at("id").get<std::string>();
         auto input = std::make_unique<CharacterDefinition>(id);
-        j.at("texturePath").get_to(input->texturePath);
+        j.at("animatedTextureId").get_to(input->animatedTextureId);
         j.at("name").get_to(input->name);
         j.at("spriteSize").get_to(input->spriteSize);
         j.at("speed").get_to(input->speed);
@@ -372,6 +379,86 @@ namespace space
         }
 
         return result;
+    }
+
+    json toJson(const AnimatedTexture &input)
+    {
+        json sequences;
+        for (auto &sequenceKvp : input.sequences())
+        {
+            sequences.push_back(json {sequenceKvp.first, toJson(sequenceKvp.second)});
+        }
+
+        return json {
+            {"id", input.id},
+            {"texturePath", input.texturePath()},
+            {"spriteSize", toJson(input.spriteSize())},
+            {"sequences", sequences}
+        };
+    }
+
+    std::unique_ptr<AnimatedTexture> fromJsonAnimatedTexture(const json &j)
+    {
+        auto id = j.at("id").get<DefinitionId>();
+        auto texturePath = j.at("texturePath").get<std::string>();
+        auto spriteSize = fromJsonVector2<ushort>(j.at("spriteSize"));
+
+        auto result = std::make_unique<AnimatedTexture>(id, texturePath, spriteSize);
+
+        auto sequencesJson = j.find("sequences");
+        if (sequencesJson != j.end())
+        {
+            for (auto &sequenceKvp : sequencesJson->items())
+            {
+                const auto &name = sequenceKvp.key();
+                auto sequence = fromJsonAnimationSequence(sequenceKvp.value());
+
+                result->addSequence(name, sequence);
+            }
+        }
+
+        return std::move(result);
+    }
+
+    json toJson(const AnimationSequence &input)
+    {
+        json result {
+            {"frameTiming", input.frameTiming},
+        };
+
+        auto &frames = input.frames();
+        if (input.areFramesSequential())
+        {
+            result["range"] = json {frames.front(), frames.back()};
+        }
+        else
+        {
+            result["frames"] = toJsonArray(frames);
+        }
+
+        return result;
+    }
+
+    AnimationSequence fromJsonAnimationSequence(const json &j)
+    {
+        auto frameTiming = j.at("frameTiming").get<float>();
+        auto rangeJson = j.find("range");
+        if (rangeJson != j.end())
+        {
+            auto startIndex = (*rangeJson)[0].get<uint>();
+            auto endIndex = (*rangeJson)[1].get<uint>();
+
+            return AnimationSequence(startIndex, endIndex, frameTiming);
+        }
+
+        std::vector<uint> frames;
+        auto framesJson = j.find("frames");
+        for (auto &frame : *framesJson)
+        {
+            frames.push_back(frame.get<uint>());
+        }
+
+        return AnimationSequence(frames, frameTiming);
     }
 
     json toJson(const CelestialBodyLocation &input)
