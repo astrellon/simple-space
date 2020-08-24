@@ -143,12 +143,12 @@ namespace space
         character->insideArea(nullptr);
     }
 
-    void WalkableArea::addPlaceable(PlaceableItem *item, sf::Vector2f position)
+    PlacedItem *WalkableArea::addPlaceable(PlaceableItem *item, sf::Vector2f position)
     {
         DrawLayer *layer;
         if (!tryGetLayer(item->placeableDefinition.drawLayer, &layer))
         {
-            return;
+            return nullptr;
         }
 
         // Snap position to the inside pixel scaling.
@@ -160,6 +160,10 @@ namespace space
         auto &placedItem = _placedItems.emplace_back(std::make_unique<PlacedItem>(item, position, *this, *layer));
         layer->addObject(placedItem.get());
         placedItem->addPhysics(_physicsWorld);
+
+        item->onPlaced(*placedItem);
+
+        return placedItem.get();
     }
 
     void WalkableArea::removePlaceable(ItemId id)

@@ -57,12 +57,8 @@ namespace space
 
             for (auto &teleporter : teleporters)
             {
-                ImGui::Text("%s", teleporter.item->name().c_str());
-
-                ImGui::SameLine();
-
                 std::stringstream ss;
-                ss << "Go!##" << teleporter.item->id;
+                ss << teleporter.item->name() << "##" << teleporter.item->id;
 
                 auto label = ss.str();
 
@@ -87,6 +83,11 @@ namespace space
 
         for (auto planet : planets)
         {
+            if (planet->planetSurfaces().size() == 0)
+            {
+                continue;
+            }
+
             ImGui::Text("%s: %d", planet->definition.name.c_str(), (int)planet->planetSurfaces().size());
 
             for (auto surface : planet->planetSurfaces())
@@ -95,12 +96,8 @@ namespace space
 
                 for (auto &teleporter : teleporters)
                 {
-                    ImGui::Text("%s", teleporter.item->name().c_str());
-
-                    ImGui::SameLine();
-
                     std::stringstream ss;
-                    ss << "Go!##" << teleporter.item->id;
+                    ss << teleporter.item->name() << "##" << teleporter.item->id;
 
                     auto label = ss.str();
 

@@ -1,6 +1,9 @@
 #include "teleporter.hpp"
 
 #include "../walkable_area.hpp"
+#include "../planet_surface.hpp"
+#include "../ship.hpp"
+
 #include "../../game_session.hpp"
 #include "../../engine.hpp"
 #include "../../ui/ui_manager.hpp"
@@ -18,6 +21,18 @@ namespace space
 
         auto &teleporter = session.engine().uiManager().uiTeleporter();
         teleporter.controller(&session.playerController());
+    }
+
+    void Teleporter::onPlaced(PlacedItem &placedItem)
+    {
+        if (placedItem.area.partOfPlanetSurface())
+        {
+            _name = placedItem.area.partOfPlanetSurface()->definition.name;
+        }
+        else if (placedItem.area.partOfShip())
+        {
+            _name = placedItem.area.partOfShip()->definition.name;
+        }
     }
 
     void Teleporter::onPlayerLeaves(GameSession &session)
