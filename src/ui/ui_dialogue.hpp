@@ -18,5 +18,12 @@ namespace space
             virtual void checkPosition(Engine &engine);
             virtual void doDraw(Engine &engine);
 
+        private:
+            // Fields
+            std::string _text;
+
+            // Methods
+            void processText(Engine &engine);
+
     };
 } // space

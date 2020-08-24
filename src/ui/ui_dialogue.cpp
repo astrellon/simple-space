@@ -7,6 +7,10 @@
 #include "../engine.hpp"
 #include "../game_session.hpp"
 
+#include "../mustache.hpp"
+
+using kainjow::mustache::mustache;
+
 namespace space
 {
     UIDialogue::UIDialogue() : UIWindow("Dialogue")
@@ -33,12 +37,26 @@ namespace space
 
     void UIDialogue::doDraw(Engine &engine)
     {
+        if (_text.size() == 0)
+        {
+            processText(engine);
+        }
+
         auto &manager = engine.currentSession()->dialogueManager();
         ImGui::Text("%s:", manager.personTalkingName().c_str());
-        ImGui::TextWrapped("%s", manager.currentLine().c_str());
+        ImGui::TextWrapped("%s", _text.c_str());
         if (ImGui::Button("Next"))
         {
             manager.nextLine();
+            _text = "";
         }
+    }
+
+    void UIDialogue::processText(Engine &engine)
+    {
+        auto &manager = engine.currentSession()->dialogueManager();
+
+        mustache tmplt{manager.currentLine()};
+        _text = tmplt.render({"name", manager.personTalkingName()});
     }
 } // namespace space

@@ -11,7 +11,7 @@
         "type": "dialogue",
         "id": "DIAG_FRED_1",
         "text": [
-            "Yo I'm Fred! What are you doing here on this grassy plant?",
+            "Yo I'm {{name}}! What are you doing here on this grassy plant?",
             "One day I'll give you something to do",
             "Toodles"
         ]
