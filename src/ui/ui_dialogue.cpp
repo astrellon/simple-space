@@ -13,7 +13,7 @@ using kainjow::mustache::mustache;
 
 namespace space
 {
-    UIDialogue::UIDialogue() : UIWindow("Dialogue")
+    UIDialogue::UIDialogue() : UIWindow("Dialogue"), _textDisplayIndex(0)
     {
         size = ImVec2(400, 120);
     }
@@ -41,10 +41,19 @@ namespace space
         {
             processText(engine);
         }
+        else
+        {
+            if (_textDisplayIndex < _text.size())
+            {
+                _textDisplay[_textDisplayIndex] = _text[_textDisplayIndex];
+                _textDisplayIndex++;
+                _textDisplay[_textDisplayIndex] = '\0';
+            }
+        }
 
         auto &manager = engine.currentSession()->dialogueManager();
         ImGui::Text("%s:", manager.personTalkingName().c_str());
-        ImGui::TextWrapped("%s", _text.c_str());
+        ImGui::TextWrapped("%s", _textDisplay.data());
         if (ImGui::Button("Next"))
         {
             manager.nextLine();
@@ -58,5 +67,9 @@ namespace space
 
         mustache tmplt{manager.currentLine()};
         _text = tmplt.render({"name", manager.personTalkingName()});
+
+        _textDisplay.reserve(_text.size() + 1);
+        _textDisplayIndex = 0;
+        _textDisplay[0] = '\0';
     }
 } // namespace space

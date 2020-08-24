@@ -1,5 +1,8 @@
 #pragma once
 
+#include <string>
+#include <vector>
+
 #include "ui_window.hpp"
 
 namespace space
@@ -21,6 +24,8 @@ namespace space
         private:
             // Fields
             std::string _text;
+            std::vector<char> _textDisplay;
+            size_t _textDisplayIndex;
 
             // Methods
             void processText(Engine &engine);
