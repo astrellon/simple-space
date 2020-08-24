@@ -4,13 +4,13 @@
 
 namespace space
 {
-    StartDialogueAction::StartDialogueAction(const Dialogue *dialogue) : _dialogue(dialogue)
+    StartDialogueAction::StartDialogueAction(const std::string &personTalking, const Dialogue *dialogue) : _dialogue(dialogue), _personTalking(personTalking)
     {
 
     }
 
     void StartDialogueAction::execute(GameSession &session)
     {
-        session.dialogueManager().startDialogue(_dialogue);
+        session.dialogueManager().startDialogue(_personTalking, _dialogue);
     }
 } // namespace space

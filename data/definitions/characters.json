@@ -30,5 +30,21 @@
         "speed": 50,
         "name": "Greg",
         "animatedTextureId": "DOG_SPRITE"
+    },
+    {
+        "type": "character",
+        "id": "FRED_CHAR",
+        "spriteSize": 32,
+        "speed": 50,
+        "name": "Fred",
+        "animatedTextureId": "DOG_SPRITE"
+    },
+    {
+        "type": "character",
+        "id": "FRONK_CHAR",
+        "spriteSize": 32,
+        "speed": 50,
+        "name": "Fronk",
+        "animatedTextureId": "DOG_SPRITE"
     }
 ]

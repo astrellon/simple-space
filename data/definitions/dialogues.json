@@ -1,10 +1,27 @@
 [
     {
         "type": "dialogue",
-        "id": "DIAG_1",
+        "id": "DIAG_GREG_1",
         "text": [
             "Hello there how are you?",
             "Woop woop!"
+        ]
+    },
+    {
+        "type": "dialogue",
+        "id": "DIAG_FRED_1",
+        "text": [
+            "Yo I'm Fred! What are you doing here on this grassy plant?",
+            "One day I'll give you something to do",
+            "Toodles"
+        ]
+    },
+    {
+        "type": "dialogue",
+        "id": "DIAG_FRONK_1",
+        "text": [
+            "Hey I'm Fronk, do you know Fred? He should be at the other site",
+            "Toodles"
         ]
     }
 ]

@@ -35,13 +35,39 @@
             "definitionId": "TELEPORTER_1",
             "id": 4,
             "type": "teleporter"
+        },
+        {
+            "definitionId": "TELEPORTER_1",
+            "id": 12,
+            "type": "teleporter"
+        },
+        {
+            "definitionId": "TREE_1",
+            "id": 11,
+            "type": "placeable-item"
         }
     ],
     "npcControllers": [
         {
             "controlling": 0,
             "controllingCharacter": "GREG",
-            "dialogue": "DIAG_1",
+            "dialogue": "DIAG_GREG_1",
+            "inventory": {
+                "items": null
+            }
+        },
+        {
+            "controlling": 0,
+            "controllingCharacter": "FRED",
+            "dialogue": "DIAG_FRED_1",
+            "inventory": {
+                "items": null
+            }
+        },
+        {
+            "controlling": 0,
+            "controllingCharacter": "FRONK",
+            "dialogue": "DIAG_FRONK_1",
             "inventory": {
                 "items": null
             }
@@ -52,7 +78,9 @@
             "planetId": "SS_PLANET_1",
             "definitionId": "PLANET_GRASSY_1",
             "walkableArea": {
-                "characterIds": null,
+                "characterIds": [
+                    "FRED"
+                ],
                 "placedItems": [
                     {
                         "itemId": 10,
@@ -66,6 +94,33 @@
                         "itemId": 3,
                         "position": [
                             50.0,
+                            50.0
+                        ],
+                        "type": "placed-item"
+                    }
+                ]
+            }
+        },
+        {
+            "planetId": "SS_PLANET_1",
+            "definitionId": "PLANET_GRASSY_1-2",
+            "walkableArea": {
+                "characterIds": [
+                    "FRONK"
+                ],
+                "placedItems": [
+                    {
+                        "itemId": 11,
+                        "position": [
+                            120.0,
+                            70.0
+                        ],
+                        "type": "placed-item"
+                    },
+                    {
+                        "itemId": 12,
+                        "position": [
+                            30.0,
                             50.0
                         ],
                         "type": "placed-item"
@@ -188,6 +243,32 @@
                 "position": [
                     0.0,
                     0.0
+                ],
+                "rotation": 0.0,
+                "scale": 0.1666666716337204
+            },
+            "type": "character"
+        },
+        {
+            "definitionId": "FRED_CHAR",
+            "id": "FRED",
+            "transform": {
+                "position": [
+                    40.0,
+                    20.0
+                ],
+                "rotation": 0.0,
+                "scale": 0.1666666716337204
+            },
+            "type": "character"
+        },
+        {
+            "definitionId": "FRONK_CHAR",
+            "id": "FRONK",
+            "transform": {
+                "position": [
+                    20.0,
+                    30.0
                 ],
                 "rotation": 0.0,
                 "scale": 0.1666666716337204

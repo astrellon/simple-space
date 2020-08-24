@@ -13,13 +13,14 @@ namespace space
             // Fields
 
             // Constructor
-            StartDialogueAction(const Dialogue *dialogue);
+            StartDialogueAction(const std::string &personTalking, const Dialogue *dialogue);
 
             // Methods
             virtual std::string label() const { return "Talk"; }
             virtual void execute(GameSession &session);
 
         private:
+            std::string _personTalking;
             const Dialogue *_dialogue;
     };
 } // space

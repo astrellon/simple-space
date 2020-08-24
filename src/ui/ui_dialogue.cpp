@@ -34,7 +34,8 @@ namespace space
     void UIDialogue::doDraw(Engine &engine)
     {
         auto &manager = engine.currentSession()->dialogueManager();
-        ImGui::Text("%s", manager.currentLine().c_str());
+        ImGui::Text("%s:", manager.personTalkingName().c_str());
+        ImGui::TextWrapped("%s", manager.currentLine().c_str());
         if (ImGui::Button("Next"))
         {
             manager.nextLine();

@@ -9,8 +9,9 @@ namespace space
 
     }
 
-    void DialogueManager::startDialogue(const Dialogue *dialogue)
+    void DialogueManager::startDialogue(const std::string &personTalking, const Dialogue *dialogue)
     {
+        _personTalking = personTalking;
         _inDialogue = dialogue != nullptr;
         _current = dialogue;
         _nextPage = 0;

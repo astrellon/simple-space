@@ -16,7 +16,7 @@ namespace space
 {
     UIInteractables::UIInteractables() : UIWindow("Interactables")
     {
-        size = ImVec2(160, 160);
+        size = ImVec2(200, 160);
         position.x = 20;
     }
 

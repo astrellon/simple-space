@@ -36,7 +36,7 @@
                     "name": "Planet 1",
                     "scale": 10,
                     "texturePath": "data/textures/planetColours1.png",
-                    "planetSurfaceIds": [ "PLANET_GRASSY_1" ]
+                    "planetSurfaceIds": [ "PLANET_GRASSY_1", "PLANET_GRASSY_1-2" ]
                 },
                 {
                     "type": "planet",

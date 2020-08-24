@@ -16,7 +16,7 @@ namespace space
 {
     UIInventory::UIInventory() : UIWindow("Inventory")
     {
-        size = ImVec2(160, 160);
+        size = ImVec2(200, 160);
         position = ImVec2(20, 20);
     }
 

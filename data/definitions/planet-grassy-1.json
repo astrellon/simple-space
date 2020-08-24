@@ -2,7 +2,13 @@
     {
         "type": "planet-surface",
         "id": "PLANET_GRASSY_1",
-        "name": "Planet Grassy",
+        "name": "Grassy Site 1",
         "tmxMapPath": "data/maps/planet1.tmx"
+    },
+    {
+        "type": "planet-surface",
+        "id": "PLANET_GRASSY_1-2",
+        "name": "Grassy Site 2",
+        "tmxMapPath": "data/maps/planet1-2.tmx"
     }
 ]

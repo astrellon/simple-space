@@ -29,6 +29,6 @@ namespace space
             _character->interactable().removeInteraction(_startDialogueAction);
         }
 
-        _startDialogueAction = _character->interactable().createInteraction<StartDialogueAction>(dialogue);
+        _startDialogueAction = _character->interactable().createInteraction<StartDialogueAction>(_character->definition.name, dialogue);
     }
 } // namespace space

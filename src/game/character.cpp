@@ -25,14 +25,14 @@ namespace space
 
         if (_insideArea && _insideArea->partOfPlanetSurface())
         {
-            auto movement = moveInput / definition.speed * 2500.0f;
+            auto movement = moveInput * definition.speed;
             b2Vec2 b2movement(movement.x, movement.y);
 
             _physicsBody->SetLinearVelocity(b2movement);
         }
         else
         {
-            auto movement = moveInput / definition.speed * 50000.0f;
+            auto movement = moveInput * definition.speed * 20.0f;
             b2Vec2 b2movement(movement.x, movement.y);
 
             _physicsBody->ApplyForceToCenter(b2movement, true);
