@@ -53,6 +53,7 @@ namespace space
         {
             if (_character && _character->insideArea())
             {
+                updateAnimations(dt);
                 checkForGroundInteractables(_character->transform().position, *_character->insideArea());
             }
             else

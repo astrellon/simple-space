@@ -112,7 +112,10 @@ namespace space
             float _interactRangeShips;
             float _interactRangeShipsSquared;
 
+            float _timeToNextIdle;
+
             // Methods
             void checkInRangeOfInteractable(Interactable *interactable);
+            void updateAnimations(sf::Time dt);
     };
 } // space

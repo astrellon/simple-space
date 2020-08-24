@@ -8,6 +8,10 @@
             "idle": {
                 "frameTiming": 0.1,
                 "range": [0, 3]
+            },
+            "idle2": {
+                "frameTiming": 0.1,
+                "range": [4, 7]
             }
         }
     },

@@ -36,6 +36,7 @@ namespace space
             void insideArea(WalkableArea *area) { _insideArea = area; }
             WalkableArea *insideArea() const { return _insideArea; }
 
+            AnimatedSprite &sprite() { return _sprite; }
             const AnimatedSprite &sprite() const { return _sprite; }
 
             void addToPhysicsWorld(b2World *world);

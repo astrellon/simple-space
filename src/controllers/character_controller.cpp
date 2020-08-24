@@ -10,13 +10,14 @@
 #include "../game/items/placeable_item.hpp"
 #include "../game/walkable_area.hpp"
 #include "../game/star_system.hpp"
+#include "../utils.hpp"
 
 namespace space
 {
     CharacterController::CharacterController(GameSession &session) : _session(session), _controlling(ControlNone), _inventory(std::make_unique<Inventory>()),
     _interactRangeObjects(0), _interactRangeObjectsSquared(0),
     _interactRangeShips(0), _interactRangeShipsSquared(0),
-    _character(nullptr), _ship(nullptr), _teleportClone(nullptr)
+    _character(nullptr), _ship(nullptr), _teleportClone(nullptr), _timeToNextIdle(0.0f)
     {
         interactRangeObjects(10.0f);
         interactRangeShips(150.0f);
@@ -212,6 +213,24 @@ namespace space
                     interactable->onPlayerEnters(_session);
                 }
             }
+        }
+    }
+
+    void CharacterController::updateAnimations(sf::Time dt)
+    {
+        _timeToNextIdle -= dt.asSeconds();
+        if (_timeToNextIdle < 0)
+        {
+            if (Utils::randi(0, 100) < 40)
+            {
+                _character->sprite().sequence("idle2", false);
+            }
+            else
+            {
+                _character->sprite().sequence("idle", false);
+            }
+
+            _timeToNextIdle = Utils::randf(2, 5);
         }
     }
 } // namespace space
