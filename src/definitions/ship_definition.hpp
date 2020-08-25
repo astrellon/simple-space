@@ -5,6 +5,7 @@
 #include <string>
 
 #include "base_definition.hpp"
+#include "../physics/polygon_collider.hpp"
 
 namespace space
 {
@@ -26,6 +27,7 @@ namespace space
             float acceleration;
 
             std::vector<sf::Vector2f> interiorPolygon;
+            std::vector<Points> extraInteriorPolygons;
             std::vector<sf::Vector2f> enginePlacements;
 
             const sf::Texture *texture;

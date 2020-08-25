@@ -49,7 +49,7 @@ namespace space
         private:
             // Fields
             std::unique_ptr<WalkableArea> _walkableArea;
-            std::unique_ptr<PolygonCollider> _collider;
+            std::vector<std::unique_ptr<PolygonCollider>> _colliders;
             std::vector<std::unique_ptr<EngineFlameEffect>> _engineEffects;
 
             // Location
@@ -61,5 +61,7 @@ namespace space
             sf::Vector2f _speed;
 
             // Methods
+            void createMainCollider();
+            void createExtraCollider(const Points &points);
     };
 } //

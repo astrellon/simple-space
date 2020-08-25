@@ -28,25 +28,18 @@ namespace space
         _interiorSprite.setScale(Utils::getInsideScale(), Utils::getInsideScale());
         _interiorSprite.move(sf::Vector2f(definition.interiorTextureOffset) * 0.25f);
 
-        _collider = std::make_unique<PolygonCollider>(b2_staticBody);
-
-        // Fill polygon structure with actual data. Any winding order works.
-        // The first polyline defines the main polygon.
-        auto maxSize = std::max(size.x, size.y) * 0.252f;
-        _collider->setMainPolygon({{maxSize, -maxSize}, {maxSize, maxSize}, {-maxSize, maxSize}, {-maxSize, -maxSize}});
-
-        // Following polylines define holes.
-        if (definition.interiorPolygon.size() <= 2)
+        createMainCollider();
+        for (auto &points : definition.extraInteriorPolygons)
         {
-            _collider->setHole({{-4, -12}, {4, -12}, {10, 3}, {3, 12}, {-3, 12}, {-10, 3}}, 0);
-        }
-        else
-        {
-            _collider->setHole(definition.interiorPolygon, 0);
+            createExtraCollider(points);
         }
 
         _walkableArea->partOfShip(this);
-        _walkableArea->addStaticCollider(*_collider);
+
+        for (auto &collider : _colliders)
+        {
+            _walkableArea->addStaticCollider(*collider);
+        }
 
         if (definition.engineGlowTexture != nullptr)
         {
@@ -127,12 +120,43 @@ namespace space
 
         if (DrawDebug::showPolygons)
         {
-            _collider->debugDraw(target, _worldTransform);
+            for (auto &collider : _colliders)
+            {
+                collider->debugDraw(target, _worldTransform);
+            }
         }
     }
     void Ship::onPostLoad(GameSession &session)
     {
         SpaceObject::onPostLoad(session);
         _walkableArea->onPostLoad(session);
+    }
+
+    void Ship::createMainCollider()
+    {
+        auto size = definition.interiorTexture->getSize();
+        auto &collider = _colliders.emplace_back(std::make_unique<PolygonCollider>(b2_staticBody));
+
+        // Fill polygon structure with actual data. Any winding order works.
+        // The first polyline defines the main polygon.
+        auto maxSize = std::max(size.x, size.y) * Utils::getInsideScale();
+        collider->setMainPolygon({{maxSize, -maxSize}, {maxSize, maxSize}, {-maxSize, maxSize}, {-maxSize, -maxSize}});
+
+        // Following polylines define holes.
+        if (definition.interiorPolygon.size() <= 2)
+        {
+            collider->setHole({{-4, -12}, {4, -12}, {10, 3}, {3, 12}, {-3, 12}, {-10, 3}}, 0);
+        }
+        else
+        {
+            collider->setHole(definition.interiorPolygon, 0);
+        }
+    }
+
+    void Ship::createExtraCollider(const Points &points)
+    {
+        auto &collider = _colliders.emplace_back(std::make_unique<PolygonCollider>(b2_staticBody));
+
+        collider->setMainPolygon(points);
     }
 }

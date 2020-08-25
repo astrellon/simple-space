@@ -108,6 +108,7 @@ namespace space
             {"turnRate", input.turnRate},
             {"acceleration", input.acceleration},
             {"interiorPolygon", toJsonArray(input.interiorPolygon)},
+            {"extraInteriorPolygons", toJsonArray(input.extraInteriorPolygons)},
             {"enginePlacements", toJsonArray(input.enginePlacements)}
         };
     }
@@ -128,6 +129,20 @@ namespace space
             {
                 auto pos = fromJsonVector2f(child);
                 result->interiorPolygon.push_back(pos);
+            }
+        }
+
+        auto extraInteriorPolygons = j.find("extraInteriorPolygons");
+        if (extraInteriorPolygons != j.end())
+        {
+            for (auto &polygonJson : *extraInteriorPolygons)
+            {
+                Points polygon;
+                for (auto &posJson : polygonJson)
+                {
+                    polygon.push_back(fromJsonVector2f(posJson));
+                }
+                result->extraInteriorPolygons.push_back(polygon);
             }
         }
 
