@@ -52,12 +52,6 @@ namespace space
         return result.get();
     }
 
-    NpcController *GameSession::createNpcController()
-    {
-        auto &result = _npcControllers.emplace_back(std::make_unique<NpcController>(*this));
-        return result.get();
-    }
-
     bool GameSession::tryGetItem(const ItemId &id, Item **result)
     {
         for (auto &item : _items)
@@ -279,6 +273,11 @@ namespace space
         }
 
         _playerController.update(dt);
+
+        for (auto &controller : _characterControllers)
+        {
+            controller->update(dt);
+        }
 
         if (_activeStarSystem)
         {

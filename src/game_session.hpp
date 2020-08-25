@@ -29,7 +29,7 @@ namespace space
     class TeleportScreenEffect;
     class RenderCamera;
     class TeleportClone;
-    class NpcController;
+    class CharacterController;
 
     class GameSession
     {
@@ -39,7 +39,7 @@ namespace space
             typedef std::vector<std::unique_ptr<StarSystem>> StarSystemList;
             typedef std::vector<std::unique_ptr<PlanetSurface>> PlanetSurfaceList;
             typedef std::vector<std::unique_ptr<Item>> ItemList;
-            typedef std::vector<std::unique_ptr<NpcController>> NpcControllerList;
+            typedef std::vector<std::unique_ptr<CharacterController>> CharacterControllerList;
 
             // Constructor
             GameSession(Engine &engine);
@@ -50,12 +50,11 @@ namespace space
             const StarSystemList &starSystems() const { return _starSystems; }
             const PlanetSurfaceList &planetSurfaces() const { return _planetSurfaces; }
             const ItemList &items() const { return _items; }
-            const NpcControllerList &npcControllers() const { return _npcControllers; }
+            const CharacterControllerList &characterControllers() const { return _characterControllers; }
 
             StarSystem *createStarSystem(const StarSystemDefinition &definition);
             PlanetSurface *createPlanetSurface(const PlanetSurfaceDefinition &definition);
             PlanetSurface *createPlanetSurface(const PlanetSurfaceDefinition &definition, std::unique_ptr<WalkableArea> walkableArea);
-            NpcController *createNpcController();
 
             template <typename T, typename... TArgs>
             auto createObject(TArgs &&... args)
@@ -71,9 +70,9 @@ namespace space
             template <typename T, typename... TArgs>
             auto createItem(TArgs &&... args)
             {
-                auto obj = std::make_unique<T>(std::forward<TArgs>(args)...);
-                auto result = obj.get();
-                _items.emplace_back(std::move(obj));
+                auto item = std::make_unique<T>(std::forward<TArgs>(args)...);
+                auto result = item.get();
+                _items.emplace_back(std::move(item));
 
                 return result;
             }
@@ -91,6 +90,15 @@ namespace space
                 }
 
                 return false;
+            }
+
+            template <typename T, typename... TArgs>
+            auto createCharacterController(TArgs &&... args)
+            {
+                auto controller = std::make_unique<T>(*this, std::forward<TArgs>(args)...);
+                auto result = controller.get();
+                _characterControllers.emplace_back(std::move(controller));
+                return result;
             }
 
             bool tryGetSpaceObject(const ObjectId &id, SpaceObject **result);
@@ -169,7 +177,7 @@ namespace space
             StarSystemList _starSystems;
             PlanetSurfaceList _planetSurfaces;
             ItemList _items;
-            NpcControllerList _npcControllers;
+            CharacterControllerList _characterControllers;
 
             std::unique_ptr<TeleportScreenEffect> _teleportEffect;
             StarSystem *_activeStarSystem;

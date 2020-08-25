@@ -23,6 +23,7 @@
 #include "../../controllers/character_controller.hpp"
 #include "../../controllers/npc_controller.hpp"
 #include "../../controllers/player_controller.hpp"
+#include "../../controllers/space_station_controller.hpp"
 
 #include "json_common.hpp"
 
@@ -34,7 +35,7 @@ namespace space
             {"spaceObjects", toJsonArray(input.spaceObjects())},
             {"items", toJsonArray(input.items())},
             {"playerController", toJson(input.playerController())},
-            {"npcControllers", toJsonArray(input.npcControllers())},
+            {"characterControllers", toJsonArray(input.characterControllers())},
             {"starSystems", toJsonArray(input.starSystems())},
             {"planetSurfaces", toJsonArray(input.planetSurfaces())}
         };
@@ -59,8 +60,8 @@ namespace space
         for (auto &item : j.at("items"))
             addFromJsonItem(item, session);
 
-        for (auto &npcControllers : j.at("npcControllers"))
-            addFromJsonNpcController(npcControllers, session);
+        for (auto &characterControllers : j.at("characterControllers"))
+            addFromJsonCharacterController(characterControllers, session);
 
         for (auto &starSystem : j.at("starSystems"))
             addFromJsonStarSystem(starSystem, session);
@@ -387,9 +388,13 @@ namespace space
 
     bool addFromJsonCharacterControllerBase(const json &j, GameSession &session, CharacterController &controller)
     {
-        auto controlling = j.at("controlling").get<ControllingValue>();
+        ControllingValue controlling = ControlNone;
+        if (Utils::json_try_set<ControllingValue>(j, "controlling", controlling))
+        {
+            controller.controlling(controlling);
+        }
+
         ObjectId controllingCharacterId, controllingShipId;
-        controller.controlling(controlling);
 
         if (Utils::json_try_set(j, "controllingCharacter", controllingCharacterId))
         {
@@ -417,8 +422,12 @@ namespace space
             }
         }
 
-        auto inventory = fromJsonInventory(j.at("inventory"), session);
-        controller.inventory(std::move(inventory));
+        auto inventoryJson = j.find("inventory");
+        if (inventoryJson != j.end())
+        {
+            auto inventory = fromJsonInventory(*inventoryJson, session);
+            controller.inventory(std::move(inventory));
+        }
 
         return true;
     }
@@ -430,6 +439,21 @@ namespace space
 
         else if (input.type() == PlayerController::ControllerType())
             return toJson(dynamic_cast<const PlayerController &>(input));
+
+        else if (input.type() == SpaceStationController::ControllerType())
+            return toJson(dynamic_cast<const SpaceStationController &>(input));
+
+        throw std::runtime_error("Unknown character controller");
+    }
+
+    bool addFromJsonCharacterController(const json &j, GameSession &session)
+    {
+        auto type = j.at("type").get<std::string>();
+        if (type == NpcController::ControllerType())
+            return addFromJsonNpcController(j, session);
+
+        if (type == SpaceStationController::ControllerType())
+            return addFromJsonSpaceStationController(j, session);
 
         throw std::runtime_error("Unknown character controller");
     }
@@ -445,7 +469,7 @@ namespace space
 
     bool addFromJsonNpcController(const json &j, GameSession &session)
     {
-        auto controller = session.createNpcController();
+        auto controller = session.createCharacterController<NpcController>();
         if (!addFromJsonCharacterControllerBase(j, session, *controller))
         {
             return false;
@@ -469,6 +493,7 @@ namespace space
         return true;
     }
 
+
     json toJson(const PlayerController &input)
     {
         return toJsonBase(input);
@@ -477,6 +502,22 @@ namespace space
     bool addFromJsonPlayerController(const json &j, GameSession &session)
     {
         if (!addFromJsonCharacterControllerBase(j, session, session.playerController()))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    json toJson(const SpaceStationController &input)
+    {
+        return toJsonBase(input);
+    }
+
+    bool addFromJsonSpaceStationController(const json &j, GameSession &session)
+    {
+        auto controller = session.createCharacterController<SpaceStationController>();
+        if (!addFromJsonCharacterControllerBase(j, session, *controller))
         {
             return false;
         }

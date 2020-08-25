@@ -30,7 +30,7 @@
                         "influenceRadius": 200,
                         "angle": 35
                     },
-                    "rotationRate": 0.1,
+                    "rotationRate": 0.04,
                     "size": 128,
                     "glowColour": "0x6090FFFF",
                     "name": "Planet 1",
@@ -41,7 +41,7 @@
                 {
                     "type": "planet",
                     "id": "SS_PLANET_2",
-                    "rotationRate": 0.08,
+                    "rotationRate": 0.03,
                     "location": {
                         "distance": 400,
                         "influenceRadius": 200,

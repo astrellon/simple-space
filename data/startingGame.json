@@ -42,13 +42,19 @@
             "type": "teleporter"
         },
         {
+            "definitionId": "TELEPORTER_1",
+            "id": 20,
+            "type": "teleporter"
+        },
+        {
             "definitionId": "TREE_1",
             "id": 11,
             "type": "placeable-item"
         }
     ],
-    "npcControllers": [
+    "characterControllers": [
         {
+            "type": "npc",
             "controlling": 0,
             "controllingCharacter": "GREG",
             "dialogue": "DIAG_GREG_1",
@@ -57,6 +63,7 @@
             }
         },
         {
+            "type": "npc",
             "controlling": 0,
             "controllingCharacter": "FRED",
             "dialogue": "DIAG_FRED_1",
@@ -65,12 +72,17 @@
             }
         },
         {
+            "type": "npc",
             "controlling": 0,
             "controllingCharacter": "FRONK",
             "dialogue": "DIAG_FRONK_1",
             "inventory": {
                 "items": null
             }
+        },
+        {
+            "type": "space-station",
+            "controllingShip": "SPACE_STATION"
         }
     ],
     "planetSurfaces": [
@@ -159,6 +171,28 @@
     },
     "spaceObjects": [
         {
+            "definitionId": "SPACE_STATION_1",
+            "id": "SPACE_STATION",
+            "rotationSpeed": 0,
+            "speed": [0, 0],
+            "transform": {
+                "position": [-300, 0],
+                "rotation": 0,
+                "scale": 1
+            },
+            "type": "ship",
+            "walkableArea": {
+                "characterIds": [],
+                "placedItems": [
+                    {
+                        "itemId": 20,
+                        "position": [0, 0],
+                        "type": "placed-item"
+                    }
+                ]
+            }
+        },
+        {
             "definitionId": "SHIP_1",
             "id": "PLAYER",
             "rotationSpeed": 0.0,
@@ -186,38 +220,24 @@
             "definitionId": "SHIP_2",
             "id": "OTHER",
             "rotationSpeed": 0.0,
-            "speed": [
-                0.0,
-                0.0
-            ],
+            "speed": [ 0.0, 0.0 ],
             "transform": {
-                "position": [
-                    200.0,
-                    0.0
-                ],
+                "position": [ 200.0, 0.0 ],
                 "rotation": 0.0,
                 "scale": 1.0
             },
             "type": "ship",
             "walkableArea": {
-                "characterIds": [
-                    "GREG"
-                ],
+                "characterIds": [ "GREG" ],
                 "placedItems": [
                     {
                         "itemId": 5,
-                        "position": [
-                            0.0,
-                            -10.0
-                        ],
+                        "position": [ 0.0, -10.0 ],
                         "type": "placed-item"
                     },
                     {
                         "itemId": 2,
-                        "position": [
-                            0.0,
-                            0.0
-                        ],
+                        "position": [ 0.0, 0.0 ],
                         "type": "placed-item"
                     }
                 ]
@@ -281,7 +301,8 @@
             "definitionId": "STAR_SYSTEM_1",
             "spaceObjectIds": [
                 "PLAYER",
-                "OTHER"
+                "OTHER",
+                "SPACE_STATION"
             ]
         },
         {

@@ -20,6 +20,7 @@ namespace space
     class CharacterController;
     class NpcController;
     class PlayerController;
+    class SpaceStationController;
     class Inventory;
     class Item;
     class PlaceableItem;
@@ -68,6 +69,9 @@ namespace space
 
     json toJson(const PlayerController &input);
     bool addFromJsonPlayerController(const json &j, GameSession &session);
+
+    json toJson(const SpaceStationController &input);
+    bool addFromJsonSpaceStationController(const json &j, GameSession &session);
 
     json toJsonBase(const Item &item);
     json toJson(const Item &item);
