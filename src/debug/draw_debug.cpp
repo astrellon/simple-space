@@ -6,4 +6,5 @@ namespace space
     bool DrawDebug::slow = false;
     bool DrawDebug::showPolygons = false;
     bool DrawDebug::showUIWindow = false;
+    bool DrawDebug::hideGameSession = false;
 } // namespace space

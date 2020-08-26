@@ -10,6 +10,7 @@ namespace space
             static bool slow;
             static bool showPolygons;
             static bool showUIWindow;
+            static bool hideGameSession;
 
             // Constructor
 

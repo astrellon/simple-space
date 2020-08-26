@@ -19,6 +19,7 @@ namespace space
         ImGui::Text("Draw Calls: %d", DrawDebug::glDraw);
         ImGui::Checkbox("Slow", &DrawDebug::slow);
         ImGui::Checkbox("Show Physics", &DrawDebug::showPolygons);
+        ImGui::Checkbox("Hide GameSession", &DrawDebug::hideGameSession);
 
         auto transition = engine.currentSession()->currentTransition();
         if (transition)

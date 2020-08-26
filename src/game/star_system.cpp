@@ -10,6 +10,7 @@
 #include "../engine.hpp"
 #include "../render_camera.hpp"
 #include "../effects/transition.hpp"
+#include "../debug/draw_debug.hpp"
 
 #include "../definitions/planet_definition.hpp"
 #include "../definitions/celestial_body_definition.hpp"
@@ -42,6 +43,11 @@ namespace space
         }
 
         _background->draw(target);
+
+        if (DrawDebug::hideGameSession)
+        {
+            return;
+        }
         target.preDraw();
 
         for (auto obj : _objects)
