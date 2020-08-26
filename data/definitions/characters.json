@@ -46,5 +46,13 @@
         "speed": 50,
         "name": "Fronk",
         "animatedTextureId": "DOG_SPRITE"
+    },
+    {
+        "type": "character",
+        "id": "TUMBO_CHAR",
+        "spriteSize": 32,
+        "speed": 50,
+        "name": "Tumbo",
+        "animatedTextureId": "DOG_SPRITE"
     }
 ]

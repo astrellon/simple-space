@@ -81,6 +81,15 @@
             }
         },
         {
+            "type": "npc",
+            "controlling": 0,
+            "controllingCharacter": "TUMBO",
+            "dialogue": "DIAG_TUMBO_1",
+            "inventory": {
+                "items": null
+            }
+        },
+        {
             "type": "space-station",
             "controllingShip": "SPACE_STATION"
         }
@@ -182,7 +191,7 @@
             },
             "type": "ship",
             "walkableArea": {
-                "characterIds": [],
+                "characterIds": ["TUMBO"],
                 "placedItems": [
                     {
                         "itemId": 20,
@@ -289,6 +298,19 @@
                 "position": [
                     20.0,
                     30.0
+                ],
+                "rotation": 0.0,
+                "scale": 0.1666666716337204
+            },
+            "type": "character"
+        },
+        {
+            "definitionId": "TUMBO_CHAR",
+            "id": "TUMBO",
+            "transform": {
+                "position": [
+                    0.0,
+                    -26.0
                 ],
                 "rotation": 0.0,
                 "scale": 0.1666666716337204

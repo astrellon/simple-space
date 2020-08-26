@@ -38,9 +38,9 @@
     {
         "type": "ship",
         "id": "SPACE_STATION_1",
-        "maxRotation": 8.0,
+        "maxRotation": 5.0,
         "maxSpeed": 0,
-        "turnRate": 5.0,
+        "turnRate": 3.0,
         "acceleration": 0,
         "name": "Space Station",
         "texturePath": "data/textures/ships/spaceStation.png",
