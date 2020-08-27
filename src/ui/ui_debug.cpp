@@ -31,6 +31,8 @@ namespace space
             ImGui::Text("No transition");
         }
 
+        ImGui::Text("Mem: %lu %lu %lu", DrawDebug::totalMemoryAllocated, DrawDebug::allocatedThisFrame, DrawDebug::freedThisFrame);
+
         if (engine.currentSession() && ImGui::Button("Save"))
         {
             engine.currentSession()->saveGame();

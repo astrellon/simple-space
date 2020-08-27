@@ -38,6 +38,21 @@
 #include "src/ui/ui_manager.hpp"
 
 
+void operator delete(void *ptr, size_t size)
+{
+    space::DrawDebug::totalMemoryAllocated -= size;
+    space::DrawDebug::freedThisFrame += size;
+
+    free(ptr);
+}
+
+void *operator new(size_t size)
+{
+    space::DrawDebug::totalMemoryAllocated += size;
+    space::DrawDebug::allocatedThisFrame += size;
+
+    return malloc(size);
+}
 
 #include "earcut.hpp"
 

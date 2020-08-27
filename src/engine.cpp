@@ -176,6 +176,9 @@ namespace space
 
     void Engine::preUpdate()
     {
+        DrawDebug::allocatedThisFrame = 0;
+        DrawDebug::freedThisFrame = 0;
+
         _deltaTime = _timer.getElapsedTime();
         _timeSinceStartOnUpdate = timeSinceStart();
         _timer.restart();
