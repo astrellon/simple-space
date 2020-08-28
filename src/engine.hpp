@@ -4,8 +4,8 @@
 #include "resource_manager.hpp"
 #include "definition_manager.hpp"
 #include "camera.hpp"
-#include "effects/bloom-effect.hpp"
-#include "effects/bloom-effect-2.hpp"
+#include "effects/bloom_effect.hpp"
+#include "effects/bloom_effect_2.hpp"
 #include "effects/overlay.hpp"
 #include "render_camera.hpp"
 

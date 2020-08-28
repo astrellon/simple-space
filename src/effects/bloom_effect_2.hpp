@@ -5,7 +5,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 
-#include "post-effect.hpp"
+#include "post_effect.hpp"
 
 #include "../resource_manager.hpp"
 

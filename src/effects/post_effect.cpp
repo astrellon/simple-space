@@ -1,4 +1,4 @@
-#include "post-effect.hpp"
+#include "post_effect.hpp"
 
 #include "../debug/draw_debug.hpp"
 

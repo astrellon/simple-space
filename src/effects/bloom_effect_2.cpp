@@ -1,4 +1,4 @@
-#include "bloom-effect-2.hpp"
+#include "bloom_effect_2.hpp"
 
 namespace space
 {
