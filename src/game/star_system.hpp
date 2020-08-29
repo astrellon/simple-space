@@ -28,10 +28,7 @@ namespace space
             StarSystem(GameSession &session, const StarSystemDefinition &definition);
 
             // Methods
-            const std::vector<SpaceObject *> objects() const
-            {
-                return _objects;
-            }
+            const std::vector<SpaceObject *> &objects() const { return _objects; }
 
             void initFromDefinition();
             void addObject(SpaceObject *object);
