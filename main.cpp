@@ -65,7 +65,7 @@ int main()
     settings.minorVersion = 0;
 
     sf::RenderWindow window(sf::VideoMode(1920, 1080), "Space", sf::Style::Default, settings);
-    window.setVerticalSyncEnabled(true);
+    //window.setVerticalSyncEnabled(true);
     // window.setFramerateLimit(120);
 
     glewInit();

@@ -1,3 +1,6 @@
 [submodule "extern/tmxlite"]
 	path = extern/tmxlite
 	url = https://github.com/fallahn/tmxlite
+[submodule "extern/SFML"]
+	path = extern/SFML
+	url = https://github.com/SFML/SFML

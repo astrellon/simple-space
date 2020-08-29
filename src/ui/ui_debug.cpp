@@ -33,10 +33,15 @@ namespace space
 
         ImGui::Text("Mem: %lu %lu %lu", DrawDebug::totalMemoryAllocated, DrawDebug::allocatedThisFrame, DrawDebug::freedThisFrame);
 
+        ImGui::Text("Locks: %lu", DrawDebug::locksUsed);
+        ImGui::Text("Average Frame: %fus", DrawDebug::averageFrameDuration());
+        ImGui::PlotLines("Frame Times", DrawDebug::frameDurations.data(), DrawDebug::frameDurations.size());
+
         if (engine.currentSession() && ImGui::Button("Save"))
         {
             engine.currentSession()->saveGame();
         }
+
         ImGui::End();
     }
 } // namespace space

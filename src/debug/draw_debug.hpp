@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stddef.h>
+#include <array>
 
 namespace space
 {
@@ -17,9 +18,16 @@ namespace space
             static size_t totalMemoryAllocated;
             static size_t allocatedThisFrame;
             static size_t freedThisFrame;
+            static size_t locksUsed;
+            static std::array<float, 1000> frameDurations;
 
             // Constructor
 
             // Methods
+            static void addFrameDuration(size_t frameDuration);
+            static float averageFrameDuration();
+
+        private:
+            static size_t frameDurationIndex;
     };
 } // space

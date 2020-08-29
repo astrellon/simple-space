@@ -32,6 +32,7 @@ if (GLEW_FOUND)
     link_libraries(${GLEW_LIBRARIES})
 endif()
 
+add_subdirectory("extern/SFML")
 add_subdirectory("extern/tmxlite/tmxlite")
 
 SET (SFML_LIBRARIES sfml-graphics sfml-audio sfml-window sfml-system)

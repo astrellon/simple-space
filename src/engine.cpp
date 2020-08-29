@@ -29,6 +29,8 @@ namespace space
         _resourceManager = std::make_unique<ResourceManager>();
         _definitionManager = std::make_unique<DefinitionManager>();
         _uiManager = std::make_unique<UIManager>();
+
+        _frameStart = std::chrono::high_resolution_clock::now();
     }
     Engine::~Engine()
     {
@@ -178,6 +180,13 @@ namespace space
     {
         DrawDebug::allocatedThisFrame = 0;
         DrawDebug::freedThisFrame = 0;
+        DrawDebug::locksUsed = 0;
+
+        auto now = std::chrono::high_resolution_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::microseconds>(now - _frameStart).count();
+
+        DrawDebug::addFrameDuration(duration);
+        _frameStart = now;
 
         _deltaTime = _timer.getElapsedTime();
         _timeSinceStartOnUpdate = timeSinceStart();

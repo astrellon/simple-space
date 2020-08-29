@@ -9,6 +9,7 @@
 #include "effects/overlay.hpp"
 #include "render_camera.hpp"
 
+#include <chrono>
 #include <SFML/Graphics.hpp>
 
 namespace space
@@ -87,5 +88,7 @@ namespace space
             sf::Time _timeSinceStartOnUpdate;
 
             bool _enableBloom;
+
+            std::chrono::system_clock::time_point _frameStart;
     };
 } // town
