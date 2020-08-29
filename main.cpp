@@ -36,6 +36,7 @@
 #include "src/debug/draw_debug.hpp"
 #include "src/controllers/npc_controller.hpp"
 #include "src/ui/ui_manager.hpp"
+#include "src/effects/portal_effect.hpp"
 
 
 void operator delete(void *ptr, size_t size)
@@ -65,7 +66,7 @@ int main()
     settings.minorVersion = 0;
 
     sf::RenderWindow window(sf::VideoMode(1920, 1080), "Space", sf::Style::Default, settings);
-    //window.setVerticalSyncEnabled(true);
+    window.setVerticalSyncEnabled(true);
     // window.setFramerateLimit(120);
 
     glewInit();
@@ -93,8 +94,15 @@ int main()
     nlohmann::json startingGameJson;
     startingGameFile >> startingGameJson;
 
-    auto gameSession = space::fromJsonGameSession(engine, startingGameJson);
-    engine.currentSession(std::move(gameSession));
+    auto gameSessionTemp = space::fromJsonGameSession(engine, startingGameJson);
+    auto gameSession = gameSessionTemp.get();
+    engine.currentSession(std::move(gameSessionTemp));
+
+    auto portalEffect = gameSession->createObject<space::PortalEffect>("PORTAL", 1000);
+    space::StarSystem *starSystem1;
+    gameSession->tryGetStarSystem("STAR_SYSTEM_1", &starSystem1);
+
+    starSystem1->addObject(portalEffect);
 
     while (window.isOpen())
     {
