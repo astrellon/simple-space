@@ -3,10 +3,14 @@
 #include <math.h>
 #include "../utils.hpp"
 #include "../render_camera.hpp"
+#include "../engine.hpp"
+#include "../resource_manager.hpp"
+#include "../game_session.hpp"
+#include <SFML/OpenGL.hpp>
 
 namespace space
 {
-    PortalEffect::PortalEffect(const ObjectId &id, size_t numParticles) : SpaceObject(id), _vertices(sf::Points, numParticles)
+    PortalEffect::PortalEffect(const ObjectId &id, size_t numParticles) : SpaceObject(id), _vertices(sf::Points, numParticles), _shader(nullptr)
     {
         _particles.resize(numParticles);
 
@@ -21,12 +25,18 @@ namespace space
             vertex.position = sf::Vector2f(std::cos(angle) * dist, std::sin(angle) * dist);
             vertex.color = Utils::hsv(Utils::randf(0, 360), 0.75f, 0.75f);
 
-            particle.velocity = sf::Vector2f(std::cos(angle + M_PI_2), std::sin(angle + M_PI_2)) * 10.0f;
+            angle += Utils::randf(0.2, M_PI_4);
+
+            particle.velocity = sf::Vector2f(std::cos(angle), std::sin(angle)) * 10.0f;
         }
     }
 
     void PortalEffect::update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform)
     {
+        if (_shader == nullptr)
+        {
+            session.engine().resourceManager().shader("portalParticle", &_shader);
+        }
         auto seconds = dt.asSeconds();
         for (auto i = 0; i < _particles.size(); i++)
         {
@@ -50,6 +60,14 @@ namespace space
 
     void PortalEffect::draw(GameSession &session, sf::RenderTarget &target)
     {
-        target.draw(_vertices, _worldTransform);
+        sf::RenderStates states;
+        states.shader = _shader;
+        states.transform = _worldTransform;
+
+        glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
+
+        target.draw(_vertices, states);
+
+        glDisable(GL_VERTEX_PROGRAM_POINT_SIZE);
     }
 } // namespace space

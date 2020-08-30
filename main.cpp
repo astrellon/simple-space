@@ -66,7 +66,7 @@ int main()
     settings.minorVersion = 0;
 
     sf::RenderWindow window(sf::VideoMode(1920, 1080), "Space", sf::Style::Default, settings);
-    window.setVerticalSyncEnabled(true);
+    //window.setVerticalSyncEnabled(true);
     // window.setFramerateLimit(120);
 
     glewInit();
@@ -78,6 +78,7 @@ int main()
 
     resourceManager.preloadShader("stars", "data/shaders/stars.vert", "data/shaders/stars.frag");
     resourceManager.preloadShader("planet", "data/shaders/planet.vert", "data/shaders/planet.frag");
+    resourceManager.preloadShader("portalParticle", "data/shaders/portal_particle.vert", "data/shaders/portal_particle.frag");
     resourceManager.preloadTextures("data/textures");
     resourceManager.preloadFonts("data/fonts");
     resourceManager.preloadMaps("data/maps");
@@ -98,9 +99,10 @@ int main()
     auto gameSession = gameSessionTemp.get();
     engine.currentSession(std::move(gameSessionTemp));
 
-    auto portalEffect = gameSession->createObject<space::PortalEffect>("PORTAL", 1000);
+    auto portalEffect = gameSession->createObject<space::PortalEffect>("PORTAL", 1024);
     space::StarSystem *starSystem1;
     gameSession->tryGetStarSystem("STAR_SYSTEM_1", &starSystem1);
+    portalEffect->transform().position.x = 300;
 
     starSystem1->addObject(portalEffect);
 

@@ -33,6 +33,7 @@ namespace space
             // Fields
             sf::VertexArray _vertices;
             std::vector<Particle> _particles;
+            sf::Shader *_shader;
 
             // Methods
     };
