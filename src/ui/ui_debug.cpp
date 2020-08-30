@@ -32,7 +32,11 @@ namespace space
             ImGui::Text("No transition");
         }
 
+#ifdef TRACK_MEMORY
         ImGui::Text("Mem: %lu %lu %lu %lu", DrawDebug::totalMemoryAllocated, DrawDebug::allocatedThisFrame, DrawDebug::freedThisFrame, DrawDebug::numAllocations);
+#else
+        ImGui::Text("Memory tracking disabled");
+#endif
 
         ImGui::Text("Locks: %lu", DrawDebug::locksUsed);
 
