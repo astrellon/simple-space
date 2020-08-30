@@ -42,7 +42,8 @@ namespace space
             character->prePhysics(session, dt, parentTransform);
         }
 
-        _physicsWorld.Step(1.0f / 60.0f, 4, 2);
+        auto physicsSteps = std::min(dt.asSeconds(), 1.0f / 60.0f);
+        _physicsWorld.Step(physicsSteps, 4, 2);
 
         for (auto &character : _characters)
         {
