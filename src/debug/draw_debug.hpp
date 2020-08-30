@@ -18,6 +18,7 @@ namespace space
             static size_t totalMemoryAllocated;
             static size_t allocatedThisFrame;
             static size_t freedThisFrame;
+            static size_t numAllocations;
             static size_t locksUsed;
             static std::array<float, 1000> frameDurations;
 

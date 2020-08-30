@@ -11,6 +11,7 @@ namespace space
     size_t DrawDebug::totalMemoryAllocated = 0;
     size_t DrawDebug::allocatedThisFrame = 0;
     size_t DrawDebug::freedThisFrame = 0;
+    size_t DrawDebug::numAllocations = 0;
     size_t DrawDebug::locksUsed = 0;
     std::array<float, 1000> DrawDebug::frameDurations;
     size_t DrawDebug::frameDurationIndex = 0;
