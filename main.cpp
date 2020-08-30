@@ -7,6 +7,7 @@
 #include <chrono>
 #include <vector>
 #include <iomanip>
+#include <malloc.h>
 
 #include "src/engine.hpp"
 #include "src/resource_manager.hpp"
@@ -38,6 +39,7 @@
 #include "src/ui/ui_manager.hpp"
 #include "src/effects/portal_effect.hpp"
 
+#ifdef TRACK_MEMORY
 void operator delete(void *ptr, size_t size)
 {
     space::DrawDebug::totalMemoryAllocated -= size;
@@ -46,14 +48,27 @@ void operator delete(void *ptr, size_t size)
     free(ptr);
 }
 
+void operator delete(void *ptr)
+{
+    auto size = malloc_usable_size(ptr);
+    space::DrawDebug::totalMemoryAllocated -= size;
+    space::DrawDebug::freedThisFrame += size;
+
+    free(ptr);
+}
+
 void *operator new(size_t size)
 {
-    space::DrawDebug::totalMemoryAllocated += size;
-    space::DrawDebug::allocatedThisFrame += size;
+    auto result = malloc(size);
+
+    auto newSize = malloc_usable_size(result);
+    space::DrawDebug::totalMemoryAllocated += newSize;
+    space::DrawDebug::allocatedThisFrame += newSize;
     space::DrawDebug::numAllocations++;
 
-    return malloc(size);
+    return result;
 }
+#endif
 
 #include "earcut.hpp"
 
@@ -108,6 +123,11 @@ int main()
 
     while (window.isOpen())
     {
+        space::DrawDebug::allocatedThisFrame = 0;
+        space::DrawDebug::freedThisFrame = 0;
+        space::DrawDebug::locksUsed = 0;
+        space::DrawDebug::numAllocations = 0;
+
         engine.processEvents();
         engine.preUpdate();
 

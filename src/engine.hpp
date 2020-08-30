@@ -20,9 +20,14 @@ namespace space
     class Engine : private NonCopyable
     {
         public:
+            // Fields
+            bool enableBloom;
+
+            // Constructor
             Engine(sf::RenderWindow *window);
             ~Engine();
 
+            // Methods
             const ResourceManager &resourceManager() const { return *_resourceManager.get(); }
             const DefinitionManager &definitionManager() const { return *_definitionManager.get(); }
             const UIManager &uiManager() const { return *_uiManager.get(); }
@@ -66,6 +71,7 @@ namespace space
             void shutdown();
 
         private:
+            // Fields
             std::unique_ptr<ResourceManager> _resourceManager;
             std::unique_ptr<DefinitionManager> _definitionManager;
             std::unique_ptr<UIManager> _uiManager;
@@ -86,8 +92,6 @@ namespace space
             sf::Clock _timerSinceStart;
             sf::Time _deltaTime;
             sf::Time _timeSinceStartOnUpdate;
-
-            bool _enableBloom;
 
             std::chrono::system_clock::time_point _frameStart;
     };
