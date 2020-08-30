@@ -31,10 +31,12 @@ namespace space
             ImGui::Text("No transition");
         }
 
-        ImGui::Text("Mem: %lu %lu %lu", DrawDebug::totalMemoryAllocated, DrawDebug::allocatedThisFrame, DrawDebug::freedThisFrame);
+        ImGui::Text("Mem: %lu %lu %lu %lu", DrawDebug::totalMemoryAllocated, DrawDebug::allocatedThisFrame, DrawDebug::freedThisFrame, DrawDebug::numAllocations);
 
         ImGui::Text("Locks: %lu", DrawDebug::locksUsed);
-        ImGui::Text("Average Frame: %fus", DrawDebug::averageFrameDuration());
+
+        auto averageFrameDuration = DrawDebug::averageFrameDuration();
+        ImGui::Text("Average Frame: %.1fus %.1ffps", averageFrameDuration, 1000000.0f / averageFrameDuration);
         ImGui::PlotLines("Frame Times", DrawDebug::frameDurations.data(), DrawDebug::frameDurations.size());
 
         if (engine.currentSession() && ImGui::Button("Save"))

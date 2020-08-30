@@ -38,7 +38,6 @@
 #include "src/ui/ui_manager.hpp"
 #include "src/effects/portal_effect.hpp"
 
-
 void operator delete(void *ptr, size_t size)
 {
     space::DrawDebug::totalMemoryAllocated -= size;
@@ -51,6 +50,7 @@ void *operator new(size_t size)
 {
     space::DrawDebug::totalMemoryAllocated += size;
     space::DrawDebug::allocatedThisFrame += size;
+    space::DrawDebug::numAllocations++;
 
     return malloc(size);
 }

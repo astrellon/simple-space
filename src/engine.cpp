@@ -181,6 +181,7 @@ namespace space
         DrawDebug::allocatedThisFrame = 0;
         DrawDebug::freedThisFrame = 0;
         DrawDebug::locksUsed = 0;
+        DrawDebug::numAllocations = 0;
 
         auto now = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::microseconds>(now - _frameStart).count();

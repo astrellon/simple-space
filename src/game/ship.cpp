@@ -67,22 +67,36 @@ namespace space
         _transform.rotation += _rotationSpeed * seconds;
 
         _speed += Utils::transformDirection(moveInput, _transform.getTransform()) * seconds * definition.acceleration;
-        auto length = _speed.x * _speed.x + _speed.y * _speed.y;
-        if (length > (definition.maxSpeed * definition.maxSpeed))
-        {
-            length = std::sqrt(length);
-            _speed /= length;
-            _speed *= definition.maxSpeed;
-        }
+        _speed = Utils::clampLength(_speed, 0, definition.maxSpeed);
         _transform.position += _speed * seconds;
 
-        if (moveInput == sf::Vector2f())
+        if (moveInput == sf::Vector2f() && _speed != sf::Vector2f())
         {
-            _speed *= 0.98f;
+            auto length = Utils::length(_speed);
+            auto prevSpeed = _speed;
+            auto prevSpeedDir = _speed / length;
+
+            _speed -= prevSpeedDir * definition.acceleration * seconds;
+
+            auto newSpeedDir = Utils::normalised(_speed);
+            auto dot = Utils::dot(prevSpeedDir, newSpeedDir);
+            if (std::abs(dot - 1) > 0.01)
+            {
+                _speed = sf::Vector2f();
+            }
         }
-        if (rotateInput == 0.0f)
+
+        if (rotateInput == 0.0f && _rotationSpeed != 0.0f)
         {
-            _rotationSpeed *= 0.95f;
+            auto prevSpeed = _rotationSpeed;
+            auto prevSign = _rotationSpeed > 0 ? 1 : -1;
+            _rotationSpeed -= prevSign * definition.turnRate * seconds;
+            auto newSign = _rotationSpeed > 0 ? 1 : -1;
+
+            if (prevSign != newSign)
+            {
+                _rotationSpeed = 0.0f;
+            }
         }
 
         updateWorldTransform(parentTransform);
