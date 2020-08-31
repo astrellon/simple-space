@@ -20,7 +20,7 @@ file(GLOB src_files
     "src/controllers/*.cpp"
 )
 
-SET (CMAKE_CXX_FLAGS_RELEASE_INIT "-O3 -DNDEBUG")
+SET (CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
 #SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
 SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wconversion-null")
 
