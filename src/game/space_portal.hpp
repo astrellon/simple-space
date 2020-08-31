@@ -15,6 +15,7 @@ namespace space
         public:
             // Fields
             const SpacePortalDefinition &definition;
+            ObjectId targetObjectId;
 
             // Constructor
             SpacePortal(const ObjectId &id, const SpacePortalDefinition &definition);

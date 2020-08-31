@@ -11,8 +11,8 @@ namespace space
         public:
             // Fields
             float rotation;
-            sf::Vector2f position;
             float scale;
+            sf::Vector2f position;
 
             // Constructor
             SpaceTransform() : rotation(0), scale(1) { }
@@ -26,7 +26,7 @@ namespace space
                 auto cosine = static_cast<float>(std::cos(angle));
                 auto sine   = static_cast<float>(std::sin(angle));
 
-                auto m = const_cast<float *>(_transform.getMatrix());
+                auto m = _transform.getMatrix();
                 m[0] = scale * cosine;
                 m[4] = scale * sine;
                 m[12] = position.x;

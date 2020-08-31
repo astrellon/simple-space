@@ -195,6 +195,27 @@ namespace space
         }
     }
 
+    void GameSession::moveSpaceObject(SpaceObject *obj, sf::Vector2f position, StarSystem *starSystem)
+    {
+        if (obj->starSystem() != nullptr)
+        {
+            obj->starSystem()->removeObject(obj);
+        }
+
+        if (starSystem == nullptr)
+        {
+            return;
+        }
+
+        starSystem->addObject(obj);
+        obj->transform().position = position;
+
+        if (obj->id == _playerController.controllingShip()->id)
+        {
+            activeStarSystem(starSystem);
+        }
+    }
+
     void GameSession::setTransition(std::unique_ptr<Transition> &transition)
     {
         clearTransition();

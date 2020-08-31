@@ -10,6 +10,8 @@
 #include "draw_layer.hpp"
 #include "draw_layers.hpp"
 
+#include "../non_copyable.hpp"
+
 namespace space
 {
     class PlaceableItem;
@@ -23,7 +25,7 @@ namespace space
     class PlacedItemPair;
     class Teleporter;
 
-    class WalkableArea
+    class WalkableArea : private NonCopyable
     {
         public:
             // Fields

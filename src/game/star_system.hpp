@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include <functional>
 
 #include "../non_copyable.hpp"
 #include "../definitions/star_system_definition.hpp"
@@ -21,6 +22,7 @@ namespace space
     class StarSystem : private NonCopyable
     {
         public:
+            typedef std::function<void(SpaceObject *)> FindObjectCallback;
             // Fields
             const StarSystemDefinition &definition;
 
@@ -29,6 +31,7 @@ namespace space
 
             // Methods
             const std::vector<SpaceObject *> &objects() const { return _objects; }
+            void getObjectsNearby(float radius, const sf::Vector2f &position, FindObjectCallback callback) const;
 
             void initFromDefinition();
             void addObject(SpaceObject *object);

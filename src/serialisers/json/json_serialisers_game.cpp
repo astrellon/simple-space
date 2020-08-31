@@ -136,11 +136,6 @@ namespace space
     }
     bool addFromJsonSpaceObject(const json &j, GameSession &session)
     {
-        // std::stringstream ss;
-        // ss << j;
-
-        // auto temp = ss.str();
-
         auto type = j.at("type").get<std::string>();
         if (type == Character::SpaceObjectType())
             return addFromJsonCharacter(j, session);
@@ -256,6 +251,8 @@ namespace space
 
         auto result = session.createObject<SpacePortal>(id, *definition);
         result->transform(fromJsonTransform(j.at("transform")));
+
+        j.at("targetObjectId").get_to(result->targetObjectId);
 
         return result;
     }

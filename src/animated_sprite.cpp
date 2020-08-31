@@ -39,6 +39,11 @@ namespace space
 
     void AnimatedSprite::sequence(const std::string &name, bool immediateChange)
     {
+        if (name == _currentAnimation)
+        {
+            return;
+        }
+
         if (!immediateChange)
         {
             _nextAnimation = name;

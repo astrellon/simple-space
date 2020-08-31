@@ -283,10 +283,22 @@
         },
         {
             "definitionId": "SPACE_PORTAL_1",
-            "id": "SPACE_PORTAL",
+            "id": "SS_SPACE_PORTAL",
             "type": "space-portal",
+            "targetObjectId": "SS2_SPACE_PORTAL",
             "transform": {
                 "position": [ 300, 0 ],
+                "rotation": 0,
+                "scale": 1
+            }
+        },
+        {
+            "definitionId": "SPACE_PORTAL_1",
+            "id": "SS2_SPACE_PORTAL",
+            "type": "space-portal",
+            "targetObjectId": "SS_SPACE_PORTAL",
+            "transform": {
+                "position": [ 400, 0 ],
                 "rotation": 0,
                 "scale": 1
             }
@@ -299,12 +311,14 @@
                 "PLAYER",
                 "OTHER",
                 "SPACE_STATION",
-                "SPACE_PORTAL"
+                "SS_SPACE_PORTAL"
             ]
         },
         {
             "definitionId": "STAR_SYSTEM_2",
-            "spaceObjectIds": []
+            "spaceObjectIds": [
+                "SS2_SPACE_PORTAL"
+            ]
         }
     ]
 }

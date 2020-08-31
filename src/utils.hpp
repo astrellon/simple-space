@@ -192,7 +192,12 @@ namespace space
 
             static inline float length(const sf::Vector2f &input)
             {
-                return std::sqrt(dot(input, input));
+                return std::sqrt(lengthSquared(input));
+            }
+
+            static inline float lengthSquared(const sf::Vector2f &input)
+            {
+                return dot(input, input);
             }
 
             static inline float dot(const sf::Vector2f &v1, const sf::Vector2f &v2)

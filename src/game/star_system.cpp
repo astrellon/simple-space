@@ -11,6 +11,7 @@
 #include "../render_camera.hpp"
 #include "../effects/transition.hpp"
 #include "../debug/draw_debug.hpp"
+#include "../utils.hpp"
 
 #include "../definitions/planet_definition.hpp"
 #include "../definitions/celestial_body_definition.hpp"
@@ -113,6 +114,19 @@ namespace space
         else
         {
             std::cout << "Unable to find object: " << object->id << " to remove from star system" << std::endl;
+        }
+    }
+
+    void StarSystem::getObjectsNearby(float radius, const sf::Vector2f &position, StarSystem::FindObjectCallback callback) const
+    {
+        auto lengthSquared = radius * radius;
+        for (auto obj : _objects)
+        {
+            auto dist = Utils::lengthSquared(position - obj->transform().position);
+            if (dist <= lengthSquared)
+            {
+                callback(obj);
+            }
         }
     }
 

@@ -154,6 +154,7 @@ namespace space
             Ship *getShipPlayerCloneIsInsideOf() const;
 
             void moveCharacter(Character *character, sf::Vector2f position, WalkableArea *area);
+            void moveSpaceObject(SpaceObject *spaceObject, sf::Vector2f position, StarSystem *starSystem);
 
             Transition *currentTransition() const { return _transition.get(); }
             void setTransition(std::unique_ptr<Transition> &transition);

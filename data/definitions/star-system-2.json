@@ -7,7 +7,7 @@
         },
         "rootBody": {
             "type": "planet",
-            "id": "STAR_1",
+            "id": "SS2_STAR_1",
             "location": {
                 "distance": 0,
                 "influenceRadius": 4000,
