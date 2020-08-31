@@ -1,6 +1,7 @@
 # Builds
 /build
 /build_test
+/build_debug
 /debug
 
 # Prerequisites
