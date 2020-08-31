@@ -10,6 +10,7 @@
 #include "../../game/space_object.hpp"
 #include "../../game/character.hpp"
 #include "../../game/ship.hpp"
+#include "../../game/space_portal.hpp"
 #include "../../game/planet.hpp"
 #include "../../game/planet_surface.hpp"
 #include "../../game/star_system.hpp"
@@ -125,6 +126,9 @@ namespace space
         else if (input.type() == Planet::SpaceObjectType())
             return json {};
 
+        else if (input.type() == SpacePortal::SpaceObjectType())
+            return toJson(dynamic_cast<const SpacePortal &>(input));
+
         else if (input.type() == PlacedItem::SpaceObjectType())
             return toJson(dynamic_cast<const PlacedItem &>(input));
 
@@ -132,10 +136,10 @@ namespace space
     }
     bool addFromJsonSpaceObject(const json &j, GameSession &session)
     {
-        std::stringstream ss;
-        ss << j;
+        // std::stringstream ss;
+        // ss << j;
 
-        auto temp = ss.str();
+        // auto temp = ss.str();
 
         auto type = j.at("type").get<std::string>();
         if (type == Character::SpaceObjectType())
@@ -147,6 +151,9 @@ namespace space
         if (type == Planet::SpaceObjectType())
             // Ignore planets
             return true;
+
+        if (type == SpacePortal::SpaceObjectType())
+            return addFromJsonSpacePortal(j, session);
 
         if (type == PlacedItem::SpaceObjectType())
             throw std::runtime_error("Unable to add placed item without walkable area");
@@ -227,6 +234,30 @@ namespace space
         area.addPostLoadPlaceable(itemId, position);
 
         return true;
+    }
+
+    json toJson(const SpacePortal &input)
+    {
+        auto result = toJsonBase(input);
+        result["definitionId"] = input.definition.id;
+        return result;
+    }
+    bool addFromJsonSpacePortal(const json &j, GameSession &session)
+    {
+        auto id = j.at("id").get<ObjectId>();
+        auto definitionId = j.at("definitionId").get<DefinitionId>();
+
+        const SpacePortalDefinition *definition;
+        if (!session.engine().definitionManager().tryGet(definitionId, &definition))
+        {
+            std::cout << "Unable to find space portal definition " << definitionId << " for " << id << std::endl;
+            return false;
+        }
+
+        auto result = session.createObject<SpacePortal>(id, *definition);
+        result->transform(fromJsonTransform(j.at("transform")));
+
+        return result;
     }
 
     json toJson(const WalkableArea &input)

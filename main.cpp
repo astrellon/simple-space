@@ -114,13 +114,6 @@ int main()
     auto gameSession = gameSessionTemp.get();
     engine.currentSession(std::move(gameSessionTemp));
 
-    auto portalEffect = gameSession->createObject<space::PortalEffect>("PORTAL", 1024);
-    space::StarSystem *starSystem1;
-    gameSession->tryGetStarSystem("STAR_SYSTEM_1", &starSystem1);
-    portalEffect->transform().position.x = 300;
-
-    starSystem1->addObject(portalEffect);
-
     while (window.isOpen())
     {
         space::DrawDebug::allocatedThisFrame = 0;

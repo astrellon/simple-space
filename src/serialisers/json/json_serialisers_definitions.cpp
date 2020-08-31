@@ -19,6 +19,7 @@
 #include "../../definitions/item_definition.hpp"
 #include "../../definitions/placeable_item_definition.hpp"
 #include "../../definitions/animated_texture.hpp"
+#include "../../definitions/space_portal_definition.hpp"
 
 using nlohmann::json;
 
@@ -55,6 +56,9 @@ namespace space
         else if (type == AnimatedTexture::DefinitionType())
             j = toJson(dynamic_cast<const AnimatedTexture &>(input));
 
+        else if (type == SpacePortalDefinition::DefinitionType())
+            j = toJson(dynamic_cast<const SpacePortalDefinition &>(input));
+
         else
             std::cout << "Error!" << std::endl;
 
@@ -90,6 +94,9 @@ namespace space
 
         if (type == AnimatedTexture::DefinitionType())
             return fromJsonAnimatedTexture(j);
+
+        if (type == SpacePortalDefinition::DefinitionType())
+            return fromJsonSpacePortalDefinition(j);
 
         throw std::runtime_error("Oh no");
     }
@@ -392,6 +399,23 @@ namespace space
         {
             result->drawLayer = DrawLayers::fromString(drawLayerString);
         }
+
+        return result;
+    }
+
+    json toJson(const SpacePortalDefinition &input)
+    {
+        return json {
+            {"id", input.id},
+            {"animatedTextureId", input.animatedTextureId}
+        };
+    }
+
+    std::unique_ptr<SpacePortalDefinition> fromJsonSpacePortalDefinition(const json &j)
+    {
+        auto id = j.at("id").get<std::string>();
+        auto result = std::make_unique<SpacePortalDefinition>(id);
+        j.at("animatedTextureId").get_to(result->animatedTextureId);
 
         return result;
     }

@@ -1,0 +1,23 @@
+[
+    {
+        "type": "animated-texture",
+        "id": "SPACE_PORTAL_TEXTURE",
+        "texturePath": "data/textures/starPortal.png",
+        "spriteSize": [64, 64],
+        "sequences": {
+            "idle": {
+                "frameTiming": 1,
+                "range": [0, 0]
+            },
+            "active": {
+                "frameTiming": 0.1,
+                "range": [1, 7]
+            }
+        }
+    },
+    {
+        "type": "space-portal",
+        "id": "SPACE_PORTAL_1",
+        "animatedTextureId": "SPACE_PORTAL_TEXTURE"
+    }
+]

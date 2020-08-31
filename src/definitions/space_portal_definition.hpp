@@ -5,31 +5,26 @@
 #include <string>
 
 #include "base_definition.hpp"
-#include "../tiles.hpp"
 
 namespace space
 {
     class Engine;
     class AnimatedTexture;
 
-    class CharacterDefinition : public BaseDefinition
+    class SpacePortalDefinition : public BaseDefinition
     {
         public:
             // Fields
             std::string animatedTextureId;
-            std::string name;
-            uint spriteSize;
-            float speed;
 
             const AnimatedTexture *texture;
-            //Tiles tiles;
 
             // Constructor
-            CharacterDefinition(const DefinitionId &id) : BaseDefinition(id), texture(nullptr) { }
-            virtual ~CharacterDefinition() { }
+            SpacePortalDefinition(const DefinitionId &id) : BaseDefinition(id), texture(nullptr) { }
+            virtual ~SpacePortalDefinition() { }
 
             // Methods
-            static const std::string DefinitionType() { return "character"; }
+            static const std::string DefinitionType() { return "space-portal"; }
             std::string type() const { return DefinitionType(); }
 
             virtual void onPostLoad(Engine &engine);

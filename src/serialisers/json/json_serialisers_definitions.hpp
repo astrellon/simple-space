@@ -21,6 +21,7 @@ namespace space
     class PlaceableItemDefinition;
     class AnimatedTexture;
     class AnimationSequence;
+    class SpacePortalDefinition;
 
     json toJson(const BaseDefinition &input);
     std::unique_ptr<BaseDefinition> fromJsonBaseDefinition(const json &j);
@@ -50,6 +51,9 @@ namespace space
 
     json toJson(const PlaceableItemDefinition &input);
     std::unique_ptr<PlaceableItemDefinition> fromJsonPlaceableItemDefinition(const json &j);
+
+    json toJson(const SpacePortalDefinition &input);
+    std::unique_ptr<SpacePortalDefinition> fromJsonSpacePortalDefinition(const json &j);
 
     json toJson(const AnimatedTexture &input);
     std::unique_ptr<AnimatedTexture> fromJsonAnimatedTexture(const json &j);

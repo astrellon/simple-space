@@ -22,7 +22,6 @@ namespace space
     {
         auto seconds = dt.asSeconds();
 
-
         if (_insideArea && _insideArea->partOfPlanetSurface())
         {
             auto movement = moveInput * definition.speed;

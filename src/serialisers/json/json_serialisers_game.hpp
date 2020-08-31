@@ -29,6 +29,7 @@ namespace space
     class PlanetSurface;
     class Chair;
     class Teleporter;
+    class SpacePortal;
 
     json toJson(const GameSession &input);
     std::unique_ptr<GameSession> fromJsonGameSession(Engine &engine, const json &j);
@@ -72,6 +73,9 @@ namespace space
 
     json toJson(const SpaceStationController &input);
     bool addFromJsonSpaceStationController(const json &j, GameSession &session);
+
+    json toJson(const SpacePortal &input);
+    bool addFromJsonSpacePortal(const json &j, GameSession &session);
 
     json toJsonBase(const Item &item);
     json toJson(const Item &item);

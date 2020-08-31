@@ -105,18 +105,12 @@
                 "placedItems": [
                     {
                         "itemId": 10,
-                        "position": [
-                            100.0,
-                            50.0
-                        ],
+                        "position": [ 100.0, 50.0 ],
                         "type": "placed-item"
                     },
                     {
                         "itemId": 3,
-                        "position": [
-                            50.0,
-                            50.0
-                        ],
+                        "position": [ 50.0, 50.0 ],
                         "type": "placed-item"
                     }
                 ]
@@ -132,18 +126,12 @@
                 "placedItems": [
                     {
                         "itemId": 11,
-                        "position": [
-                            120.0,
-                            70.0
-                        ],
+                        "position": [ 120.0, 70.0 ],
                         "type": "placed-item"
                     },
                     {
                         "itemId": 12,
-                        "position": [
-                            30.0,
-                            50.0
-                        ],
+                        "position": [ 30.0, 50.0 ],
                         "type": "placed-item"
                     }
                 ]
@@ -157,10 +145,7 @@
                 "placedItems": [
                     {
                         "itemId": 4,
-                        "position": [
-                            50.0,
-                            50.0
-                        ],
+                        "position": [ 50.0, 50.0 ],
                         "type": "placed-item"
                     }
                 ]
@@ -205,15 +190,9 @@
             "definitionId": "SHIP_1",
             "id": "PLAYER",
             "rotationSpeed": 0.0,
-            "speed": [
-                0.0,
-                0.0
-            ],
+            "speed": [ 0.0, 0.0 ],
             "transform": {
-                "position": [
-                    0.0,
-                    0.0
-                ],
+                "position": [ 0.0, 0.0 ],
                 "rotation": 0.0,
                 "scale": 1.0
             },
@@ -256,10 +235,7 @@
             "definitionId": "PLAYER_CHAR",
             "id": "PLAYER_CHAR",
             "transform": {
-                "position": [
-                    0.0,
-                    0.0
-                ],
+                "position": [ 0.0, 0.0 ],
                 "rotation": 0.0,
                 "scale": 0.1666666716337204
             },
@@ -269,10 +245,7 @@
             "definitionId": "GREG_CHAR",
             "id": "GREG",
             "transform": {
-                "position": [
-                    0.0,
-                    0.0
-                ],
+                "position": [ 0.0, 0.0 ],
                 "rotation": 0.0,
                 "scale": 0.1666666716337204
             },
@@ -282,10 +255,7 @@
             "definitionId": "FRED_CHAR",
             "id": "FRED",
             "transform": {
-                "position": [
-                    40.0,
-                    20.0
-                ],
+                "position": [ 40.0, 20.0 ],
                 "rotation": 0.0,
                 "scale": 0.1666666716337204
             },
@@ -295,10 +265,7 @@
             "definitionId": "FRONK_CHAR",
             "id": "FRONK",
             "transform": {
-                "position": [
-                    20.0,
-                    30.0
-                ],
+                "position": [ 20.0, 30.0 ],
                 "rotation": 0.0,
                 "scale": 0.1666666716337204
             },
@@ -308,14 +275,21 @@
             "definitionId": "TUMBO_CHAR",
             "id": "TUMBO",
             "transform": {
-                "position": [
-                    0.0,
-                    -26.0
-                ],
+                "position": [ 0.0, -26.0 ],
                 "rotation": 0.0,
                 "scale": 0.1666666716337204
             },
             "type": "character"
+        },
+        {
+            "definitionId": "SPACE_PORTAL_1",
+            "id": "SPACE_PORTAL",
+            "type": "space-portal",
+            "transform": {
+                "position": [ 300, 0 ],
+                "rotation": 0,
+                "scale": 1
+            }
         }
     ],
     "starSystems": [
@@ -324,7 +298,8 @@
             "spaceObjectIds": [
                 "PLAYER",
                 "OTHER",
-                "SPACE_STATION"
+                "SPACE_STATION",
+                "SPACE_PORTAL"
             ]
         },
         {
