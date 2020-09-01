@@ -36,6 +36,7 @@ namespace space
         }
 
         _sprite.sequence("active", false);
+        auto seconds = dt.asSeconds();
 
         auto pos = Utils::getPosition(_worldTransform);
         _insideStarSystem->getObjectsNearby(50.0f, pos, [&](SpaceObject *obj)
@@ -56,14 +57,22 @@ namespace space
             auto portalToShip = pos - obj->transform().position;
             auto distanceToShip = Utils::length(portalToShip);
             auto dir = portalToShip / distanceToShip;
-            if (distanceToShip < 5)
+            if (distanceToShip < 10)
             {
-                auto newPos = targetObject->transform().position + dir * 10.0f;
-                session.moveSpaceObject(obj, newPos, targetObject->starSystem());
+                auto newPos = targetObject->transform().position + dir * 20.0f;
+                auto queue = obj->id == session.playerController().controllingShip()->id;
+                session.moveSpaceObject(obj, newPos, targetObject->starSystem(), queue);
                 return;
             }
+
+            // auto ship = dynamic_cast<Ship *>(obj);
+            // if (ship == nullptr)
+            // {
+            //     return;
+            // }
+
             // auto force = Utils::clamp(50.0f - distanceToShip, 0, 20.0f);
-            // ship->transform().position += dir * force;
+            // ship->speed(ship->speed() + dir * force * seconds);
         });
     }
 

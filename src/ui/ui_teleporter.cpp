@@ -112,7 +112,7 @@ namespace space
                         {
                             std::cout << "Teleport to: " << teleporter.item->name() << " @ " << area.partOfPlanetSurface()->definition.name << std::endl;
 
-                            session->moveCharacter(_characterController->controllingCharacter(), teleporter.placed->transform().position, &teleporter.placed->area);
+                            session->moveCharacter(_characterController->controllingCharacter(), teleporter.placed->transform().position, &teleporter.placed->area, true);
                         }
                     }
                 }

@@ -12,6 +12,7 @@
 
 #include "dialogue_manager.hpp"
 #include "controllers/player_controller.hpp"
+#include "next_frame_state.hpp"
 
 namespace space
 {
@@ -118,23 +119,13 @@ namespace space
 
             void removeSpaceObject(const ObjectId &id);
 
-            void activeStarSystem(StarSystem *starSystem)
-            {
-                _activeStarSystem = starSystem;
-                _activePlanetSurface = nullptr;
-                _playerController.clearCanInteractWith();
-                _playerController.clearShipsInTeleportRange();
-            }
             StarSystem *activeStarSystem() const { return _activeStarSystem; }
+            void activeStarSystem(StarSystem *starSystem) { _activeStarSystem = starSystem; }
 
-            void activePlanetSurface(PlanetSurface *planetSurface)
-            {
-                _activePlanetSurface = planetSurface;
-                _activeStarSystem = nullptr;
-                _playerController.clearCanInteractWith();
-                _playerController.clearShipsInTeleportRange();
-            }
             PlanetSurface *activePlanetSurface() const { return _activePlanetSurface; }
+            void activePlanetSurface(PlanetSurface *planetSurface) { _activePlanetSurface = planetSurface; }
+
+            NextFrameState &nextFrameState() { return _nextFrameState; }
 
             bool tryGetStarSystem(const DefinitionId &id, StarSystem **result) const;
             bool tryGetPlanetSurface(const DefinitionId &id, PlanetSurface **result) const;
@@ -153,8 +144,8 @@ namespace space
             Ship *getShipPlayerIsInsideOf() const;
             Ship *getShipPlayerCloneIsInsideOf() const;
 
-            void moveCharacter(Character *character, sf::Vector2f position, WalkableArea *area);
-            void moveSpaceObject(SpaceObject *spaceObject, sf::Vector2f position, StarSystem *starSystem);
+            void moveCharacter(Character *character, sf::Vector2f position, WalkableArea *area, bool queue = false);
+            void moveSpaceObject(SpaceObject *spaceObject, sf::Vector2f position, StarSystem *starSystem, bool queue = false);
 
             Transition *currentTransition() const { return _transition.get(); }
             void setTransition(std::unique_ptr<Transition> &transition);
@@ -179,6 +170,7 @@ namespace space
             PlanetSurfaceList _planetSurfaces;
             ItemList _items;
             CharacterControllerList _characterControllers;
+            NextFrameState _nextFrameState;
 
             std::unique_ptr<TeleportScreenEffect> _teleportEffect;
             StarSystem *_activeStarSystem;
@@ -195,5 +187,7 @@ namespace space
             void createTransition(const WalkableArea *prevArea, const WalkableArea *area, const TeleportClone &teleportClone, const Character *character);
             void applyAreaToTransitionData(const WalkableArea *area, TransitionData &data) const;
             void clearTeleportClone();
+
+            void checkNextFrameState();
     };
 } // town
