@@ -17,7 +17,7 @@ namespace space
     CharacterController::CharacterController(GameSession &session) : _session(session), _controlling(ControlNone), _inventory(std::make_unique<Inventory>()),
     _interactRangeObjects(0), _interactRangeObjectsSquared(0),
     _interactRangeShips(0), _interactRangeShipsSquared(0),
-    _character(nullptr), _ship(nullptr), _teleportClone(nullptr), _timeToNextIdle(0.0f)
+    _character(nullptr), _ship(nullptr), _teleportClone(nullptr), _timeToNextIdle(0.0f), _dizzy(0.0f)
     {
         interactRangeObjects(10.0f);
         interactRangeShips(150.0f);
@@ -218,16 +218,33 @@ namespace space
 
     void CharacterController::updateAnimations(sf::Time dt)
     {
+        auto seconds = dt.asSeconds();
+        auto rotSpeed = std::abs(_character->physicsBody()->GetAngularVelocity());
+        _dizzy += (rotSpeed - 8.0f) * seconds;
+        _dizzy = Utils::clamp(_dizzy, 0, 5.0f);
+
+        auto &sprite = _character->sprite();
+
+        if (_dizzy > 1.0f)
+        {
+            if (sprite.currentAnimation() != "dizzy")
+            {
+                sprite.sequence("dizzy", true);
+                _timeToNextIdle = 1.0f;
+            }
+            return;
+        }
+
         _timeToNextIdle -= dt.asSeconds();
         if (_timeToNextIdle < 0)
         {
             if (Utils::randi(0, 100) < 40)
             {
-                _character->sprite().sequence("idle2", false);
+                sprite.sequence("idle2", false);
             }
             else
             {
-                _character->sprite().sequence("idle", false);
+                sprite.sequence("idle", false);
             }
 
             _timeToNextIdle = Utils::randf(2, 5);

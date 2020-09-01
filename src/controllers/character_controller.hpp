@@ -113,6 +113,7 @@ namespace space
             float _interactRangeShipsSquared;
 
             float _timeToNextIdle;
+            float _dizzy;
 
             // Methods
             void checkInRangeOfInteractable(Interactable *interactable);

@@ -12,6 +12,10 @@
             "idle2": {
                 "frameTiming": 0.1,
                 "range": [4, 7]
+            },
+            "dizzy": {
+                "frameTiming": 0.1,
+                "range": [8, 11]
             }
         }
     },

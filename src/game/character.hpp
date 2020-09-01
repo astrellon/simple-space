@@ -39,6 +39,8 @@ namespace space
             AnimatedSprite &sprite() { return _sprite; }
             const AnimatedSprite &sprite() const { return _sprite; }
 
+            b2Body *physicsBody() { return _physicsBody; }
+
             void addToPhysicsWorld(b2World *world);
             void removeFromPhysicsWorld(b2World *world);
 
