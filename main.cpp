@@ -37,6 +37,9 @@
 #include "src/debug/draw_debug.hpp"
 #include "src/controllers/npc_controller.hpp"
 #include "src/ui/ui_manager.hpp"
+#include "earcut.hpp"
+
+#include <tmxlite/Map.hpp>
 
 #ifdef TRACK_MEMORY
 void doDelete(void *ptr)
@@ -70,10 +73,6 @@ void *operator new(size_t size)
     return result;
 }
 #endif
-
-#include "earcut.hpp"
-
-#include <tmxlite/Map.hpp>
 
 int main()
 {
