@@ -39,21 +39,23 @@
 #include "src/ui/ui_manager.hpp"
 
 #ifdef TRACK_MEMORY
-void operator delete(void *ptr, size_t size)
-{
-    space::DrawDebug::totalMemoryAllocated -= size;
-    space::DrawDebug::freedThisFrame += size;
-
-    free(ptr);
-}
-
-void operator delete(void *ptr)
+void doDelete(void *ptr)
 {
     auto size = malloc_usable_size(ptr);
     space::DrawDebug::totalMemoryAllocated -= size;
     space::DrawDebug::freedThisFrame += size;
 
     free(ptr);
+}
+
+void operator delete(void *ptr, size_t origSize)
+{
+    doDelete(ptr);
+}
+
+void operator delete(void *ptr)
+{
+    doDelete(ptr);
 }
 
 void *operator new(size_t size)
