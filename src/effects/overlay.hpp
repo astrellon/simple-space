@@ -4,7 +4,7 @@
 
 namespace space
 {
-    class Engine;
+    class DefinitionManager;
 
     class Overlay
     {
@@ -12,9 +12,10 @@ namespace space
             // Fields
 
             // Constructor
-            Overlay(Engine &engine);
+            Overlay();
 
             // Methods
+            bool init(DefinitionManager &definitionManager);
             void draw(sf::RenderTarget &output, float alpha);
 
         private:

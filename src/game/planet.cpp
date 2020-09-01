@@ -7,6 +7,7 @@
 #include "../game_session.hpp"
 #include "planet_surface.hpp"
 #include "../debug/draw_debug.hpp"
+#include "../definitions/shader_definition.hpp"
 
 namespace space
 {
@@ -40,9 +41,14 @@ namespace space
     {
         if (_shader == nullptr)
         {
-            if (!session.engine().resourceManager().shader("planet", &_shader))
+            ShaderDefinition *shaderDef;
+            if (!session.engine().definitionManager().tryGet("EFFECT_PLANET", &shaderDef))
             {
                 std::cout << "Unable to find shader for planet" << std::endl;
+            }
+            else
+            {
+                _shader = &shaderDef->shader;
             }
         }
 

@@ -43,6 +43,25 @@ namespace space
                 return true;
             }
 
+            template<typename TDef>
+            bool tryGet(const DefinitionId &id, TDef **result)
+            {
+                auto find = _definitions.find(id);
+                if (find == _definitions.end())
+                {
+                    return false;
+                }
+
+                auto casted = dynamic_cast<TDef *>(find->second.get());
+                if (casted == nullptr)
+                {
+                    return false;
+                }
+
+                *result = casted;
+                return true;
+            }
+
         private:
 
             DefinitionMap _definitions;

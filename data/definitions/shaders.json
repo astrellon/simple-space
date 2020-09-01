@@ -1,0 +1,56 @@
+[
+    {
+        "type": "shader",
+        "id": "EFFECT_BRIGHTNESS",
+        "fragmentPath": "data/shaders/effects/brightness.frag",
+        "vertexPath": "data/shaders/effects/fullpass.vert"
+    },
+    {
+        "type": "shader",
+        "id": "EFFECT_DOWNSAMPLE",
+        "fragmentPath": "data/shaders/effects/down-sample.frag",
+        "vertexPath": "data/shaders/effects/fullpass.vert"
+    },
+    {
+        "type": "shader",
+        "id": "EFFECT_GUASSIAN_BLUR",
+        "fragmentPath": "data/shaders/effects/guassian-blur.frag",
+        "vertexPath": "data/shaders/effects/fullpass.vert"
+    },
+    {
+        "type": "shader",
+        "id": "EFFECT_ADD",
+        "fragmentPath": "data/shaders/effects/add.frag",
+        "vertexPath": "data/shaders/effects/fullpass.vert"
+    },
+    {
+        "type": "shader",
+        "id": "EFFECT_OVERLAY",
+        "fragmentPath": "data/shaders/effects/overlay.frag",
+        "vertexPath": "data/shaders/effects/overlay.vert"
+    },
+    {
+        "type": "shader",
+        "id": "EFFECT_TELEPORT_DISSOLVE",
+        "fragmentPath": "data/shaders/effects/teleport_dissolve.frag",
+        "vertexPath": "data/shaders/effects/fullpass.vert"
+    },
+    {
+        "type": "shader",
+        "id": "EFFECT_STARS",
+        "fragmentPath": "data/shaders/stars.frag",
+        "vertexPath": "data/shaders/stars.vert"
+    },
+    {
+        "type": "shader",
+        "id": "EFFECT_PLANET",
+        "fragmentPath": "data/shaders/planet.frag",
+        "vertexPath": "data/shaders/planet.vert"
+    },
+    {
+        "type": "shader",
+        "id": "EFFECT_PORTAL_PARTICLE",
+        "fragmentPath": "data/shaders/portal_particle.frag",
+        "vertexPath": "data/shaders/portal_particle.vert"
+    }
+]

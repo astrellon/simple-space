@@ -22,6 +22,7 @@ namespace space
     class AnimatedTexture;
     class AnimationSequence;
     class SpacePortalDefinition;
+    class ShaderDefinition;
 
     json toJson(const BaseDefinition &input);
     std::unique_ptr<BaseDefinition> fromJsonBaseDefinition(const json &j);
@@ -60,6 +61,9 @@ namespace space
 
     json toJson(const AnimationSequence &input);
     AnimationSequence fromJsonAnimationSequence(const json &j);
+
+    json toJson(const ShaderDefinition &input);
+    std::unique_ptr<ShaderDefinition> fromJsonShaderDefinition(const json &j);
 
     json toJson(const CelestialBodyLocation &input);
     CelestialBodyLocation fromJsonCelestialBodyLocation(const json &j);

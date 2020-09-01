@@ -10,6 +10,7 @@
 #include "../engine.hpp"
 #include "../render_camera.hpp"
 #include "../effects/transition.hpp"
+#include "../effects/overlay.hpp"
 #include "../debug/draw_debug.hpp"
 #include "../utils.hpp"
 

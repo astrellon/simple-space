@@ -252,6 +252,15 @@ namespace space
                 return _perlinNoise.noise2D_0_1(x, y);
             }
 
+            static inline bool iequals(const std::string& a, const std::string& b)
+            {
+                return std::equal(a.begin(), a.end(),
+                    b.begin(), b.end(),
+                    [](char a, char b) {
+                        return tolower(a) == tolower(b);
+                    });
+            }
+
         private:
             Utils();
 

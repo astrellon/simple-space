@@ -7,16 +7,16 @@
 
 #include "post_effect.hpp"
 
-#include "../resource_manager.hpp"
-
 namespace space
 {
+    class DefinitionManager;
+
     class BloomEffect : public PostEffect
     {
         public:
             BloomEffect();
 
-            void init(ResourceManager &resourceManager);
+            bool init(DefinitionManager &definitionManager);
 
             virtual void apply(const sf::RenderTexture &input, sf::RenderTarget &output);
 
@@ -38,10 +38,11 @@ namespace space
             sf::Shader *_downSample;
             sf::Shader *_blur;
             sf::Shader *_add;
+            bool _hasAllShaders;
 
-            sf::RenderTexture mBrightnessTexture;
-            RenderTextureArray mFirstPassTextures;
-            RenderTextureArray mSecondPassTextures;
+            sf::RenderTexture _brightnessTexture;
+            RenderTextureArray _firstPassTextures;
+            RenderTextureArray _secondPassTextures;
     };
 
 } // namespace space

@@ -28,7 +28,7 @@ namespace space
     GameSession::GameSession(Engine &engine) : _engine(engine), _activeStarSystem(nullptr), _playerController(*this), _drawingPreTeleport(false)
     {
         _teleportEffect = std::make_unique<TeleportScreenEffect>();
-        _teleportEffect->init(engine.resourceManager());
+        _teleportEffect->init(engine.definitionManager());
     }
     GameSession::~GameSession()
     {

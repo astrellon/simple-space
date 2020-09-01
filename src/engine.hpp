@@ -4,9 +4,6 @@
 #include "resource_manager.hpp"
 #include "definition_manager.hpp"
 #include "camera.hpp"
-#include "effects/bloom_effect.hpp"
-#include "effects/bloom_effect_2.hpp"
-#include "effects/overlay.hpp"
 #include "render_camera.hpp"
 
 #include <chrono>
@@ -16,6 +13,8 @@ namespace space
 {
     class GameSession;
     class UIManager;
+    class Overlay;
+    class BloomEffect;
 
     class Engine : private NonCopyable
     {
@@ -78,8 +77,7 @@ namespace space
 
             RenderCamera _sceneRender;
             RenderCamera _sceneRenderTransition;
-            BloomEffect _bloomEffect;
-            BloomEffect2 _bloomEffect2;
+            std::unique_ptr<BloomEffect> _bloomEffect;
             std::unique_ptr<Overlay> _overlay;
 
             float _spriteScale;

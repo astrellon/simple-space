@@ -1,53 +1,88 @@
 #include "bloom_effect.hpp"
 
+#include "../definition_manager.hpp"
+#include "../definitions/shader_definition.hpp"
+
 namespace space
 {
     BloomEffect::BloomEffect()
-        : mBrightnessTexture(), mFirstPassTextures(), mSecondPassTextures()
+        : _brightnessTexture(), _firstPassTextures(), _secondPassTextures(), _hasAllShaders(false), _brightness(nullptr), _downSample(nullptr), _blur(nullptr), _add(nullptr)
     {
     }
 
-    void BloomEffect::init(ResourceManager &resourceManager)
+    bool BloomEffect::init(DefinitionManager &definitionManager)
     {
-        _brightness = resourceManager.preloadShader("effect/brightness", "data/shaders/effects/fullpass.vert", "data/shaders/effects/brightness.frag");
-        _downSample = resourceManager.preloadShader("effect/downSample", "data/shaders/effects/fullpass.vert", "data/shaders/effects/down-sample.frag");
-        _blur = resourceManager.preloadShader("effect/guassianBlur", "data/shaders/effects/fullpass.vert", "data/shaders/effects/guassian-blur.frag");
-        _add = resourceManager.preloadShader("effect/add", "data/shaders/effects/fullpass.vert", "data/shaders/effects/add.frag");
+        _hasAllShaders = false;
+        ShaderDefinition *brightness, *downSample, *blur, *add;
+        if (!definitionManager.tryGet("EFFECT_BRIGHTNESS", &brightness))
+        {
+            std::cout << "Missing brightness shader for bloom effect" << std::endl;
+            return false;
+        }
+
+        if (!definitionManager.tryGet("EFFECT_DOWNSAMPLE", &downSample))
+        {
+            std::cout << "Missing downsample shader for bloom effect" << std::endl;
+            return false;
+        }
+        if (!definitionManager.tryGet("EFFECT_GUASSIAN_BLUR", &blur))
+        {
+            std::cout << "Missing guassian blur shader for bloom effect" << std::endl;
+            return false;
+        }
+        if (!definitionManager.tryGet("EFFECT_ADD", &add))
+        {
+            std::cout << "Missing add shader for bloom effect" << std::endl;
+            return false;
+        }
+
+        _brightness = &brightness->shader;
+        _downSample = &downSample->shader;
+        _blur = &blur->shader;
+        _add = &add->shader;
+
+        _hasAllShaders = true;
+        return true;
     }
 
     void BloomEffect::apply(const sf::RenderTexture &input, sf::RenderTarget &output)
     {
+        if (!_hasAllShaders)
+        {
+            return;
+        }
+
         prepareTextures(input.getSize());
 
-        filterBright(input, mBrightnessTexture);
+        filterBright(input, _brightnessTexture);
 
-        downsample(mBrightnessTexture, mFirstPassTextures[0]);
-        blurMultipass(mFirstPassTextures);
+        downsample(_brightnessTexture, _firstPassTextures[0]);
+        blurMultipass(_firstPassTextures);
 
-        downsample(mFirstPassTextures[0], mSecondPassTextures[0]);
-        blurMultipass(mSecondPassTextures);
+        downsample(_firstPassTextures[0], _secondPassTextures[0]);
+        blurMultipass(_secondPassTextures);
 
-        add(mFirstPassTextures[0], mSecondPassTextures[0], mFirstPassTextures[1]);
-        mFirstPassTextures[1].display();
-        add(input, mFirstPassTextures[1], output);
+        add(_firstPassTextures[0], _secondPassTextures[0], _firstPassTextures[1]);
+        _firstPassTextures[1].display();
+        add(input, _firstPassTextures[1], output);
     }
 
     void BloomEffect::prepareTextures(sf::Vector2u size)
     {
-        if (mBrightnessTexture.getSize() != size)
+        if (_brightnessTexture.getSize() != size)
         {
-            mBrightnessTexture.create(size.x, size.y);
-            mBrightnessTexture.setSmooth(true);
+            _brightnessTexture.create(size.x, size.y);
+            _brightnessTexture.setSmooth(true);
 
-            mFirstPassTextures[0].create(size.x / 2, size.y / 2);
-            mFirstPassTextures[0].setSmooth(true);
-            mFirstPassTextures[1].create(size.x / 2, size.y / 2);
-            mFirstPassTextures[1].setSmooth(true);
+            _firstPassTextures[0].create(size.x / 2, size.y / 2);
+            _firstPassTextures[0].setSmooth(true);
+            _firstPassTextures[1].create(size.x / 2, size.y / 2);
+            _firstPassTextures[1].setSmooth(true);
 
-            mSecondPassTextures[0].create(size.x / 4, size.y / 4);
-            mSecondPassTextures[0].setSmooth(true);
-            mSecondPassTextures[1].create(size.x / 4, size.y / 4);
-            mSecondPassTextures[1].setSmooth(true);
+            _secondPassTextures[0].create(size.x / 4, size.y / 4);
+            _secondPassTextures[0].setSmooth(true);
+            _secondPassTextures[1].create(size.x / 4, size.y / 4);
+            _secondPassTextures[1].setSmooth(true);
         }
     }
 

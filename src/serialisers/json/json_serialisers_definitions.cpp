@@ -20,6 +20,7 @@
 #include "../../definitions/placeable_item_definition.hpp"
 #include "../../definitions/animated_texture.hpp"
 #include "../../definitions/space_portal_definition.hpp"
+#include "../../definitions/shader_definition.hpp"
 
 using nlohmann::json;
 
@@ -59,6 +60,9 @@ namespace space
         else if (type == SpacePortalDefinition::DefinitionType())
             j = toJson(dynamic_cast<const SpacePortalDefinition &>(input));
 
+        else if (type == ShaderDefinition::DefinitionType())
+            j = toJson(dynamic_cast<const ShaderDefinition &>(input));
+
         else
             std::cout << "Error!" << std::endl;
 
@@ -97,6 +101,9 @@ namespace space
 
         if (type == SpacePortalDefinition::DefinitionType())
             return fromJsonSpacePortalDefinition(j);
+
+        if (type == ShaderDefinition::DefinitionType())
+            return fromJsonShaderDefinition(j);
 
         throw std::runtime_error("Oh no");
     }
@@ -457,6 +464,28 @@ namespace space
         }
 
         return std::move(result);
+    }
+
+    json toJson(const ShaderDefinition &input)
+    {
+        return json {
+            {"id", input.id},
+            {"name", input.name},
+            {"fragmentPath", input.fragementPath},
+            {"vertexPath", input.vertexPath}
+        };
+    }
+
+    std::unique_ptr<ShaderDefinition> fromJsonShaderDefinition(const json &j)
+    {
+        auto id = j.at("id").get<DefinitionId>();
+        auto result = std::make_unique<ShaderDefinition>(id);
+
+        j.at("fragmentPath").get_to(result->fragementPath);
+        j.at("vertexPath").get_to(result->vertexPath);
+        Utils::json_try_set(j, "name", result->name);
+
+        return result;
     }
 
     json toJson(const AnimationSequence &input)

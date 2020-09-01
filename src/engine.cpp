@@ -17,6 +17,9 @@
 #include "game/items/placeable_item.hpp"
 #include "game/ship.hpp"
 
+#include "effects/overlay.hpp"
+#include "effects/bloom_effect.hpp"
+
 #include "ui/ui_manager.hpp"
 #include "ui/ui_debug.hpp"
 
@@ -94,10 +97,11 @@ namespace space
 
     void Engine::initEffects()
     {
-        _bloomEffect.init(*_resourceManager.get());
-        _bloomEffect2.init(*_resourceManager.get());
+        _bloomEffect = std::make_unique<BloomEffect>();
+        _bloomEffect->init(definitionManager());
 
-        _overlay = std::make_unique<Overlay>(*this);
+        _overlay = std::make_unique<Overlay>();
+        _overlay->init(definitionManager());
     }
 
     void Engine::processEvents()
@@ -239,7 +243,7 @@ namespace space
         _window->clear();
         if (enableBloom)
         {
-            _bloomEffect.apply(_sceneRender.texture(), *_window);
+            _bloomEffect->apply(_sceneRender.texture(), *_window);
         }
         else
         {

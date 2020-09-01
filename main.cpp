@@ -37,7 +37,6 @@
 #include "src/debug/draw_debug.hpp"
 #include "src/controllers/npc_controller.hpp"
 #include "src/ui/ui_manager.hpp"
-#include "src/effects/portal_effect.hpp"
 
 #ifdef TRACK_MEMORY
 void operator delete(void *ptr, size_t size)
@@ -81,7 +80,7 @@ int main()
     settings.minorVersion = 0;
 
     sf::RenderWindow window(sf::VideoMode(1920, 1080), "Space", sf::Style::Default, settings);
-    //window.setVerticalSyncEnabled(true);
+    window.setVerticalSyncEnabled(true);
     // window.setFramerateLimit(120);
 
     glewInit();
@@ -91,20 +90,17 @@ int main()
 
     space::ResourceManager &resourceManager = engine.resourceManager();
 
-    resourceManager.preloadShader("stars", "data/shaders/stars.vert", "data/shaders/stars.frag");
-    resourceManager.preloadShader("planet", "data/shaders/planet.vert", "data/shaders/planet.frag");
-    resourceManager.preloadShader("portalParticle", "data/shaders/portal_particle.vert", "data/shaders/portal_particle.frag");
     resourceManager.preloadTextures("data/textures");
     resourceManager.preloadFonts("data/fonts");
     resourceManager.preloadMaps("data/maps");
-
-    engine.initEffects();
-    engine.uiManager().initDefaultWindows();
 
     auto &definitionManager = engine.definitionManager();
     definitionManager.loadFolder("data/definitions");
 
     definitionManager.onPostLoad(engine);
+
+    engine.initEffects();
+    engine.uiManager().initDefaultWindows();
 
     std::ifstream startingGameFile("data/startingGame.json");
     nlohmann::json startingGameJson;

@@ -8,6 +8,7 @@
 #include <map>
 
 #include "non_copyable.hpp"
+#include "shader_resource.hpp"
 
 namespace space
 {
@@ -17,7 +18,7 @@ namespace space
             typedef std::map<std::string, std::unique_ptr<sf::Texture>> TextureMap;
             typedef std::map<std::string, std::unique_ptr<sf::Image>> ImageMap;
             typedef std::map<std::string, std::unique_ptr<sf::Font>> FontMap;
-            typedef std::map<std::string, std::unique_ptr<sf::Shader>> ShaderMap;
+            typedef std::map<std::string, std::unique_ptr<std::string>> TextMap;
             typedef std::map<std::string, std::unique_ptr<tmx::Map>> TmxMap;
 
             // Methods
@@ -29,11 +30,10 @@ namespace space
             const sf::Font *preloadFont(const std::string &filename);
             void preloadFonts(const std::string &folder);
 
-            // Shaders
-            const ShaderMap &shaders() const { return _shaders; }
+            // Texts
+            const TextMap &texts() const { return _texts; }
 
-            sf::Shader *preloadShader(const std::string &name, const std::string &vertShaderFilename, const std::string &fragShaderFilename);
-            bool shader(const std::string &name, sf::Shader **result);
+            bool text(const std::string &filename, const std::string **result);
 
             // Textures
             const TextureMap &textures() const { return _textures; }
@@ -61,7 +61,7 @@ namespace space
             TextureMap _textures;
             ImageMap _images;
             FontMap _fonts;
-            ShaderMap _shaders;
+            TextMap _texts;
             TmxMap _maps;
     };
 }

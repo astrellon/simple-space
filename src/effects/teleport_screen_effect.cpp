@@ -7,6 +7,8 @@
 #include "../game_session.hpp"
 #include "../engine.hpp"
 #include "../debug/draw_debug.hpp"
+#include "../definition_manager.hpp"
+#include "../definitions/shader_definition.hpp"
 
 namespace space
 {
@@ -21,13 +23,17 @@ namespace space
         _vertices[5] = sf::Vertex(sf::Vector2f(-1, -1), sf::Vector2f(0, 0));
     }
 
-    void TeleportScreenEffect::init(ResourceManager &resourceManager)
+    bool TeleportScreenEffect::init(DefinitionManager &definitionManager)
     {
-        _dissolve = resourceManager.preloadShader("teleport_dissolve", "data/shaders/effects/fullpass.vert", "data/shaders/effects/teleport_dissolve.frag");
-        if (!_dissolve)
+        ShaderDefinition *dissolve;
+        if (!definitionManager.tryGet("EFFECT_TELEPORT_DISSOLVE", &dissolve))
         {
             std::cout << "Dissolve shader not found!" << std::endl;
+            return false;
         }
+
+        _dissolve = &dissolve->shader;
+        return true;
     }
 
     void TeleportScreenEffect::draw(GameSession &session, const sf::Texture *texture, sf::RenderTarget &target, float t)

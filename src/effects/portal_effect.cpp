@@ -1,12 +1,14 @@
 #include "portal_effect.hpp"
 
 #include <math.h>
+#include <SFML/OpenGL.hpp>
+
 #include "../utils.hpp"
 #include "../render_camera.hpp"
 #include "../engine.hpp"
 #include "../resource_manager.hpp"
 #include "../game_session.hpp"
-#include <SFML/OpenGL.hpp>
+#include "../definitions/shader_definition.hpp"
 
 namespace space
 {
@@ -35,8 +37,17 @@ namespace space
     {
         if (_shader == nullptr)
         {
-            session.engine().resourceManager().shader("portalParticle", &_shader);
+            ShaderDefinition *shaderDef;
+            if (!session.engine().definitionManager().tryGet("EFFECT_PORTAL_PARTICLE", &shaderDef))
+            {
+                std::cout << "Unable to find shader for portal effect" << std::endl;
+            }
+            else
+            {
+                _shader = &shaderDef->shader;
+            }
         }
+
         auto seconds = dt.asSeconds();
         for (auto i = 0; i < _particles.size(); i++)
         {

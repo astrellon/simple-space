@@ -4,11 +4,10 @@
 
 #include <SFML/Graphics.hpp>
 
-#include "../resource_manager.hpp"
-
 namespace space
 {
     class GameSession;
+    class DefinitionManager;
 
     class TeleportScreenEffect
     {
@@ -17,7 +16,7 @@ namespace space
             TeleportScreenEffect();
 
             // Methods
-            void init(ResourceManager &resourceManager);
+            bool init(DefinitionManager &definitionManager);
             void draw(GameSession &session, const sf::Texture *texture, sf::RenderTarget &target, float t);
             void offset(float value) { _offset = value; }
 

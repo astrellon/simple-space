@@ -1,6 +1,7 @@
 #include "resource_manager.hpp"
 
 #include <iostream>
+#include <fstream>
 #include <filesystem>
 
 #include "utils.hpp"
@@ -58,34 +59,30 @@ namespace space
         }
     }
 
-    // Shaders
-    sf::Shader *ResourceManager::preloadShader(const std::string &name, const std::string &vertShaderFilename, const std::string &fragShaderFilename)
+    // Texts
+    bool ResourceManager::text(const std::string &filename, const std::string **result)
     {
-        auto find = _shaders.find(name);
-        if (find != _shaders.end())
-        {
-            std::cout << "Shader already loaded: " << name << std::endl;
-            return find->second.get();
-        }
-
-        auto shader = std::make_unique<sf::Shader>();
-        if (!shader->loadFromFile(vertShaderFilename, fragShaderFilename))
-        {
-            std::cout << "Unable to load shader: " << vertShaderFilename << ", " << fragShaderFilename << std::endl;
-            return nullptr;
-        }
-
-        auto result = shader.get();
-        shader.swap(_shaders[name]);
-        return result;
-    }
-
-    bool ResourceManager::shader(const std::string &name, sf::Shader **result)
-    {
-        auto find = _shaders.find(name);
-        if (find != _shaders.end())
+        auto find = _texts.find(filename);
+        if (find != _texts.end())
         {
             *result = find->second.get();
+            return true;
+        }
+
+        std::ifstream in(filename, std::ios::in | std::ios::binary);
+        if (in)
+        {
+            std::ifstream ifs(filename.c_str(), std::ios::in | std::ios::binary | std::ios::ate);
+
+            auto fileSize = ifs.tellg();
+            ifs.seekg(0, std::ios::beg);
+
+            std::vector<char> bytes(fileSize);
+            ifs.read(bytes.data(), fileSize);
+
+            auto contents = std::make_unique<std::string>(bytes.data(), fileSize);
+            *result = contents.get();
+            _texts[filename] = std::move(contents);
             return true;
         }
 
@@ -139,6 +136,12 @@ namespace space
             }
 
             const auto &filename = dirEntry.path().string();
+            auto ext = Utils::getFilenameExt(filename);
+            if (Utils::iequals(ext, "aseprite"))
+            {
+                // Can silently ignore aseprite files
+                continue;
+            }
 
             std::cout << "Loading texture: " << filename << std::endl;
 
