@@ -310,31 +310,16 @@ namespace space
         _playerController.update(dt);
 
         for (auto &controller : _characterControllers)
-        {
             controller->update(dt);
-        }
 
-        if (_activeStarSystem)
-        {
-            _activeStarSystem->update(dt);
-        }
-        if (_activePlanetSurface)
-        {
-            _activePlanetSurface->update(dt);
-        }
+        for (auto &starSystem : _starSystems)
+            starSystem->update(dt);
+
+        for (auto &plantSurface : _planetSurfaces)
+            plantSurface->update(dt);
 
         if (_transition.get())
         {
-            auto &fromData = _transition->fromData;
-            if (fromData.planetSurface && fromData.planetSurface != _activePlanetSurface)
-            {
-                fromData.planetSurface->update(dt);
-            }
-            else if (fromData.starSystem && fromData.starSystem != _activeStarSystem)
-            {
-                fromData.starSystem->update(dt);
-            }
-
             auto &sceneRender = _engine.sceneRender();
             auto &sceneRenderTransition = _engine.sceneRenderTransition();
 
