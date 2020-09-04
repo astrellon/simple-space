@@ -16,6 +16,8 @@ namespace space
         public:
             // Fields
             std::string animatedTextureId;
+            float pullRadius;
+            float pullForce;
 
             const AnimatedTexture *texture;
 

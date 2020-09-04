@@ -35,11 +35,13 @@ namespace space
             return;
         }
 
+        auto targetSpacePortal = dynamic_cast<SpacePortal *>(targetObject);
+
         _sprite.sequence("active", false);
         auto seconds = dt.asSeconds();
 
         auto pos = Utils::getPosition(_worldTransform);
-        _insideStarSystem->getObjectsNearby(50.0f, pos, [&](SpaceObject *obj)
+        _insideStarSystem->getObjectsNearby(definition.pullRadius, pos, [&](SpaceObject *obj)
         {
             if (obj->id == this->id)
             {
@@ -54,6 +56,8 @@ namespace space
                 return;
             }
 
+            auto isIdToIgnore = foundId(obj->id);
+
             auto portalToShip = pos - obj->transform().position;
             auto distanceToShip = Utils::length(portalToShip);
             auto dir = portalToShip / distanceToShip;
@@ -62,24 +66,69 @@ namespace space
                 auto newPos = targetObject->transform().position + dir * 20.0f;
                 auto queue = obj->id == session.playerController().controllingShip()->id;
                 session.moveSpaceObject(obj, newPos, targetObject->starSystem(), queue);
+
+                if (targetSpacePortal)
+                {
+                    targetSpacePortal->ignoreId(obj->id);
+                }
                 return;
             }
 
-            // auto ship = dynamic_cast<Ship *>(obj);
-            // if (ship == nullptr)
-            // {
-            //     return;
-            // }
+            if (isIdToIgnore)
+            {
+                return;
+            }
 
-            // auto force = Utils::clamp(50.0f - distanceToShip, 0, 20.0f);
-            // ship->speed(ship->speed() + dir * force * seconds);
+            auto ship = dynamic_cast<Ship *>(obj);
+            if (ship == nullptr)
+            {
+                return;
+            }
+
+            auto force = Utils::clamp((definition.pullRadius - distanceToShip) / definition.pullRadius, 0, 1.0f);
+            auto speedAddition = dir * force * definition.pullForce * seconds;
+
+            ship->speed(ship->speed() + speedAddition);
         });
+
+        for (auto i = 0; i < _idsToIgnore.size(); i++)
+        {
+            auto &idToIgnore = _idsToIgnore[i];
+            if (idToIgnore.framesOutsideOfRadius > 10)
+            {
+                _idsToIgnore.erase(_idsToIgnore.begin() + i);
+                i--;
+            }
+            else
+            {
+                idToIgnore.framesOutsideOfRadius++;
+            }
+        }
     }
 
     void SpacePortal::draw(GameSession &session, sf::RenderTarget &target)
     {
         target.draw(_sprite, _worldTransform);
         DrawDebug::glDraw++;
+    }
+
+    void SpacePortal::ignoreId(const ObjectId &id)
+    {
+        _idsToIgnore.emplace_back(id);
+    }
+
+    bool SpacePortal::foundId(const ObjectId &id)
+    {
+        for (auto &idToIgnore : _idsToIgnore)
+        {
+            if (idToIgnore.id == id)
+            {
+                idToIgnore.framesOutsideOfRadius = 0;
+                return true;
+            }
+        }
+
+        return false;
     }
 
 } // space

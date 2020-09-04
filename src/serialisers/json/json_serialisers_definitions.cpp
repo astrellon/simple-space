@@ -414,7 +414,9 @@ namespace space
     {
         return json {
             {"id", input.id},
-            {"animatedTextureId", input.animatedTextureId}
+            {"animatedTextureId", input.animatedTextureId},
+            {"pullRadius", input.pullRadius},
+            {"pullForce", input.pullForce}
         };
     }
 
@@ -423,6 +425,8 @@ namespace space
         auto id = j.at("id").get<std::string>();
         auto result = std::make_unique<SpacePortalDefinition>(id);
         j.at("animatedTextureId").get_to(result->animatedTextureId);
+        j.at("pullRadius").get_to(result->pullRadius);
+        j.at("pullForce").get_to(result->pullForce);
 
         return result;
     }

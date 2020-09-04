@@ -27,10 +27,23 @@ namespace space
             virtual void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform);
             virtual void draw(GameSession &session, sf::RenderTarget &target);
 
+            void ignoreId(const ObjectId &id);
+
         private:
+            // Helpers
+            struct IgnoreId
+            {
+                ObjectId id;
+                int framesOutsideOfRadius;
+
+                IgnoreId(const ObjectId &id) : id(id), framesOutsideOfRadius(0) { }
+            };
+
             // Fields
             AnimatedSprite _sprite;
+            std::vector<IgnoreId> _idsToIgnore;
 
             // Methods
+            bool foundId(const ObjectId &id);
     };
 } // space

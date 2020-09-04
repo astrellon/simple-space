@@ -18,6 +18,8 @@
     {
         "type": "space-portal",
         "id": "SPACE_PORTAL_1",
-        "animatedTextureId": "SPACE_PORTAL_TEXTURE"
+        "animatedTextureId": "SPACE_PORTAL_TEXTURE",
+        "pullRadius": 120,
+        "pullForce": 500
     }
 ]
