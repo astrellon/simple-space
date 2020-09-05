@@ -22,7 +22,10 @@ namespace space
 
         area *= 1.0f / cameraScale;
 
-        _texture.create(area.x, area.y);
+        sf::ContextSettings settings;
+        settings.stencilBits = 8;
+
+        _texture.create(area.x, area.y, settings);
     }
 
     void RenderCamera::preDraw()
