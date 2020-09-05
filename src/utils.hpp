@@ -177,40 +177,6 @@ namespace space
                 return input < 0 ? 0 : (input > 1 ? 1 : input);
             }
 
-            static inline sf::Vector2f clampLength(const sf::Vector2f &input, float minLength, float maxLength)
-            {
-                auto len = length(input);
-                if (len >= minLength && len <= maxLength)
-                {
-                    return input;
-                }
-
-                auto multiply = len < minLength ? minLength : maxLength;
-
-                return sf::Vector2f(input.x / len * multiply, input.y / len * multiply);
-            }
-
-            static inline float length(const sf::Vector2f &input)
-            {
-                return std::sqrt(lengthSquared(input));
-            }
-
-            static inline float lengthSquared(const sf::Vector2f &input)
-            {
-                return dot(input, input);
-            }
-
-            static inline float dot(const sf::Vector2f &v1, const sf::Vector2f &v2)
-            {
-                return v1.x * v2.x + v1.y * v2.y;
-            }
-
-            static inline sf::Vector2f normalised(const sf::Vector2f &input)
-            {
-                auto invlen = 1.0f / length(input);
-                return sf::Vector2f(input.x * invlen, input.y * invlen);
-            }
-
             static inline void setColour(sf::Color &target, const sf::Color &src)
             {
                 target.r = src.r;

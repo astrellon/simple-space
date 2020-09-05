@@ -67,19 +67,19 @@ namespace space
         _transform.rotation += _rotationSpeed * seconds;
 
         _speed += Utils::transformDirection(moveInput, _transform.getTransform()) * seconds * definition.acceleration;
-        _speed = Utils::clampLength(_speed, 0, definition.maxSpeed);
+        _speed = _speed.clampLength(0, definition.maxSpeed);
         _transform.position += _speed * seconds;
 
         if (moveInput == sf::Vector2f() && _speed != sf::Vector2f())
         {
-            auto length = Utils::length(_speed);
+            auto length = _speed.length();
             auto prevSpeed = _speed;
             auto prevSpeedDir = _speed / length;
 
             _speed -= prevSpeedDir * definition.acceleration * seconds;
 
-            auto newSpeedDir = Utils::normalised(_speed);
-            auto dot = Utils::dot(prevSpeedDir, newSpeedDir);
+            auto newSpeedDir = _speed.normalised();
+            auto dot = prevSpeedDir.dot(newSpeedDir);
             if (std::abs(dot - 1) > 0.01)
             {
                 _speed = sf::Vector2f();

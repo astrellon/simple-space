@@ -59,7 +59,7 @@ namespace space
             auto isIdToIgnore = foundId(obj->id);
 
             auto portalToShip = pos - obj->transform().position;
-            auto distanceToShip = Utils::length(portalToShip);
+            auto distanceToShip = portalToShip.length();
             auto dir = portalToShip / distanceToShip;
             if (distanceToShip < 10)
             {

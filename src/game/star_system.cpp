@@ -123,7 +123,7 @@ namespace space
         auto lengthSquared = radius * radius;
         for (auto obj : _objects)
         {
-            auto dist = Utils::lengthSquared(position - obj->transform().position);
+            auto dist = (position - obj->transform().position).lengthSquared();
             if (dist <= lengthSquared)
             {
                 callback(obj);
