@@ -167,10 +167,10 @@ namespace space
         }
     }
 
-    void Ship::createExtraCollider(const Points &points)
+    void Ship::createExtraCollider(const Polygon &polygon)
     {
         auto &collider = _colliders.emplace_back(std::make_unique<PolygonCollider>(b2_staticBody));
 
-        collider->setMainPolygon(points);
+        collider->setMainPolygon(polygon);
     }
 }

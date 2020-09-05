@@ -62,6 +62,6 @@ namespace space
 
             // Methods
             void createMainCollider();
-            void createExtraCollider(const Points &points);
+            void createExtraCollider(const Polygon &polygon);
     };
 } //

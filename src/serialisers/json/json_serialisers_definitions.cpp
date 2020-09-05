@@ -151,7 +151,7 @@ namespace space
         {
             for (auto &polygonJson : *extraInteriorPolygons)
             {
-                Points polygon;
+                Polygon polygon;
                 for (auto &posJson : polygonJson)
                 {
                     polygon.push_back(fromJsonVector2f(posJson));

@@ -5,8 +5,7 @@
 #include <SFML/Graphics.hpp>
 #include <Box2D/Box2D.h>
 
-using Points = std::vector<sf::Vector2f>;
-using Polygon = std::vector<Points>;
+#include "polygon.hpp"
 
 namespace space
 {
@@ -19,8 +18,8 @@ namespace space
             PolygonCollider(b2BodyType bodyType);
 
             // Methods
-            void setMainPolygon(const Points &points);
-            void setHole(const Points &points, size_t holeIndex);
+            void setMainPolygon(const Polygon &points);
+            void setHole(const Polygon &points, size_t holeIndex);
 
             void addToWorld(b2World *world);
             void removeFromWorld(b2World *world);
@@ -29,7 +28,7 @@ namespace space
 
         protected:
             // Fields
-            Polygon _polygon;
+            std::vector<Polygon> _polygons;
             std::vector<uint16_t> _indices;
             b2BodyType _bodyType;
             b2Body *_body;

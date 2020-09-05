@@ -11,17 +11,17 @@ namespace space
 
     }
 
-    void PolygonCollider::setMainPolygon(const Points &points)
+    void PolygonCollider::setMainPolygon(const Polygon &points)
     {
-        _polygon.reserve(1);
+        _polygons.reserve(1);
         //_polygon[0] = points;
-        _polygon.insert(_polygon.begin(), points);
+        _polygons.insert(_polygons.begin(), points);
         _dirty = true;
     }
-    void PolygonCollider::setHole(const Points &points, size_t holeIndex)
+    void PolygonCollider::setHole(const Polygon &points, size_t holeIndex)
     {
-        _polygon.reserve(holeIndex + 1);
-        _polygon.insert(_polygon.begin() + holeIndex + 1, points);
+        _polygons.reserve(holeIndex + 1);
+        _polygons.insert(_polygons.begin() + holeIndex + 1, points);
         _dirty = true;
     }
 
@@ -42,13 +42,13 @@ namespace space
                 // If we had a main polygon with 4 points and a hole with 4 points and the current index was 5
                 // then the actual point would be the 2nd [1] of the hole polygon.
                 //for (k = 0; k < _polygon.size() && index >= _polygon[k].size(); k++, index -= _polygon[k].size());
-                while (index >= _polygon[k].size())
+                while (index >= _polygons[k].size())
                 {
-                    index -= _polygon[k].size();
+                    index -= _polygons[k].size();
                     k++;
                 }
 
-                vertexArray[j].position = _polygon[k][index];
+                vertexArray[j].position = _polygons[k][index];
                 vertexArray[j].color = Utils::hsv((float)i / (float)_indices.size() * 360, 1, 1);
                 vertexArray[j].color.a = 120;
             }
@@ -75,13 +75,13 @@ namespace space
                 auto index = _indices[i + j];
                 size_t k = 0;
 
-                while (index >= _polygon[k].size())
+                while (index >= _polygons[k].size())
                 {
-                    index -= _polygon[k].size();
+                    index -= _polygons[k].size();
                     k++;
                 }
 
-                auto p = _polygon[k][index];
+                auto p = _polygons[k][index];
                 points.push_back(b2Vec2(p.x, p.y));
             }
 
@@ -114,6 +114,6 @@ namespace space
         }
 
         _dirty = false;
-        _indices = mapbox::earcut<uint16_t>(_polygon);
+        _indices = mapbox::earcut<uint16_t>(_polygons);
     }
 } // namespace space
