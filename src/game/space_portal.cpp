@@ -6,6 +6,7 @@
 #include "star_system.hpp"
 #include "ship.hpp"
 #include "planet.hpp"
+#include "../engine.hpp"
 
 namespace space
 {
@@ -41,6 +42,15 @@ namespace space
         auto seconds = dt.asSeconds();
 
         auto pos = Utils::getPosition(_worldTransform);
+
+
+        auto toViewport = session.engine().sceneRender().camera().center() - pos;
+        _shadow.viewPoint = toViewport;
+
+        toViewport = toViewport.normalised();
+        _shadow.point1 = sf::Vector2f(toViewport.y * 20.0f, -toViewport.x * 20.0f);
+        _shadow.point2 = sf::Vector2f(-toViewport.y * 20.0f, toViewport.x * 20.0f);
+
         _insideStarSystem->getObjectsNearby(definition.pullRadius, pos, [&](SpaceObject *obj)
         {
             if (obj->id == this->id)
@@ -110,6 +120,15 @@ namespace space
     {
         target.draw(_sprite, _worldTransform);
         DrawDebug::glDraw++;
+
+        auto polygon = _shadow.calcShadow();
+        sf::VertexArray polygonDraw(sf::TrianglesFan, polygon.size());
+
+        for (auto &point : polygon)
+        {
+            polygonDraw.append(sf::Vertex(point, sf::Color::White));
+        }
+        target.draw(polygonDraw, _worldTransform);
     }
 
     void SpacePortal::ignoreId(const ObjectId &id)

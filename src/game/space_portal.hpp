@@ -5,6 +5,7 @@
 #include "space_object.hpp"
 #include "../definitions/space_portal_definition.hpp"
 #include "../animated_sprite.hpp"
+#include "../effects/portal_shadow.hpp"
 
 namespace space
 {
@@ -42,6 +43,7 @@ namespace space
             // Fields
             AnimatedSprite _sprite;
             std::vector<IgnoreId> _idsToIgnore;
+            PortalShadow _shadow;
 
             // Methods
             bool foundId(const ObjectId &id);
