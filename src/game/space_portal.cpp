@@ -1,5 +1,7 @@
 #include "space_portal.hpp"
 
+#include <SFML/OpenGL.hpp>
+
 #include "../debug/draw_debug.hpp"
 #include "../utils.hpp"
 #include "../game_session.hpp"
@@ -123,13 +125,14 @@ namespace space
         _shadow.point1 = sf::Vector2f(-toViewport.y * 20.0f, toViewport.x * 20.0f);
 
         auto polygon = _shadow.calcShadow();
-        sf::VertexArray polygonDraw(sf::TrianglesFan, polygon.size());
-
+        sf::VertexArray polygonDraw(sf::LineStrip);
+        glLineWidth(4.0f);
         for (auto &point : polygon)
         {
             polygonDraw.append(sf::Vertex(point, sf::Color::White));
         }
         target.draw(polygonDraw, _worldTransform);
+        glLineWidth(1.0f);
     }
 
     void SpacePortal::ignoreId(const ObjectId &id)
