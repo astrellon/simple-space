@@ -21,7 +21,7 @@ namespace space
             PortalShadow();
 
             // Methods
-            Polygon calcShadow();
+            void calcShadow(Polygon &result);
 
         private:
             struct Line

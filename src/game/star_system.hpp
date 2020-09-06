@@ -22,7 +22,6 @@ namespace space
     class StarSystem : private NonCopyable
     {
         public:
-            typedef std::function<void(SpaceObject *)> FindObjectCallback;
             // Fields
             const StarSystemDefinition &definition;
 
@@ -31,7 +30,7 @@ namespace space
 
             // Methods
             const std::vector<SpaceObject *> &objects() const { return _objects; }
-            void getObjectsNearby(float radius, const sf::Vector2f &position, FindObjectCallback callback) const;
+            void getObjectsNearby(float radius, const sf::Vector2f &position, std::vector<SpaceObject *> &result) const;
 
             void initFromDefinition();
             void addObject(SpaceObject *object);

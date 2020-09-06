@@ -45,7 +45,10 @@ namespace space
 
         auto pos = Utils::getPosition(_worldTransform);
 
-        _insideStarSystem->getObjectsNearby(definition.pullRadius, pos, [&](SpaceObject *obj)
+        _nearbyObjects.clear();
+        _insideStarSystem->getObjectsNearby(definition.pullRadius, pos, _nearbyObjects);
+
+        for (auto &obj : _nearbyObjects)
         {
             if (obj->id == this->id)
             {
@@ -93,7 +96,7 @@ namespace space
             auto speedAddition = dir * force * definition.pullForce * seconds;
 
             ship->speed(ship->speed() + speedAddition);
-        });
+        };
 
         for (auto i = 0; i < _idsToIgnore.size(); i++)
         {
@@ -124,10 +127,11 @@ namespace space
         _shadow.point2 = sf::Vector2f(toViewport.y * 20.0f, -toViewport.x * 20.0f);
         _shadow.point1 = sf::Vector2f(-toViewport.y * 20.0f, toViewport.x * 20.0f);
 
-        auto polygon = _shadow.calcShadow();
+        _shadowShape.clear();
+        _shadow.calcShadow(_shadowShape);
         sf::VertexArray polygonDraw(sf::LineStrip);
         glLineWidth(4.0f);
-        for (auto &point : polygon)
+        for (auto &point : _shadowShape)
         {
             polygonDraw.append(sf::Vertex(point, sf::Color::White));
         }

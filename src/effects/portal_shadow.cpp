@@ -14,7 +14,7 @@ namespace space
 
     }
 
-    Polygon PortalShadow::calcShadow()
+    void PortalShadow::calcShadow(Polygon &result)
     {
         calcViewLines();
 
@@ -22,7 +22,6 @@ namespace space
         auto dir1 = (point1 - viewPoint).normalised();
         auto dir2 = (point2 - viewPoint).normalised();
 
-        Polygon result;
         result.push_back(point1);
 
         sf::Vector2f endPoint1, endPoint2;
@@ -62,7 +61,6 @@ namespace space
 
         result.push_back(endPoint2);
         result.push_back(point2);
-        return result;
     }
 
     void PortalShadow::calcViewLines()

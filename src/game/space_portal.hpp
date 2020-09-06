@@ -43,7 +43,9 @@ namespace space
             // Fields
             AnimatedSprite _sprite;
             std::vector<IgnoreId> _idsToIgnore;
+            std::vector<SpaceObject *> _nearbyObjects;
             PortalShadow _shadow;
+            Polygon _shadowShape;
 
             // Methods
             bool foundId(const ObjectId &id);

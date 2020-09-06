@@ -118,7 +118,7 @@ namespace space
         }
     }
 
-    void StarSystem::getObjectsNearby(float radius, const sf::Vector2f &position, StarSystem::FindObjectCallback callback) const
+    void StarSystem::getObjectsNearby(float radius, const sf::Vector2f &position, std::vector<SpaceObject *> &result) const
     {
         auto lengthSquared = radius * radius;
         for (auto obj : _objects)
@@ -126,7 +126,7 @@ namespace space
             auto dist = (position - obj->transform().position).lengthSquared();
             if (dist <= lengthSquared)
             {
-                callback(obj);
+                result.push_back(obj);
             }
         }
     }
