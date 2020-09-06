@@ -224,23 +224,23 @@ namespace space
             return;
         }
 
-        glEnable(GL_STENCIL_TEST);
+        // glEnable(GL_STENCIL_TEST);
 
-        _sceneRender.texture().setActive(true);
+        // _sceneRender.texture().setActive(true);
 
-        glStencilFunc(GL_ALWAYS, 1, 0xFF);
-        glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
-        glStencilMask(0xFF);
-        glClearStencil(0x0);
-        glClear(GL_STENCIL_BUFFER_BIT);
+        // glStencilFunc(GL_ALWAYS, 1, 0xFF);
+        // glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+        // glStencilMask(0xFF);
+        // glClearStencil(0x0);
+        // glClear(GL_STENCIL_BUFFER_BIT);
 
-        sf::RectangleShape box;
-        box.setSize(sf::Vector2f(100, 100));
-        _sceneRender.texture().draw(box);
+        // sf::RectangleShape box;
+        // box.setSize(sf::Vector2f(100, 100));
+        // _sceneRender.texture().draw(box);
 
-        glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
-        glStencilFunc(GL_EQUAL, 1, 0xFF);
-        glStencilMask(0x00);
+        // glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+        // glStencilFunc(GL_EQUAL, 1, 0xFF);
+        // glStencilMask(0x00);
 
         // Draw main scene
         if (_currentSession.get())
@@ -257,7 +257,7 @@ namespace space
 
         _sceneRender.texture().display();
 
-        glDisable(GL_STENCIL_TEST);
+        // glDisable(GL_STENCIL_TEST);
 
         // Draw from render texture to window
         _window->setActive(true);

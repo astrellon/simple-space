@@ -227,6 +227,8 @@ namespace space
                     });
             }
 
+            static bool tryGetIntersection(const sf::Vector2f &origin, const sf::Vector2f &direction, const sf::Vector2f &point1, const sf::Vector2f &point2, sf::Vector2f *result);
+
         private:
             Utils();
 

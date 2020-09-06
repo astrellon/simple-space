@@ -140,4 +140,28 @@ namespace space
 
         return sf::Color(r, g, b);
     }
+
+    bool Utils::tryGetIntersection(const sf::Vector2f &origin, const sf::Vector2f &direction, const sf::Vector2f &point1, const sf::Vector2f &point2, sf::Vector2f *result)
+    {
+        auto v1 = origin - point1;
+        auto v2 = point2 - point1;
+        sf::Vector2 v3(-direction.y, direction.x);
+
+        auto dot = v2.dot(v3);
+        if (std::abs(dot) < 0.00001f)
+        {
+            return false;
+        }
+
+        auto t1 = v2.cross(v1) / dot;
+        auto t2 = (v1.dot(v3)) / dot;
+
+        if (t1 >= 0.0f & (t2 >= 0.0f && t2 <= 1.0f))
+        {
+            *result = origin + direction * t1;
+            return true;
+        }
+
+        return false;
+    }
 }
