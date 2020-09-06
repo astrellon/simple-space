@@ -14,6 +14,7 @@ namespace space
             static bool showPolygons;
             static bool showUIWindow;
             static bool hideGameSession;
+            static bool hideEverything;
 
             static size_t totalMemoryAllocated;
             static size_t allocatedThisFrame;
