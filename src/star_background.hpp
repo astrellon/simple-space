@@ -6,6 +6,7 @@
 
 #include "layer_camera.hpp"
 #include "definitions/star_background_options.hpp"
+#include "effects/overlay.hpp"
 
 namespace space
 {
@@ -38,6 +39,7 @@ namespace space
             Engine &_engine;
             const StarBackgroundOptions &_options;
             std::vector<std::unique_ptr<StarBackgroundLayer>> _layers;
+            Overlay _backgroundColour;
 
             // Methods
     };

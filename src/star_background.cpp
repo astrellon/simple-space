@@ -13,12 +13,14 @@
 namespace space
 {
     StarBackground::StarBackground(Engine &engine, const StarBackgroundOptions &options) :
-        _engine(engine), _options(options)
+        _engine(engine), _options(options), _backgroundColour(options.backgroundColour)
     {
         for (auto i = 0; i < options.numLayers; i++)
         {
             _layers.emplace_back(std::make_unique<StarBackgroundLayer>(*this, 0.9f - (7 - i) * 0.1f));
         }
+
+        _backgroundColour.init(engine.definitionManager());
     }
 
     void StarBackground::update(sf::Time dt)
@@ -31,7 +33,8 @@ namespace space
 
     void StarBackground::draw(RenderCamera &renderCamera)
     {
-        renderCamera.texture().clear(_options.backgroundColour);
+        _backgroundColour.draw(renderCamera.texture(), 1.0f);
+
         shader()->setUniform("timeSinceStart", _engine.timeSinceStart().asSeconds());
 
         glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);

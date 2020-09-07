@@ -6,23 +6,25 @@ namespace space
 {
     class DefinitionManager;
 
-    class Overlay
+    class TextureOverlay
     {
         public:
             // Fields
 
             // Constructor
-            Overlay(sf::Color colour = sf::Color(0.1 * 255, 0.15 * 255, 0.2 * 255, 255));
+            TextureOverlay();
 
             // Methods
             bool init(DefinitionManager &definitionManager);
-            void draw(sf::RenderTarget &output, float alpha);
+            void draw(sf::RenderTarget &output);
+
+            void texture(const sf::Texture *texture) { _texture = texture; }
 
         private:
             // Fields
             sf::VertexArray _vertices;
+            const sf::Texture *_texture;
             sf::Shader *_shader;
-            sf::Color _colour;
 
             // Methods
     };

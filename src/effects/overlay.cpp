@@ -6,15 +6,15 @@
 
 namespace space
 {
-    Overlay::Overlay() : _shader(nullptr), _vertices(sf::Triangles, 6)
+    Overlay::Overlay(sf::Color colour) : _shader(nullptr), _vertices(sf::Triangles, 6), _colour(colour)
     {
-        _vertices[0] = sf::Vertex(sf::Vector2f(-1, 1), sf::Vector2f(0, 1));
-        _vertices[1] = sf::Vertex(sf::Vector2f(1, 1), sf::Vector2f(1, 1));
-        _vertices[2] = sf::Vertex(sf::Vector2f(-1, -1), sf::Vector2f(0, 0));
+        _vertices[0] = sf::Vertex(sf::Vector2f(-1, 1), _colour, sf::Vector2f(0, 1));
+        _vertices[1] = sf::Vertex(sf::Vector2f(1, 1), _colour, sf::Vector2f(1, 1));
+        _vertices[2] = sf::Vertex(sf::Vector2f(-1, -1), _colour, sf::Vector2f(0, 0));
 
-        _vertices[3] = sf::Vertex(sf::Vector2f(1, 1), sf::Vector2f(1, 1));
-        _vertices[4] = sf::Vertex(sf::Vector2f(1, -1), sf::Vector2f(1, 0));
-        _vertices[5] = sf::Vertex(sf::Vector2f(-1, -1), sf::Vector2f(0, 0));
+        _vertices[3] = sf::Vertex(sf::Vector2f(1, 1), _colour, sf::Vector2f(1, 1));
+        _vertices[4] = sf::Vertex(sf::Vector2f(1, -1), _colour, sf::Vector2f(1, 0));
+        _vertices[5] = sf::Vertex(sf::Vector2f(-1, -1), _colour, sf::Vector2f(0, 0));
     }
 
     bool Overlay::init(DefinitionManager &definitionManager)

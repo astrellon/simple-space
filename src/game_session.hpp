@@ -13,6 +13,7 @@
 #include "dialogue_manager.hpp"
 #include "controllers/player_controller.hpp"
 #include "next_frame_state.hpp"
+#include "effects/texture_overlay.hpp"
 
 namespace space
 {
@@ -31,6 +32,7 @@ namespace space
     class RenderCamera;
     class TeleportClone;
     class CharacterController;
+    class SpacePortal;
 
     class GameSession
     {
@@ -179,6 +181,7 @@ namespace space
             std::unique_ptr<Transition> _transition;
             DialogueManager _dialogueManager;
             bool _drawingPreTeleport;
+            TextureOverlay _portalOverlay;
 
             // Methods
             void applyTransitionToCamera(const TransitionData &transitionData, RenderCamera &renderCamera);
@@ -189,5 +192,6 @@ namespace space
             void clearTeleportClone();
 
             void checkNextFrameState();
+            void drawSpacePortal(SpacePortal *spacePortal);
     };
 } // town

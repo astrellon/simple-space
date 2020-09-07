@@ -5,10 +5,11 @@
 #include "../debug/draw_debug.hpp"
 #include "../utils.hpp"
 #include "../game_session.hpp"
+#include "../engine.hpp"
+#include "../earcut.hpp"
 #include "star_system.hpp"
 #include "ship.hpp"
 #include "planet.hpp"
-#include "../engine.hpp"
 
 namespace space
 {
@@ -16,6 +17,7 @@ namespace space
         SpaceObject(id), definition(definition), _sprite(*definition.texture), _lerpFromShadowT(1.0f)
     {
         _sprite.sequence("idle", true);
+        _shadowShape.emplace_back();
     }
 
     void SpacePortal::update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform)
@@ -96,7 +98,10 @@ namespace space
     {
         target.draw(_sprite, _worldTransform);
         DrawDebug::glDraw++;
+    }
 
+    void SpacePortal::drawPortal(GameSession &session, sf::RenderTarget &target)
+    {
         auto pos = Utils::getPosition(_worldTransform);
         auto &camera = session.engine().sceneRender().camera();
         auto playerShip = session.getPlayerShip();
@@ -126,16 +131,19 @@ namespace space
             _lerpFromShadowT = Utils::clamp01(_lerpFromShadowT + session.engine().deltaTime().asSeconds() * 4.0f);
         }
 
-        _shadowShape.clear();
-        _shadow.calcShadow(_shadowShape);
-        sf::VertexArray polygonDraw(sf::LineStrip);
-        glLineWidth(4.0f);
-        for (auto &point : _shadowShape)
+        _shadowShape[0].clear();
+        _shadow.calcShadow(_shadowShape[0]);
+
+        auto indicies = mapbox::earcut<uint16_t>(_shadowShape);
+
+        sf::VertexArray polygonDraw(sf::Triangles);
+        for (auto i = 0; i < indicies.size(); i++)
         {
+            auto index = indicies[i];
+            auto &point = _shadowShape[0][index];
             polygonDraw.append(sf::Vertex(point, sf::Color::White));
         }
         target.draw(polygonDraw, _worldTransform);
-        glLineWidth(1.0f);
     }
 
     void SpacePortal::cleanupNearbyObjects()

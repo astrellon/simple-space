@@ -2,9 +2,10 @@
 
 out vec4 FragColor;
 
+in vec4 colour;
 uniform float alpha;
 
 void main()
 {
-    FragColor = vec4(0.1, 0.15, 0.2, alpha);
+    FragColor = vec4(colour.rgb, colour.a * alpha);
 }

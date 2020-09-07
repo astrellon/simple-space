@@ -1,5 +1,7 @@
 #include "game_session.hpp"
 
+#include <SFML/OpenGL.hpp>
+
 #include "engine.hpp"
 #include "render_camera.hpp"
 #include "game/ship.hpp"
@@ -9,6 +11,7 @@
 #include "game/character.hpp"
 #include "game/walkable_area.hpp"
 #include "game/teleport_clone.hpp"
+#include "game/space_portal.hpp"
 #include "definitions/ship_definition.hpp"
 #include "definitions/planet_definition.hpp"
 #include "definitions/star_system_definition.hpp"
@@ -29,6 +32,8 @@ namespace space
     {
         _teleportEffect = std::make_unique<TeleportScreenEffect>();
         _teleportEffect->init(engine.definitionManager());
+
+        _portalOverlay.init(engine.definitionManager());
     }
     GameSession::~GameSession()
     {
@@ -363,8 +368,24 @@ namespace space
         else
         {
             _drawingPreTeleport = false;
-            if (_activeStarSystem) _activeStarSystem->draw(sceneRender);
-            else if (_activePlanetSurface) _activePlanetSurface->draw(sceneRender);
+            if (_activeStarSystem)
+            {
+                _activeStarSystem->draw(sceneRender);
+                for (auto obj : _activeStarSystem->objects())
+                {
+                    auto spacePortal = dynamic_cast<SpacePortal *>(obj);
+                    if (spacePortal == nullptr)
+                    {
+                        continue;
+                    }
+
+                    drawSpacePortal(spacePortal);
+                }
+            }
+            else if (_activePlanetSurface)
+            {
+                _activePlanetSurface->draw(sceneRender);
+            }
         }
     }
 
@@ -498,5 +519,51 @@ namespace space
         }
 
         _nextFrameState.clear();
+    }
+
+    void GameSession::drawSpacePortal(SpacePortal *spacePortal)
+    {
+        SpaceObject *targetObject;
+        if (!tryGetSpaceObject(spacePortal->targetObjectId, &targetObject))
+        {
+            return;
+        }
+
+        auto targetStarSystem = targetObject->starSystem();
+        if (!targetStarSystem)
+        {
+            return;
+        }
+
+        auto diff = targetObject->transform().position - spacePortal->transform().position;
+
+        auto &sceneRender = _engine.sceneRender();
+        auto &sceneRenderTransition = _engine.sceneRenderTransition();
+        sceneRenderTransition.camera().cameraProps(sceneRender.camera().cameraProps());
+        sceneRenderTransition.camera().center(sceneRenderTransition.camera().center() + diff);
+        sceneRenderTransition.texture().clear(sf::Color(0, 0, 0, 0));
+
+        glEnable(GL_STENCIL_TEST);
+
+        glStencilFunc(GL_ALWAYS, 1, 0xFF);
+        glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+        glStencilMask(0xFF);
+        glClearStencil(0x0);
+        glClear(GL_STENCIL_BUFFER_BIT);
+
+        spacePortal->drawPortal(*this, sceneRenderTransition.texture());
+
+        glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+        glStencilFunc(GL_EQUAL, 1, 0xFF);
+        glStencilMask(0x00);
+
+        targetStarSystem->draw(sceneRenderTransition);
+
+        glDisable(GL_STENCIL_TEST);
+
+        sceneRenderTransition.texture().display();
+
+        _portalOverlay.texture(&sceneRenderTransition.texture().getTexture());
+        _portalOverlay.draw(sceneRender.texture());
     }
 } // namespace town

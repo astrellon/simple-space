@@ -52,5 +52,11 @@
         "id": "EFFECT_PORTAL_PARTICLE",
         "fragmentPath": "data/shaders/portal_particle.frag",
         "vertexPath": "data/shaders/portal_particle.vert"
+    },
+    {
+        "type": "shader",
+        "id": "EFFECT_TEXTURE_OVERLAY",
+        "fragmentPath": "data/shaders/effects/fullpass.frag",
+        "vertexPath": "data/shaders/effects/fullpass.vert"
     }
 ]

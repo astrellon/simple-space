@@ -29,6 +29,8 @@ namespace space
             virtual void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform);
             virtual void draw(GameSession &session, sf::RenderTarget &target);
 
+            void drawPortal(GameSession &session, sf::RenderTarget &target);
+
         private:
             // Helpers
             struct NearPortalObject
@@ -47,7 +49,8 @@ namespace space
             AnimatedSprite _sprite;
             std::vector<NearPortalObject> _nearbyObjects;
             PortalShadow _shadow;
-            Polygon _shadowShape;
+            // Is a vector for earcutting
+            std::vector<Polygon> _shadowShape;
             std::array<sf::Vector2f, 2> _lerpFromShadowPoint;
             float _lerpFromShadowT;
 
