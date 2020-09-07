@@ -221,6 +221,11 @@ namespace space
 
         starSystem->addObject(obj);
         obj->transform().position = position;
+        auto ship = dynamic_cast<Ship *>(obj);
+        if (ship)
+        {
+            ship->prevPosition(position);
+        }
 
         if (obj->id == _playerController.controllingShip()->id)
         {

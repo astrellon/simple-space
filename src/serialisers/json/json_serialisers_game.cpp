@@ -187,6 +187,7 @@ namespace space
         result["speed"] = toJson(input.speed());
         result["walkableArea"] = toJson(input.walkableArea());
         result["definitionId"] = input.definition.id;
+        result["prevPosition"] = toJson(input.prevPosition());
 
         return result;
     }
@@ -206,6 +207,12 @@ namespace space
 
         auto result = session.createObject<Ship>(id, *definition, std::move(walkableArea));
         result->transform(fromJsonTransform(j.at("transform")));
+        sf::Vector2f prevPosition;
+        if (!Utils::json_try_set(j, "prevPosition", prevPosition))
+        {
+            prevPosition = result->transform().position;
+        }
+        result->prevPosition(prevPosition);
 
         result->rotationSpeed(j.at("rotationSpeed").get<float>());
         result->speed(fromJsonVector2f(j.at("speed")));

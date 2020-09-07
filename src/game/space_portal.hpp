@@ -10,6 +10,7 @@
 namespace space
 {
     class GameSession;
+    class Ship;
 
     class SpacePortal : public SpaceObject
     {
@@ -28,26 +29,32 @@ namespace space
             virtual void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform);
             virtual void draw(GameSession &session, sf::RenderTarget &target);
 
-            void ignoreId(const ObjectId &id);
-
         private:
             // Helpers
-            struct IgnoreId
+            struct NearPortalObject
             {
-                ObjectId id;
+                Ship *ship;
+                sf::Vector2f entryP1;
+                sf::Vector2f entryP2;
                 int framesOutsideOfRadius;
 
-                IgnoreId(const ObjectId &id) : id(id), framesOutsideOfRadius(0) { }
+                NearPortalObject(Ship *ship) : ship(ship), framesOutsideOfRadius(0) { }
+
+                void calcEntryPoints(sf::Vector2f point, float radius);
             };
 
             // Fields
             AnimatedSprite _sprite;
-            std::vector<IgnoreId> _idsToIgnore;
-            std::vector<SpaceObject *> _nearbyObjects;
+            std::vector<NearPortalObject> _nearbyObjects;
             PortalShadow _shadow;
             Polygon _shadowShape;
+            std::array<sf::Vector2f, 2> _lerpFromShadowPoint;
+            float _lerpFromShadowT;
 
             // Methods
-            bool foundId(const ObjectId &id);
+            void cleanupNearbyObjects();
+
+            NearPortalObject &getNearbyObject(const sf::Vector2f &portalToShip, Ship *ship);
+            bool tryGetNearbyObject(Ship *ship, NearPortalObject **result);
     };
 } // space

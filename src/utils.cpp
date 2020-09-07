@@ -164,4 +164,15 @@ namespace space
 
         return false;
     }
+
+    bool Utils::checkIfLinesIntersect(const sf::Vector2f &start1, const sf::Vector2f &end1, const sf::Vector2f &start2, const sf::Vector2f &end2)
+    {
+        return counterClockWise(start1, start2, end2) != counterClockWise(end1, start2, end2) &&
+            counterClockWise(start1, end1, start2) != counterClockWise(start1, end1, end2);
+    }
+
+    float Utils::counterClockWise(const sf::Vector2f &p1, const sf::Vector2f &p2, const sf::Vector2f &p3)
+    {
+        return (p3.y - p1.y) * (p2.x - p1.x) > (p2.y - p1.y) * (p3.x - p1.x);
+    }
 }

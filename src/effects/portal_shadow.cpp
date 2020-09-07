@@ -27,19 +27,36 @@ namespace space
         sf::Vector2f endPoint1, endPoint2;
         CircularIndex index(_viewLines.size());
 
+        auto checkCounter = 0;
         // Find intersecting ray for point1
         while (!Utils::tryGetIntersection(point1, dir1, _viewLines[index].p1, _viewLines[index].p2, &endPoint1))
         {
             ++index;
+            ++checkCounter;
+
+            if (checkCounter > _viewLines.size())
+            {
+                std::cout << "Unable to find intersection with screen edge" << std::endl;
+                return;
+            }
         }
 
         // Find intersecting ray for point2
+        checkCounter = 0;
         auto origIndex = index;
         while (!Utils::tryGetIntersection(point2, dir2, _viewLines[index].p1, _viewLines[index].p2, &endPoint2))
         {
             ++index;
 
             if (index == origIndex) { break; }
+
+            ++checkCounter;
+
+            if (checkCounter > _viewLines.size())
+            {
+                std::cout << "Unable to find intersection with screen edge" << std::endl;
+                return;
+            }
         }
 
         result.push_back(endPoint1);

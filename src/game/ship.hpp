@@ -39,6 +39,9 @@ namespace space
             sf::Vector2f speed() const { return _speed; }
             void speed(const sf::Vector2f &speed) { _speed = speed; }
 
+            sf::Vector2f prevPosition() const { return _prevPosition; }
+            void prevPosition(const sf::Vector2f &pos) { _prevPosition = pos; }
+
             WalkableArea &walkableArea() { return *_walkableArea.get(); }
             const WalkableArea &walkableArea() const { return *_walkableArea.get(); }
 
@@ -55,6 +58,7 @@ namespace space
             // Location
             sf::Sprite _sprite;
             sf::Sprite _interiorSprite;
+            sf::Vector2f _prevPosition;
 
             // Current speeds
             float _rotationSpeed;

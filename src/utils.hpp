@@ -229,6 +229,8 @@ namespace space
 
             static bool tryGetIntersection(const sf::Vector2f &origin, const sf::Vector2f &direction, const sf::Vector2f &point1, const sf::Vector2f &point2, sf::Vector2f *result);
 
+            static bool checkIfLinesIntersect(const sf::Vector2f &start1, const sf::Vector2f &end1, const sf::Vector2f &start2, const sf::Vector2f &end2);
+
         private:
             Utils();
 
@@ -236,5 +238,7 @@ namespace space
             static std::mt19937 _rand;
 
             static siv::PerlinNoise _perlinNoise;
+
+            static float counterClockWise(const sf::Vector2f &p1, const sf::Vector2f &p2, const sf::Vector2f &p3);
     };
 } // town

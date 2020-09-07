@@ -13,7 +13,7 @@
 namespace space
 {
     SpacePortal::SpacePortal(const ObjectId &id, const SpacePortalDefinition &definition) :
-        SpaceObject(id), definition(definition), _sprite(*definition.texture)
+        SpaceObject(id), definition(definition), _sprite(*definition.texture), _lerpFromShadowT(1.0f)
     {
         _sprite.sequence("idle", true);
     }
@@ -45,10 +45,7 @@ namespace space
 
         auto pos = Utils::getPosition(_worldTransform);
 
-        _nearbyObjects.clear();
-        _insideStarSystem->getObjectsNearby(definition.pullRadius, pos, _nearbyObjects);
-
-        for (auto &obj : _nearbyObjects)
+        _insideStarSystem->getObjectsNearby(definition.pullRadius, pos, [&](SpaceObject *obj)
         {
             if (obj->id == this->id)
             {
@@ -56,61 +53,43 @@ namespace space
                 return;
             }
 
-            auto planet = dynamic_cast<Planet *>(obj);
-            if (planet != nullptr)
-            {
-                // No sucking up planets right now.
-                return;
-            }
-
-            auto isIdToIgnore = foundId(obj->id);
-
-            auto portalToShip = pos - obj->transform().position;
-            auto distanceToShip = portalToShip.length();
-            auto dir = portalToShip / distanceToShip;
-            if (distanceToShip < 10)
-            {
-                auto newPos = targetObject->transform().position + dir * 20.0f;
-                auto queue = obj->id == session.playerController().controllingShip()->id;
-                session.moveSpaceObject(obj, newPos, targetObject->starSystem(), queue);
-
-                if (targetSpacePortal)
-                {
-                    targetSpacePortal->ignoreId(obj->id);
-                }
-                return;
-            }
-
-            if (isIdToIgnore)
-            {
-                return;
-            }
-
             auto ship = dynamic_cast<Ship *>(obj);
             if (ship == nullptr)
             {
+                // Only work on ships for now
                 return;
             }
 
-            auto force = Utils::clamp((definition.pullRadius - distanceToShip) / definition.pullRadius, 0, 1.0f);
-            auto speedAddition = dir * force * definition.pullForce * seconds;
+            auto shipPoint = ship->transform().position;
+            auto portalToShip = shipPoint - pos;
+            auto distanceToShip = portalToShip.length();
+            auto shipMoveDir = (shipPoint - ship->prevPosition()).normalised();
+            auto portalToShipDir = portalToShip / distanceToShip;
 
-            ship->speed(ship->speed() + speedAddition);
-        };
+            auto &nearby = getNearbyObject(portalToShip, ship);
+            nearby.framesOutsideOfRadius = 0;
 
-        for (auto i = 0; i < _idsToIgnore.size(); i++)
-        {
-            auto &idToIgnore = _idsToIgnore[i];
-            if (idToIgnore.framesOutsideOfRadius > 10)
+            auto pp = (nearby.entryP2 - nearby.entryP1).normalised();
+            auto cross = pp.cross(portalToShip);
+            auto shipToPortalDot = portalToShipDir.dot(shipMoveDir);
+            // Make sure we've gone through the middle of the portal edge and that we were moving
+            // towards the portal at the same time.
+            if (cross < -0.1f && shipToPortalDot > 0.1f)
             {
-                _idsToIgnore.erase(_idsToIgnore.begin() + i);
-                i--;
+                auto newPos = targetObject->transform().position + portalToShip; //+ dir * 20.0f;
+                auto queue = ship->id == session.playerController().controllingShip()->id;
+                session.moveSpaceObject(ship, newPos, targetObject->starSystem(), queue);
+
+                if (targetSpacePortal)
+                {
+                    auto &otherNearby = targetSpacePortal->getNearbyObject(portalToShip, ship);
+                    otherNearby.entryP1 = nearby.entryP2;
+                    otherNearby.entryP2 = nearby.entryP1;
+                }
             }
-            else
-            {
-                idToIgnore.framesOutsideOfRadius++;
-            }
-        }
+        });
+
+        cleanupNearbyObjects();
     }
 
     void SpacePortal::draw(GameSession &session, sf::RenderTarget &target)
@@ -119,13 +98,33 @@ namespace space
         DrawDebug::glDraw++;
 
         auto pos = Utils::getPosition(_worldTransform);
-        auto toViewport = session.engine().sceneRender().camera().center() - pos;
+        auto &camera = session.engine().sceneRender().camera();
+        auto playerShip = session.getPlayerShip();
+        auto toViewport = camera.center() - pos;
         _shadow.viewPoint = toViewport;
-        _shadow.view = session.engine().sceneRender().camera().view();
+        _shadow.view = camera.view();
 
-        toViewport = toViewport.normalised();
-        _shadow.point2 = sf::Vector2f(toViewport.y * 20.0f, -toViewport.x * 20.0f);
-        _shadow.point1 = sf::Vector2f(-toViewport.y * 20.0f, toViewport.x * 20.0f);
+        NearPortalObject *nearbyPlayer;
+        if (playerShip && tryGetNearbyObject(playerShip, &nearbyPlayer))
+        {
+            _shadow.point2 = nearbyPlayer->entryP2;
+            _shadow.point1 = nearbyPlayer->entryP1;
+            _lerpFromShadowT = 0.0f;
+            _lerpFromShadowPoint[0] = nearbyPlayer->entryP1;
+            _lerpFromShadowPoint[1] = nearbyPlayer->entryP2;
+        }
+        else
+        {
+            toViewport = toViewport.normalised();
+            auto radius = definition.pullRadius;
+            auto point2 = sf::Vector2f(toViewport.y * radius, -toViewport.x * radius);
+            auto point1 = sf::Vector2f(-toViewport.y * radius, toViewport.x * radius);
+
+            _shadow.point1 = Utils::paraLerp(_lerpFromShadowPoint[0], point1, _lerpFromShadowT);
+            _shadow.point2 = Utils::paraLerp(_lerpFromShadowPoint[1], point2, _lerpFromShadowT);
+
+            _lerpFromShadowT = Utils::clamp01(_lerpFromShadowT + session.engine().deltaTime().asSeconds() * 4.0f);
+        }
 
         _shadowShape.clear();
         _shadow.calcShadow(_shadowShape);
@@ -139,23 +138,57 @@ namespace space
         glLineWidth(1.0f);
     }
 
-    void SpacePortal::ignoreId(const ObjectId &id)
+    void SpacePortal::cleanupNearbyObjects()
     {
-        _idsToIgnore.emplace_back(id);
+        for (auto i = 0; i < _nearbyObjects.size(); i++)
+        {
+            auto &nearbyObj = _nearbyObjects[i];
+            if (nearbyObj.framesOutsideOfRadius > 4)
+            {
+                _nearbyObjects.erase(_nearbyObjects.begin() + i);
+                i--;
+            }
+            else
+            {
+                nearbyObj.framesOutsideOfRadius++;
+            }
+        }
     }
 
-    bool SpacePortal::foundId(const ObjectId &id)
+    SpacePortal::NearPortalObject &SpacePortal::getNearbyObject(const sf::Vector2f &portalToShip, Ship *ship)
     {
-        for (auto &idToIgnore : _idsToIgnore)
+        for (auto &nearby : _nearbyObjects)
         {
-            if (idToIgnore.id == id)
+            if (nearby.ship == ship)
             {
-                idToIgnore.framesOutsideOfRadius = 0;
+                return nearby;
+            }
+        }
+
+        auto &result = _nearbyObjects.emplace_back(ship);
+        result.calcEntryPoints(portalToShip, definition.pullRadius);
+        return result;
+    }
+
+    bool SpacePortal::tryGetNearbyObject(Ship *ship, SpacePortal::NearPortalObject **result)
+    {
+        for (auto &nearby : _nearbyObjects)
+        {
+            if (nearby.ship == ship)
+            {
+                *result = &nearby;
                 return true;
             }
         }
 
         return false;
+    }
+
+    void SpacePortal::NearPortalObject::calcEntryPoints(sf::Vector2f point, float radius)
+    {
+        point = point.normalised();
+        entryP2 = sf::Vector2f(point.y * radius, -point.x * radius);
+        entryP1 = sf::Vector2f(-point.y * radius, point.x * radius);
     }
 
 } // space

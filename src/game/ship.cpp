@@ -68,6 +68,7 @@ namespace space
 
         _speed += Utils::transformDirection(moveInput, _transform.getTransform()) * seconds * definition.acceleration;
         _speed = _speed.clampLength(0, definition.maxSpeed);
+        _prevPosition = _transform.position;
         _transform.position += _speed * seconds;
 
         if (moveInput == sf::Vector2f() && _speed != sf::Vector2f())
