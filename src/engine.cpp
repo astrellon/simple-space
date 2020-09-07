@@ -243,7 +243,7 @@ namespace space
         // glStencilMask(0x00);
 
         // Draw main scene
-        if (_currentSession.get())
+        if (!DrawDebug::hideEverything && _currentSession.get())
         {
             _currentSession->draw();
         }
