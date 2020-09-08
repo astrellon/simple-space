@@ -4,7 +4,7 @@
         "id": "STAR_SYSTEM_3",
         "name": "Star System 3",
         "starBackgroundOptions": {
-            "backgroundColour": "0x361E26FF"
+            "backgroundColour": "0x1A1F32FF"
         },
         "rootBody": {
             "type": "planet",

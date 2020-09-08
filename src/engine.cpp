@@ -178,6 +178,9 @@ namespace space
             style.GrabRounding = 0;
             style.PopupRounding = 0;
             style.ScrollbarRounding = 0;
+
+            auto &io = ImGui::GetIO();
+            io.MouseDrawCursor = true;
         }
     }
 
