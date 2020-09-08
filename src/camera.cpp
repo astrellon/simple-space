@@ -138,4 +138,11 @@ namespace space
         auto size = _size / (_props.scale * _zoomScale);
         _view.setSize(size);
     }
+
+    sf::FloatRect Camera::viewport() const
+    {
+        auto size = _view.getSize();
+        auto center = _view.getCenter();
+        return sf::FloatRect(center.x - size.x * 0.5f, center.y - size.y * 0.5f, size.x, size.y);
+    }
 }

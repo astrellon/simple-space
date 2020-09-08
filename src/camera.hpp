@@ -69,6 +69,8 @@ namespace space
 
             const sf::View &view() const;
 
+            sf::FloatRect viewport() const;
+
         private:
             // Fields
             Engine &_engine;

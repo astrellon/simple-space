@@ -523,6 +523,14 @@ namespace space
 
     void GameSession::drawSpacePortal(SpacePortal *spacePortal)
     {
+        auto &sceneRender = _engine.sceneRender();
+        auto &sceneRenderTransition = _engine.sceneRenderTransition();
+
+        if (!sceneRender.camera().viewport().contains(spacePortal->transform().position))
+        {
+            return;
+        }
+
         SpaceObject *targetObject;
         if (!tryGetSpaceObject(spacePortal->targetObjectId, &targetObject))
         {
@@ -537,8 +545,6 @@ namespace space
 
         auto diff = targetObject->transform().position - spacePortal->transform().position;
 
-        auto &sceneRender = _engine.sceneRender();
-        auto &sceneRenderTransition = _engine.sceneRenderTransition();
         sceneRenderTransition.camera().cameraProps(sceneRender.camera().cameraProps());
         sceneRenderTransition.camera().center(sceneRenderTransition.camera().center() + diff);
         sceneRenderTransition.texture().clear(sf::Color(0, 0, 0, 0));
