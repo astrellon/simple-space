@@ -21,6 +21,7 @@ namespace space
         ImGui::Checkbox("Show Physics", &DrawDebug::showPolygons);
         ImGui::Checkbox("Hide GameSession", &DrawDebug::hideGameSession);
         ImGui::Checkbox("Hide Everything", &DrawDebug::hideEverything);
+        ImGui::Checkbox("Hide Background", &DrawDebug::hideBackground);
         ImGui::Checkbox("Bloom", &engine.enableBloom);
         ImGui::Checkbox("Show Portal Shapes", &DrawDebug::showPortalShapes);
 

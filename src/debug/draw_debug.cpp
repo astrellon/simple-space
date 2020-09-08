@@ -8,6 +8,7 @@ namespace space
     bool DrawDebug::showUIWindow = false;
     bool DrawDebug::hideGameSession = false;
     bool DrawDebug::hideEverything = false;
+    bool DrawDebug::hideBackground = false;
     bool DrawDebug::showPortalShapes = false;
 
     size_t DrawDebug::totalMemoryAllocated = 0;

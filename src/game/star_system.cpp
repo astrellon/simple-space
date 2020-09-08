@@ -44,7 +44,10 @@ namespace space
             showInternals = true;
         }
 
-        _background->draw(target);
+        if (!DrawDebug::hideBackground)
+        {
+            _background->draw(target);
+        }
 
         if (DrawDebug::hideGameSession)
         {

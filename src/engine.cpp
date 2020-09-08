@@ -227,6 +227,11 @@ namespace space
             return;
         }
 
+        if (DrawDebug::hideBackground)
+        {
+            _sceneRender.texture().clear();
+        }
+
         // Draw main scene
         if (!DrawDebug::hideEverything && _currentSession.get())
         {
