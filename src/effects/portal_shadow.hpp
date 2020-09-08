@@ -5,6 +5,7 @@
 
 #include "../non_copyable.hpp"
 #include "../physics/polygon.hpp"
+#include "../line.hpp"
 
 namespace space
 {
@@ -24,17 +25,8 @@ namespace space
             void calcShadow(Polygon &result);
 
         private:
-            struct Line
-            {
-                sf::Vector2f p1;
-                sf::Vector2f p2;
-
-                Line() { }
-                Line(const sf::Vector2f &p1, const sf::Vector2f &p2) : p1(p1), p2(p2) { }
-            };
-
             // Fields
-            std::array<Line, 4> _viewLines;
+            std::array<FloatLine, 4> _viewLines;
 
             // Methods
             void calcViewLines();
