@@ -132,7 +132,7 @@ namespace space
         }
 
         _shadowShape[0].clear();
-        _shadow.calcShadow(_shadowShape[0]);
+        _shadow.calcShadow(_shadowShape[0], _shadowOutlines);
 
         auto indicies = mapbox::earcut<uint16_t>(_shadowShape);
 
@@ -144,6 +144,19 @@ namespace space
             polygonDraw.append(sf::Vertex(point, sf::Color::White));
         }
         target.draw(polygonDraw, _worldTransform);
+    }
+
+    void SpacePortal::drawPortalOutlines(GameSession &session, sf::RenderTarget &target)
+    {
+        glLineWidth(3.0f);
+        sf::VertexArray outlineDraw(sf::Lines, 4);
+        outlineDraw.append(sf::Vertex(_shadowOutlines[0].point1, sf::Color::White));
+        outlineDraw.append(sf::Vertex(_shadowOutlines[0].point2, sf::Color::White));
+        outlineDraw.append(sf::Vertex(_shadowOutlines[1].point1, sf::Color::White));
+        outlineDraw.append(sf::Vertex(_shadowOutlines[1].point2, sf::Color::White));
+
+        target.draw(outlineDraw, _worldTransform);
+        glLineWidth(1.0f);
     }
 
     void SpacePortal::cleanupNearbyObjects()

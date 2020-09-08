@@ -22,7 +22,7 @@ namespace space
             PortalShadow();
 
             // Methods
-            void calcShadow(Polygon &result);
+            void calcShadow(Polygon &result, std::array<FloatLine, 2> &outlines);
 
         private:
             // Fields

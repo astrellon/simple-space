@@ -1,11 +1,13 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include <array>
 
 #include "space_object.hpp"
 #include "../definitions/space_portal_definition.hpp"
 #include "../animated_sprite.hpp"
 #include "../effects/portal_shadow.hpp"
+#include "../line.hpp"
 
 namespace space
 {
@@ -30,6 +32,7 @@ namespace space
             virtual void draw(GameSession &session, sf::RenderTarget &target);
 
             void drawPortal(GameSession &session, sf::RenderTarget &target);
+            void drawPortalOutlines(GameSession &session, sf::RenderTarget &target);
 
         private:
             // Helpers
@@ -51,6 +54,7 @@ namespace space
             PortalShadow _shadow;
             // Is a vector for earcutting
             std::vector<Polygon> _shadowShape;
+            std::array<FloatLine, 2> _shadowOutlines;
             std::array<sf::Vector2f, 2> _lerpFromShadowPoint;
             float _lerpFromShadowT;
 

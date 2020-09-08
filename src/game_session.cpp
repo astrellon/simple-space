@@ -571,5 +571,7 @@ namespace space
 
         _portalOverlay.texture(&sceneRenderTransition.texture().getTexture());
         _portalOverlay.draw(sceneRender.texture());
+
+        spacePortal->drawPortalOutlines(*this, sceneRender.texture());
     }
 } // namespace town

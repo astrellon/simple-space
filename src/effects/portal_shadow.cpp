@@ -14,7 +14,7 @@ namespace space
 
     }
 
-    void PortalShadow::calcShadow(Polygon &result)
+    void PortalShadow::calcShadow(Polygon &result, std::array<FloatLine, 2> &outlines)
     {
         calcViewLines();
 
@@ -78,6 +78,11 @@ namespace space
 
         result.push_back(endPoint2);
         result.push_back(point2);
+
+        outlines[0].point1 = point1;
+        outlines[0].point2 = endPoint1;
+        outlines[1].point1 = point2;
+        outlines[1].point2 = endPoint2;
     }
 
     void PortalShadow::calcViewLines()
