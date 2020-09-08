@@ -100,7 +100,7 @@ namespace space
         DrawDebug::glDraw++;
     }
 
-    void SpacePortal::drawPortal(GameSession &session, sf::RenderTarget &target)
+    void SpacePortal::drawPortal(GameSession &session, sf::RenderTarget &target, bool asPolygon)
     {
         auto pos = Utils::getPosition(_worldTransform);
         auto &camera = session.engine().sceneRender().camera();
@@ -134,16 +134,30 @@ namespace space
         _shadowShape[0].clear();
         _shadow.calcShadow(_shadowShape[0], _shadowOutlines);
 
-        auto indicies = mapbox::earcut<uint16_t>(_shadowShape);
-
-        sf::VertexArray polygonDraw(sf::Triangles);
-        for (auto i = 0; i < indicies.size(); i++)
+        if (asPolygon)
         {
-            auto index = indicies[i];
-            auto &point = _shadowShape[0][index];
-            polygonDraw.append(sf::Vertex(point, sf::Color::White));
+            auto indicies = mapbox::earcut<uint16_t>(_shadowShape);
+
+            sf::VertexArray polygonDraw(sf::Triangles);
+            for (auto i = 0; i < indicies.size(); i++)
+            {
+                auto index = indicies[i];
+                auto &point = _shadowShape[0][index];
+                polygonDraw.append(sf::Vertex(point, sf::Color::White));
+            }
+            target.draw(polygonDraw, _worldTransform);
         }
-        target.draw(polygonDraw, _worldTransform);
+        else
+        {
+            glLineWidth(3.0f);
+            sf::VertexArray polygonDraw(sf::LineStrip);
+            for (auto &point : _shadowShape[0])
+            {
+                polygonDraw.append(sf::Vertex(point, sf::Color::White));
+            }
+            target.draw(polygonDraw, _worldTransform);
+            glLineWidth(1.0f);
+        }
     }
 
     void SpacePortal::drawPortalOutlines(GameSession &session, sf::RenderTarget &target)

@@ -2,6 +2,7 @@
 
 #include <SFML/OpenGL.hpp>
 
+#include "debug/draw_debug.hpp"
 #include "engine.hpp"
 #include "render_camera.hpp"
 #include "game/ship.hpp"
@@ -554,30 +555,37 @@ namespace space
         sceneRenderTransition.texture().setView(transitionCamera.view());
         sceneRenderTransition.texture().clear(sf::Color(0, 0, 0, 0));
 
-        glEnable(GL_STENCIL_TEST);
+        if (!DrawDebug::showPortalShapes)
+        {
+            glEnable(GL_STENCIL_TEST);
 
-        glStencilFunc(GL_ALWAYS, 1, 0xFF);
-        glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
-        glStencilMask(0xFF);
-        glClearStencil(0x0);
-        glClear(GL_STENCIL_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+            glStencilFunc(GL_ALWAYS, 1, 0xFF);
+            glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+            glStencilMask(0xFF);
+            glClearStencil(0x0);
+            glClear(GL_STENCIL_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
-        spacePortal->drawPortal(*this, sceneRenderTransition.texture());
+            spacePortal->drawPortal(*this, sceneRenderTransition.texture(), true);
 
-        glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
-        glStencilFunc(GL_EQUAL, 1, 0xFF);
-        glStencilMask(0x00);
+            glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+            glStencilFunc(GL_EQUAL, 1, 0xFF);
+            glStencilMask(0x00);
 
-        transitionCamera.center(sceneCamera.center() + diff);
-        targetStarSystem->draw(sceneRenderTransition);
+            transitionCamera.center(sceneCamera.center() + diff);
+            targetStarSystem->draw(sceneRenderTransition);
 
-        glDisable(GL_STENCIL_TEST);
+            glDisable(GL_STENCIL_TEST);
 
-        sceneRenderTransition.texture().display();
+            sceneRenderTransition.texture().display();
 
-        _portalOverlay.texture(&sceneRenderTransition.texture().getTexture());
-        _portalOverlay.draw(sceneRender.texture());
+            _portalOverlay.texture(&sceneRenderTransition.texture().getTexture());
+            _portalOverlay.draw(sceneRender.texture());
 
-        spacePortal->drawPortalOutlines(*this, sceneRender.texture());
+            spacePortal->drawPortalOutlines(*this, sceneRender.texture());
+        }
+        else
+        {
+            spacePortal->drawPortal(*this, sceneRender.texture(), false);
+        }
     }
 } // namespace town

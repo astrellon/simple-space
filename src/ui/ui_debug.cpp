@@ -22,6 +22,7 @@ namespace space
         ImGui::Checkbox("Hide GameSession", &DrawDebug::hideGameSession);
         ImGui::Checkbox("Hide Everything", &DrawDebug::hideEverything);
         ImGui::Checkbox("Bloom", &engine.enableBloom);
+        ImGui::Checkbox("Show Portal Shapes", &DrawDebug::showPortalShapes);
 
         auto transition = engine.currentSession()->currentTransition();
         if (transition)
