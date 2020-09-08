@@ -525,18 +525,22 @@ namespace space
     {
         auto &sceneRender = _engine.sceneRender();
         auto &sceneRenderTransition = _engine.sceneRenderTransition();
+        auto &sceneCamera = sceneRender.camera();
 
-        if (!sceneRender.camera().viewport().contains(spacePortal->transform().position))
+        // Don't render portal offscreen
+        if (!sceneCamera.viewport().contains(spacePortal->transform().position))
         {
             return;
         }
 
+        // Bail if we can't find the target object
         SpaceObject *targetObject;
         if (!tryGetSpaceObject(spacePortal->targetObjectId, &targetObject))
         {
             return;
         }
 
+        // Also bail if we can't find the target star system.
         auto targetStarSystem = targetObject->starSystem();
         if (!targetStarSystem)
         {
@@ -544,9 +548,10 @@ namespace space
         }
 
         auto diff = targetObject->transform().position - spacePortal->transform().position;
-
-        sceneRenderTransition.camera().cameraProps(sceneRender.camera().cameraProps());
-        sceneRenderTransition.camera().center(sceneRenderTransition.camera().center() + diff);
+        auto &transitionCamera = sceneRenderTransition.camera();
+        transitionCamera.cameraProps(sceneCamera.cameraProps());
+        transitionCamera.center(sceneCamera.center());
+        sceneRenderTransition.texture().setView(transitionCamera.view());
         sceneRenderTransition.texture().clear(sf::Color(0, 0, 0, 0));
 
         glEnable(GL_STENCIL_TEST);
@@ -555,7 +560,7 @@ namespace space
         glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
         glStencilMask(0xFF);
         glClearStencil(0x0);
-        glClear(GL_STENCIL_BUFFER_BIT);
+        glClear(GL_STENCIL_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
         spacePortal->drawPortal(*this, sceneRenderTransition.texture());
 
@@ -563,6 +568,7 @@ namespace space
         glStencilFunc(GL_EQUAL, 1, 0xFF);
         glStencilMask(0x00);
 
+        transitionCamera.center(sceneCamera.center() + diff);
         targetStarSystem->draw(sceneRenderTransition);
 
         glDisable(GL_STENCIL_TEST);

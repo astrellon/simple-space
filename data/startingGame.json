@@ -294,11 +294,33 @@
         },
         {
             "definitionId": "SPACE_PORTAL_1",
+            "id": "SS_SPACE_PORTAL2",
+            "type": "space-portal",
+            "targetObjectId": "SS3_SPACE_PORTAL",
+            "transform": {
+                "position": [ -800, 0 ],
+                "rotation": 0,
+                "scale": 1
+            }
+        },
+        {
+            "definitionId": "SPACE_PORTAL_1",
             "id": "SS2_SPACE_PORTAL",
             "type": "space-portal",
             "targetObjectId": "SS_SPACE_PORTAL",
             "transform": {
                 "position": [ 400, 0 ],
+                "rotation": 0,
+                "scale": 1
+            }
+        },
+        {
+            "definitionId": "SPACE_PORTAL_1",
+            "id": "SS3_SPACE_PORTAL",
+            "type": "space-portal",
+            "targetObjectId": "SS_SPACE_PORTAL2",
+            "transform": {
+                "position": [ -400, 0 ],
                 "rotation": 0,
                 "scale": 1
             }
@@ -311,13 +333,20 @@
                 "PLAYER",
                 "OTHER",
                 "SPACE_STATION",
-                "SS_SPACE_PORTAL"
+                "SS_SPACE_PORTAL",
+                "SS_SPACE_PORTAL2"
             ]
         },
         {
             "definitionId": "STAR_SYSTEM_2",
             "spaceObjectIds": [
                 "SS2_SPACE_PORTAL"
+            ]
+        },
+        {
+            "definitionId": "STAR_SYSTEM_3",
+            "spaceObjectIds": [
+                "SS3_SPACE_PORTAL"
             ]
         }
     ]

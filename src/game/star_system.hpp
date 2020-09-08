@@ -48,7 +48,7 @@ namespace space
             std::unique_ptr<StarBackground> _background;
 
             // Methods
-            void createCelestialBody(const CelestialBodyDefinition *bodyDefinition);
+            void createCelestialBody(const CelestialBodyDefinition *bodyDefinition, sf::Transform parentTransform);
 
     };
 } // space

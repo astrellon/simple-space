@@ -26,31 +26,32 @@
                     "type": "planet",
                     "id": "SS2_PLANET_1",
                     "location": {
-                        "distance": 700,
+                        "distance": 500,
                         "influenceRadius": 200,
-                        "angle": 125
+                        "angle": -30
                     },
                     "rotationRate": 0.1,
                     "size": 100,
                     "glowColour": "0x6090FFFF",
                     "name": "Planet 1",
                     "scale": 10,
-                    "texturePath": "data/textures/planetColours1.png"
+                    "texturePath": "data/textures/planetColours1.png",
+                    "children": [ ]
                 },
                 {
                     "type": "planet",
                     "id": "SS2_PLANET_2",
                     "rotationRate": 0.08,
                     "location": {
-                        "distance": 800,
+                        "distance": 520,
                         "influenceRadius": 200,
-                        "angle": -90
+                        "angle": -40
                     },
-                    "size": 128,
-                    "name": "Planet 2",
-                    "scale": 10,
-                    "glowColour": "0xc9eae1FF",
-                    "texturePath": "data/textures/planetColours2.png"
+                    "size": 64,
+                    "name": "Moon 1",
+                    "scale": 5,
+                    "glowColour": "0xa1a1a121",
+                    "texturePath": "data/textures/moonColours1.png"
                 }
             ]
         }

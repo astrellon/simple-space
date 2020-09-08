@@ -71,7 +71,7 @@ namespace space
 
     void StarSystem::initFromDefinition()
     {
-        createCelestialBody(definition.rootBody.get());
+        createCelestialBody(definition.rootBody.get(), sf::Transform::Identity);
         _background = std::make_unique<StarBackground>(_session.engine(), definition.starBackgroundOptions);
     }
 
@@ -144,7 +144,7 @@ namespace space
         }
     }
 
-    void StarSystem::createCelestialBody(const CelestialBodyDefinition *bodyDefinition)
+    void StarSystem::createCelestialBody(const CelestialBodyDefinition *bodyDefinition, sf::Transform parentTransform)
     {
         auto type = bodyDefinition->type();
         if (type == PlanetDefinition::DefinitionType())
@@ -164,7 +164,7 @@ namespace space
 
         for (const auto &child : bodyDefinition->children)
         {
-            createCelestialBody(child.get());
+            createCelestialBody(child.get(), parentTransform);
         }
     }
 } // namespace space

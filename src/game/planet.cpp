@@ -17,6 +17,8 @@ namespace space
         _renderTexture = std::make_unique<sf::RenderTexture>();
         _renderTexture->create(definition.size, definition.size);
         _renderTexture->setSmooth(false);
+
+        setTransformFromLocation();
     }
 
     void Planet::update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform)
@@ -51,8 +53,6 @@ namespace space
                 _shader = &shaderDef->shader;
             }
         }
-
-        setTransformFromLocation();
 
         sf::Sprite sprite(*definition.texture);
         sprite.setScale(definition.size / 2, definition.size / 2);

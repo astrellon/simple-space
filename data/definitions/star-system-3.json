@@ -1,0 +1,44 @@
+[
+    {
+        "type": "star-system",
+        "id": "STAR_SYSTEM_3",
+        "name": "Star System 3",
+        "starBackgroundOptions": {
+            "backgroundColour": "0x361E26FF"
+        },
+        "rootBody": {
+            "type": "planet",
+            "id": "SS3_STAR_1",
+            "location": {
+                "distance": 0,
+                "influenceRadius": 4000,
+                "angle": 0
+            },
+            "rotationRate": 0.05,
+            "size": 200,
+            "name": "Star",
+            "scale": 25,
+            "oscillateNoise": 0.06,
+            "glowColour": "0x4BA2FAFF",
+            "texturePath": "data/textures/starColours2.png",
+            "children": [
+                {
+                    "type": "planet",
+                    "id": "SS3_PLANET_1",
+                    "location": {
+                        "distance": 500,
+                        "influenceRadius": 200,
+                        "angle": 145
+                    },
+                    "rotationRate": 0.04,
+                    "size": 100,
+                    "glowColour": "0xEFA5A5FF",
+                    "name": "Planet 1",
+                    "scale": 8,
+                    "texturePath": "data/textures/planetColours3.png",
+                    "planetSurfaceIds": []
+                }
+            ]
+        }
+    }
+]

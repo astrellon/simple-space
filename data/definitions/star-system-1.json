@@ -28,7 +28,7 @@
                     "location": {
                         "distance": 400,
                         "influenceRadius": 200,
-                        "angle": 35
+                        "angle": 135
                     },
                     "rotationRate": 0.04,
                     "size": 128,
@@ -45,7 +45,7 @@
                     "location": {
                         "distance": 400,
                         "influenceRadius": 200,
-                        "angle": -35
+                        "angle": -135
                     },
                     "size": 128,
                     "name": "Planet 2",
