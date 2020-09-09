@@ -37,7 +37,7 @@ namespace space
     void StarSystem::draw(RenderCamera &target)
     {
         auto insideOfShip = _session.getShipPlayerIsInsideOf();
-        auto showInternals = _session.isControllingCharacter();
+        auto showInternals = _session.isControllingCharacter() && insideOfShip != nullptr;
         if (target.transitionData && target.transitionData->ship)
         {
             insideOfShip = target.transitionData->ship;

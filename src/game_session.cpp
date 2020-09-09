@@ -512,10 +512,15 @@ namespace space
             _playerController.clearShipsInTeleportRange();
 
             if (_nextFrameState.nextPlanetSurface)
+            {
                 _activePlanetSurface = _nextFrameState.nextPlanetSurface;
-
+                _activeStarSystem = nullptr;
+            }
             else if (_nextFrameState.nextStarSystem)
+            {
                 _activeStarSystem = _nextFrameState.nextStarSystem;
+                _activePlanetSurface = nullptr;
+            }
 
         }
 
