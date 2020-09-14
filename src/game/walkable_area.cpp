@@ -7,6 +7,7 @@
 #include "../physics/polygon_collider.hpp"
 #include "../utils.hpp"
 #include "../game_session.hpp"
+#include "../effects/grass_effect.hpp"
 
 namespace space
 {
@@ -45,6 +46,11 @@ namespace space
         auto physicsSteps = std::min(dt.asSeconds(), 1.0f / 60.0f);
         _physicsWorld.Step(physicsSteps, 4, 2);
 
+        for (auto grassEffect : _grassEffects)
+        {
+            grassEffect->update(session, dt, parentTransform);
+        }
+
         for (auto &character : _characters)
         {
             character->update(session, dt, parentTransform);
@@ -60,37 +66,46 @@ namespace space
 
     void WalkableArea::onPostLoad(GameSession &session)
     {
-        for (auto &id : _onPostLoadCharacters)
+        for (auto postLoad : _onPostLoadObjects)
         {
-            Character *character;
-            if (session.tryGetSpaceObject<Character>(id, &character))
+            if (postLoad.type == PostLoadType::Character)
             {
-                addCharacter(character);
+                Character *character;
+                if (session.tryGetSpaceObject<Character>(postLoad.id, &character))
+                {
+                    addCharacter(character);
+                }
+                else
+                {
+                    std::cout << "Unable to find character '" << postLoad.id << "' for walkable area" << std::endl;
+                }
             }
-            else
+            else if (postLoad.type == PostLoadType::GrassEffect)
             {
-                std::cout << "Unable to find character '" << id << "' for walkable area" << std::endl;
+                GrassEffect *grassEffect;
+                if (session.tryGetSpaceObject<GrassEffect>(postLoad.id, &grassEffect))
+                {
+                    addGrassEffect(grassEffect);
+                }
+                else
+                {
+                    std::cout << "Unable to find grass effect '" << postLoad.id << "' for walkable area" << std::endl;
+                }
+            }
+            else if (postLoad.type == PostLoadType::Item)
+            {
+                PlaceableItem *item;
+                if (!session.tryGetItem<PlaceableItem>(postLoad.itemId, &item))
+                {
+                    std::cout << "Unable to find placeable item for placed item: " << postLoad.id << std::endl;
+                    continue;
+                }
+
+                addPlaceable(item, postLoad.position);
             }
         }
 
-        _onPostLoadCharacters.clear();
-
-        for (auto &pair : _onPostLoadPlaceables)
-        {
-            auto itemId = std::get<0>(pair);
-            auto position = std::get<1>(pair);
-
-            PlaceableItem *item;
-            if (!session.tryGetItem<PlaceableItem>(itemId, &item))
-            {
-                std::cout << "Unable to find placeable item for placed item: " << itemId << std::endl;
-                continue;
-            }
-
-            addPlaceable(item, position);
-        }
-
-        _onPostLoadPlaceables.clear();
+        _onPostLoadObjects.clear();
     }
 
     std::vector<PlacedItemPair<Teleporter>> WalkableArea::findTeleporters() const
@@ -142,6 +157,25 @@ namespace space
 
         character->removeFromPhysicsWorld(&_physicsWorld);
         character->insideArea(nullptr);
+    }
+
+    void WalkableArea::addGrassEffect(GrassEffect *grassEffect)
+    {
+        _grassEffects.push_back(grassEffect);
+        _background.addObject(grassEffect);
+        grassEffect->transform().scale = Utils::getInsideScale();
+    }
+    void WalkableArea::removeGrassEffect(const ObjectId &id)
+    {
+        for (auto iter = _grassEffects.begin(); iter != _grassEffects.end(); ++iter)
+        {
+            if ((*iter)->id == id)
+            {
+                _grassEffects.erase(iter);
+                _background.removeObject(*iter);
+                break;
+            }
+        }
     }
 
     PlacedItem *WalkableArea::addPlaceable(PlaceableItem *item, sf::Vector2f position)

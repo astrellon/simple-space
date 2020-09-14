@@ -1,5 +1,7 @@
 #include "json_common.hpp"
 
+#include "../../utils.hpp"
+
 namespace space
 {
     template <>
@@ -74,17 +76,29 @@ namespace space
 
     json toJson(const SpaceTransform &input)
     {
-        return json {
-            {"rotation", input.rotation},
+        auto result = json {
             {"position", toJson(input.position)},
-            {"scale", input.scale}
         };
+
+        if (input.rotation != 0.0f)
+        {
+            result["rotation"] = input.rotation;
+        }
+        if (input.scale != 1.0f)
+        {
+            result["scale"] = input.scale;
+        }
+
+        return result;
     }
+
     SpaceTransform fromJsonTransform(const json &j)
     {
-        auto rotation = j.at("rotation").get<float>();
+        float scale = 1.0f, rotation = 0.0f;
         auto position = fromJsonVector2f(j.at("position"));
-        auto scale = j.at("scale").get<float>();
+
+        Utils::json_try_set(j, "scale", scale);
+        Utils::json_try_set(j, "rotation", rotation);
 
         return SpaceTransform(rotation, position, scale);
     }

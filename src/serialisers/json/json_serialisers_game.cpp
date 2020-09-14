@@ -20,6 +20,7 @@
 #include "../../game/items/chair.hpp"
 #include "../../game/items/teleporter.hpp"
 #include "../../physics/polygon_collider.hpp"
+#include "../../effects/grass_effect.hpp"
 
 #include "../../controllers/character_controller.hpp"
 #include "../../controllers/npc_controller.hpp"
@@ -132,6 +133,9 @@ namespace space
         else if (input.type() == PlacedItem::SpaceObjectType())
             return toJson(dynamic_cast<const PlacedItem &>(input));
 
+        else if (input.type() == GrassEffect::SpaceObjectType())
+            return toJson(dynamic_cast<const GrassEffect &>(input));
+
         throw std::runtime_error("Unknown space object type");
     }
     bool addFromJsonSpaceObject(const json &j, GameSession &session)
@@ -152,6 +156,9 @@ namespace space
 
         if (type == PlacedItem::SpaceObjectType())
             throw std::runtime_error("Unable to add placed item without walkable area");
+
+        if (type == GrassEffect::SpaceObjectType())
+            return addFromJsonGrassEffect(j, session);
 
         throw std::runtime_error("Unknown space object type");
     }
@@ -261,7 +268,30 @@ namespace space
 
         j.at("targetObjectId").get_to(result->targetObjectId);
 
-        return result;
+        return true;
+    }
+
+    json toJson(const GrassEffect &input)
+    {
+        throw std::runtime_error("Cannot save grass effect!");
+    }
+    bool addFromJsonGrassEffect(const json &j, GameSession &session)
+    {
+        auto id = j.at("id").get<ObjectId>();
+        auto texturePath = j.at("texturePath").get<std::string>();
+
+        const sf::Texture *texture;
+        if (!session.engine().resourceManager().texture(texturePath, &texture))
+        {
+            std::cout << "Unable to load grass effect [" << id << "] texture: " << texturePath << std::endl;
+            return false;
+        }
+
+        auto result = session.createObject<GrassEffect>(id);
+        result->transform(fromJsonTransform(j.at("transform")));
+        result->texture(*texture);
+
+        return true;
     }
 
     json toJson(const WalkableArea &input)
@@ -270,9 +300,14 @@ namespace space
         for (auto character : input.characters())
             charactersJson.push_back(character->id);
 
+        json grassEffectJson;
+        for (auto grassEffect : input.grassEffects())
+            grassEffectJson.push_back(grassEffect->id);
+
         return json {
             {"characterIds", charactersJson},
-            {"placedItems", toJsonArray(input.placedItems())}
+            {"placedItems", toJsonArray(input.placedItems())},
+            {"grassEffectIds", grassEffectJson}
         };
     }
 
@@ -282,7 +317,7 @@ namespace space
         auto characterIds = j.at("characterIds");
         for (auto &jsonId : characterIds)
         {
-            auto id = jsonId.get<std::string>();
+            auto id = jsonId.get<ObjectId>();
             result->addPostLoadCharacter(id);
         }
 
@@ -290,6 +325,16 @@ namespace space
         for (auto &placedItem : placedItems)
         {
             addFromJsonPlacedItem(placedItem, session, *result.get());
+        }
+
+        auto grassEffectIds = j.find("grassEffects");
+        if (grassEffectIds != j.end())
+        {
+            for (auto &jsonId : *grassEffectIds)
+            {
+                auto id = jsonId.get<ObjectId>();
+                result->addPostLoadGrassEffect(id);
+            }
         }
 
         return result;

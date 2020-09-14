@@ -113,6 +113,9 @@
                         "position": [ 50.0, 50.0 ],
                         "type": "placed-item"
                     }
+                ],
+                "grassEffects": [
+                    "GRASS_1"
                 ]
             }
         },
@@ -323,6 +326,14 @@
                 "position": [ -400, 0 ],
                 "rotation": 0,
                 "scale": 1
+            }
+        },
+        {
+            "id": "GRASS_1",
+            "type": "grass-effect",
+            "texturePath": "data/textures/grassMask1.png",
+            "transform": {
+                "position": [60, 60]
             }
         }
     ],

@@ -20,6 +20,7 @@ namespace space
     class Ship;
     class PolygonCollider;
     class PlanetSurface;
+    class GrassEffect;
 
     template <typename T>
     class PlacedItemPair;
@@ -27,7 +28,25 @@ namespace space
 
     class WalkableArea : private NonCopyable
     {
+        private:
+            enum class PostLoadType
+            {
+                Character, GrassEffect, Item
+            };
+
+            struct PostLoadObject
+            {
+                ObjectId id;
+                ItemId itemId;
+                PostLoadType type;
+                sf::Vector2f position;
+
+                PostLoadObject(const ObjectId &id, PostLoadType type) : id(id), type(type) { }
+                PostLoadObject(ItemId itemId, sf::Vector2f position) : itemId(itemId), type(PostLoadType::Item), position(position) { }
+            };
+
         public:
+
             // Fields
 
             // Constructor
@@ -50,12 +69,17 @@ namespace space
             void addStaticCollider(PolygonCollider &collider);
             void removeStaticCollider(PolygonCollider &collider);
 
-            void addPostLoadCharacter(const ObjectId &id) { _onPostLoadCharacters.push_back(id); }
-            void addPostLoadPlaceable(ItemId id, sf::Vector2f position) { _onPostLoadPlaceables.emplace_back(id, position); }
+            void addPostLoadCharacter(const ObjectId &id) { _onPostLoadObjects.emplace_back(id, PostLoadType::Character); }
+            void addPostLoadGrassEffect(const ObjectId &id) { _onPostLoadObjects.emplace_back(id, PostLoadType::GrassEffect); }
+            void addPostLoadPlaceable(ItemId id, sf::Vector2f position) { _onPostLoadObjects.emplace_back(id, position); }
 
             void addCharacter(Character *character);
             void removeCharacter(Character *character);
             const std::vector<Character *> characters() const { return _characters; }
+
+            void addGrassEffect(GrassEffect *grassEffect);
+            void removeGrassEffect(const ObjectId &id);
+            const std::vector<GrassEffect *> grassEffects() const { return _grassEffects; }
 
             PlacedItem *addPlaceable(PlaceableItem *item, sf::Vector2f position);
             void removePlaceable(ItemId id);
@@ -65,11 +89,11 @@ namespace space
 
         private:
             // Fields
-            std::vector<ObjectId> _onPostLoadCharacters;
-            std::vector<std::tuple<ItemId, sf::Vector2f>> _onPostLoadPlaceables;
+            std::vector<PostLoadObject> _onPostLoadObjects;
 
             std::vector<Character *> _characters;
             std::vector<std::unique_ptr<PlacedItem>> _placedItems;
+            std::vector<GrassEffect *> _grassEffects;
             sf::Transform _worldTransform;
             Ship *_partOfShip;
             PlanetSurface *_partOfPlanet;

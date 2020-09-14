@@ -58,5 +58,11 @@
         "id": "EFFECT_TEXTURE_OVERLAY",
         "fragmentPath": "data/shaders/effects/fullpass.frag",
         "vertexPath": "data/shaders/effects/fullpass.vert"
+    },
+    {
+        "type": "shader",
+        "id": "EFFECT_GRASS",
+        "fragmentPath": "data/shaders/effects/grass_effect.frag",
+        "vertexPath": "data/shaders/effects/grass_effect.vert"
     }
 ]
