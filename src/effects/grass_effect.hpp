@@ -29,6 +29,7 @@ namespace space
             // Fields
             sf::Sprite _sprite;
             sf::Shader *_shader;
+            const sf::Texture *_noiseTex;
             bool _init;
 
             // Methods

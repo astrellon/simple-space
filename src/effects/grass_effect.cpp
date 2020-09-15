@@ -38,7 +38,18 @@ namespace space
         auto size = _sprite.getTexture()->getSize();
         _shader->setUniform("tipColour", sf::Glsl::Vec4(sf::Color(207, 255, 112)));
         _shader->setUniform("sideColour", sf::Glsl::Vec4(sf::Color(60, 163, 112)));
+        _shader->setUniform("windColour", sf::Glsl::Vec4(sf::Color(233, 255, 153)));
         _shader->setUniform("invTextureSize", sf::Glsl::Vec2(1.0f / size.x, 1.0f / size.y));
+        _shader->setUniform("timeSinceStart", session.engine().timeSinceStart().asSeconds());
+        _shader->setUniform("windSpeed", 1.5f);
+        _shader->setUniform("noiseTex", _noiseTex);
+
+        size = _noiseTex->getSize();
+        _shader->setUniform("invNoiseTexSize", sf::Glsl::Vec2(1.0f / size.x, 1.0f / size.y));
+
+        sf::Vector2f windDirection(-1, -1);
+        windDirection = windDirection.normalised();
+        _shader->setUniform("windDirection", sf::Glsl::Vec2(windDirection));
 
         target.draw(_sprite, states);
     }
@@ -54,6 +65,17 @@ namespace space
         else
         {
             _shader = &shader->shader;
+        }
+
+        sf::Texture *noiseTex;
+        if (!session.engine().resourceManager().texture("data/textures/noise.png", &noiseTex))
+        {
+            std::cout << "Unable to find noise texture for grass effect" << std::endl;
+        }
+        else
+        {
+            noiseTex->setRepeated(true);
+            _noiseTex = noiseTex;
         }
     }
 } // space
