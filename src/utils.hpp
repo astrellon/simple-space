@@ -195,9 +195,20 @@ namespace space
 
             static inline sf::Color fromHexString(const std::string &input)
             {
+                if (input.length() < 6)
+                {
+                    std::cout << "Invalid hex colour string: " << input << std::endl;
+                    return sf::Color::Black;
+                }
+
                 std::stringstream ss(input);
-                char c1, c2;
-                ss >> c1 >> c2;
+                if (input[0] == '0' && (input[1] == 'x' || input[1] == 'X'))
+                {
+                    // Skip 0x
+                    char c1, c2;
+                    ss >> c1 >> c2;
+                }
+
                 std::uint32_t full;
                 ss >> std::hex >> full;
 
