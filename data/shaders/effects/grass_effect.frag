@@ -22,11 +22,11 @@ float sineWave(float T, float a, float phase, vec2 dir, vec2 pos)
 }
 
 float wind (vec2 pos, float t) {
-    return (sineWave(2.0f, 1.8f, 1.0f*windSpeed*t,
+    return (sineWave(1.0f, 1.8f, 1.0f*windSpeed*t,
                    windDirection, pos)
-          + sineWave(0.7f, 0.1f, 2.0f*windSpeed*t,
+          + sineWave(0.35f, 0.1f, 2.0f*windSpeed*t,
                      normalize(windDirection - vec2(0.0f, 0.4f)), pos)
-          + sineWave(0.75f, 0.1f, 1.5f*windSpeed*t,
+          + sineWave(0.375f, 0.1f, 1.5f*windSpeed*t,
                      normalize(windDirection + vec2(0.4f, 0.0f)), pos))
          / 3.0f;
 }
@@ -39,9 +39,9 @@ float sampleNoise(vec2 uv, float offset)
 void main()
 {
     vec2 uv = gl_TexCoord[0].xy * invTextureSize;
-    float noise = sampleNoise(gl_TexCoord[0].xy, 0.15f * windSpeed * timeSinceStart);
+    float noise = sampleNoise(gl_TexCoord[0].xy, 0.1f * windSpeed * timeSinceStart);
 
-    uv.y -= noise * invNoiseTexSize.x * 0.5f;
+    uv.y -= noise * invNoiseTexSize.x * 0.25f;
 
     FragColor = vec4(0.0f); // Start with clear color.
     for (float dist = 0.0f; dist < MAX_BLADE_LENGTH; ++dist)

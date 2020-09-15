@@ -6,6 +6,7 @@
 #include "../engine.hpp"
 #include "../definition_manager.hpp"
 #include "../definitions/shader_definition.hpp"
+#include "../utils.hpp"
 
 namespace space
 {
@@ -36,9 +37,9 @@ namespace space
         states.transform = _worldTransform;
 
         auto size = _sprite.getTexture()->getSize();
-        _shader->setUniform("tipColour", sf::Glsl::Vec4(sf::Color(207, 255, 112)));
-        _shader->setUniform("sideColour", sf::Glsl::Vec4(sf::Color(60, 163, 112)));
-        _shader->setUniform("windColour", sf::Glsl::Vec4(sf::Color(233, 255, 153)));
+        _shader->setUniform("tipColour", sf::Glsl::Vec4(Utils::fromHexString("8fde5dff")));
+        _shader->setUniform("sideColour", sf::Glsl::Vec4(Utils::fromHexString("73c74dff")));
+        _shader->setUniform("windColour", sf::Glsl::Vec4(Utils::fromHexString("9fef6dff")));
         _shader->setUniform("invTextureSize", sf::Glsl::Vec2(1.0f / size.x, 1.0f / size.y));
         _shader->setUniform("timeSinceStart", session.engine().timeSinceStart().asSeconds());
         _shader->setUniform("windSpeed", 1.5f);
