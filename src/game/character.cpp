@@ -51,7 +51,7 @@ namespace space
 
         if (_flipSprite)
         {
-            _worldTransform.getMatrix()[0] *= -1.0f;
+            _worldTransform *= sf::Transform(-1, 0, 0,  0, 1, 0,  0, 0, 1);
         }
 
         _sprite.update(dt);
@@ -89,7 +89,7 @@ namespace space
         fixtureDef.density = 5.0f;
         fixtureDef.shape = &shape;
 
-        if (_insideArea && _insideArea->partOfPlanetSurface())
+        if (!isInSpace())
         {
             bodyDef.fixedRotation = true;
             _transform.rotation = 0;
@@ -105,5 +105,10 @@ namespace space
     {
         world->DestroyBody(_physicsBody);
         _physicsBody = nullptr;
+    }
+
+    bool Character::isInSpace() const
+    {
+        return _insideArea && _insideArea->partOfShip();
     }
 } // namespace space

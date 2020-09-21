@@ -241,11 +241,18 @@ namespace space
             sprite.sequence("walk", true);
             _timeToNextIdle = 0;
 
-            if (_character->moveInput.x < 0)
+            if (!_character->isInSpace())
             {
-                _character->flipSprite(true);
+                if (_character->moveInput.x < 0)
+                {
+                    _character->flipSprite(true);
+                }
+                else if (_character->moveInput.x > 0)
+                {
+                    _character->flipSprite(false);
+                }
             }
-            else if (_character->moveInput.x > 0)
+            else
             {
                 _character->flipSprite(false);
             }

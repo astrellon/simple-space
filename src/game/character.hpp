@@ -47,6 +47,8 @@ namespace space
             void addToPhysicsWorld(b2World *world);
             void removeFromPhysicsWorld(b2World *world);
 
+            bool isInSpace() const;
+
         protected:
             // Fields
             WalkableArea *_insideArea;
