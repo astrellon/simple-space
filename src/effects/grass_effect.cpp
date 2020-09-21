@@ -6,75 +6,43 @@
 #include "../engine.hpp"
 #include "../definition_manager.hpp"
 #include "../definitions/shader_definition.hpp"
+#include "../definitions/grass_effect_definition.hpp"
 #include "../utils.hpp"
 
 namespace space
 {
-    GrassEffect::GrassEffect(const ObjectId &id) : SpaceObject(id), _shader(nullptr), _init(false)
+    GrassEffect::GrassEffect(const ObjectId &id, const GrassEffectDefinition &definition) : SpaceObject(id), definition(definition)
     {
 
     }
 
     void GrassEffect::update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform)
     {
-        if (!_init)
-        {
-            init(session);
-        }
-
         updateWorldTransform(parentTransform);
     }
 
     void GrassEffect::draw(GameSession &session, sf::RenderTarget &target)
     {
-        if (_shader == nullptr)
-        {
-            return;
-        }
+        auto &shader = definition.shader->shader;
 
         sf::RenderStates states;
-        states.shader = _shader;
+        states.shader = &shader;
         states.transform = _worldTransform;
 
         auto size = _sprite.getTexture()->getSize();
-        _shader->setUniform("tipColour", sf::Glsl::Vec4(Utils::fromHexString("8fde5dff")));
-        _shader->setUniform("sideColour", sf::Glsl::Vec4(Utils::fromHexString("73c74dff")));
-        _shader->setUniform("windColour", sf::Glsl::Vec4(Utils::fromHexString("9fef6dff")));
-        _shader->setUniform("insideScale", Utils::getInsideScale());
-        _shader->setUniform("worldPosition", sf::Glsl::Vec2(_transform.position));
-        _shader->setUniform("invTextureSize", sf::Glsl::Vec2(1.0f / size.x, 1.0f / size.y));
-        _shader->setUniform("timeSinceStart", session.engine().timeSinceStart().asSeconds());
-        _shader->setUniform("windSpeed", 1.5f);
+        shader.setUniform("tipColour", sf::Glsl::Vec4(definition.tipColour));
+        shader.setUniform("sideColour", sf::Glsl::Vec4(definition.sideColour));
+        shader.setUniform("windColour", sf::Glsl::Vec4(definition.windColour));
+        shader.setUniform("insideScale", Utils::getInsideScale());
+        shader.setUniform("worldPosition", sf::Glsl::Vec2(_transform.position));
+        shader.setUniform("invTextureSize", sf::Glsl::Vec2(1.0f / size.x, 1.0f / size.y));
+        shader.setUniform("timeSinceStart", session.engine().timeSinceStart().asSeconds());
+        shader.setUniform("windSpeed", 1.5f);
 
         sf::Vector2f windDirection(-1, -1);
         windDirection = windDirection.normalised();
-        _shader->setUniform("windDirection", sf::Glsl::Vec2(windDirection));
+        shader.setUniform("windDirection", sf::Glsl::Vec2(windDirection));
 
         target.draw(_sprite, states);
-    }
-
-    void GrassEffect::init(GameSession &session)
-    {
-        _init = true;
-        ShaderDefinition *shader;
-        if (!session.engine().definitionManager().tryGet("EFFECT_GRASS", &shader))
-        {
-            std::cout << "Unable to find grass shader for grass effect" << std::endl;
-        }
-        else
-        {
-            _shader = &shader->shader;
-        }
-
-        sf::Texture *noiseTex;
-        if (!session.engine().resourceManager().texture("data/textures/noise.png", &noiseTex))
-        {
-            std::cout << "Unable to find noise texture for grass effect" << std::endl;
-        }
-        else
-        {
-            noiseTex->setRepeated(true);
-            _noiseTex = noiseTex;
-        }
     }
 } // space

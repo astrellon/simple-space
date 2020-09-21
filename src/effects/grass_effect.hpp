@@ -3,6 +3,8 @@
 #include <SFML/Graphics.hpp>
 #include "../game/space_object.hpp"
 
+#include "../definitions/grass_effect_definition.hpp"
+
 namespace space
 {
     class GameSession;
@@ -11,16 +13,14 @@ namespace space
     {
         public:
             // Fields
+            const GrassEffectDefinition &definition;
 
             // Constructor
-            GrassEffect(const ObjectId &id);
+            GrassEffect(const ObjectId &id, const GrassEffectDefinition &definition);
 
             // Methods
             virtual void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform);
             virtual void draw(GameSession &session, sf::RenderTarget &target);
-
-            void texture(const sf::Texture &texture) { _sprite.setTexture(texture, true); }
-            const sf::Texture *texture() const { return _sprite.getTexture(); }
 
             static const std::string SpaceObjectType() { return "grass-effect"; }
             virtual std::string type() const { return SpaceObjectType(); }
@@ -28,11 +28,7 @@ namespace space
         private:
             // Fields
             sf::Sprite _sprite;
-            sf::Shader *_shader;
-            const sf::Texture *_noiseTex;
-            bool _init;
 
             // Methods
-            void init(GameSession &session);
     };
 } // space

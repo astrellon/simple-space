@@ -278,18 +278,16 @@ namespace space
     bool addFromJsonGrassEffect(const json &j, GameSession &session)
     {
         auto id = j.at("id").get<ObjectId>();
-        auto texturePath = j.at("texturePath").get<std::string>();
+        auto definitionId = j.at("definitionId").get<DefinitionId>();
 
-        const sf::Texture *texture;
-        if (!session.engine().resourceManager().texture(texturePath, &texture))
+        const GrassEffectDefinition *definition;
+        if (!session.engine().definitionManager().tryGet(definitionId, &definition))
         {
-            std::cout << "Unable to load grass effect [" << id << "] texture: " << texturePath << std::endl;
+            std::cout << "Unable to find grass effect definition " << definitionId << " for " << id << std::endl;
             return false;
         }
 
-        auto result = session.createObject<GrassEffect>(id);
-        result->transform(fromJsonTransform(j.at("transform")));
-        result->texture(*texture);
+        auto result = session.createObject<GrassEffect>(id, *definition);
 
         return true;
     }
