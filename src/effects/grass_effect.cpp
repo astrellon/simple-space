@@ -40,13 +40,11 @@ namespace space
         _shader->setUniform("tipColour", sf::Glsl::Vec4(Utils::fromHexString("8fde5dff")));
         _shader->setUniform("sideColour", sf::Glsl::Vec4(Utils::fromHexString("73c74dff")));
         _shader->setUniform("windColour", sf::Glsl::Vec4(Utils::fromHexString("9fef6dff")));
+        _shader->setUniform("insideScale", Utils::getInsideScale());
+        _shader->setUniform("worldPosition", sf::Glsl::Vec2(_transform.position));
         _shader->setUniform("invTextureSize", sf::Glsl::Vec2(1.0f / size.x, 1.0f / size.y));
         _shader->setUniform("timeSinceStart", session.engine().timeSinceStart().asSeconds());
         _shader->setUniform("windSpeed", 1.5f);
-        _shader->setUniform("noiseTex", _noiseTex);
-
-        size = _noiseTex->getSize();
-        _shader->setUniform("invNoiseTexSize", sf::Glsl::Vec2(1.0f / size.x, 1.0f / size.y));
 
         sf::Vector2f windDirection(-1, -1);
         windDirection = windDirection.normalised();

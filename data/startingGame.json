@@ -1,5 +1,5 @@
 {
-    "activeStarSystem": "STAR_SYSTEM_1",
+    "activePlanetSurface": "PLANET_GRASSY_1",
     "items": [
         {
             "definitionId": "CHAIR_1",
@@ -100,7 +100,8 @@
             "definitionId": "PLANET_GRASSY_1",
             "walkableArea": {
                 "characterIds": [
-                    "FRED"
+                    "FRED",
+                    "PLAYER_CHAR"
                 ],
                 "placedItems": [
                     {
@@ -115,7 +116,8 @@
                     }
                 ],
                 "grassEffects": [
-                    "GRASS_1"
+                    "GRASS_1",
+                    "GRASS_2"
                 ]
             }
         },
@@ -156,13 +158,11 @@
         }
     ],
     "playerController": {
-        "controlling": 1,
+        "controlling": 2,
         "controllingCharacter": "PLAYER_CHAR",
         "controllingShip": "PLAYER",
         "inventory": {
             "items": [
-                0,
-                1
             ]
         }
     },
@@ -195,16 +195,26 @@
             "rotationSpeed": 0.0,
             "speed": [ 0.0, 0.0 ],
             "transform": {
-                "position": [ 0.0, 0.0 ],
+                "position": [ -200.0, 200.0 ],
                 "rotation": 0.0,
                 "scale": 1.0
             },
             "type": "ship",
             "walkableArea": {
                 "characterIds": [
-                    "PLAYER_CHAR"
                 ],
-                "placedItems": null
+                "placedItems": [
+                    {
+                        "itemId": 0,
+                        "position": [ 0.0, -10.0 ],
+                        "type": "placed-item"
+                    },
+                    {
+                        "itemId": 1,
+                        "position": [ 0.0, 0.0 ],
+                        "type": "placed-item"
+                    }
+                ]
             }
         },
         {
@@ -238,7 +248,7 @@
             "definitionId": "PLAYER_CHAR",
             "id": "PLAYER_CHAR",
             "transform": {
-                "position": [ 0.0, 0.0 ],
+                "position": [ 80.0, 80.0 ],
                 "rotation": 0.0,
                 "scale": 0.1666666716337204
             },
@@ -334,6 +344,14 @@
             "texturePath": "data/textures/grassMask1.png",
             "transform": {
                 "position": [60, 60]
+            }
+        },
+        {
+            "id": "GRASS_2",
+            "type": "grass-effect",
+            "texturePath": "data/textures/grassMask1.png",
+            "transform": {
+                "position": [20, 70]
             }
         }
     ],
