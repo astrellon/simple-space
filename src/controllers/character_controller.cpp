@@ -235,16 +235,29 @@ namespace space
             return;
         }
 
+        auto immediateChange = false;
+        if (_character->moveInput != sf::Vector2f())
+        {
+            sprite.sequence("walk", true);
+            _timeToNextIdle = 0;
+
+            return;
+        }
+        else if (sprite.currentAnimation() == "walk")
+        {
+            immediateChange = true;
+        }
+
         _timeToNextIdle -= dt.asSeconds();
         if (_timeToNextIdle < 0)
         {
             if (Utils::randi(0, 100) < 40)
             {
-                sprite.sequence("idle2", false);
+                sprite.sequence("idle2", immediateChange);
             }
             else
             {
-                sprite.sequence("idle", false);
+                sprite.sequence("idle", immediateChange);
             }
 
             _timeToNextIdle = Utils::randf(2, 5);

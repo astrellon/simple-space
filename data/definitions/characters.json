@@ -16,6 +16,10 @@
             "dizzy": {
                 "frameTiming": 0.1,
                 "range": [8, 11]
+            },
+            "walk": {
+                "frameTiming": 0.1,
+                "range": [12, 15]
             }
         }
     },
