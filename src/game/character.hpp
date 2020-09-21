@@ -36,6 +36,9 @@ namespace space
             void insideArea(WalkableArea *area) { _insideArea = area; }
             WalkableArea *insideArea() const { return _insideArea; }
 
+            void flipSprite(bool flip) { _flipSprite = flip; }
+            bool flipSprite() const { return _flipSprite; }
+
             AnimatedSprite &sprite() { return _sprite; }
             const AnimatedSprite &sprite() const { return _sprite; }
 
@@ -49,6 +52,7 @@ namespace space
             WalkableArea *_insideArea;
             b2Body *_physicsBody;
             AnimatedSprite _sprite;
+            bool _flipSprite;
 
             // Methods
     };

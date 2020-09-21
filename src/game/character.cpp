@@ -12,7 +12,7 @@
 namespace space
 {
     Character::Character(const ObjectId &id, const CharacterDefinition &definition) :
-        SpaceObject(id), definition(definition), rotateInput(0), _physicsBody(nullptr), _insideArea(nullptr), _sprite(*definition.texture)
+        SpaceObject(id), definition(definition), rotateInput(0), _physicsBody(nullptr), _insideArea(nullptr), _sprite(*definition.texture), _flipSprite(false)
     {
         _interactable.name(definition.name);
         _sprite.sequence("idle", true);
@@ -48,6 +48,11 @@ namespace space
         _transform.rotation = Utils::radiansToDegrees(rotation);
 
         updateWorldTransform(parentTransform);
+
+        if (_flipSprite)
+        {
+            _worldTransform.getMatrix()[0] *= -1.0f;
+        }
 
         _sprite.update(dt);
     }
