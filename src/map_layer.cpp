@@ -131,7 +131,7 @@ namespace space
         int posX2 = static_cast<int>(std::ceil((viewCorner.x + size.x) / m_chunkSize.x));
         int posY2 = static_cast<int>(std::ceil((viewCorner.y + size.y)/ m_chunkSize.y));
 
-        std::vector<Chunk*> visible;
+        m_visibleChunksTemp.clear();
         for (auto y = posY; y < posY2; ++y)
         {
             for (auto x = posX; x < posX2; ++x)
@@ -139,12 +139,12 @@ namespace space
                 std::size_t idx = y * int(m_chunkCount.x) + x;
                 if (idx >= 0u && idx < m_chunks.size() && !m_chunks[idx]->empty())
                 {
-                    visible.push_back(m_chunks[idx].get());
+                    m_visibleChunksTemp.push_back(m_chunks[idx].get());
                 }
             }
         }
 
-        std::swap(m_visibleChunks, visible);
+        std::swap(m_visibleChunks, m_visibleChunksTemp);
     }
 
     void MapLayer::draw(sf::RenderTarget& rt, sf::RenderStates states) const

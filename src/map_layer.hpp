@@ -93,6 +93,7 @@ namespace space
 
         std::vector<ChunkPtr> m_chunks;
         mutable std::vector<Chunk*> m_visibleChunks;
+        mutable std::vector<Chunk*> m_visibleChunksTemp;
         ChunkPtr& getChunkAndTransform(int x, int y, sf::Vector2u& chunkRelative);
         void createChunks(const tmx::Map& map, ResourceManager &resourceManager, const tmx::TileLayer& layer);
 

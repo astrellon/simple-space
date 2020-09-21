@@ -75,11 +75,11 @@ namespace space
 
             void addCharacter(Character *character);
             void removeCharacter(Character *character);
-            const std::vector<Character *> characters() const { return _characters; }
+            const std::vector<Character *> &characters() const { return _characters; }
 
             void addGrassEffect(GrassEffect *grassEffect);
             void removeGrassEffect(const ObjectId &id);
-            const std::vector<GrassEffect *> grassEffects() const { return _grassEffects; }
+            const std::vector<GrassEffect *> &grassEffects() const { return _grassEffects; }
 
             PlacedItem *addPlaceable(PlaceableItem *item, sf::Vector2f position);
             void removePlaceable(ItemId id);

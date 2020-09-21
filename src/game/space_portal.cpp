@@ -6,7 +6,6 @@
 #include "../utils.hpp"
 #include "../game_session.hpp"
 #include "../engine.hpp"
-#include "../earcut.hpp"
 #include "star_system.hpp"
 #include "ship.hpp"
 #include "planet.hpp"
@@ -136,12 +135,12 @@ namespace space
 
         if (asPolygon)
         {
-            auto indicies = mapbox::earcut<uint16_t>(_shadowShape);
+            _earcut(_shadowShape);
 
             sf::VertexArray polygonDraw(sf::Triangles);
-            for (auto i = 0; i < indicies.size(); i++)
+            for (auto i = 0; i < _earcut.indices.size(); i++)
             {
-                auto index = indicies[i];
+                auto index = _earcut.indices[i];
                 auto &point = _shadowShape[0][index];
                 polygonDraw.append(sf::Vertex(point, sf::Color::White));
             }

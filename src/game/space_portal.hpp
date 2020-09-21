@@ -8,6 +8,7 @@
 #include "../animated_sprite.hpp"
 #include "../effects/portal_shadow.hpp"
 #include "../line.hpp"
+#include "../earcut.hpp"
 
 namespace space
 {
@@ -52,8 +53,10 @@ namespace space
             AnimatedSprite _sprite;
             std::vector<NearPortalObject> _nearbyObjects;
             PortalShadow _shadow;
+
             // Is a vector for earcutting
             std::vector<Polygon> _shadowShape;
+            mapbox::detail::Earcut<uint16_t> _earcut;
             std::array<FloatLine, 2> _shadowOutlines;
             std::array<sf::Vector2f, 2> _lerpFromShadowPoint;
             float _lerpFromShadowT;
