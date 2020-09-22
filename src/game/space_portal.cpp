@@ -161,15 +161,15 @@ namespace space
 
     void SpacePortal::drawPortalOutlines(GameSession &session, sf::RenderTarget &target)
     {
-        glLineWidth(3.0f);
-        sf::VertexArray outlineDraw(sf::Lines, 4);
-        outlineDraw.append(sf::Vertex(_shadowOutlines[0].point1, sf::Color::White));
-        outlineDraw.append(sf::Vertex(_shadowOutlines[0].point2, sf::Color::White));
-        outlineDraw.append(sf::Vertex(_shadowOutlines[1].point1, sf::Color::White));
-        outlineDraw.append(sf::Vertex(_shadowOutlines[1].point2, sf::Color::White));
+        // glLineWidth(3.0f);
+        // sf::VertexArray outlineDraw(sf::Lines, 4);
+        // outlineDraw.append(sf::Vertex(_shadowOutlines[0].point1, sf::Color::White));
+        // outlineDraw.append(sf::Vertex(_shadowOutlines[0].point2, sf::Color::White));
+        // outlineDraw.append(sf::Vertex(_shadowOutlines[1].point1, sf::Color::White));
+        // outlineDraw.append(sf::Vertex(_shadowOutlines[1].point2, sf::Color::White));
 
-        target.draw(outlineDraw, _worldTransform);
-        glLineWidth(1.0f);
+        // target.draw(outlineDraw, _worldTransform);
+        // glLineWidth(1.0f);
     }
 
     void SpacePortal::cleanupNearbyObjects()
