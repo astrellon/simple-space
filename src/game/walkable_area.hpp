@@ -25,28 +25,11 @@ namespace space
     template <typename T>
     class PlacedItemPair;
     class Teleporter;
+    class LoadingContext;
 
     class WalkableArea : private NonCopyable
     {
-        private:
-            enum class PostLoadType
-            {
-                Character, GrassEffect, Item
-            };
-
-            struct PostLoadObject
-            {
-                ObjectId id;
-                ItemId itemId;
-                PostLoadType type;
-                sf::Vector2f position;
-
-                PostLoadObject(const ObjectId &id, PostLoadType type) : id(id), type(type) { }
-                PostLoadObject(ItemId itemId, sf::Vector2f position) : itemId(itemId), type(PostLoadType::Item), position(position) { }
-            };
-
         public:
-
             // Fields
 
             // Constructor
@@ -56,7 +39,7 @@ namespace space
             // Methods
             void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform);
             void draw(GameSession &session, sf::RenderTarget &target);
-            void onPostLoad(GameSession &session);
+            void onPostLoad(GameSession &session, LoadingContext &context);
 
             std::vector<PlacedItemPair<Teleporter>> findTeleporters() const;
 
@@ -68,10 +51,6 @@ namespace space
 
             void addStaticCollider(PolygonCollider &collider);
             void removeStaticCollider(PolygonCollider &collider);
-
-            void addPostLoadCharacter(const ObjectId &id) { _onPostLoadObjects.emplace_back(id, PostLoadType::Character); }
-            void addPostLoadGrassEffect(const ObjectId &id) { _onPostLoadObjects.emplace_back(id, PostLoadType::GrassEffect); }
-            void addPostLoadPlaceable(ItemId id, sf::Vector2f position) { _onPostLoadObjects.emplace_back(id, position); }
 
             void addCharacter(Character *character);
             void removeCharacter(Character *character);
@@ -89,8 +68,6 @@ namespace space
 
         private:
             // Fields
-            std::vector<PostLoadObject> _onPostLoadObjects;
-
             std::vector<Character *> _characters;
             std::vector<std::unique_ptr<PlacedItem>> _placedItems;
             std::vector<GrassEffect *> _grassEffects;

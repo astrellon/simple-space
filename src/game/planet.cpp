@@ -85,7 +85,8 @@ namespace space
         target.draw(sphereSprite, states);
         DrawDebug::glDraw++;
     }
-    void Planet::onPostLoad(GameSession &session)
+
+    void Planet::onPostLoad(GameSession &session, LoadingContext &context)
     {
         for (auto &id : _onPostLoadPlanetSurfaceIds)
         {

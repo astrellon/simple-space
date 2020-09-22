@@ -24,6 +24,7 @@
 #include "controllers/npc_controller.hpp"
 
 #include "serialisers/json/json_serialisers_game.hpp"
+#include "serialisers/loading_context.hpp"
 
 #include <tmxlite/Map.hpp>
 
@@ -390,13 +391,13 @@ namespace space
         }
     }
 
-    void GameSession::onPostLoad()
+    void GameSession::onPostLoad(LoadingContext &context)
     {
         for (auto &spaceObject : _spaceObjects)
-            spaceObject->onPostLoad(*this);
+            spaceObject->onPostLoad(*this, context);
 
         for (auto &planetSurface : _planetSurfaces)
-            planetSurface->onPostLoad(*this);
+            planetSurface->onPostLoad(*this, context);
     }
 
     void GameSession::applyTransitionToCamera(const TransitionData &transitionData, RenderCamera &renderCamera)

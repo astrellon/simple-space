@@ -8,6 +8,7 @@
 #include "../utils.hpp"
 #include "../game_session.hpp"
 #include "../effects/grass_effect.hpp"
+#include "../serialisers/loading_context.hpp"
 
 namespace space
 {
@@ -64,48 +65,13 @@ namespace space
         _foreground.draw(session, target);
     }
 
-    void WalkableArea::onPostLoad(GameSession &session)
+    void WalkableArea::onPostLoad(GameSession &session, LoadingContext &context)
     {
-        for (auto postLoad : _onPostLoadObjects)
+        auto find = context.postLoadWalkableAreaInstances.find(this);
+        if (find != context.postLoadWalkableAreaInstances.end())
         {
-            if (postLoad.type == PostLoadType::Character)
-            {
-                Character *character;
-                if (session.tryGetSpaceObject<Character>(postLoad.id, &character))
-                {
-                    addCharacter(character);
-                }
-                else
-                {
-                    std::cout << "Unable to find character '" << postLoad.id << "' for walkable area" << std::endl;
-                }
-            }
-            else if (postLoad.type == PostLoadType::GrassEffect)
-            {
-                GrassEffect *grassEffect;
-                if (session.tryGetSpaceObject<GrassEffect>(postLoad.id, &grassEffect))
-                {
-                    addGrassEffect(grassEffect);
-                }
-                else
-                {
-                    std::cout << "Unable to find grass effect '" << postLoad.id << "' for walkable area" << std::endl;
-                }
-            }
-            else if (postLoad.type == PostLoadType::Item)
-            {
-                PlaceableItem *item;
-                if (!session.tryGetItem<PlaceableItem>(postLoad.itemId, &item))
-                {
-                    std::cout << "Unable to find placeable item for placed item: " << postLoad.id << std::endl;
-                    continue;
-                }
-
-                addPlaceable(item, postLoad.position);
-            }
+            find->second->applyToWalkableArea(*this, session);
         }
-
-        _onPostLoadObjects.clear();
     }
 
     std::vector<PlacedItemPair<Teleporter>> WalkableArea::findTeleporters() const
@@ -125,7 +91,6 @@ namespace space
 
         return result;
     }
-
 
     void WalkableArea::addStaticCollider(PolygonCollider &collider)
     {

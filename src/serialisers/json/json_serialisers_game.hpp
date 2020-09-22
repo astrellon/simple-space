@@ -16,6 +16,7 @@ namespace space
     class Planet;
     class PlacedItem;
     class WalkableArea;
+    class WalkableAreaInstances;
     class SpaceTransform;
     class CharacterController;
     class NpcController;
@@ -31,31 +32,34 @@ namespace space
     class Teleporter;
     class SpacePortal;
     class GrassEffect;
+    class LoadingContext;
 
     json toJson(const GameSession &input);
     std::unique_ptr<GameSession> fromJsonGameSession(Engine &engine, const json &j);
 
     json toJsonBase(const SpaceObject &input);
     json toJson(const SpaceObject &input);
-    bool addFromJsonSpaceObject(const json &j, GameSession &session);
+    bool addFromJsonSpaceObject(const json &j, GameSession &session, LoadingContext &context);
 
     json toJson(const Character &input);
     bool addFromJsonCharacter(const json &j, GameSession &session);
 
     json toJson(const Ship &input);
-    bool addFromJsonShip(const json &j, GameSession &session);
+    bool addFromJsonShip(const json &j, GameSession &session, LoadingContext &context);
 
     json toJson(const PlacedItem &input);
-    bool addFromJsonPlacedItem(const json &j, GameSession &session, WalkableArea &area);
+    bool addFromJsonPlacedItem(const json &j, WalkableAreaInstances &instances);
 
     json toJson(const WalkableArea &input);
-    std::unique_ptr<WalkableArea> fromJsonWalkableArea(const json &j, GameSession &session);
+    std::unique_ptr<WalkableArea> fromJsonWalkableArea(const json &j, GameSession &session, LoadingContext &context);
+
+    bool fromJsonWalkableAreaInstances(const json &j, WalkableAreaInstances &instances);
 
     json toJson(const StarSystem &input);
     bool addFromJsonStarSystem(const json &j, GameSession &session);
 
     json toJson(const PlanetSurface &input);
-    bool addFromJsonPlanetSurface(const json &j, GameSession &session);
+    bool addFromJsonPlanetSurface(const json &j, GameSession &session, LoadingContext &context);
 
     json toJson(const Inventory &input);
     std::unique_ptr<Inventory> fromJsonInventory(const json &j, GameSession &session);

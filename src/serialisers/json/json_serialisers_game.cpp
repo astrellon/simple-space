@@ -27,6 +27,8 @@
 #include "../../controllers/player_controller.hpp"
 #include "../../controllers/space_station_controller.hpp"
 
+#include "../loading_context.hpp"
+
 #include "json_common.hpp"
 
 namespace space
@@ -53,11 +55,12 @@ namespace space
 
     std::unique_ptr<GameSession> fromJsonGameSession(Engine &engine, const json &j)
     {
+        LoadingContext context;
         auto result = std::make_unique<GameSession>(engine);
         auto &session = *result.get();
 
         for (auto &spaceObject : j.at("spaceObjects"))
-            addFromJsonSpaceObject(spaceObject, session);
+            addFromJsonSpaceObject(spaceObject, session, context);
 
         for (auto &item : j.at("items"))
             addFromJsonItem(item, session);
@@ -69,7 +72,7 @@ namespace space
             addFromJsonStarSystem(starSystem, session);
 
         for (auto &planetSurfaces : j.at("planetSurfaces"))
-            addFromJsonPlanetSurface(planetSurfaces, session);
+            addFromJsonPlanetSurface(planetSurfaces, session, context);
 
         auto activeStarSystem = j.find("activeStarSystem");
         if (activeStarSystem != j.end())
@@ -103,7 +106,7 @@ namespace space
 
         addFromJsonPlayerController(j.at("playerController"), *result);
 
-        result->onPostLoad();
+        result->onPostLoad(context);
 
         return std::move(result);
     }
@@ -116,6 +119,7 @@ namespace space
             {"transform", toJson(input.transform())},
         };
     }
+
     json toJson(const SpaceObject &input)
     {
         if (input.type() == Character::SpaceObjectType())
@@ -138,14 +142,14 @@ namespace space
 
         throw std::runtime_error("Unknown space object type");
     }
-    bool addFromJsonSpaceObject(const json &j, GameSession &session)
+    bool addFromJsonSpaceObject(const json &j, GameSession &session, LoadingContext &context)
     {
         auto type = j.at("type").get<std::string>();
         if (type == Character::SpaceObjectType())
             return addFromJsonCharacter(j, session);
 
         if (type == Ship::SpaceObjectType())
-            return addFromJsonShip(j, session);
+            return addFromJsonShip(j, session, context);
 
         if (type == Planet::SpaceObjectType())
             // Ignore planets
@@ -198,7 +202,7 @@ namespace space
 
         return result;
     }
-    bool addFromJsonShip(const json &j, GameSession &session)
+    bool addFromJsonShip(const json &j, GameSession &session, LoadingContext &context)
     {
         auto id = j.at("id").get<ObjectId>();
         auto definitionId = j.at("definitionId").get<DefinitionId>();
@@ -210,7 +214,7 @@ namespace space
             return false;
         }
 
-        auto walkableArea = fromJsonWalkableArea(j.at("walkableArea"), session);
+        auto walkableArea = fromJsonWalkableArea(j.at("walkableArea"), session, context);
 
         auto result = session.createObject<Ship>(id, *definition, std::move(walkableArea));
         result->transform(fromJsonTransform(j.at("transform")));
@@ -236,7 +240,7 @@ namespace space
         };
     }
 
-    bool addFromJsonPlacedItem(const json &j, GameSession &session, WalkableArea &area)
+    bool addFromJsonPlacedItem(const json &j, WalkableAreaInstances &area)
     {
         auto itemId = j.at("itemId").get<ItemId>();
         auto position = fromJsonVector2f(j.at("position"));
@@ -309,20 +313,29 @@ namespace space
         };
     }
 
-    std::unique_ptr<WalkableArea> fromJsonWalkableArea(const json &j, GameSession &session)
+    std::unique_ptr<WalkableArea> fromJsonWalkableArea(const json &j, GameSession &session, LoadingContext &context)
     {
         auto result = std::make_unique<WalkableArea>();
+        auto instances = context.getWalkableInstances(result.get());
+
+        fromJsonWalkableAreaInstances(j, *instances);
+
+        return result;
+    }
+
+    bool fromJsonWalkableAreaInstances(const json &j, WalkableAreaInstances &instances)
+    {
         auto characterIds = j.at("characterIds");
         for (auto &jsonId : characterIds)
         {
             auto id = jsonId.get<ObjectId>();
-            result->addPostLoadCharacter(id);
+            instances.addPostLoadCharacter(id);
         }
 
         auto placedItems = j.at("placedItems");
         for (auto &placedItem : placedItems)
         {
-            addFromJsonPlacedItem(placedItem, session, *result.get());
+            addFromJsonPlacedItem(placedItem, instances);
         }
 
         auto grassEffectIds = j.find("grassEffects");
@@ -331,11 +344,11 @@ namespace space
             for (auto &jsonId : *grassEffectIds)
             {
                 auto id = jsonId.get<ObjectId>();
-                result->addPostLoadGrassEffect(id);
+                instances.addPostLoadGrassEffect(id);
             }
         }
 
-        return result;
+        return true;
     }
 
     json toJson(const StarSystem &input)
@@ -392,7 +405,7 @@ namespace space
             {"walkableArea", toJson(input.walkableArea())}
         };
     }
-    bool addFromJsonPlanetSurface(const json &j, GameSession &session)
+    bool addFromJsonPlanetSurface(const json &j, GameSession &session, LoadingContext &context)
     {
         auto definitionId = j.at("definitionId").get<DefinitionId>();
         const PlanetSurfaceDefinition *definition;
@@ -409,7 +422,7 @@ namespace space
             std::cout << "Unable to find planet " << planetId << " for planet surface" << std::endl;
             return false;
         }
-        auto walkableArea = fromJsonWalkableArea(j.at("walkableArea"), session);
+        auto walkableArea = fromJsonWalkableArea(j.at("walkableArea"), session, context);
         auto planetSurface = session.createPlanetSurface(*definition, std::move(walkableArea));
         planetSurface->partOfPlanet(planet);
 

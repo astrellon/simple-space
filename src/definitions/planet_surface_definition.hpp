@@ -2,8 +2,11 @@
 
 #include <string>
 #include <memory>
+#include <vector>
 
 #include "base_definition.hpp"
+
+#include "../game/walkable_area_instances.hpp"
 
 namespace tmx
 {
@@ -13,6 +16,7 @@ namespace tmx
 namespace space
 {
     class Engine;
+    class GrassEffectDefinition;
 
     class PlanetSurfaceDefinition : public BaseDefinition
     {
@@ -22,6 +26,8 @@ namespace space
             std::string tmxMapPath;
 
             tmx::Map *tmxMap;
+            WalkableAreaInstances walkableAreaInstances;
+
             // Constructor
             PlanetSurfaceDefinition(DefinitionId id) : BaseDefinition(id) { }
             virtual ~PlanetSurfaceDefinition() { }

@@ -12,6 +12,7 @@ namespace space
 {
     class GameSession;
     class PlanetSurface;
+    class LoadingContext;
 
     class Planet : public CelestialBody
     {
@@ -30,7 +31,7 @@ namespace space
 
             virtual void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform);
             virtual void draw(GameSession &session, sf::RenderTarget &target);
-            virtual void onPostLoad(GameSession &sesion);
+            virtual void onPostLoad(GameSession &session, LoadingContext &context);
 
             void addPostLoadPlanetSurfaceId(const DefinitionId &id) { _onPostLoadPlanetSurfaceIds.push_back(id); }
             void addPlanetSurface(PlanetSurface *planetSurface);

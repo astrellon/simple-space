@@ -23,6 +23,7 @@ namespace space
     class AnimationSequence;
     class SpacePortalDefinition;
     class ShaderDefinition;
+    class GrassEffectDefinition;
 
     json toJson(const BaseDefinition &input);
     std::unique_ptr<BaseDefinition> fromJsonBaseDefinition(const json &j);

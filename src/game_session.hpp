@@ -33,6 +33,7 @@ namespace space
     class TeleportClone;
     class CharacterController;
     class SpacePortal;
+    class LoadingContext;
 
     class GameSession
     {
@@ -161,7 +162,7 @@ namespace space
 
             void update(sf::Time dt);
             void draw();
-            void onPostLoad();
+            void onPostLoad(LoadingContext &context);
 
         private:
             // Fields

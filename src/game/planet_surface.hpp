@@ -15,6 +15,7 @@ namespace space
     class GameSession;
     class Planet;
     class RenderCamera;
+    class LoadingContext;
 
     class PlanetSurface : private NonCopyable
     {
@@ -32,7 +33,7 @@ namespace space
 
             void update(sf::Time dt);
             void draw(RenderCamera &target);
-            void onPostLoad(GameSession &session);
+            void onPostLoad(GameSession &session, LoadingContext &context);
 
             void partOfPlanet(Planet *planet) { _partOfPlanet = planet; }
             Planet *partOfPlanet() const { return _partOfPlanet; }

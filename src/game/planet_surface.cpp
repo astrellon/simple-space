@@ -50,8 +50,8 @@ namespace space
         _walkableArea->draw(_session, target);
     }
 
-    void PlanetSurface::onPostLoad(GameSession &session)
+    void PlanetSurface::onPostLoad(GameSession &session, LoadingContext &context)
     {
-        _walkableArea->onPostLoad(session);
+        _walkableArea->onPostLoad(session, context);
     }
 } // namespace space

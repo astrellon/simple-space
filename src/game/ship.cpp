@@ -141,10 +141,10 @@ namespace space
             }
         }
     }
-    void Ship::onPostLoad(GameSession &session)
+    void Ship::onPostLoad(GameSession &session, LoadingContext &context)
     {
-        SpaceObject::onPostLoad(session);
-        _walkableArea->onPostLoad(session);
+        SpaceObject::onPostLoad(session, context);
+        _walkableArea->onPostLoad(session, context);
     }
 
     void Ship::createMainCollider()

@@ -129,7 +129,7 @@ namespace space
         }
     }
 
-    void PlacedItem::onPostLoad(GameSession &session)
+    void PlacedItem::onPostLoad(GameSession &session, LoadingContext &context)
     {
         if (item == nullptr)
         {

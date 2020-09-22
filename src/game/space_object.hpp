@@ -15,6 +15,7 @@ namespace space
 
     class GameSession;
     class StarSystem;
+    class LoadingContext;
 
     class SpaceObject : private NonCopyable
     {
@@ -44,7 +45,7 @@ namespace space
             virtual void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform) = 0;
             virtual void draw(GameSession &session, sf::RenderTarget &target) = 0;
 
-            virtual void onPostLoad(GameSession &session);
+            virtual void onPostLoad(GameSession &session, LoadingContext &context) { }
 
             Interactable &interactable() { return _interactable; }
 

@@ -47,7 +47,7 @@ namespace space
 
             virtual void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform);
             virtual void draw(GameSession &session, sf::RenderTarget &target);
-            virtual void onPostLoad(GameSession &session);
+            virtual void onPostLoad(GameSession &session, LoadingContext &context);
 
         private:
             // Fields
