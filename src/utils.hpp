@@ -73,7 +73,7 @@ namespace space
                 return false;
             }
 
-            static inline ObjectId makeObjectId(ItemId item)
+            static inline ObjectId makeItemId(ItemId item)
             {
                 std::stringstream ss;
                 ss << "ITEM_" << item;

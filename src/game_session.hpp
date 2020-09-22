@@ -164,6 +164,11 @@ namespace space
             void draw();
             void onPostLoad(LoadingContext &context);
 
+            void nextId(int id) { _nextId = id; }
+            int nextId() { return ++_nextId; }
+
+            ObjectId nextObjectId();
+
         private:
             // Fields
             Engine &_engine;
@@ -183,6 +188,7 @@ namespace space
             DialogueManager _dialogueManager;
             bool _drawingPreTeleport;
             TextureOverlay _portalOverlay;
+            int _nextId;
 
             // Methods
             void applyTransitionToCamera(const TransitionData &transitionData, RenderCamera &renderCamera);

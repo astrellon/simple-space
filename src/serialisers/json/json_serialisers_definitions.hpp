@@ -66,6 +66,9 @@ namespace space
     json toJson(const ShaderDefinition &input);
     std::unique_ptr<ShaderDefinition> fromJsonShaderDefinition(const json &j);
 
+    json toJson(const GrassEffectDefinition &input);
+    std::unique_ptr<GrassEffectDefinition> fromJsonGrassEffectDefinition(const json &j);
+
     json toJson(const CelestialBodyLocation &input);
     CelestialBodyLocation fromJsonCelestialBodyLocation(const json &j);
 

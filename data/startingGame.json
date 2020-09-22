@@ -116,8 +116,6 @@
                     }
                 ],
                 "grassEffects": [
-                    "GRASS_1",
-                    "GRASS_2"
                 ]
             }
         },
@@ -336,22 +334,6 @@
                 "position": [ -400, 0 ],
                 "rotation": 0,
                 "scale": 1
-            }
-        },
-        {
-            "id": "GRASS_1",
-            "type": "grass-effect",
-            "texturePath": "data/textures/grassMask1.png",
-            "transform": {
-                "position": [60, 60]
-            }
-        },
-        {
-            "id": "GRASS_2",
-            "type": "grass-effect",
-            "texturePath": "data/textures/grassMask1.png",
-            "transform": {
-                "position": [20, 70]
             }
         }
     ],

@@ -8,48 +8,51 @@
 
 #include "../effects/grass_effect.hpp"
 #include "../game_session.hpp"
+#include "../engine.hpp"
+#include "../definition_manager.hpp"
 
 namespace space
 {
-    void WalkableAreaInstances::applyToWalkableArea(WalkableArea &walkableArea, GameSession &session)
+    void WalkableAreaInstances::applyToWalkableArea(WalkableArea &walkableArea, GameSession &session) const
     {
         for (auto postLoad : _onPostLoadObjects)
         {
-            if (postLoad.type == PostLoadType::Character)
+            Character *character;
+            if (session.tryGetSpaceObject<Character>(postLoad, &character))
             {
-                Character *character;
-                if (session.tryGetSpaceObject<Character>(postLoad.id, &character))
-                {
-                    walkableArea.addCharacter(character);
-                }
-                else
-                {
-                    std::cout << "Unable to find character '" << postLoad.id << "' for walkable area" << std::endl;
-                }
+                walkableArea.addCharacter(character);
             }
-            else if (postLoad.type == PostLoadType::GrassEffect)
+            else
             {
-                GrassEffect *grassEffect;
-                if (session.tryGetSpaceObject<GrassEffect>(postLoad.id, &grassEffect))
-                {
-                    walkableArea.addGrassEffect(grassEffect);
-                }
-                else
-                {
-                    std::cout << "Unable to find grass effect '" << postLoad.id << "' for walkable area" << std::endl;
-                }
+                std::cout << "Unable to find character '" << postLoad << "' for walkable area" << std::endl;
             }
-            else if (postLoad.type == PostLoadType::Item)
-            {
-                PlaceableItem *item;
-                if (!session.tryGetItem<PlaceableItem>(postLoad.itemId, &item))
-                {
-                    std::cout << "Unable to find placeable item for placed item: " << postLoad.id << std::endl;
-                    continue;
-                }
+        }
 
-                walkableArea.addPlaceable(item, postLoad.position);
+        for (auto grassEffectEntry : _onPostLoadGrass)
+        {
+            GrassEffectDefinition *definition;
+            if (session.engine().definitionManager().tryGet(grassEffectEntry.defId, &definition))
+            {
+                auto grassEffect = session.createObject<GrassEffect>(session.nextObjectId(), *definition);
+                grassEffect->transform().position = grassEffectEntry.position;
+                walkableArea.addGrassEffect(grassEffect);
             }
+            else
+            {
+                std::cout << "Unable to find grass effect '" << grassEffectEntry.defId << "' for walkable area" << std::endl;
+            }
+        }
+
+        for (auto placedItemEntry : _onPostLoadItems)
+        {
+            PlaceableItem *item;
+            if (!session.tryGetItem<PlaceableItem>(placedItemEntry.itemId, &item))
+            {
+                std::cout << "Unable to find placeable item for placed item: " << placedItemEntry.itemId << std::endl;
+                continue;
+            }
+
+            walkableArea.addPlaceable(item, placedItemEntry.position);
         }
     }
 } // space

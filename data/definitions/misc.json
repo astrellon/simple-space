@@ -21,5 +21,23 @@
         "animatedTextureId": "SPACE_PORTAL_TEXTURE",
         "pullRadius": 20,
         "pullForce": 500
+    },
+    {
+        "type": "grass-effect",
+        "id": "GRASS_1",
+        "texturePath": "data/textures/grassMask1.png",
+        "shaderId": "EFFECT_GRASS",
+        "tipColour": "8fde5dff",
+        "sideColour": "73c74dff",
+        "windColour": "9fef6dff"
+    },
+    {
+        "type": "grass-effect",
+        "id": "GRASS_2",
+        "texturePath": "data/textures/grassMask2.png",
+        "shaderId": "EFFECT_GRASS",
+        "tipColour": "8fde5dff",
+        "sideColour": "73c74dff",
+        "windColour": "9fef6dff"
     }
 ]

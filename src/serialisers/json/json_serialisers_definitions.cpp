@@ -4,6 +4,7 @@
 #include <stdexcept>
 
 #include "json_common.hpp"
+#include "json_serialisers_game.hpp"
 
 #include "../../utils.hpp"
 
@@ -21,6 +22,7 @@
 #include "../../definitions/animated_texture.hpp"
 #include "../../definitions/space_portal_definition.hpp"
 #include "../../definitions/shader_definition.hpp"
+#include "../../definitions/grass_effect_definition.hpp"
 
 using nlohmann::json;
 
@@ -63,6 +65,9 @@ namespace space
         else if (type == ShaderDefinition::DefinitionType())
             j = toJson(dynamic_cast<const ShaderDefinition &>(input));
 
+        else if (type == GrassEffectDefinition::DefinitionType())
+            j = toJson(dynamic_cast<const GrassEffectDefinition &>(input));
+
         else
             std::cout << "Error!" << std::endl;
 
@@ -104,6 +109,9 @@ namespace space
 
         if (type == ShaderDefinition::DefinitionType())
             return fromJsonShaderDefinition(j);
+
+        if (type == GrassEffectDefinition::DefinitionType())
+            return fromJsonGrassEffectDefinition(j);
 
         throw std::runtime_error("Oh no");
     }
@@ -337,6 +345,12 @@ namespace space
         j.at("name").get_to(result->name);
         j.at("tmxMapPath").get_to(result->tmxMapPath);
 
+        auto walkableAreaInstancesJson = j.find("walkableAreaInstances");
+        if (walkableAreaInstancesJson != j.end())
+        {
+            fromJsonWalkableAreaInstances(*walkableAreaInstancesJson, result->walkableAreaInstances);
+        }
+
         return result;
     }
 
@@ -488,6 +502,31 @@ namespace space
         j.at("fragmentPath").get_to(result->fragementPath);
         j.at("vertexPath").get_to(result->vertexPath);
         Utils::json_try_set(j, "name", result->name);
+
+        return result;
+    }
+
+    json toJson(const GrassEffectDefinition &input)
+    {
+        return json {
+            {"texturePath", input.texturePath},
+            {"shaderId", input.shaderId},
+            {"tipColour", Utils::toHexString(input.tipColour)},
+            {"sideColour", Utils::toHexString(input.sideColour)},
+            {"windColour", Utils::toHexString(input.windColour)}
+        };
+    }
+    std::unique_ptr<GrassEffectDefinition> fromJsonGrassEffectDefinition(const json &j)
+    {
+        auto id = j.at("id").get<DefinitionId>();
+        auto result = std::make_unique<GrassEffectDefinition>(id);
+
+        j.at("texturePath").get_to(result->texturePath);
+        j.at("shaderId").get_to(result->shaderId);
+
+        result->tipColour = Utils::fromHexString(j.at("tipColour").get<std::string>());
+        result->sideColour = Utils::fromHexString(j.at("sideColour").get<std::string>());
+        result->windColour = Utils::fromHexString(j.at("windColour").get<std::string>());
 
         return result;
     }

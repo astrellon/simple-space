@@ -11,7 +11,7 @@
 
 namespace space
 {
-    GrassEffect::GrassEffect(const ObjectId &id, const GrassEffectDefinition &definition) : SpaceObject(id), definition(definition)
+    GrassEffect::GrassEffect(const ObjectId &id, const GrassEffectDefinition &definition) : SpaceObject(id), definition(definition), _sprite(*definition.texture)
     {
 
     }
@@ -23,6 +23,11 @@ namespace space
 
     void GrassEffect::draw(GameSession &session, sf::RenderTarget &target)
     {
+        if (!_sprite.getTexture())
+        {
+            return;
+        }
+
         auto &shader = definition.shader->shader;
 
         sf::RenderStates states;

@@ -249,6 +249,15 @@ namespace space
         return true;
     }
 
+    bool addFromJsonGrassEffect(const json &j, WalkableAreaInstances &area)
+    {
+        auto defId = j.at("definitionId").get<DefinitionId>();
+        auto position = fromJsonVector2f(j.at("position"));
+        area.addPostLoadGrassEffect(defId, position);
+
+        return true;
+    }
+
     json toJson(const SpacePortal &input)
     {
         auto result = toJsonBase(input);
@@ -325,26 +334,31 @@ namespace space
 
     bool fromJsonWalkableAreaInstances(const json &j, WalkableAreaInstances &instances)
     {
-        auto characterIds = j.at("characterIds");
-        for (auto &jsonId : characterIds)
+        auto characterIds = j.find("characterIds");
+        if (characterIds != j.end())
         {
-            auto id = jsonId.get<ObjectId>();
-            instances.addPostLoadCharacter(id);
-        }
-
-        auto placedItems = j.at("placedItems");
-        for (auto &placedItem : placedItems)
-        {
-            addFromJsonPlacedItem(placedItem, instances);
-        }
-
-        auto grassEffectIds = j.find("grassEffects");
-        if (grassEffectIds != j.end())
-        {
-            for (auto &jsonId : *grassEffectIds)
+            for (auto &jsonId : *characterIds)
             {
                 auto id = jsonId.get<ObjectId>();
-                instances.addPostLoadGrassEffect(id);
+                instances.addPostLoadCharacter(id);
+            }
+        }
+
+        auto placedItems = j.find("placedItems");
+        if (placedItems != j.end())
+        {
+            for (auto &placedItem : *placedItems)
+            {
+                addFromJsonPlacedItem(placedItem, instances);
+            }
+        }
+
+        auto grassEffects = j.find("grassEffects");
+        if (grassEffects != j.end())
+        {
+            for (auto &grassEffect : *grassEffects)
+            {
+                addFromJsonGrassEffect(grassEffect, instances);
             }
         }
 

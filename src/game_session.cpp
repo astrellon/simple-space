@@ -30,7 +30,7 @@
 
 namespace space
 {
-    GameSession::GameSession(Engine &engine) : _engine(engine), _activeStarSystem(nullptr), _playerController(*this), _drawingPreTeleport(false), _activePlanetSurface(nullptr)
+    GameSession::GameSession(Engine &engine) : _engine(engine), _activeStarSystem(nullptr), _playerController(*this), _drawingPreTeleport(false), _activePlanetSurface(nullptr), _nextId(0)
     {
         _teleportEffect = std::make_unique<TeleportScreenEffect>();
         _teleportEffect->init(engine.definitionManager());
@@ -398,6 +398,13 @@ namespace space
 
         for (auto &planetSurface : _planetSurfaces)
             planetSurface->onPostLoad(*this, context);
+    }
+
+    ObjectId GameSession::nextObjectId()
+    {
+        std::stringstream ss("_ID_");
+        ss << nextId();
+        return ss.str();
     }
 
     void GameSession::applyTransitionToCamera(const TransitionData &transitionData, RenderCamera &renderCamera)

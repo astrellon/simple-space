@@ -3,7 +3,31 @@
         "type": "planet-surface",
         "id": "PLANET_GRASSY_1",
         "name": "Grassy Site 1",
-        "tmxMapPath": "data/maps/planet1.tmx"
+        "tmxMapPath": "data/maps/planet1.tmx",
+        "walkableAreaInstances": {
+            "grassEffects": [
+                {
+                    "definitionId": "GRASS_2",
+                    "position": [100, 80]
+                },
+                {
+                    "definitionId": "GRASS_2",
+                    "position": [120, 60]
+                },
+                {
+                    "definitionId": "GRASS_2",
+                    "position": [130, 90]
+                },
+                {
+                    "definitionId": "GRASS_1",
+                    "position": [20, 60]
+                },
+                {
+                    "definitionId": "GRASS_1",
+                    "position": [60, 80]
+                }
+            ]
+        }
     },
     {
         "type": "planet-surface",

@@ -4,6 +4,7 @@
 #include "../render_camera.hpp"
 #include "../game_session.hpp"
 #include "../engine.hpp"
+#include "walkable_area_instances.hpp"
 
 namespace space
 {
@@ -53,5 +54,6 @@ namespace space
     void PlanetSurface::onPostLoad(GameSession &session, LoadingContext &context)
     {
         _walkableArea->onPostLoad(session, context);
+        definition.walkableAreaInstances.applyToWalkableArea(*_walkableArea, session);
     }
 } // namespace space

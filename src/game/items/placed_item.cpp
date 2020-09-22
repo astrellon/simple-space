@@ -20,7 +20,7 @@ namespace space
 
         processItem();
     }
-    PlacedItem::PlacedItem(const ItemId &itemId, const sf::Vector2f &position, WalkableArea &area, DrawLayer &onLayer) : SpaceObject(Utils::makeObjectId(itemId)),  _collider(nullptr), area(area), onLayer(onLayer), item(nullptr)
+    PlacedItem::PlacedItem(const ItemId &itemId, const sf::Vector2f &position, WalkableArea &area, DrawLayer &onLayer) : SpaceObject(Utils::makeItemId(itemId)),  _collider(nullptr), area(area), onLayer(onLayer), item(nullptr)
     {
         _transform.position = position;
     }

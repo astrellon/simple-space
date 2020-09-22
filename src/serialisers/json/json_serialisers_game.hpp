@@ -50,6 +50,8 @@ namespace space
     json toJson(const PlacedItem &input);
     bool addFromJsonPlacedItem(const json &j, WalkableAreaInstances &instances);
 
+    bool addFromJsonGrassEffect(const json &j, WalkableAreaInstances &instances);
+
     json toJson(const WalkableArea &input);
     std::unique_ptr<WalkableArea> fromJsonWalkableArea(const json &j, GameSession &session, LoadingContext &context);
 
