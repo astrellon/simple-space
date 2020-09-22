@@ -2,6 +2,7 @@
 
 #define MAX_BLADE_LENGTH 10.0f
 #define PI 3.1415926
+#define NUM_OBJECTS 1
 
 out vec4 FragColor;
 
@@ -15,6 +16,7 @@ uniform vec4 windColour;
 uniform float windSpeed;
 uniform vec2 windDirection;
 uniform float timeSinceStart;
+uniform vec2[NUM_OBJECTS] objectPositions;
 
 float sineWave(float T, float a, float phase, vec2 dir, vec2 pos)
 {
@@ -38,12 +40,18 @@ void main()
     vec2 uv = gl_TexCoord[0].xy * invTextureSize;
 
     FragColor = vec4(0.0f); // Start with clear color.
+    float dist_to_object = length(objectPositions[0] - worldUv);
 
     bool blown = false;
     for (float dist = 0.0f; dist < MAX_BLADE_LENGTH; ++dist)
     {
         float wind = wind(worldUv * 0.02f, -timeSinceStart);
         float blade_length = texture2D(source, uv).r * 255.0f;
+        if (dist_to_object < 4)
+        {
+            wind = 1.0f;
+        }
+
         if (wind > 0.55f && !blown)
         {
             blown = true;

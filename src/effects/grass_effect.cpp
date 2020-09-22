@@ -4,6 +4,7 @@
 
 #include "../game_session.hpp"
 #include "../engine.hpp"
+#include "../game/character.hpp"
 #include "../definition_manager.hpp"
 #include "../definitions/shader_definition.hpp"
 #include "../definitions/grass_effect_definition.hpp"
@@ -43,6 +44,11 @@ namespace space
         shader.setUniform("invTextureSize", sf::Glsl::Vec2(1.0f / size.x, 1.0f / size.y));
         shader.setUniform("timeSinceStart", session.engine().timeSinceStart().asSeconds());
         shader.setUniform("windSpeed", 1.5f);
+
+        auto playerPos = session.playerController().controllingCharacter()->transform().position;
+        std::array<sf::Glsl::Vec2, 1> objectPositions;
+        objectPositions[0] = sf::Glsl::Vec2(playerPos);
+        shader.setUniformArray("objectPositions", objectPositions.data(), 1);
 
         sf::Vector2f windDirection(-1, -1);
         windDirection = windDirection.normalised();
