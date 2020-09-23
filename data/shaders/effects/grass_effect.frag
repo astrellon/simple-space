@@ -1,8 +1,8 @@
 #version 130
 
-#define MAX_BLADE_LENGTH 10.0f
+#define MAX_BLADE_LENGTH 5.0f
 #define PI 3.1415926
-#define NUM_OBJECTS 1
+#define NUM_OBJECTS 2
 
 out vec4 FragColor;
 
@@ -40,17 +40,14 @@ void main()
     vec2 uv = gl_TexCoord[0].xy * invTextureSize;
 
     FragColor = vec4(0.0f); // Start with clear color.
-    float dist_to_object = length(objectPositions[0] - worldUv);
+    float dist_to_object = min(length(objectPositions[0] - worldUv), length(objectPositions[1] - worldUv));
+    float dist_effect = dist_to_object < 3 ? (dist_to_object < 2 ? 2.0f : 1.0f) : 0.0f;
 
     bool blown = false;
     for (float dist = 0.0f; dist < MAX_BLADE_LENGTH; ++dist)
     {
         float wind = wind(worldUv * 0.02f, -timeSinceStart);
         float blade_length = texture2D(source, uv).r * 255.0f;
-        if (dist_to_object < 4)
-        {
-            wind = 1.0f;
-        }
 
         if (wind > 0.55f && !blown)
         {
@@ -65,10 +62,14 @@ void main()
             {
                 blade_length -= 1.0f;
             }
+            if (dist_effect > 0.0f)
+            {
+                blade_length = clamp(blade_length - dist_effect, 0.0f, MAX_BLADE_LENGTH);
+            }
 
             if (dist == blade_length)
             {
-                if (wind <= 0.5f)
+                if (wind <= 0.5f && dist_effect < 1.0f)
                 {
                     FragColor = tipColour;
                 }

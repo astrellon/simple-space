@@ -46,9 +46,10 @@ namespace space
         shader.setUniform("windSpeed", 1.5f);
 
         auto playerPos = session.playerController().controllingCharacter()->transform().position;
-        std::array<sf::Glsl::Vec2, 1> objectPositions;
-        objectPositions[0] = sf::Glsl::Vec2(playerPos);
-        shader.setUniformArray("objectPositions", objectPositions.data(), 1);
+        std::array<sf::Glsl::Vec2, 2> objectPositions;
+        objectPositions[0] = sf::Glsl::Vec2(playerPos + sf::Vector2f(-1.5f, 1.0f));
+        objectPositions[1] = sf::Glsl::Vec2(playerPos + sf::Vector2f(1.5f, 1.0f));
+        shader.setUniformArray("objectPositions", objectPositions.data(), objectPositions.size());
 
         sf::Vector2f windDirection(-1, -1);
         windDirection = windDirection.normalised();
