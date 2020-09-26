@@ -236,23 +236,16 @@ namespace space
         }
 
         auto immediateChange = false;
-        if (_character->moveInput != sf::Vector2f())
+        if (_character->moveInput != sf::Vector2f() && !_character->isInSpace())
         {
             sprite.sequence("walk", true);
             _timeToNextIdle = 0;
 
-            if (!_character->isInSpace())
+            if (_character->moveInput.x < 0)
             {
-                if (_character->moveInput.x < 0)
-                {
-                    _character->flipSprite(true);
-                }
-                else if (_character->moveInput.x > 0)
-                {
-                    _character->flipSprite(false);
-                }
+                _character->flipSprite(true);
             }
-            else
+            else if (_character->moveInput.x > 0)
             {
                 _character->flipSprite(false);
             }
