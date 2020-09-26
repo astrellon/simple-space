@@ -14,10 +14,11 @@
 
 namespace space
 {
-    UIInteractables::UIInteractables() : UIWindow("Interactables")
+    UIInteractables::UIInteractables() : UIPanel("Interactables")
     {
         size = ImVec2(200, 160);
         position.x = 20;
+        show = true;
     }
 
     bool UIInteractables::isOpen(Engine &engine)
@@ -28,7 +29,7 @@ namespace space
         }
 
         auto &player = engine.currentSession()->playerController();
-        return player.controlling() != ControlShip && !engine.currentSession()->dialogueManager().isInDialogue();
+        return show && player.controlling() != ControlShip && !engine.currentSession()->dialogueManager().isInDialogue();
     }
 
     void UIInteractables::checkPosition(Engine &engine)

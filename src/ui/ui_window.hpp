@@ -14,20 +14,19 @@ namespace space
     {
         public:
             // Fields
-            ImVec2 position;
-            ImVec2 size;
             const std::string windowName;
+            bool show;
 
             // Constructor
             UIWindow(const std::string &windowName);
+            virtual ~UIWindow() { }
 
             // Methods
             virtual void draw(Engine &engine);
 
         protected:
             // Methods
-            virtual bool isOpen(Engine &engine) { return false; }
-            virtual void checkPosition(Engine &engine) { }
+            virtual bool isOpen(Engine &engine) { return show; }
             virtual void doDraw(Engine &engine) = 0;
 
     };

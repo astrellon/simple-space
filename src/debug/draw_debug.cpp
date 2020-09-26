@@ -5,7 +5,6 @@ namespace space
     int DrawDebug::glDraw = 0;
     bool DrawDebug::slow = false;
     bool DrawDebug::showPolygons = false;
-    bool DrawDebug::showUIWindow = false;
     bool DrawDebug::hideGameSession = false;
     bool DrawDebug::hideEverything = false;
     bool DrawDebug::hideBackground = false;

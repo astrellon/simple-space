@@ -19,10 +19,11 @@
 
 namespace space
 {
-    UITeleporter::UITeleporter() : UIWindow("Teleporters"), _characterController(nullptr)
+    UITeleporter::UITeleporter() : UIPanel("Teleporters"), _characterController(nullptr)
     {
         size = ImVec2(200, 160);
         position = ImVec2(20, 20);
+        show = true;
     }
 
     bool UITeleporter::isOpen(Engine &engine)
@@ -32,7 +33,7 @@ namespace space
             return false;
         }
 
-        return !engine.currentSession()->dialogueManager().isInDialogue() && _characterController != nullptr && _characterController->controlling() == ControlCharacter;
+        return show && !engine.currentSession()->dialogueManager().isInDialogue() && _characterController != nullptr && _characterController->controlling() == ControlCharacter;
     }
 
     void UITeleporter::checkPosition(Engine &engine)

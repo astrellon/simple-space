@@ -14,10 +14,11 @@
 
 namespace space
 {
-    UIInventory::UIInventory() : UIWindow("Inventory")
+    UIInventory::UIInventory() : UIPanel("Inventory")
     {
         size = ImVec2(200, 160);
         position = ImVec2(20, 20);
+        show = true;
     }
 
     bool UIInventory::isOpen(Engine &engine)
@@ -28,7 +29,7 @@ namespace space
         }
 
         auto &player = engine.currentSession()->playerController();
-        return player.controlling() != ControlShip && !engine.currentSession()->dialogueManager().isInDialogue();
+        return show && player.controlling() != ControlShip && !engine.currentSession()->dialogueManager().isInDialogue();
     }
 
     void UIInventory::doDraw(Engine &engine)

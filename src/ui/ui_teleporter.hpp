@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "ui_window.hpp"
+#include "ui_panel.hpp"
 
 namespace space
 {
@@ -10,7 +10,7 @@ namespace space
     class Planet;
     class CharacterController;
 
-    class UITeleporter : public UIWindow
+    class UITeleporter : public UIPanel
     {
         public:
             // Fields

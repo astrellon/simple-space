@@ -1,12 +1,12 @@
 #pragma once
 
-#include "ui_window.hpp"
+#include "ui_panel.hpp"
 
 namespace space
 {
     class Engine;
 
-    class UIInteractables : public UIWindow
+    class UIInteractables : public UIPanel
     {
         public:
             // Constructors

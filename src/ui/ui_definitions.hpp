@@ -6,13 +6,15 @@ namespace space
 {
     class Engine;
 
-    class UIDebug : public UIWindow
+    class UIDefinitions : public UIWindow
     {
         public:
             // Fields
 
             // Constructor
-            UIDebug();
+            UIDefinitions();
+
+            // Methods
 
         protected:
             // Methods

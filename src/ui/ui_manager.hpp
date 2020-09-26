@@ -13,10 +13,13 @@ namespace space
     class UIInventory;
     class UITeleporter;
     class UIDialogue;
+    class UIDebug;
+    class UIDefinitions;
 
     class UIManager
     {
         public:
+            typedef std::vector<std::unique_ptr<UIWindow>>  WindowList;
             // Fields
 
             // Constructor
@@ -37,18 +40,25 @@ namespace space
             void initDefaultWindows();
             void draw(Engine &engine);
 
+            WindowList &windows() { return _uiWindows; }
+
             UIInteractables &uiInteractables() { return *_uiInteractables; }
             UIInventory &uiInventory() { return *_uiInventory; }
             UITeleporter &uiTeleporter() { return *_uiTeleporter; }
             UIDialogue &uiDialogue() { return *_uiDialogue; }
+            UIDebug &uiDebug() { return *_uiDebug; }
+            UIDefinitions &uiDefinitions() { return *_uiDefinitions; }
 
         private:
             // Fields
-            std::vector<std::unique_ptr<UIWindow>> _uiWindows;
+            WindowList _uiWindows;
+
             UIInteractables *_uiInteractables;
             UIInventory *_uiInventory;
             UITeleporter *_uiTeleporter;
             UIDialogue *_uiDialogue;
+            UIDebug *_uiDebug;
+            UIDefinitions *_uiDefinitions;
 
             // Methods
     };

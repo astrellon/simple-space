@@ -12,7 +12,6 @@ namespace space
             static int glDraw;
             static bool slow;
             static bool showPolygons;
-            static bool showUIWindow;
             static bool hideGameSession;
             static bool hideEverything;
             static bool hideBackground;

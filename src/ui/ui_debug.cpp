@@ -1,6 +1,7 @@
 #include "ui_debug.hpp"
 
 #include "../engine.hpp"
+#include "ui_manager.hpp"
 #include "../game_session.hpp"
 #include "../effects/transition.hpp"
 #include "../imgui/imgui.h"
@@ -8,15 +9,29 @@
 
 namespace space
 {
-    void UIDebug::draw(Engine &engine)
+    UIDebug::UIDebug() : UIWindow("Debug")
     {
-        if (!DrawDebug::showUIWindow)
+
+    }
+
+    void UIDebug::doDraw(Engine &engine)
+    {
+        ImGui::Text("Draw Calls: %d", DrawDebug::glDraw);
+
+        if (ImGui::TreeNode("UI Windows"))
         {
-            return;
+            for (auto &uiWindow : engine.uiManager().windows())
+            {
+                if (ImGui::TreeNode((void *)uiWindow.get(), "%s", uiWindow->windowName.c_str()))
+                {
+                    ImGui::Checkbox("Show", &uiWindow->show);
+
+                    ImGui::TreePop();
+                }
+            }
+            ImGui::TreePop();
         }
 
-        ImGui::Begin("Debug");
-        ImGui::Text("Draw Calls: %d", DrawDebug::glDraw);
         ImGui::Checkbox("Slow", &DrawDebug::slow);
         ImGui::Checkbox("Show Physics", &DrawDebug::showPolygons);
         ImGui::Checkbox("Hide GameSession", &DrawDebug::hideGameSession);
@@ -51,7 +66,5 @@ namespace space
         {
             engine.currentSession()->saveGame();
         }
-
-        ImGui::End();
     }
 } // namespace space

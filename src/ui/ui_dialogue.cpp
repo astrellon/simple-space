@@ -13,7 +13,7 @@ using kainjow::mustache::mustache;
 
 namespace space
 {
-    UIDialogue::UIDialogue() : UIWindow("Dialogue"), _textDisplayIndex(0)
+    UIDialogue::UIDialogue() : UIPanel("Dialogue"), _textDisplayIndex(0)
     {
         size = ImVec2(400, 120);
     }
@@ -25,7 +25,7 @@ namespace space
             return false;
         }
 
-        return engine.currentSession()->dialogueManager().isInDialogue();
+        return show && engine.currentSession()->dialogueManager().isInDialogue();
     }
 
     void UIDialogue::checkPosition(Engine &engine)

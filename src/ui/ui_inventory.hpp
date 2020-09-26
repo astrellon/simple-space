@@ -1,12 +1,12 @@
 #pragma once
 
-#include "ui_window.hpp"
+#include "ui_panel.hpp"
 
 namespace space
 {
     class PlayerController;
 
-    class UIInventory : public UIWindow
+    class UIInventory : public UIPanel
     {
         public:
             // Constructors

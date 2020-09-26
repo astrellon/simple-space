@@ -216,7 +216,7 @@ namespace space
 
         if (Keyboard::isKeyDown(sf::Keyboard::Tilde))
         {
-            DrawDebug::showUIWindow = !DrawDebug::showUIWindow;
+            uiManager().uiDebug().show = !uiManager().uiDebug().show;
         }
     }
 
@@ -241,7 +241,6 @@ namespace space
         if (_initedImgui)
         {
             _uiManager->draw(*this);
-            UIDebug::draw(*this);
             ImGui::SFML::Render(_sceneRender.texture());
         }
 

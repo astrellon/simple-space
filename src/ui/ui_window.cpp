@@ -5,10 +5,10 @@
 namespace space
 {
     UIWindow::UIWindow(const std::string &windowName)
-        : windowName(windowName), position(100, 100), size(100, 100)
+        : windowName(windowName), show(false)
     {
-
     }
+
     void UIWindow::draw(Engine &engine)
     {
         if (!isOpen(engine))
@@ -16,10 +16,7 @@ namespace space
             return;
         }
 
-        checkPosition(engine);
-        ImGui::SetNextWindowSize(size);
-        ImGui::SetNextWindowPos(position);
-        ImGui::Begin(windowName.c_str(), NULL, ImGuiWindowFlags_NoDecoration);
+        ImGui::Begin(windowName.c_str());
         doDraw(engine);
         ImGui::End();
     }

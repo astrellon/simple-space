@@ -3,13 +3,13 @@
 #include <string>
 #include <vector>
 
-#include "ui_window.hpp"
+#include "ui_panel.hpp"
 
 namespace space
 {
     class Engine;
 
-    class UIDialogue : public UIWindow
+    class UIDialogue : public UIPanel
     {
         public:
             // Constructors
