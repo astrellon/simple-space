@@ -1,5 +1,7 @@
 #include "ui_definitions.hpp"
 
+#include <sstream>
+
 #include "../engine.hpp"
 #include "../game_session.hpp"
 #include "../imgui/imgui.h"
@@ -10,6 +12,15 @@
 #include "../definitions/shader_definition.hpp"
 #include "../definitions/character_definition.hpp"
 #include "../definitions/ship_definition.hpp"
+#include "../definitions/animated_texture.hpp"
+#include "../definitions/celestial_body_definition.hpp"
+#include "../definitions/grass_effect_definition.hpp"
+#include "../definitions/item_definition.hpp"
+#include "../definitions/placeable_item_definition.hpp"
+#include "../definitions/planet_definition.hpp"
+#include "../definitions/planet_surface_definition.hpp"
+#include "../definitions/space_portal_definition.hpp"
+#include "../definitions/star_system_definition.hpp"
 
 #include "../serialisers/json/json_serialisers_definitions.hpp"
 
@@ -64,6 +75,14 @@ namespace space
             {
                 drawShip(static_cast<ShipDefinition &>(*_selectedCopy));
             }
+            else if (type == AnimatedTexture::DefinitionType())
+            {
+                drawAnimatedTexture(static_cast<AnimatedTexture &>(*_selectedCopy));
+            }
+            else if (type == GrassEffectDefinition::DefinitionType())
+            {
+                drawGrassEffect(static_cast<GrassEffectDefinition &>(*_selectedCopy));
+            }
             ImGui::EndChild();
         }
 
@@ -80,6 +99,7 @@ namespace space
 
         // Not ideal for copying, but okay for dev UI.
         auto copyJson = toJson(*definition);
+        std::cout << "Copied: " << copyJson << std::endl;
         _selectedCopy = fromJsonBaseDefinition(copyJson);
     }
 
@@ -119,5 +139,86 @@ namespace space
 
         ImGui::Text("Interior Texture: %s, loaded %s", ship.interiorTexturePath.c_str(), ship.interiorTexture ? "true" : "false");
         ImGui::Text("Interior Texture Offset: %i, %i", ship.interiorTextureOffset.x, ship.interiorTextureOffset.y);
+
+        std::stringstream interiorPolygon;
+        for (auto &point : ship.interiorPolygon)
+        {
+            interiorPolygon << "[" << point.x << ", " << point.y << "] ";
+        }
+        ImGui::TextWrapped("Interior Polygon: %s", interiorPolygon.str().c_str());
+
+        ImGui::Text("Extra Polygons:");
+        for (auto i = 0; i < ship.extraInteriorPolygons.size(); i++)
+        {
+            auto &polygon = ship.extraInteriorPolygons[i];
+
+            std::stringstream extraInteriorPolygon;
+            for (auto &point : polygon)
+            {
+                extraInteriorPolygon << "[" << point.x << ", " << point.y << "] ";
+            }
+            ImGui::TextWrapped("%d - : %s", i + 1, extraInteriorPolygon.str().c_str());
+        }
+
+        std::stringstream enginePlacements;
+        ImGui::Text("Engine Glow Placements:");
+        for (auto &point : ship.enginePlacements)
+        {
+            enginePlacements << "[" << point.x << ", " << point.y << "] ";
+        }
+        ImGui::TextWrapped("%s", enginePlacements.str().c_str());
+    }
+
+    void UIDefinitions::drawAnimatedTexture(AnimatedTexture &animated)
+    {
+        ImGui::Text("Texture Path: %s", animated.texturePath().c_str());
+        ImGui::Text("Sprite Size: %u, %u", animated.spriteSize().x, animated.spriteSize().y);
+        ImGui::Text("Sequences:");
+
+        ImGui::TreePush();
+        for (auto &sequence : animated.sequences())
+        {
+            ImGui::Text("Name: %s", sequence.first.c_str());
+            ImGui::TreePush();
+            ImGui::Text("Timing: %f", sequence.second.frameTiming);
+            std::stringstream ss;
+
+            auto first = true;
+            for (auto frame : sequence.second.frames())
+            {
+                if (!first)
+                {
+                    ss << ", ";
+                }
+                first = false;
+                ss << frame;
+            }
+
+            ImGui::Text("Frames: %s", ss.str().c_str());
+            ImGui::TreePop();
+        }
+        ImGui::TreePop();
+    }
+
+    void UIDefinitions::drawGrassEffect(GrassEffectDefinition &grassEffect)
+    {
+        ImGui::Text("Texture Path: %s, loaded %s", grassEffect.texturePath.c_str(), grassEffect.texture ? "true" : "false");
+        ImGui::Text("Shader Id: %s loaded %s", grassEffect.shaderId.c_str(), grassEffect.shader ? "true" : "false");
+
+        drawColour("Tip Colour", grassEffect.tipColour);
+        drawColour("Side Colour", grassEffect.sideColour);
+        drawColour("Wind Colour", grassEffect.windColour);
+    }
+
+    void UIDefinitions::drawColour(const char *label, sf::Color &colour)
+    {
+        float colourValues[4] = { colour.r / 255.0f, colour.g / 255.0f, colour.b / 255.0f, colour.a / 255.0f };
+        ImGui::ColorEdit4(label, colourValues);
+        colour.r = static_cast<sf::Uint8>(colourValues[0] * 255.0f);
+        colour.g = static_cast<sf::Uint8>(colourValues[1] * 255.0f);
+        colour.b = static_cast<sf::Uint8>(colourValues[2] * 255.0f);
+        colour.a = static_cast<sf::Uint8>(colourValues[3] * 255.0f);
     }
 } // space
+
+// Code code code code code I'm Alan and I can totally type without looking at the keyboard. Also I watch YouTube alllllll daaaaay. K byyyyyeeeeee ~~~

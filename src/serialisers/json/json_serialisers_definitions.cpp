@@ -450,7 +450,7 @@ namespace space
         json sequences;
         for (auto &sequenceKvp : input.sequences())
         {
-            sequences.push_back(json {sequenceKvp.first, toJson(sequenceKvp.second)});
+            sequences[sequenceKvp.first] = toJson(sequenceKvp.second);
         }
 
         return json {
@@ -509,6 +509,7 @@ namespace space
     json toJson(const GrassEffectDefinition &input)
     {
         return json {
+            {"id", input.id},
             {"texturePath", input.texturePath},
             {"shaderId", input.shaderId},
             {"tipColour", Utils::toHexString(input.tipColour)},

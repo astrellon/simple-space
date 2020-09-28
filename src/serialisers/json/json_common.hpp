@@ -60,9 +60,7 @@ namespace space
         json result;
         for (auto &iter : input)
         {
-            json sub1;
-            sub1.push_back(toJsonArray(iter));
-            result.push_back(sub1);
+            result.push_back(toJsonArray(iter));
         }
         return result;
     }

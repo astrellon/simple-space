@@ -188,9 +188,12 @@ namespace space
             static inline std::string toHexString(const sf::Color &input)
             {
                 std::stringstream ss;
-                ss << "0x" << std::setfill('0') << std::setw(2) << std::hex << input.r << input.g << input.b << input.a;
+                int value = input.r << 24 | input.g << 16 | input.b << 8 | input.a;
+                ss << "0x" << std::setfill('0') << std::setw(8) << std::hex << value;
 
-                return ss.str();
+                auto result = ss.str();
+
+                return result;
             }
 
             static inline sf::Color fromHexString(const std::string &input)
