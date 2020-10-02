@@ -24,6 +24,30 @@
         }
     },
     {
+        "type": "animated-texture",
+        "id": "BIRD_SPRITE",
+        "texturePath": "data/textures/characters/bird1.png",
+        "spriteSize": [24, 24],
+        "sequences": {
+            "idle": {
+                "frameTiming": 0.1,
+                "frames": [0]
+            },
+            "blink": {
+                "frameTiming": 0.8,
+                "frames": [1]
+            }
+        }
+    },
+    {
+        "type": "character",
+        "id": "BIRD_CHAR_DEF",
+        "spriteSize": 24,
+        "speed": 10,
+        "name": "Birdy",
+        "animatedTextureId": "BIRD_SPRITE"
+    },
+    {
         "type": "character",
         "id": "PLAYER_CHAR",
         "spriteSize": 32,

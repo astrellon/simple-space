@@ -117,6 +117,6 @@ namespace space
 
             // Methods
             void checkInRangeOfInteractable(Interactable *interactable);
-            void updateAnimations(sf::Time dt);
+            virtual void updateAnimations(sf::Time dt);
     };
 } // space

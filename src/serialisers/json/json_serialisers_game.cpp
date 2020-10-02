@@ -26,6 +26,7 @@
 #include "../../controllers/npc_controller.hpp"
 #include "../../controllers/player_controller.hpp"
 #include "../../controllers/space_station_controller.hpp"
+#include "../../controllers/bird_controller.hpp"
 
 #include "../loading_context.hpp"
 
@@ -548,6 +549,9 @@ namespace space
         else if (input.type() == SpaceStationController::ControllerType())
             return toJson(dynamic_cast<const SpaceStationController &>(input));
 
+        else if (input.type() == BirdController::ControllerType())
+            return toJson(dynamic_cast<const BirdController &>(input));
+
         throw std::runtime_error("Unknown character controller");
     }
 
@@ -559,6 +563,9 @@ namespace space
 
         if (type == SpaceStationController::ControllerType())
             return addFromJsonSpaceStationController(j, session);
+
+        if (type == BirdController::ControllerType())
+            return addFromJsonBirdController(j, session);
 
         throw std::runtime_error("Unknown character controller");
     }
@@ -622,6 +629,22 @@ namespace space
     bool addFromJsonSpaceStationController(const json &j, GameSession &session)
     {
         auto controller = session.createCharacterController<SpaceStationController>();
+        if (!addFromJsonCharacterControllerBase(j, session, *controller))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    json toJson(const BirdController &input)
+    {
+        return toJsonBase(input);
+    }
+
+    bool addFromJsonBirdController(const json &j, GameSession &session)
+    {
+        auto controller = session.createCharacterController<BirdController>();
         if (!addFromJsonCharacterControllerBase(j, session, *controller))
         {
             return false;

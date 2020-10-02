@@ -92,6 +92,10 @@
         {
             "type": "space-station",
             "controllingShip": "SPACE_STATION"
+        },
+        {
+            "type": "bird",
+            "controllingCharacter": "BIRD_CHAR"
         }
     ],
     "planetSurfaces": [
@@ -101,7 +105,8 @@
             "walkableArea": {
                 "characterIds": [
                     "FRED",
-                    "PLAYER_CHAR"
+                    "PLAYER_CHAR",
+                    "BIRD_CHAR"
                 ],
                 "placedItems": [
                     {
@@ -251,6 +256,14 @@
                 "scale": 0.1666666716337204
             },
             "type": "character"
+        },
+        {
+            "definitionId": "BIRD_CHAR_DEF",
+            "id": "BIRD_CHAR",
+            "type": "character",
+            "transform": {
+                "position": [ 40, 40 ]
+            }
         },
         {
             "definitionId": "GREG_CHAR",
