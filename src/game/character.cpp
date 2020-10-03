@@ -71,6 +71,14 @@ namespace space
             target.draw(shape, _worldTransform);
         }
     }
+    bool Character::doesMouseHover(sf::Vector2f mousePosition) const
+    {
+        auto worldPos = Utils::getPosition(_worldTransform);
+        auto local = mousePosition - worldPos;
+        std::cout << "Mouse pos: " << definition.name << ": " << local << std::endl;
+
+        return false;
+    }
 
     void Character::addToPhysicsWorld(b2World *world)
     {

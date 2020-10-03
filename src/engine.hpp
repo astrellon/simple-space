@@ -59,6 +59,8 @@ namespace space
             RenderCamera &sceneRender() { return _sceneRender; }
             RenderCamera &sceneRenderTransition() { return _sceneRenderTransition; }
 
+            sf::RenderWindow *window() { return _window; }
+
             void initEffects();
 
             void onResize(sf::Vector2f area);

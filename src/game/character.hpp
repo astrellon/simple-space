@@ -32,6 +32,7 @@ namespace space
             virtual void prePhysics(GameSession &session, sf::Time dt, const sf::Transform &parentTransform);
             virtual void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform);
             virtual void draw(GameSession &session, sf::RenderTarget &target);
+            virtual bool doesMouseHover(sf::Vector2f mousePosition) const;
 
             void insideArea(WalkableArea *area) { _insideArea = area; }
             WalkableArea *insideArea() const { return _insideArea; }

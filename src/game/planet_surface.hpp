@@ -33,7 +33,8 @@ namespace space
 
             void update(sf::Time dt);
             void draw(RenderCamera &target);
-            void onPostLoad(GameSession &session, LoadingContext &context);
+            void onPostLoad(LoadingContext &context);
+            void checkForMouse(sf::Vector2f mousePosition);
 
             void partOfPlanet(Planet *planet) { _partOfPlanet = planet; }
             Planet *partOfPlanet() const { return _partOfPlanet; }

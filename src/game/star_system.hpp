@@ -40,6 +40,7 @@ namespace space
 
             void update(sf::Time dt);
             void draw(RenderCamera &target);
+            void checkForMouse(sf::Vector2f mousePosition);
 
         private:
             // Fields

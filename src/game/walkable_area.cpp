@@ -74,6 +74,25 @@ namespace space
         }
     }
 
+    void WalkableArea::checkForMouse(GameSession &session, sf::Vector2f mousePosition)
+    {
+        for (int i = _characters.size() - 1; i >= 0; --i)
+        {
+            if (_characters[i]->doesMouseHover(mousePosition))
+            {
+                return;
+            }
+        }
+
+        for (int i = _placedItems.size() - 1; i >= 0; --i)
+        {
+            if (_placedItems[i]->doesMouseHover(mousePosition))
+            {
+                return;
+            }
+        }
+    }
+
     std::vector<PlacedItemPair<Teleporter>> WalkableArea::findTeleporters() const
     {
         std::vector<PlacedItemPair<Teleporter>> result;

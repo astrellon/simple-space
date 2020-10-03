@@ -47,6 +47,8 @@ namespace space
 
             virtual void onPostLoad(GameSession &session, LoadingContext &context) { }
 
+            virtual bool doesMouseHover(sf::Vector2f mousePosition) const { return false; }
+
             Interactable &interactable() { return _interactable; }
 
         protected:

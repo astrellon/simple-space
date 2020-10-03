@@ -51,9 +51,14 @@ namespace space
         _walkableArea->draw(_session, target);
     }
 
-    void PlanetSurface::onPostLoad(GameSession &session, LoadingContext &context)
+    void PlanetSurface::onPostLoad(LoadingContext &context)
     {
-        _walkableArea->onPostLoad(session, context);
-        definition.walkableAreaInstances.applyToWalkableArea(*_walkableArea, session);
+        _walkableArea->onPostLoad(_session, context);
+        definition.walkableAreaInstances.applyToWalkableArea(*_walkableArea, _session);
+    }
+
+    void PlanetSurface::checkForMouse(sf::Vector2f mousePosition)
+    {
+        _walkableArea->checkForMouse(_session, mousePosition);
     }
 } // namespace space

@@ -169,9 +169,13 @@ namespace space
 
             ObjectId nextObjectId();
 
+            void setNextMouseHover(SpaceObject *obj);
+
         private:
             // Fields
             Engine &_engine;
+            SpaceObject *_mouseOverObject;
+            SpaceObject *_nextMouseOverObject;
 
             SpaceObjectList _spaceObjects;
             StarSystemList _starSystems;

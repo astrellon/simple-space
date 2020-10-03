@@ -30,7 +30,7 @@
 
 namespace space
 {
-    GameSession::GameSession(Engine &engine) : _engine(engine), _activeStarSystem(nullptr), _playerController(*this), _drawingPreTeleport(false), _activePlanetSurface(nullptr), _nextId(0)
+    GameSession::GameSession(Engine &engine) : _engine(engine), _activeStarSystem(nullptr), _playerController(*this), _drawingPreTeleport(false), _activePlanetSurface(nullptr), _nextId(0), _mouseOverObject(nullptr), _nextMouseOverObject(nullptr)
     {
         _teleportEffect = std::make_unique<TeleportScreenEffect>();
         _teleportEffect->init(engine.definitionManager());
@@ -330,13 +330,42 @@ namespace space
         for (auto &plantSurface : _planetSurfaces)
             plantSurface->update(dt);
 
+        auto &sceneRender = _engine.sceneRender();
         if (_transition.get())
         {
-            auto &sceneRender = _engine.sceneRender();
             auto &sceneRenderTransition = _engine.sceneRenderTransition();
 
             applyTransitionToCamera(_transition->toData, sceneRender);
             applyTransitionToCamera(_transition->fromData, sceneRenderTransition);
+        }
+
+        _nextMouseOverObject = nullptr;
+
+        auto mousePosition = sf::Mouse::getPosition(*_engine.window());
+        auto worldMousePosition = _engine.window()->mapPixelToCoords(mousePosition, sceneRender.camera().view());
+
+        if (_activePlanetSurface)
+            _activePlanetSurface->checkForMouse(worldMousePosition);
+        if (_activeStarSystem)
+            _activeStarSystem->checkForMouse(worldMousePosition);
+
+        if (_nextMouseOverObject != _mouseOverObject)
+        {
+            // Hover changed!
+            if (_mouseOverObject)
+            {
+                std::cout << "Left " << _mouseOverObject->id << " ";
+            }
+            if (_nextMouseOverObject)
+            {
+                std::cout << "over " << _nextMouseOverObject->id;
+            }
+            else
+            {
+                std::cout << "over nothing";
+            }
+
+            std::cout << std::endl;
         }
     }
 
@@ -397,7 +426,7 @@ namespace space
             spaceObject->onPostLoad(*this, context);
 
         for (auto &planetSurface : _planetSurfaces)
-            planetSurface->onPostLoad(*this, context);
+            planetSurface->onPostLoad(context);
     }
 
     ObjectId GameSession::nextObjectId()
@@ -405,6 +434,11 @@ namespace space
         std::stringstream ss("_ID_");
         ss << nextId();
         return ss.str();
+    }
+
+    void GameSession::setNextMouseHover(SpaceObject *obj)
+    {
+        _nextMouseOverObject = obj;
     }
 
     void GameSession::applyTransitionToCamera(const TransitionData &transitionData, RenderCamera &renderCamera)

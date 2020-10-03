@@ -72,6 +72,11 @@ namespace space
         }
     }
 
+    void StarSystem::checkForMouse(sf::Vector2f mousePosition)
+    {
+
+    }
+
     void StarSystem::initFromDefinition()
     {
         createCelestialBody(definition.rootBody.get(), sf::Transform::Identity);
