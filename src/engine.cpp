@@ -7,6 +7,7 @@
 #include "utils.hpp"
 #include "game_session.hpp"
 #include "keyboard.hpp"
+#include "mouse.hpp"
 #include "particles.hpp"
 #include "debug/draw_debug.hpp"
 
@@ -108,6 +109,7 @@ namespace space
     void Engine::processEvents()
     {
         Keyboard::resetKeys();
+        Mouse::resetButtons();
 
         if (_headlessMode)
         {
@@ -146,6 +148,18 @@ namespace space
         else if (event.type == sf::Event::KeyReleased)
         {
             Keyboard::setKeyUp(event.key.code);
+        }
+        else if (event.type == sf::Event::MouseButtonPressed)
+        {
+            auto &mb = event.mouseButton;
+            Mouse::setMouseDown(mb.button);
+            Mouse::mouseDownPosition(mb.button, sf::Vector2i(mb.x, mb.y));
+        }
+        else if (event.type == sf::Event::MouseButtonReleased)
+        {
+            auto &mb = event.mouseButton;
+            Mouse::setMouseUp(mb.button);
+            Mouse::mouseUpPosition(mb.button, sf::Vector2i(mb.x, mb.y));
         }
     }
 
@@ -201,6 +215,8 @@ namespace space
             ImGui::SFML::Update(_cameraScale, *_window, _sceneRender.texture(), _deltaTime);
         }
 
+        //ImGui::IsMouseHoveringRect()
+
         DrawDebug::glDraw = 0;
     }
 
@@ -218,6 +234,8 @@ namespace space
         {
             uiManager().uiDebug().show = !uiManager().uiDebug().show;
         }
+
+        Mouse::prevMousePosition(sf::Mouse::getPosition());
     }
 
     void Engine::draw()

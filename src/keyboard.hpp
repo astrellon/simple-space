@@ -10,14 +10,11 @@ namespace space
     {
         public:
             static bool isKeyPressed(sf::Keyboard::Key key);
-
             static bool isKeyDown(sf::Keyboard::Key key);
-
             static bool isKeyUp(sf::Keyboard::Key key);
 
             static void resetKeys();
             static void setKeyDown(sf::Keyboard::Key key);
-
             static void setKeyUp(sf::Keyboard::Key key);
 
             typedef std::vector<sf::Keyboard::Key> KeyList;

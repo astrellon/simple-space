@@ -38,6 +38,7 @@
 #include "src/controllers/npc_controller.hpp"
 #include "src/ui/ui_manager.hpp"
 #include "earcut.hpp"
+#define TRACK_MEMORY 1
 
 #include <tmxlite/Map.hpp>
 
@@ -79,6 +80,7 @@ int main()
     sf::ContextSettings settings;
     settings.majorVersion = 3;
     settings.minorVersion = 0;
+    settings.stencilBits = 1;
 
     sf::RenderWindow window(sf::VideoMode(1920, 1080), "Space", sf::Style::Default, settings);
     window.setVerticalSyncEnabled(true);
@@ -87,7 +89,7 @@ int main()
     glewInit();
 
     space::Engine engine(&window);
-    engine.spriteScale(2.0f);
+    engine.spriteScale(4.0f);
 
     space::ResourceManager &resourceManager = engine.resourceManager();
 
