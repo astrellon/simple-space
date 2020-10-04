@@ -19,6 +19,7 @@
 #include "definitions/planet_surface_definition.hpp"
 #include "utils.hpp"
 #include "keyboard.hpp"
+#include "mouse.hpp"
 #include "effects/transition.hpp"
 #include "effects/teleport_screen_effect.hpp"
 #include "controllers/npc_controller.hpp"
@@ -393,6 +394,11 @@ namespace space
             std::cout << std::endl;
         }
         _mouseOverObject = _nextMouseOverObject;
+
+        if (Mouse::isMousePressed(sf::Mouse::Left))
+        {
+            _playerController.selectedObject(_mouseOverObject ? _mouseOverObject->id : "");
+        }
     }
 
     void GameSession::draw()

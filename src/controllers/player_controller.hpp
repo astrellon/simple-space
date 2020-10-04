@@ -2,6 +2,7 @@
 
 #include <SFML/System.hpp>
 
+#include "../game/space_object.hpp"
 #include "character_controller.hpp"
 
 namespace space
@@ -20,8 +21,12 @@ namespace space
 
             virtual void update(sf::Time dt);
 
+            void selectedObject(const ObjectId &id) { _selectedObject = id; }
+            ObjectId selectedObject() const { return _selectedObject; }
+
         private:
             // Fields
+            ObjectId _selectedObject;
 
             // Methods
             void controlShip(sf::Time dt);

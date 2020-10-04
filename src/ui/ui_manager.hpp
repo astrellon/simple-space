@@ -15,6 +15,7 @@ namespace space
     class UIDialogue;
     class UIDebug;
     class UIDefinitions;
+    class UISelected;
 
     class UIManager
     {
@@ -48,6 +49,7 @@ namespace space
             UIDialogue &uiDialogue() { return *_uiDialogue; }
             UIDebug &uiDebug() { return *_uiDebug; }
             UIDefinitions &uiDefinitions() { return *_uiDefinitions; }
+            UISelected &uiSelected() { return *_uiSelected; }
 
         private:
             // Fields
@@ -59,6 +61,7 @@ namespace space
             UIDialogue *_uiDialogue;
             UIDebug *_uiDebug;
             UIDefinitions *_uiDefinitions;
+            UISelected *_uiSelected;
 
             // Methods
     };
