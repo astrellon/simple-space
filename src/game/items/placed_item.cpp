@@ -35,6 +35,8 @@ namespace space
         _sprite.setOrigin(sf::Vector2f(item->definition.texture->getSize()) * 0.5f + item->definition.textureOffset);
         _sprite.setScale(Utils::getInsideScale(), Utils::getInsideScale());
 
+        _spriteBounds = _sprite.getGlobalBounds();
+
         _interactable.createInteraction<UseItemAction>(this);
         if (item->placeableDefinition.canPickup)
         {
@@ -142,5 +144,12 @@ namespace space
                 std::cout << "Unable to find item '" << _itemId << "'for placed item: " << id << std::endl;
             }
         }
+    }
+
+    bool PlacedItem::doesMouseHover(GameSession &session, sf::Vector2f mousePosition) const
+    {
+        auto worldPos = Utils::getPosition(_worldTransform);
+        auto local = mousePosition - worldPos;
+        return _spriteBounds.contains(local);
     }
 }

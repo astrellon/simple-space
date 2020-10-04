@@ -22,6 +22,7 @@ namespace space
     {
         auto size = definition.texture->getSize();
         _sprite.setOrigin(size.x / 2, size.y / 2);
+        _spriteBounds = _sprite.getGlobalBounds();
 
         size = definition.interiorTexture->getSize();
         _interiorSprite.setOrigin(size.x / 2, size.y / 2);
@@ -145,6 +146,13 @@ namespace space
     {
         SpaceObject::onPostLoad(session, context);
         _walkableArea->onPostLoad(session, context);
+    }
+
+    bool Ship::doesMouseHover(GameSession &session, sf::Vector2f mousePosition) const
+    {
+        auto worldPos = Utils::getPosition(_worldTransform);
+        auto local = mousePosition - worldPos;
+        return _spriteBounds.contains(local);
     }
 
     void Ship::createMainCollider()

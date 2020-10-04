@@ -40,7 +40,7 @@ namespace space
             void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform);
             void draw(GameSession &session, sf::RenderTarget &target);
             void onPostLoad(GameSession &session, LoadingContext &context);
-            void checkForMouse(GameSession &session, sf::Vector2f mousePosition);
+            bool checkForMouse(GameSession &session, sf::Vector2f mousePosition);
 
             std::vector<PlacedItemPair<Teleporter>> findTeleporters() const;
 

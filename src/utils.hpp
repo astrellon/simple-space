@@ -16,6 +16,8 @@
 #include "serialisers/json/json.hpp"
 #include "serialisers/json/json_common.hpp"
 #include "PerlinNoise.hpp"
+#include "earcut.hpp"
+#include "physics/polygon.hpp"
 
 using nlohmann::json;
 
@@ -244,6 +246,47 @@ namespace space
             static bool tryGetIntersection(const sf::Vector2f &origin, const sf::Vector2f &direction, const sf::Vector2f &point1, const sf::Vector2f &point2, sf::Vector2f *result);
 
             static bool checkIfLinesIntersect(const sf::Vector2f &start1, const sf::Vector2f &end1, const sf::Vector2f &start2, const sf::Vector2f &end2);
+
+            static inline float triangleArea(const sf::Vector2f &p1, const sf::Vector2f &p2, const sf::Vector2f &p3)
+            {
+                return std::abs((p1.x * (p2.y - p3.y) + p2.x * (p3.y - p1.y) + p3.x * (p1.y - p2.y)) * 0.5);
+            }
+
+            static inline bool checkIfInsideTriangle(const sf::Vector2f &point, const sf::Vector2f &p1, const sf::Vector2f &p2, const sf::Vector2f &p3)
+            {
+                // Calculate area of triangle ABC
+                auto A = triangleArea(p1, p2, p3);
+
+                // Calculate area of triangle PBC
+                auto A1 = triangleArea(point, p2, p3);
+
+                // Calculate area of triangle PAC
+                auto A2 = triangleArea(p1, point, p3);
+
+                // Calculate area of triangle PAB
+                auto A3 = triangleArea(p1, p2, point);
+
+                // Check if sum of A1, A2 and A3 is same as A
+                return (A == A1 + A2 + A3);
+            }
+
+            template <typename T>
+            static bool checkIfInsidePolygon(const sf::Vector2f &point, const Polygon &polygon, const mapbox::detail::Earcut<T> &earcut)
+            {
+                for (auto i = 0; i < earcut.indices.size(); i += 3)
+                {
+                    auto &p1 = polygon[earcut.indices[i    ]];
+                    auto &p2 = polygon[earcut.indices[i + 1]];
+                    auto &p3 = polygon[earcut.indices[i + 2]];
+
+                    if (checkIfInsideTriangle(point, p1, p2, p3))
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
 
         private:
             Utils();

@@ -28,6 +28,9 @@ namespace space
             inline const AnimatedTexture &texture() const { return _texture; }
             inline sf::IntRect currentRect() const { return _sprite.getTextureRect(); }
 
+            sf::FloatRect getLocalBounds() const;
+            sf::FloatRect getGlobalBounds() const;
+
         protected:
             // Methods
             virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;

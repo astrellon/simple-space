@@ -5,9 +5,10 @@
 
 #include "../engine.hpp"
 #include "../game_session.hpp"
-#include "planet_surface.hpp"
 #include "../debug/draw_debug.hpp"
 #include "../definitions/shader_definition.hpp"
+#include "../utils.hpp"
+#include "planet_surface.hpp"
 
 namespace space
 {
@@ -120,5 +121,17 @@ namespace space
         {
             planetSurface->partOfPlanet(nullptr);
         }
+    }
+
+    bool Planet::doesMouseHover(GameSession &session, sf::Vector2f mousePosition) const
+    {
+        auto worldPos = Utils::getPosition(_worldTransform);
+        auto local = mousePosition - worldPos;
+
+        auto distSquared = local.lengthSquared();
+        auto radius = definition.size * 0.5f;
+        auto radiusSquared = radius * radius;
+
+        return distSquared < radiusSquared;
     }
 } // namespace space

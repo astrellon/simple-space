@@ -32,6 +32,7 @@ namespace space
             virtual void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform);
             virtual void draw(GameSession &session, sf::RenderTarget &target);
             virtual void onPostLoad(GameSession &session, LoadingContext &context);
+            virtual bool doesMouseHover(GameSession &session, sf::Vector2f mousePosition) const;
 
             void addPostLoadPlanetSurfaceId(const DefinitionId &id) { _onPostLoadPlanetSurfaceIds.push_back(id); }
             void addPlanetSurface(PlanetSurface *planetSurface);

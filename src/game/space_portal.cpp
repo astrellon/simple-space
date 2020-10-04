@@ -17,6 +17,8 @@ namespace space
     {
         _sprite.sequence("idle", true);
         _shadowShape.emplace_back();
+
+        _spriteBounds = _sprite.getGlobalBounds();
     }
 
     void SpacePortal::update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform)
@@ -97,6 +99,22 @@ namespace space
     {
         target.draw(_sprite, _worldTransform);
         DrawDebug::glDraw++;
+    }
+
+    bool SpacePortal::doesMouseHover(GameSession &session, sf::Vector2f mousePosition) const
+    {
+        auto worldPos = Utils::getPosition(_worldTransform);
+        auto local = mousePosition - worldPos;
+        return _spriteBounds.contains(local);
+    }
+
+    bool SpacePortal::isMouseOverPortal(sf::Vector2f mousePosition) const
+    {
+        auto worldPos = Utils::getPosition(_worldTransform);
+        auto local = mousePosition - worldPos;
+        auto &polygon = _shadowShape[0];
+
+        return Utils::checkIfInsidePolygon(local, polygon, _earcut);
     }
 
     void SpacePortal::drawPortal(GameSession &session, sf::RenderTarget &target, bool asPolygon)

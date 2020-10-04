@@ -57,8 +57,8 @@ namespace space
         definition.walkableAreaInstances.applyToWalkableArea(*_walkableArea, _session);
     }
 
-    void PlanetSurface::checkForMouse(sf::Vector2f mousePosition)
+    bool PlanetSurface::checkForMouse(sf::Vector2f mousePosition)
     {
-        _walkableArea->checkForMouse(_session, mousePosition);
+        return _walkableArea->checkForMouse(_session, mousePosition);
     }
 } // namespace space

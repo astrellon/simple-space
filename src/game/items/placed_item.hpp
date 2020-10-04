@@ -41,12 +41,14 @@ namespace space
             virtual void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform);
             virtual void draw(GameSession &session, sf::RenderTarget &target);
             virtual void onPostLoad(GameSession &session, LoadingContext &context);
+            virtual bool doesMouseHover(GameSession &session, sf::Vector2f mousePosition) const;
 
         private:
             // Fields
             ItemId _itemId;
             sf::Sprite _sprite;
             b2Body *_collider;
+            sf::FloatRect _spriteBounds;
 
             // Methods
             void processItem();

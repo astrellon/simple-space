@@ -345,9 +345,34 @@ namespace space
         auto worldMousePosition = _engine.window()->mapPixelToCoords(mousePosition, sceneRender.camera().view());
 
         if (_activePlanetSurface)
+        {
             _activePlanetSurface->checkForMouse(worldMousePosition);
+        }
+
         if (_activeStarSystem)
-            _activeStarSystem->checkForMouse(worldMousePosition);
+        {
+            auto foundInPortal = false;
+            for (auto obj : _activeStarSystem->objects())
+            {
+                if (obj->type() != SpacePortal::SpaceObjectType())
+                {
+                    continue;
+                }
+
+                auto spacePortal = dynamic_cast<SpacePortal *>(obj);
+                if (spacePortal == nullptr)
+                {
+                    continue;
+                }
+
+                foundInPortal = checkMouseSpacePortal(worldMousePosition, spacePortal);
+            }
+
+            if (!foundInPortal)
+            {
+                _activeStarSystem->checkForMouse(worldMousePosition);
+            }
+        }
 
         if (_nextMouseOverObject != _mouseOverObject)
         {
@@ -367,6 +392,7 @@ namespace space
 
             std::cout << std::endl;
         }
+        _mouseOverObject = _nextMouseOverObject;
     }
 
     void GameSession::draw()
@@ -404,6 +430,11 @@ namespace space
                 _activeStarSystem->draw(sceneRender);
                 for (auto obj : _activeStarSystem->objects())
                 {
+                    if (obj->type() != SpacePortal::SpaceObjectType())
+                    {
+                        continue;
+                    }
+
                     auto spacePortal = dynamic_cast<SpacePortal *>(obj);
                     if (spacePortal == nullptr)
                     {
@@ -567,6 +598,41 @@ namespace space
         }
 
         _nextFrameState.clear();
+    }
+
+    bool GameSession::checkMouseSpacePortal(sf::Vector2f mousePosition, SpacePortal *spacePortal)
+    {
+        auto &sceneRender = _engine.sceneRender();
+
+        // Don't check portal offscreen
+        if (!sceneRender.camera().viewport().contains(spacePortal->transform().position))
+        {
+            return false;
+        }
+
+        // Bail if we can't find the target object
+        SpaceObject *targetObject;
+        if (!tryGetSpaceObject(spacePortal->targetObjectId, &targetObject))
+        {
+            return false;
+        }
+
+        // Also bail if we can't find the target star system.
+        auto targetStarSystem = targetObject->starSystem();
+        if (!targetStarSystem)
+        {
+            return false;
+        }
+
+        if (!spacePortal->isMouseOverPortal(mousePosition))
+        {
+            return false;
+        }
+
+        auto diff = targetObject->transform().position - spacePortal->transform().position;
+        mousePosition += diff;
+
+        return targetStarSystem->checkForMouse(mousePosition);
     }
 
     void GameSession::drawSpacePortal(SpacePortal *spacePortal)

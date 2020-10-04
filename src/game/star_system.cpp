@@ -72,9 +72,32 @@ namespace space
         }
     }
 
-    void StarSystem::checkForMouse(sf::Vector2f mousePosition)
+    bool StarSystem::checkForMouse(sf::Vector2f mousePosition)
     {
+        auto insideOfShip = _session.getShipPlayerIsInsideOf();
+        auto showInternals = _session.isControllingCharacter() && insideOfShip != nullptr;
 
+        for (int i = _objects.size() - 1; i >= 0; --i)
+        {
+            auto obj = _objects[i];
+            if (showInternals && insideOfShip == obj)
+            {
+                continue;
+            }
+
+            if (obj->doesMouseHover(_session, mousePosition))
+            {
+                _session.setNextMouseHover(_objects[i]);
+                return true;
+            }
+        }
+
+        if (showInternals && insideOfShip)
+        {
+            return insideOfShip->walkableArea().checkForMouse(_session, mousePosition);
+        }
+
+        return false;
     }
 
     void StarSystem::initFromDefinition()

@@ -74,23 +74,27 @@ namespace space
         }
     }
 
-    void WalkableArea::checkForMouse(GameSession &session, sf::Vector2f mousePosition)
+    bool WalkableArea::checkForMouse(GameSession &session, sf::Vector2f mousePosition)
     {
         for (int i = _characters.size() - 1; i >= 0; --i)
         {
-            if (_characters[i]->doesMouseHover(mousePosition))
+            if (_characters[i]->doesMouseHover(session, mousePosition))
             {
-                return;
+                session.setNextMouseHover(_characters[i]);
+                return true;
             }
         }
 
         for (int i = _placedItems.size() - 1; i >= 0; --i)
         {
-            if (_placedItems[i]->doesMouseHover(mousePosition))
+            if (_placedItems[i]->doesMouseHover(session, mousePosition))
             {
-                return;
+                session.setNextMouseHover(_placedItems[i].get());
+                return true;
             }
         }
+
+        return false;
     }
 
     std::vector<PlacedItemPair<Teleporter>> WalkableArea::findTeleporters() const

@@ -31,6 +31,9 @@ namespace space
 
             virtual void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform);
             virtual void draw(GameSession &session, sf::RenderTarget &target);
+            virtual bool doesMouseHover(GameSession &session, sf::Vector2f mousePosition) const;
+
+            bool isMouseOverPortal(sf::Vector2f mousePosition) const;
 
             void drawPortal(GameSession &session, sf::RenderTarget &target, bool asPolygon);
             void drawPortalOutlines(GameSession &session, sf::RenderTarget &target);
@@ -51,6 +54,7 @@ namespace space
 
             // Fields
             AnimatedSprite _sprite;
+            sf::FloatRect _spriteBounds;
             std::vector<NearPortalObject> _nearbyObjects;
             PortalShadow _shadow;
 

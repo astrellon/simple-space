@@ -48,6 +48,7 @@ namespace space
             virtual void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform);
             virtual void draw(GameSession &session, sf::RenderTarget &target);
             virtual void onPostLoad(GameSession &session, LoadingContext &context);
+            virtual bool doesMouseHover(GameSession &session, sf::Vector2f mousePosition) const;
 
         private:
             // Fields
@@ -57,6 +58,7 @@ namespace space
 
             // Location
             sf::Sprite _sprite;
+            sf::FloatRect _spriteBounds;
             sf::Sprite _interiorSprite;
             sf::Vector2f _prevPosition;
 

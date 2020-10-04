@@ -16,6 +16,12 @@ namespace space
     {
         _interactable.name(definition.name);
         _sprite.sequence("idle", true);
+
+        _spriteBounds = _sprite.getGlobalBounds();
+        _spriteBounds.width *= Utils::getInsideScale();
+        _spriteBounds.height *= Utils::getInsideScale();
+        _spriteBounds.top *= Utils::getInsideScale();
+        _spriteBounds.left *= Utils::getInsideScale();
     }
 
     void Character::prePhysics(GameSession &session, sf::Time dt, const sf::Transform &parentTransform)
@@ -71,13 +77,11 @@ namespace space
             target.draw(shape, _worldTransform);
         }
     }
-    bool Character::doesMouseHover(sf::Vector2f mousePosition) const
+    bool Character::doesMouseHover(GameSession &session, sf::Vector2f mousePosition) const
     {
         auto worldPos = Utils::getPosition(_worldTransform);
         auto local = mousePosition - worldPos;
-        std::cout << "Mouse pos: " << definition.name << ": " << local << std::endl;
-
-        return false;
+        return _spriteBounds.contains(local);
     }
 
     void Character::addToPhysicsWorld(b2World *world)

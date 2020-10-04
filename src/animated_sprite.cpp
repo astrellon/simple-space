@@ -64,4 +64,17 @@ namespace space
         }
         _nextAnimation = "";
     }
+
+    sf::FloatRect AnimatedSprite::getLocalBounds() const
+    {
+        float width = static_cast<float>(_texture.spriteSize().x);
+        float height = static_cast<float>(_texture.spriteSize().y);
+
+        return sf::FloatRect(0.f, 0.f, width, height);
+    }
+
+    sf::FloatRect AnimatedSprite::getGlobalBounds() const
+    {
+        return _sprite.getTransform().transformRect(getLocalBounds());
+    }
 } // namespace space
