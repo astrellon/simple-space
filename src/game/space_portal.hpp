@@ -33,7 +33,7 @@ namespace space
             virtual void draw(GameSession &session, sf::RenderTarget &target);
             virtual bool doesMouseHover(GameSession &session, sf::Vector2f mousePosition) const;
 
-            bool isMouseOverPortal(sf::Vector2f mousePosition) const;
+            bool isMouseOverPortal(sf::Vector2f mousePosition);
 
             void drawPortal(GameSession &session, sf::RenderTarget &target, bool asPolygon);
             void drawPortalOutlines(GameSession &session, sf::RenderTarget &target);
@@ -57,6 +57,7 @@ namespace space
             sf::FloatRect _spriteBounds;
             std::vector<NearPortalObject> _nearbyObjects;
             PortalShadow _shadow;
+            int _mouseOverTriangleIndex;
 
             // Is a vector for earcutting
             std::vector<Polygon> _shadowShape;

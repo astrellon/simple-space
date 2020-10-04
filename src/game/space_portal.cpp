@@ -108,13 +108,14 @@ namespace space
         return _spriteBounds.contains(local);
     }
 
-    bool SpacePortal::isMouseOverPortal(sf::Vector2f mousePosition) const
+    bool SpacePortal::isMouseOverPortal(sf::Vector2f mousePosition)
     {
         auto worldPos = Utils::getPosition(_worldTransform);
         auto local = mousePosition - worldPos;
         auto &polygon = _shadowShape[0];
 
-        return Utils::checkIfInsidePolygon(local, polygon, _earcut);
+        _mouseOverTriangleIndex = Utils::checkIfInsidePolygon(local, polygon, _earcut);
+        return _mouseOverTriangleIndex >= 0;
     }
 
     void SpacePortal::drawPortal(GameSession &session, sf::RenderTarget &target, bool asPolygon)
@@ -150,11 +151,10 @@ namespace space
 
         _shadowShape[0].clear();
         _shadow.calcShadow(_shadowShape[0], _shadowOutlines);
+        _earcut(_shadowShape);
 
         if (asPolygon)
         {
-            _earcut(_shadowShape);
-
             sf::VertexArray polygonDraw(sf::Triangles);
             for (auto i = 0; i < _earcut.indices.size(); i++)
             {
@@ -166,14 +166,24 @@ namespace space
         }
         else
         {
-            glLineWidth(3.0f);
-            sf::VertexArray polygonDraw(sf::LineStrip);
-            for (auto &point : _shadowShape[0])
+            sf::VertexArray polygonDraw(sf::Triangles);
+            for (auto i = 0; i < _earcut.indices.size(); i += 3)
             {
-                polygonDraw.append(sf::Vertex(point, sf::Color::White));
+                sf::VertexArray polygonDraw(sf::Triangles, 3);
+
+                for (auto j = 0; j < 3; j++)
+                {
+                    auto index = _earcut.indices[i + j];
+                    auto &point = _shadowShape[0][index];
+
+                    auto isOverIndex = (i / 3) == _mouseOverTriangleIndex;
+                    polygonDraw[j].position = point;
+                    polygonDraw[j].color = isOverIndex ? sf::Color::Red : Utils::hsv((float)i / (float)_earcut.indices.size() * 360, 1, 1);
+                    polygonDraw[j].color.a = isOverIndex ? 255 : 120;
+                }
+
+                target.draw(polygonDraw, _worldTransform);
             }
-            target.draw(polygonDraw, _worldTransform);
-            glLineWidth(1.0f);
         }
     }
 

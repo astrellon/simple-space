@@ -267,12 +267,13 @@ namespace space
                 auto A3 = triangleArea(p1, p2, point);
 
                 // Check if sum of A1, A2 and A3 is same as A
-                return (A == A1 + A2 + A3);
+                return std::abs(A - (A1 + A2 + A3)) < 0.1f;
             }
 
             template <typename T>
-            static bool checkIfInsidePolygon(const sf::Vector2f &point, const Polygon &polygon, const mapbox::detail::Earcut<T> &earcut)
+            static int checkIfInsidePolygon(const sf::Vector2f &point, const Polygon &polygon, const mapbox::detail::Earcut<T> &earcut)
             {
+                auto triangleIndex = 0;
                 for (auto i = 0; i < earcut.indices.size(); i += 3)
                 {
                     auto &p1 = polygon[earcut.indices[i    ]];
@@ -281,11 +282,13 @@ namespace space
 
                     if (checkIfInsideTriangle(point, p1, p2, p3))
                     {
-                        return true;
+                        return triangleIndex;
                     }
+
+                    triangleIndex++;
                 }
 
-                return false;
+                return -1;
             }
 
         private:
