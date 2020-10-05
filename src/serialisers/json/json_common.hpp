@@ -79,6 +79,20 @@ namespace space
         return result;
     }
 
+    template <typename T>
+    json toJsonArray(const std::vector<T *> &input)
+    {
+        json result;
+        for (auto &iter : input)
+        {
+            auto j = toJson(*iter);
+
+            if (!j.is_null())
+                result.push_back(j);
+        }
+        return result;
+    }
+
     template <>
     json toJsonArray(const std::vector<std::string> &input);
 

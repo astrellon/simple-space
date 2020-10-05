@@ -61,21 +61,20 @@ namespace space
             void removeGrassEffect(const ObjectId &id);
             const std::vector<GrassEffect *> &grassEffects() const { return _grassEffects; }
 
-            PlacedItem *addPlaceable(PlaceableItem *item, sf::Vector2f position);
-            void removePlaceable(ItemId id);
-            const std::vector<std::unique_ptr<PlacedItem>> &placedItems() const { return _placedItems; }
+            PlacedItem *addPlaceable(GameSession &session, PlaceableItem *item, sf::Vector2f position);
+            void removePlaceable(GameSession &session, ItemId id);
+            const std::vector<PlacedItem *> &placedItems() const { return _placedItems; }
 
             b2World &physicsWorld() { return _physicsWorld; }
 
         private:
             // Fields
             std::vector<Character *> _characters;
-            std::vector<std::unique_ptr<PlacedItem>> _placedItems;
+            std::vector<PlacedItem *> _placedItems;
             std::vector<GrassEffect *> _grassEffects;
             sf::Transform _worldTransform;
             Ship *_partOfShip;
             PlanetSurface *_partOfPlanet;
-            GameSession *_session;
 
             b2World _physicsWorld;
 

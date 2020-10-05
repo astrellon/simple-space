@@ -32,7 +32,6 @@ namespace space
     void WalkableArea::update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform)
     {
         _worldTransform = parentTransform;
-        _session = &session;
 
         for (auto &placedItem : _placedItems)
         {
@@ -89,7 +88,7 @@ namespace space
         {
             if (_placedItems[i]->doesMouseHover(session, mousePosition))
             {
-                session.setNextMouseHover(_placedItems[i].get());
+                session.setNextMouseHover(_placedItems[i]);
                 return true;
             }
         }
@@ -101,15 +100,15 @@ namespace space
     {
         std::vector<PlacedItemPair<Teleporter>> result;
 
-        for (auto &placedItem : _placedItems)
+        for (auto placedItem : _placedItems)
         {
-            auto teleporter = dynamic_cast<Teleporter *>(placedItem.get()->item);
+            auto teleporter = dynamic_cast<Teleporter *>(placedItem->item);
             if (teleporter == nullptr)
             {
                 continue;
             }
 
-            result.push_back(PlacedItemPair<Teleporter>(placedItem.get(), teleporter));
+            result.push_back(PlacedItemPair<Teleporter>(placedItem, teleporter));
         }
 
         return result;
@@ -166,7 +165,7 @@ namespace space
         }
     }
 
-    PlacedItem *WalkableArea::addPlaceable(PlaceableItem *item, sf::Vector2f position)
+    PlacedItem *WalkableArea::addPlaceable(GameSession &session, PlaceableItem *item, sf::Vector2f position)
     {
         DrawLayer *layer;
         if (!tryGetLayer(item->placeableDefinition.drawLayer, &layer))
@@ -180,33 +179,32 @@ namespace space
         position.y = std::round(position.y);
         position *= Utils::getInsideScale();
 
-        auto &placedItem = _placedItems.emplace_back(std::make_unique<PlacedItem>(item, position, *this, *layer));
-        layer->addObject(placedItem.get());
+        auto placedItem = session.createObject<PlacedItem>(item, position, *this, *layer);
+        layer->addObject(placedItem);
+        _placedItems.push_back(placedItem);
         placedItem->addPhysics(_physicsWorld);
 
         item->onPlaced(*placedItem);
 
-        return placedItem.get();
+        return placedItem;
     }
 
-    void WalkableArea::removePlaceable(ItemId id)
+    void WalkableArea::removePlaceable(GameSession &session, ItemId id)
     {
         for (auto iter = _placedItems.begin(); iter != _placedItems.end(); ++iter)
         {
-            auto placed = iter->get();
+            auto placed = *iter;
             if (placed->item->id == id)
             {
-                if (_session != nullptr)
+                session.playerController().removeCanInteractWith(&placed->interactable());
+                if (placed->item->isPlayerInRange())
                 {
-                    _session->playerController().removeCanInteractWith(&placed->interactable());
-                    if (placed->item->isPlayerInRange())
-                    {
-                        placed->item->onPlayerLeaves(*_session);
-                    }
+                    placed->item->onPlayerLeaves(session);
                 }
 
                 placed->onLayer.removeObject(placed);
                 placed->removePhysics(_physicsWorld);
+                session.removeSpaceObject(placed->id);
                 _placedItems.erase(iter);
                 return;
             }

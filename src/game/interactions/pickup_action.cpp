@@ -15,6 +15,6 @@ namespace space
     void PickupAction::execute(GameSession &session)
     {
         session.playerController().inventory().addItem(_placedItem->item);
-        _placedItem->area.removePlaceable(_placedItem->item->id);
+        _placedItem->area.removePlaceable(session, _placedItem->item->id);
     }
 } // namespace space

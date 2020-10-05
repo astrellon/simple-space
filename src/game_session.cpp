@@ -367,6 +367,11 @@ namespace space
                 }
 
                 foundInPortal = checkMouseSpacePortal(worldMousePosition, spacePortal);
+                // If we have something stop checking. Having multiple portals in a system will break this.
+                if (foundInPortal)
+                {
+                    break;
+                }
             }
 
             if (!foundInPortal)
@@ -638,7 +643,8 @@ namespace space
         auto diff = targetObject->transform().position - spacePortal->transform().position;
         mousePosition += diff;
 
-        return targetStarSystem->checkForMouse(mousePosition);
+        targetStarSystem->checkForMouse(mousePosition);
+        return true;
     }
 
     void GameSession::drawSpacePortal(SpacePortal *spacePortal)

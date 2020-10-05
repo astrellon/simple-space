@@ -136,7 +136,7 @@ namespace space
             return toJson(dynamic_cast<const SpacePortal &>(input));
 
         else if (input.type() == PlacedItem::SpaceObjectType())
-            return toJson(dynamic_cast<const PlacedItem &>(input));
+            return json {};
 
         else if (input.type() == GrassEffect::SpaceObjectType())
             return toJson(dynamic_cast<const GrassEffect &>(input));

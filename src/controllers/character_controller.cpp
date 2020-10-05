@@ -90,7 +90,7 @@ namespace space
     void CharacterController::dropItem(PlaceableItem *placeableItem)
     {
         _inventory->removeItem(placeableItem);
-        _character->insideArea()->addPlaceable(placeableItem, _character->transform().position);
+        _character->insideArea()->addPlaceable(_session, placeableItem, _character->transform().position);
     }
 
     void CharacterController::checkForTeleportableShips(sf::Vector2f position, const StarSystem &starSystem)

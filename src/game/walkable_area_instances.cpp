@@ -52,7 +52,7 @@ namespace space
                 continue;
             }
 
-            walkableArea.addPlaceable(item, placedItemEntry.position);
+            walkableArea.addPlaceable(session, item, placedItemEntry.position);
         }
     }
 } // space
