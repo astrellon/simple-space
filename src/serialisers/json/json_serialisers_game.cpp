@@ -123,6 +123,9 @@ namespace space
 
     json toJson(const SpaceObject &input)
     {
+        if (input.isGenerated())
+            return json {};
+
         if (input.type() == Character::SpaceObjectType())
             return toJson(dynamic_cast<const Character &>(input));
 
@@ -130,13 +133,13 @@ namespace space
             return toJson(dynamic_cast<const Ship &>(input));
 
         else if (input.type() == Planet::SpaceObjectType())
-            return json {};
+            return toJson(dynamic_cast<const Planet &>(input));
 
         else if (input.type() == SpacePortal::SpaceObjectType())
             return toJson(dynamic_cast<const SpacePortal &>(input));
 
         else if (input.type() == PlacedItem::SpaceObjectType())
-            return json {};
+            return toJson(dynamic_cast<const PlacedItem &>(input));
 
         else if (input.type() == GrassEffect::SpaceObjectType())
             return toJson(dynamic_cast<const GrassEffect &>(input));

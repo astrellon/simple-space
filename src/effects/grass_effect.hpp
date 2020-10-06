@@ -21,6 +21,7 @@ namespace space
             // Methods
             virtual void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform);
             virtual void draw(GameSession &session, sf::RenderTarget &target);
+            virtual bool isGenerated() const { return true; }
 
             static const std::string SpaceObjectType() { return "grass-effect"; }
             virtual std::string type() const { return SpaceObjectType(); }

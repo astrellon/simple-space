@@ -38,7 +38,6 @@ namespace space
 
             const sf::Transform &worldTransform() const { return _worldTransform; }
 
-            void starSystemId(const DefinitionId &id) { _insideStarSystemId = id; }
             void starSystem(StarSystem *starSystem) { _insideStarSystem = starSystem; }
             StarSystem *starSystem() const { return _insideStarSystem; }
 
@@ -48,6 +47,7 @@ namespace space
             virtual void onPostLoad(GameSession &session, LoadingContext &context) { }
 
             virtual bool doesMouseHover(GameSession &session, sf::Vector2f mousePosition) const { return false; }
+            virtual bool isGenerated() const { return false; }
 
             Interactable &interactable() { return _interactable; }
 
@@ -55,7 +55,6 @@ namespace space
             // Fields
             SpaceTransform _transform;
             sf::Transform _worldTransform;
-            DefinitionId _insideStarSystemId;
             StarSystem *_insideStarSystem;
             Interactable _interactable;
 
