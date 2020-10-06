@@ -8,7 +8,12 @@ namespace space
     class DrawLayers
     {
         public:
-            enum Type { Unknown, Background, Main, Foreground };
+            enum Type {
+                NotSet = 0x00,
+                Background = 0x01,
+                Main = 0x02,
+                Foreground = 0x04
+            };
             // Fields
 
             // Methods
@@ -19,7 +24,7 @@ namespace space
                     case Background: return "background";
                     case Main: return "main";
                     case Foreground: return "foreground";
-                    case Unknown: return "unknown";
+                    case NotSet: return "notset";
                     default: throw std::runtime_error("Unknown draw layer");
                 }
             }
@@ -28,7 +33,7 @@ namespace space
                 if (input == "background") { return Background; }
                 if (input == "main") { return Main; }
                 if (input == "foreground") { return Foreground; }
-                if (input == "unknown") { return Unknown; }
+                if (input == "notset") { return NotSet; }
                 throw std::runtime_error("Unknown draw layer");
             }
 

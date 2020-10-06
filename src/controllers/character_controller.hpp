@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <vector>
+#include <map>
 #include <SFML/System.hpp>
 
 #include "../non_copyable.hpp"
@@ -27,6 +28,8 @@ namespace space
     class CharacterController : private NonCopyable
     {
         public:
+            typedef std::map<Interactable &, float> InteractableMap;
+            typedef std::vector<Interactable &> InteractableList;
             // Fields
 
             // Constructor
@@ -53,43 +56,19 @@ namespace space
             void teleportClone(TeleportClone *clone) { _teleportClone = clone; }
             TeleportClone* teleportClone() const { return _teleportClone; }
 
-            void interactRangeObjects(float distance)
-            {
-                _interactRangeObjects = distance;
-                _interactRangeObjectsSquared = distance * distance;
-            }
+            void interactRangeObjects(float distance) { _interactRangeObjects = distance; }
             float interactRangeObjects() const { return _interactRangeObjects; }
-            float interactRangeObjectsSquared() const { return _interactRangeObjectsSquared; }
 
-            void interactRangeShips(float distance)
-            {
-                _interactRangeShips = distance;
-                _interactRangeShipsSquared = distance * distance;
-            }
+            void interactRangeShips(float distance) { _interactRangeShips = distance; }
             float interactRangeShips() const { return _interactRangeShips; }
-            float interactRangeShipsSquared() const { return _interactRangeShipsSquared; }
 
-            bool addCanInteractWith(Interactable *item);
-            bool removeCanInteractWith(Interactable *item);
-            bool canInteractWith(Interactable *item) const;
-            std::vector<Interactable *> &canInteractWith() { return _canInteractWith; }
+            bool canInteractWith(Interactable &item) const;
+            InteractableMap &canInteractWith() { return _canInteractWith; }
+            const InteractableList &canInteractWithInRange() { return _canInteractWithInRange; }
             void clearCanInteractWith() { _canInteractWith.clear(); }
 
-            void addShipInTeleportRange(Ship *ship);
-            void removeShipInTeleportRange(Ship *ship);
-            bool shipInTeleportRange(Ship *ship) const;
-            std::vector<Ship *> &shipsInTeleportRange() { return _shipsInTeleportRange; }
-            void clearShipsInTeleportRange() { _shipsInTeleportRange.clear(); }
-
-            void addPlanetInTeleportRange(Planet *planet);
-            void removePlanetInTeleportRange(Planet *planet);
-            bool planetInTeleportRange(Planet *planet) const;
-            std::vector<Planet *> &planetsInTeleportRange() { return _planetsInTeleportRange; }
-            void clearPlanetsInTeleportRange() { _planetsInTeleportRange.clear(); }
-
-            void checkForGroundInteractables(sf::Vector2f position, const WalkableArea &area);
-            void checkForTeleportableShips(sf::Vector2f position, const StarSystem &starSystem);
-            void checkForTeleportablePlanets(sf::Vector2f position, const StarSystem &starSystem);
+            void checkForInteractables(sf::Vector2f position, const Area &area);
+            void checkForInTeleportRange(sf::Vector2f position, const Area &area, std::vector<PlacedItemPair<Teleporter>> &teleportersInRange);
 
             void dropItem(PlaceableItem *placeableItem);
 
@@ -103,20 +82,16 @@ namespace space
             TeleportClone *_teleportClone;
             ControllingValue _controlling;
             std::unique_ptr<Inventory> _inventory;
-            std::vector<Interactable *> _canInteractWith;
-            std::vector<Ship *> _shipsInTeleportRange;
-            std::vector<Planet *> _planetsInTeleportRange;
+            InteractableMap _canInteractWith;
+            InteractableList _canInteractWithInRange;
 
             float _interactRangeObjects;
-            float _interactRangeObjectsSquared;
             float _interactRangeShips;
-            float _interactRangeShipsSquared;
 
             float _timeToNextIdle;
             float _dizzy;
 
             // Methods
-            void checkInRangeOfInteractable(Interactable *interactable);
             virtual void updateAnimations(sf::Time dt);
     };
 } // space

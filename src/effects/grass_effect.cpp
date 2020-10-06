@@ -9,6 +9,7 @@
 #include "../definitions/shader_definition.hpp"
 #include "../definitions/grass_effect_definition.hpp"
 #include "../utils.hpp"
+#include "../render_camera.hpp"
 
 namespace space
 {
@@ -22,7 +23,7 @@ namespace space
         updateWorldTransform(parentTransform);
     }
 
-    void GrassEffect::draw(GameSession &session, sf::RenderTarget &target)
+    void GrassEffect::draw(GameSession &session, RenderCamera &target)
     {
         if (!_sprite.getTexture())
         {
@@ -55,6 +56,6 @@ namespace space
         windDirection = windDirection.normalised();
         shader.setUniform("windDirection", sf::Glsl::Vec2(windDirection));
 
-        target.draw(_sprite, states);
+        target.texture().draw(_sprite, states);
     }
 } // space

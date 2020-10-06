@@ -45,19 +45,16 @@ namespace space
 
     StarSystem *GameSession::createStarSystem(const StarSystemDefinition &definition)
     {
-        auto &result = _starSystems.emplace_back(std::make_unique<StarSystem>(*this, definition));
-        return result.get();
+        auto result = createObject<StarSystem>(definition);
+        _starSystems.push_back(result);
+        return result;
     }
 
     PlanetSurface *GameSession::createPlanetSurface(const PlanetSurfaceDefinition &definition)
     {
-        auto &result = _planetSurfaces.emplace_back(std::make_unique<PlanetSurface>(*this, definition));
-        return result.get();
-    }
-    PlanetSurface *GameSession::createPlanetSurface(const PlanetSurfaceDefinition &definition, std::unique_ptr<WalkableArea> walkableArea)
-    {
-        auto &result = _planetSurfaces.emplace_back(std::make_unique<PlanetSurface>(*this, definition, std::move(walkableArea)));
-        return result.get();
+        auto result = createObject<PlanetSurface>(definition);
+        _planetSurfaces.push_back(result);
+        return result;
     }
 
     bool GameSession::tryGetItem(const ItemId &id, Item **result)
@@ -195,16 +192,16 @@ namespace space
                     createTransition(prevArea, area, *teleportClone, character);
                 }
 
-                if (area->partOfShip() != nullptr)
-                {
-                    _engine.sceneRender().camera().followingRotationId(area->partOfShip()->id);
-                    _nextFrameState.nextStarSystem = area->partOfShip()->starSystem();
-                }
-                else if (area->partOfPlanetSurface() != nullptr)
-                {
-                    _engine.sceneRender().camera().followingRotation(false);
-                    _nextFrameState.nextPlanetSurface = area->partOfPlanetSurface();
-                }
+                // if (area->partOfShip() != nullptr)
+                // {
+                //     _engine.sceneRender().camera().followingRotationId(area->partOfShip()->id);
+                //     _nextFrameState.nextStarSystem = area->partOfShip()->starSystem();
+                // }
+                // else if (area->partOfPlanetSurface() != nullptr)
+                // {
+                //     _engine.sceneRender().camera().followingRotation(false);
+                //     _nextFrameState.nextPlanetSurface = area->partOfPlanetSurface();
+                // }
             }
         }
     }
@@ -217,17 +214,17 @@ namespace space
             return;
         }
 
-        if (obj->starSystem() != nullptr)
-        {
-            obj->starSystem()->removeObject(obj);
-        }
+        // if (obj->starSystem() != nullptr)
+        // {
+        //     obj->starSystem()->removeObject(obj);
+        // }
 
         if (starSystem == nullptr)
         {
             return;
         }
 
-        starSystem->addObject(obj);
+        // starSystem->addObject(obj);
         obj->transform().position = position;
         auto ship = dynamic_cast<Ship *>(obj);
         if (ship)
@@ -275,11 +272,11 @@ namespace space
 
     bool GameSession::tryGetStarSystem(const DefinitionId &id, StarSystem **result) const
     {
-        for (auto i = _starSystems.begin(); i != _starSystems.end(); ++i)
+        for (auto starSystem : _starSystems)
         {
-            if (i->get()->definition.id == id)
+            if (starSystem->definition.id == id)
             {
-                *result = i->get();
+                *result = starSystem;
                 return true;
             }
         }
@@ -288,11 +285,11 @@ namespace space
     }
     bool GameSession::tryGetPlanetSurface(const DefinitionId &id, PlanetSurface **result) const
     {
-        for (auto i = _planetSurfaces.begin(); i != _planetSurfaces.end(); ++i)
+        for (auto planetSurface : _planetSurfaces)
         {
-            if (i->get()->definition.id == id)
+            if (planetSurface->definition.id == id)
             {
-                *result = i->get();
+                *result = planetSurface;
                 return true;
             }
         }
@@ -326,10 +323,10 @@ namespace space
             controller->update(dt);
 
         for (auto &starSystem : _starSystems)
-            starSystem->update(dt);
+            starSystem->update(*this, dt, sf::Transform::Identity);
 
         for (auto &plantSurface : _planetSurfaces)
-            plantSurface->update(dt);
+            plantSurface->update(*this, dt, sf::Transform::Identity);
 
         auto &sceneRender = _engine.sceneRender();
         if (_transition.get())
@@ -347,36 +344,36 @@ namespace space
 
         if (_activePlanetSurface)
         {
-            _activePlanetSurface->checkForMouse(worldMousePosition);
+            _activePlanetSurface->checkForMouse(*this, worldMousePosition);
         }
 
         if (_activeStarSystem)
         {
             auto foundInPortal = false;
-            for (auto obj : _activeStarSystem->objects())
-            {
-                if (obj->type() != SpacePortal::SpaceObjectType())
-                {
-                    continue;
-                }
+            // for (auto obj : _activeStarSystem->objects())
+            // {
+            //     if (obj->type() != SpacePortal::SpaceObjectType())
+            //     {
+            //         continue;
+            //     }
 
-                auto spacePortal = dynamic_cast<SpacePortal *>(obj);
-                if (spacePortal == nullptr)
-                {
-                    continue;
-                }
+            //     auto spacePortal = dynamic_cast<SpacePortal *>(obj);
+            //     if (spacePortal == nullptr)
+            //     {
+            //         continue;
+            //     }
 
-                foundInPortal = checkMouseSpacePortal(worldMousePosition, spacePortal);
-                // If we have something stop checking. Having multiple portals in a system will break this.
-                if (foundInPortal)
-                {
-                    break;
-                }
-            }
+            //     foundInPortal = checkMouseSpacePortal(worldMousePosition, spacePortal);
+            //     // If we have something stop checking. Having multiple portals in a system will break this.
+            //     if (foundInPortal)
+            //     {
+            //         break;
+            //     }
+            // }
 
             if (!foundInPortal)
             {
-                _activeStarSystem->checkForMouse(worldMousePosition);
+                _activeStarSystem->checkForMouse(*this, worldMousePosition);
             }
         }
 
@@ -438,26 +435,26 @@ namespace space
             _drawingPreTeleport = false;
             if (_activeStarSystem)
             {
-                _activeStarSystem->draw(sceneRender);
-                for (auto obj : _activeStarSystem->objects())
-                {
-                    if (obj->type() != SpacePortal::SpaceObjectType())
-                    {
-                        continue;
-                    }
+                _activeStarSystem->draw(*this, sceneRender);
+                // for (auto obj : _activeStarSystem->objects())
+                // {
+                //     if (obj->type() != SpacePortal::SpaceObjectType())
+                //     {
+                //         continue;
+                //     }
 
-                    auto spacePortal = dynamic_cast<SpacePortal *>(obj);
-                    if (spacePortal == nullptr)
-                    {
-                        continue;
-                    }
+                //     auto spacePortal = dynamic_cast<SpacePortal *>(obj);
+                //     if (spacePortal == nullptr)
+                //     {
+                //         continue;
+                //     }
 
-                    drawSpacePortal(spacePortal);
-                }
+                //     drawSpacePortal(spacePortal);
+                // }
             }
             else if (_activePlanetSurface)
             {
-                _activePlanetSurface->draw(sceneRender);
+                _activePlanetSurface->draw(*this, sceneRender);
             }
         }
     }
@@ -466,9 +463,6 @@ namespace space
     {
         for (auto &spaceObject : _spaceObjects)
             spaceObject->onPostLoad(*this, context);
-
-        for (auto &planetSurface : _planetSurfaces)
-            planetSurface->onPostLoad(context);
     }
 
     ObjectId GameSession::nextObjectId()
@@ -504,11 +498,11 @@ namespace space
     {
         if (transitionData.planetSurface)
         {
-            transitionData.planetSurface->draw(renderCamera);
+            transitionData.planetSurface->draw(*this, renderCamera);
         }
         else if (transitionData.starSystem)
         {
-            transitionData.starSystem->draw(renderCamera);
+            transitionData.starSystem->draw(*this, renderCamera);
         }
     }
 
@@ -537,7 +531,7 @@ namespace space
     {
         if (area->partOfShip())
         {
-            data.starSystem = area->partOfShip()->starSystem();
+            // data.starSystem = area->partOfShip()->starSystem();
             data.ship = area->partOfShip();
             data.cameraProps.followingRotationId = area->partOfShip()->id;
             data.cameraProps.followingRotation = true;
@@ -557,10 +551,10 @@ namespace space
             return;
         }
 
-        if (obj->starSystem())
-        {
-            obj->starSystem()->removeObject(obj);
-        }
+        // if (obj->starSystem())
+        // {
+        //     obj->starSystem()->removeObject(obj);
+        // }
 
         Character *character = dynamic_cast<Character *>(obj);
         if (character != nullptr)
@@ -629,21 +623,21 @@ namespace space
         }
 
         // Also bail if we can't find the target star system.
-        auto targetStarSystem = targetObject->starSystem();
-        if (!targetStarSystem)
-        {
-            return false;
-        }
+        // auto targetStarSystem = targetObject->starSystem();
+        // if (!targetStarSystem)
+        // {
+        //     return false;
+        // }
 
-        if (!spacePortal->isMouseOverPortal(mousePosition))
-        {
-            return false;
-        }
+        // if (!spacePortal->isMouseOverPortal(mousePosition))
+        // {
+        //     return false;
+        // }
 
-        auto diff = targetObject->transform().position - spacePortal->transform().position;
-        mousePosition += diff;
+        // auto diff = targetObject->transform().position - spacePortal->transform().position;
+        // mousePosition += diff;
 
-        targetStarSystem->checkForMouse(mousePosition);
+        // targetStarSystem->checkForMouse(mousePosition);
         return true;
     }
 
@@ -667,50 +661,50 @@ namespace space
         }
 
         // Also bail if we can't find the target star system.
-        auto targetStarSystem = targetObject->starSystem();
-        if (!targetStarSystem)
-        {
-            return;
-        }
+        // auto targetStarSystem = targetObject->starSystem();
+        // if (!targetStarSystem)
+        // {
+        //     return;
+        // }
 
-        auto diff = targetObject->transform().position - spacePortal->transform().position;
-        auto &transitionCamera = sceneRenderTransition.camera();
-        transitionCamera.cameraProps(sceneCamera.cameraProps());
-        transitionCamera.center(sceneCamera.center());
-        sceneRenderTransition.texture().setView(transitionCamera.view());
-        sceneRenderTransition.texture().clear(sf::Color(0, 0, 0, 0));
+        // auto diff = targetObject->transform().position - spacePortal->transform().position;
+        // auto &transitionCamera = sceneRenderTransition.camera();
+        // transitionCamera.cameraProps(sceneCamera.cameraProps());
+        // transitionCamera.center(sceneCamera.center());
+        // sceneRenderTransition.texture().setView(transitionCamera.view());
+        // sceneRenderTransition.texture().clear(sf::Color(0, 0, 0, 0));
 
-        if (!DrawDebug::showPortalShapes)
-        {
-            glEnable(GL_STENCIL_TEST);
+        // if (!DrawDebug::showPortalShapes)
+        // {
+        //     glEnable(GL_STENCIL_TEST);
 
-            glStencilFunc(GL_ALWAYS, 1, 0xFF);
-            glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
-            glStencilMask(0xFF);
-            glClearStencil(0x0);
-            glClear(GL_STENCIL_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+        //     glStencilFunc(GL_ALWAYS, 1, 0xFF);
+        //     glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+        //     glStencilMask(0xFF);
+        //     glClearStencil(0x0);
+        //     glClear(GL_STENCIL_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
-            spacePortal->drawPortal(*this, sceneRenderTransition.texture(), true);
+        //     spacePortal->drawPortal(*this, sceneRenderTransition.texture(), true);
 
-            glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
-            glStencilFunc(GL_EQUAL, 1, 0xFF);
-            glStencilMask(0x00);
+        //     glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+        //     glStencilFunc(GL_EQUAL, 1, 0xFF);
+        //     glStencilMask(0x00);
 
-            transitionCamera.center(sceneCamera.center() + diff);
-            targetStarSystem->draw(sceneRenderTransition);
+        //     transitionCamera.center(sceneCamera.center() + diff);
+        //     targetStarSystem->draw(sceneRenderTransition);
 
-            glDisable(GL_STENCIL_TEST);
+        //     glDisable(GL_STENCIL_TEST);
 
-            sceneRenderTransition.texture().display();
+        //     sceneRenderTransition.texture().display();
 
-            _portalOverlay.texture(&sceneRenderTransition.texture().getTexture());
-            _portalOverlay.draw(sceneRender.texture());
+        //     _portalOverlay.texture(&sceneRenderTransition.texture().getTexture());
+        //     _portalOverlay.draw(sceneRender.texture());
 
-            spacePortal->drawPortalOutlines(*this, sceneRender.texture());
-        }
-        else
-        {
-            spacePortal->drawPortal(*this, sceneRender.texture(), false);
-        }
+        //     spacePortal->drawPortalOutlines(*this, sceneRender.texture());
+        // }
+        // else
+        // {
+        //     spacePortal->drawPortal(*this, sceneRender.texture(), false);
+        // }
     }
 } // namespace town

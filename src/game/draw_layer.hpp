@@ -8,27 +8,32 @@ namespace space
 {
     class SpaceObject;
     class GameSession;
+    class RenderCamera;
 
     class DrawLayer
     {
         public:
+            typedef std::vector<SpaceObject *> SpaceObjects;
+
             // Fields
             bool sortEveryDraw;
 
             // Constructor
-            DrawLayer();
+            DrawLayer(bool sortEveryDraw = false);
 
             // Methods
-            void draw(GameSession &session, sf::RenderTarget &target);
+            void draw(GameSession &session, RenderCamera &target);
 
             void addObject(SpaceObject *obj);
             void removeObject(SpaceObject *obj);
 
             void sortObjects();
 
+            bool checkForMouse(GameSession &session, sf::Vector2f mousePosition) const;
+
         private:
             // Fields
-            std::vector<SpaceObject *> _drawables;
+            SpaceObjects _drawables;
 
             // Methods
             static bool sortByPosition(SpaceObject *obj1, SpaceObject *obj2);

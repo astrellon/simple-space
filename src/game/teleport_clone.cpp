@@ -3,6 +3,7 @@
 #include "../game_session.hpp"
 #include "../engine.hpp"
 #include "../debug/draw_debug.hpp"
+#include "../render_camera.hpp"
 
 #include "character.hpp"
 
@@ -36,14 +37,14 @@ namespace space
         _sprite.update(sf::Time::Zero);
     }
 
-    void TeleportClone::draw(GameSession &session, sf::RenderTarget &target)
+    void TeleportClone::draw(GameSession &session, RenderCamera &target)
     {
         if (!_cloneFound)
         {
             return;
         }
 
-        target.draw(_sprite, _worldTransform);
+        target.texture().draw(_sprite, _worldTransform);
         DrawDebug::glDraw++;
     }
 

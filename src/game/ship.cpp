@@ -2,23 +2,17 @@
 
 #include "../utils.hpp"
 #include "../game_session.hpp"
-#include "walkable_area.hpp"
+#include "../physics/polygon_collider.hpp"
+#include "../debug/draw_debug.hpp"
+#include "../render_camera.hpp"
 
 #include "items/placed_item.hpp"
-
-#include "../physics/polygon_collider.hpp"
-
-#include "../debug/draw_debug.hpp"
+#include "area.hpp"
 
 namespace space
 {
-    Ship::Ship(const ObjectId &id, const ShipDefinition &definition) : Ship(id, definition, std::make_unique<WalkableArea>())
-    {
-
-    }
-
-    Ship::Ship(const ObjectId &id, const ShipDefinition &definition, std::unique_ptr<WalkableArea> walkableArea):
-        SpaceObject(id), definition(definition), _sprite(*definition.texture), _interiorSprite(*definition.interiorTexture), _rotationSpeed(0), rotateInput(0), _walkableArea(std::move(walkableArea))
+    Ship::Ship(const ObjectId &id, const ShipDefinition &definition):
+        SpaceObject(id), definition(definition), _sprite(*definition.texture), _interiorSprite(*definition.interiorTexture), _rotationSpeed(0), rotateInput(0), _area(true, this)
     {
         auto size = definition.texture->getSize();
         _sprite.setOrigin(size.x / 2, size.y / 2);
@@ -35,11 +29,9 @@ namespace space
             createExtraCollider(points);
         }
 
-        _walkableArea->partOfShip(this);
-
         for (auto &collider : _colliders)
         {
-            _walkableArea->addStaticCollider(*collider);
+            _area.addStaticCollider(*collider);
         }
 
         if (definition.engineGlowTexture != nullptr)
@@ -103,7 +95,7 @@ namespace space
 
         updateWorldTransform(parentTransform);
 
-        _walkableArea->update(session, dt, _worldTransform);
+        _area.update(session, dt, _worldTransform);
 
         for (auto &engineEffect : _engineEffects)
         {
@@ -111,9 +103,9 @@ namespace space
         }
     }
 
-    void Ship::draw(GameSession &session, sf::RenderTarget &target)
+    void Ship::draw(GameSession &session, RenderCamera &target)
     {
-        target.draw(_sprite, _worldTransform);
+        target.texture().draw(_sprite, _worldTransform);
         DrawDebug::glDraw++;
 
         if (session.isControllingCharacter())
@@ -123,9 +115,9 @@ namespace space
             if ((session.getShipPlayerIsInsideOf() == this && !drawPreTeleport) ||
                 (session.getShipPlayerCloneIsInsideOf() == this && drawPreTeleport))
             {
-                target.draw(_interiorSprite, _worldTransform);
+                target.texture().draw(_interiorSprite, _worldTransform);
                 DrawDebug::glDraw++;
-                _walkableArea->draw(session, target);
+                _area.draw(session, target);
             }
         }
 
@@ -145,7 +137,7 @@ namespace space
     void Ship::onPostLoad(GameSession &session, LoadingContext &context)
     {
         SpaceObject::onPostLoad(session, context);
-        _walkableArea->onPostLoad(session, context);
+        _area.onPostLoad(session, context);
     }
 
     bool Ship::doesMouseHover(GameSession &session, sf::Vector2f mousePosition) const

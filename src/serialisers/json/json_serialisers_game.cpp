@@ -200,7 +200,7 @@ namespace space
         auto result = toJsonBase(input);
         result["rotationSpeed"] = input.rotationSpeed();
         result["speed"] = toJson(input.speed());
-        result["walkableArea"] = toJson(input.walkableArea());
+        //result["walkableArea"] = toJson(input.walkableArea());
         result["definitionId"] = input.definition.id;
         result["prevPosition"] = toJson(input.prevPosition());
 
@@ -372,13 +372,13 @@ namespace space
     json toJson(const StarSystem &input)
     {
         json spaceObjectIds;
-        for (auto obj : input.objects())
-        {
-            if (obj->type() == Planet::SpaceObjectType())
-                continue;
+        // for (auto obj : input.objects())
+        // {
+        //     if (obj->type() == Planet::SpaceObjectType())
+        //         continue;
 
-            spaceObjectIds.push_back(obj->id);
-        }
+        //     spaceObjectIds.push_back(obj->id);
+        // }
 
         return json {
             {"definitionId", input.definition.id},
@@ -396,7 +396,6 @@ namespace space
         }
 
         auto starSystem = session.createStarSystem(*definition);
-        starSystem->initFromDefinition();
 
         auto spaceObjectIds = j.at("spaceObjectIds");
         for (auto &spaceObjectId : spaceObjectIds)
@@ -409,7 +408,7 @@ namespace space
                 continue;
             }
 
-            starSystem->addObject(obj);
+            // starSystem->addObject(obj);
         }
 
         return true;
@@ -420,7 +419,7 @@ namespace space
         return json {
             {"planetId", input.partOfPlanet()->id},
             {"definitionId", input.definition.id},
-            {"walkableArea", toJson(input.walkableArea())}
+            //{"walkableArea", toJson(input.walkableArea())}
         };
     }
     bool addFromJsonPlanetSurface(const json &j, GameSession &session, LoadingContext &context)
@@ -440,8 +439,8 @@ namespace space
             std::cout << "Unable to find planet " << planetId << " for planet surface" << std::endl;
             return false;
         }
-        auto walkableArea = fromJsonWalkableArea(j.at("walkableArea"), session, context);
-        auto planetSurface = session.createPlanetSurface(*definition, std::move(walkableArea));
+        // auto walkableArea = fromJsonWalkableArea(j.at("walkableArea"), session, context);
+        auto planetSurface = session.createPlanetSurface(*definition);
         planetSurface->partOfPlanet(planet);
 
         return true;

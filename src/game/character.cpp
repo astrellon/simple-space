@@ -6,13 +6,15 @@
 #include "../utils.hpp"
 #include "../game_session.hpp"
 #include "../space_transform.hpp"
-#include "walkable_area.hpp"
 #include "../debug/draw_debug.hpp"
+#include "../render_camera.hpp"
+#include "ship.hpp"
+#include "area.hpp"
 
 namespace space
 {
     Character::Character(const ObjectId &id, const CharacterDefinition &definition) :
-        SpaceObject(id), definition(definition), rotateInput(0), _physicsBody(nullptr), _insideArea(nullptr), _sprite(*definition.texture), _flipSprite(false)
+        SpaceObject(id), definition(definition), rotateInput(0), _physicsBody(nullptr), _sprite(*definition.texture)
     {
         _interactable.name(definition.name);
         _sprite.sequence("idle", true);
@@ -28,7 +30,7 @@ namespace space
     {
         auto seconds = dt.asSeconds();
 
-        if (_insideArea && _insideArea->partOfPlanetSurface())
+        if (_insideArea && _insideArea->type() == AreaType::PlanetSurface)
         {
             auto movement = moveInput * definition.speed;
             b2Vec2 b2movement(movement.x, movement.y);
@@ -63,9 +65,9 @@ namespace space
         _sprite.update(dt);
     }
 
-    void Character::draw(GameSession &session, sf::RenderTarget &target)
+    void Character::draw(GameSession &session, RenderCamera &target)
     {
-        target.draw(_sprite, _worldTransform);
+        target.texture().draw(_sprite, _worldTransform);
         DrawDebug::glDraw++;
 
         if (DrawDebug::showPolygons)
@@ -74,7 +76,7 @@ namespace space
             shape.setFillColor(sf::Color(100, 120, 255, 120));
             shape.setSize(sf::Vector2f(20, 20));
             shape.setPosition(sf::Vector2f(-10, -10));
-            target.draw(shape, _worldTransform);
+            target.texture().draw(shape, _worldTransform);
         }
     }
     bool Character::doesMouseHover(GameSession &session, sf::Vector2f mousePosition) const
@@ -121,6 +123,6 @@ namespace space
 
     bool Character::isInSpace() const
     {
-        return _insideArea && _insideArea->partOfShip();
+        return _insideArea && _insideArea->type() == AreaType::Ship;
     }
 } // namespace space

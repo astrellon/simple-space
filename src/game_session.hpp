@@ -40,10 +40,10 @@ namespace space
         public:
             // Fields
             typedef std::vector<std::unique_ptr<SpaceObject>> SpaceObjectList;
-            typedef std::vector<std::unique_ptr<StarSystem>> StarSystemList;
-            typedef std::vector<std::unique_ptr<PlanetSurface>> PlanetSurfaceList;
             typedef std::vector<std::unique_ptr<Item>> ItemList;
             typedef std::vector<std::unique_ptr<CharacterController>> CharacterControllerList;
+            typedef std::vector<StarSystem *> StarSystemList;
+            typedef std::vector<PlanetSurface *> PlanetSurfaceList;
 
             // Constructor
             GameSession(Engine &engine);
@@ -58,7 +58,6 @@ namespace space
 
             StarSystem *createStarSystem(const StarSystemDefinition &definition);
             PlanetSurface *createPlanetSurface(const PlanetSurfaceDefinition &definition);
-            PlanetSurface *createPlanetSurface(const PlanetSurfaceDefinition &definition, std::unique_ptr<WalkableArea> walkableArea);
 
             template <typename T, typename... TArgs>
             auto createObject(TArgs &&... args)

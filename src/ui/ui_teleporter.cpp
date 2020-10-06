@@ -7,7 +7,7 @@
 
 #include "../game/items/teleporter.hpp"
 #include "../game/items/placed_item.hpp"
-#include "../game/walkable_area.hpp"
+#include "../game/area.hpp"
 #include "../game/ship.hpp"
 #include "../game/planet.hpp"
 #include "../game/planet_surface.hpp"
@@ -54,7 +54,7 @@ namespace space
         {
             ImGui::Text("%s:", ship->definition.name.c_str());
 
-            auto teleporters = ship->walkableArea().findTeleporters();
+            auto teleporters = ship->area().findTeleporters();
 
             for (auto &teleporter : teleporters)
             {
@@ -93,7 +93,7 @@ namespace space
 
             for (auto surface : planet->planetSurfaces())
             {
-                auto teleporters = surface->walkableArea().findTeleporters();
+                auto teleporters = surface->area().findTeleporters();
 
                 for (auto &teleporter : teleporters)
                 {

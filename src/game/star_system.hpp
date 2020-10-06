@@ -5,51 +5,48 @@
 #include <string>
 #include <vector>
 #include <memory>
-#include <functional>
 
 #include "../non_copyable.hpp"
 #include "../definitions/star_system_definition.hpp"
 #include "../star_background.hpp"
+#include "space_object.hpp"
+#include "area.hpp"
 
 namespace space
 {
-    typedef std::string StarSystemId;
-    class Engine;
-    class SpaceObject;
     class GameSession;
     class RenderCamera;
+    class LoadingContext;
 
-    class StarSystem : private NonCopyable
+    class StarSystem : public SpaceObject
     {
         public:
-            typedef std::function<void(SpaceObject *)> FindObjectCallback;
             // Fields
             const StarSystemDefinition &definition;
 
             // Constructor
-            StarSystem(GameSession &session, const StarSystemDefinition &definition);
+            StarSystem(const StarSystemDefinition &definition);
+            virtual ~StarSystem() { }
 
             // Methods
-            const std::vector<SpaceObject *> &objects() const { return _objects; }
-            void getObjectsNearby(float radius, const sf::Vector2f &position, FindObjectCallback callback) const;
-            void getObjectsNearby(float radius, const sf::Vector2f &position, std::vector<SpaceObject *> &result) const;
+            static const std::string SpaceObjectType() { return StarSystemDefinition::DefinitionType(); }
+            virtual std::string type() const { return SpaceObjectType(); }
 
-            void initFromDefinition();
-            void addObject(SpaceObject *object);
-            void removeObject(SpaceObject *object);
+            Area &area() { return _area; }
+            const Area &area () const { return _area; }
 
-            void update(sf::Time dt);
-            void draw(RenderCamera &target);
-            bool checkForMouse(sf::Vector2f mousePosition);
+            virtual void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransforms);
+            virtual void draw(GameSession &session, RenderCamera &target);
+            virtual void onPostLoad(GameSession &session, LoadingContext &context);
+            virtual bool checkForMouse(GameSession &session, sf::Vector2f mousePosition);
 
         private:
             // Fields
-            std::vector<SpaceObject *> _objects;
-            GameSession &_session;
+            Area _area;
             std::unique_ptr<StarBackground> _background;
 
             // Methods
-            void createCelestialBody(const CelestialBodyDefinition *bodyDefinition, sf::Transform parentTransform);
+            void createCelestialBody(GameSession &session, const CelestialBodyDefinition *bodyDefinition, const sf::Transform &parentTransform);
 
     };
 } // space

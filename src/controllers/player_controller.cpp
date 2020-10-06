@@ -29,8 +29,8 @@ namespace space
             if (planetSurface != nullptr && planetSurface->partOfPlanet() != nullptr)
             {
                 auto onPlanet = area->partOfPlanetSurface()->partOfPlanet();
-                checkForTeleportableShips(onPlanet->transform().position, *onPlanet->starSystem());
-                checkForTeleportablePlanets(onPlanet->transform().position, *onPlanet->starSystem());
+                // checkForTeleportableShips(onPlanet->transform().position, *onPlanet->starSystem());
+                // checkForTeleportablePlanets(onPlanet->transform().position, *onPlanet->starSystem());
             }
             else if (area->partOfShip() != nullptr)
             {

@@ -19,31 +19,21 @@
 
 namespace space
 {
-    StarSystem::StarSystem(GameSession &session, const StarSystemDefinition &definition) : definition(definition), _session(session)
+    StarSystem::StarSystem(const StarSystemDefinition &definition) : SpaceObject(definition.id), definition(definition), _area(false, this)
     {
 
     }
 
-    void StarSystem::update(sf::Time dt)
+    void StarSystem::update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform)
     {
+        updateWorldTransform(parentTransform);
+
         _background->update(dt);
-
-        for (auto obj : _objects)
-        {
-            obj->update(_session, dt, sf::Transform::Identity);
-        }
+        _area.update(session, dt, _worldTransform);
     }
 
-    void StarSystem::draw(RenderCamera &target)
+    void StarSystem::draw(GameSession &session, RenderCamera &target)
     {
-        auto insideOfShip = _session.getShipPlayerIsInsideOf();
-        auto showInternals = _session.isControllingCharacter() && insideOfShip != nullptr;
-        if (target.transitionData && target.transitionData->ship)
-        {
-            insideOfShip = target.transitionData->ship;
-            showInternals = true;
-        }
-
         if (!DrawDebug::hideBackground)
         {
             _background->draw(target);
@@ -53,136 +43,30 @@ namespace space
         {
             return;
         }
+
         target.preDraw();
-
-        for (auto obj : _objects)
-        {
-            // Ignore rendering current inside ship here
-            if (showInternals && obj->id == insideOfShip->id)
-            {
-                continue;
-            }
-            obj->draw(_session, target);
-        }
-
-        if (showInternals && insideOfShip != nullptr)
-        {
-            _session.engine().overlay().draw(target, 0.3);
-            insideOfShip->draw(_session, target);
-        }
+        _area.draw(session, target);
     }
 
-    bool StarSystem::checkForMouse(sf::Vector2f mousePosition)
+    bool StarSystem::checkForMouse(GameSession &session, sf::Vector2f mousePosition)
     {
-        auto insideOfShip = _session.getShipPlayerIsInsideOf();
-        auto showInternals = _session.isControllingCharacter() && insideOfShip != nullptr;
-
-        for (int i = _objects.size() - 1; i >= 0; --i)
-        {
-            auto obj = _objects[i];
-            if (showInternals && insideOfShip == obj)
-            {
-                continue;
-            }
-
-            if (obj->doesMouseHover(_session, mousePosition))
-            {
-                _session.setNextMouseHover(_objects[i]);
-                return true;
-            }
-        }
-
-        if (showInternals && insideOfShip)
-        {
-            return insideOfShip->walkableArea().checkForMouse(_session, mousePosition);
-        }
-
-        return false;
+        return _area.checkForMouse(session, mousePosition);
     }
 
-    void StarSystem::initFromDefinition()
+    void StarSystem::onPostLoad(GameSession &session, LoadingContext &context)
     {
-        createCelestialBody(definition.rootBody.get(), sf::Transform::Identity);
-        _background = std::make_unique<StarBackground>(_session.engine(), definition.starBackgroundOptions);
+        createCelestialBody(session, definition.rootBody.get(), sf::Transform::Identity);
+        _background = std::make_unique<StarBackground>(session.engine(), definition.starBackgroundOptions);
     }
 
-    void StarSystem::addObject(SpaceObject *object)
-    {
-        if (object == nullptr)
-        {
-            std::cout << "Cannot add null object to star system" << std::endl;
-            return;
-        }
-
-        if (object->starSystem() == this)
-        {
-            return;
-        }
-
-        if (object->starSystem() != nullptr)
-        {
-            object->starSystem()->removeObject(object);
-        }
-
-        object->starSystem(this);
-
-        _objects.push_back(object);
-    }
-
-    void StarSystem::removeObject(SpaceObject *object)
-    {
-        if (object == nullptr)
-        {
-            std::cout << "Cannot remove null object from star system" << std::endl;
-            return;
-        }
-
-        auto find = std::find(_objects.begin(), _objects.end(), object);
-        if (find != _objects.end())
-        {
-            object->starSystem(nullptr);
-            _objects.erase(find);
-        }
-        else
-        {
-            std::cout << "Unable to find object: " << object->id << " to remove from star system" << std::endl;
-        }
-    }
-
-    void StarSystem::getObjectsNearby(float radius, const sf::Vector2f &position, StarSystem::FindObjectCallback callback) const
-    {
-        auto lengthSquared = radius * radius;
-        for (auto obj : _objects)
-        {
-            auto dist = (position - obj->transform().position).lengthSquared();
-            if (dist <= lengthSquared)
-            {
-                callback(obj);
-            }
-        }
-    }
-
-    void StarSystem::getObjectsNearby(float radius, const sf::Vector2f &position, std::vector<SpaceObject *> &result) const
-    {
-        auto lengthSquared = radius * radius;
-        for (auto obj : _objects)
-        {
-            auto dist = (position - obj->transform().position).lengthSquared();
-            if (dist <= lengthSquared)
-            {
-                result.push_back(obj);
-            }
-        }
-    }
-
-    void StarSystem::createCelestialBody(const CelestialBodyDefinition *bodyDefinition, sf::Transform parentTransform)
+    void StarSystem::createCelestialBody(GameSession &session, const CelestialBodyDefinition *bodyDefinition, const sf::Transform &parentTransform)
     {
         auto type = bodyDefinition->type();
         if (type == PlanetDefinition::DefinitionType())
         {
             auto planetDefinition = dynamic_cast<const PlanetDefinition *>(bodyDefinition);
-            auto planet = _session.createObject<Planet>(planetDefinition->id, *planetDefinition);
-            addObject(planet);
+            auto planet = session.createObject<Planet>(planetDefinition->id, *planetDefinition);
+            _area.addObject(planet);
         }
         else if (type == OrbitPointCelestialDefinition::DefinitionType())
         {
@@ -195,7 +79,7 @@ namespace space
 
         for (const auto &child : bodyDefinition->children)
         {
-            createCelestialBody(child.get(), parentTransform);
+            createCelestialBody(session, child.get(), parentTransform);
         }
     }
 } // namespace space

@@ -8,6 +8,7 @@
 #include "../../game_session.hpp"
 #include "../../physics/polygon_collider.hpp"
 #include "../../utils.hpp"
+#include "../../render_camera.hpp"
 
 #include "../../debug/draw_debug.hpp"
 
@@ -104,9 +105,9 @@ namespace space
         updateWorldTransform(parentTransform);
     }
 
-    void PlacedItem::draw(GameSession &session, sf::RenderTarget &target)
+    void PlacedItem::draw(GameSession &session, RenderCamera &target)
     {
-        target.draw(_sprite, _worldTransform);
+        target.texture().draw(_sprite, _worldTransform);
         DrawDebug::glDraw++;
 
         if (DrawDebug::showPolygons)
@@ -118,7 +119,7 @@ namespace space
                 shape.setRadius(physicsShape.radius());
                 shape.setFillColor(sf::Color(255, 120, 100, 120));
                 shape.setPosition(sf::Vector2f(-physicsShape.radius(), -physicsShape.radius()));
-                target.draw(shape, _worldTransform);
+                target.texture().draw(shape, _worldTransform);
             }
             else if (physicsShape.type() == PhysicsShape::Rectangle)
             {
@@ -126,7 +127,7 @@ namespace space
                 shape.setSize(sf::Vector2f(physicsShape.width(), physicsShape.height()));
                 shape.setFillColor(sf::Color(120, 255, 100, 120));
                 shape.setPosition(sf::Vector2f(-physicsShape.width() * 0.5f, -physicsShape.height() * 0.5f));
-                target.draw(shape, _worldTransform);
+                target.texture().draw(shape, _worldTransform);
             }
         }
     }

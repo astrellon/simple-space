@@ -6,6 +6,7 @@
 #include "../utils.hpp"
 #include "../game_session.hpp"
 #include "../engine.hpp"
+#include "../render_camera.hpp"
 #include "star_system.hpp"
 #include "ship.hpp"
 #include "planet.hpp"
@@ -48,7 +49,7 @@ namespace space
 
         auto pos = Utils::getPosition(_worldTransform);
 
-        _insideStarSystem->getObjectsNearby(definition.pullRadius, pos, [&](SpaceObject *obj)
+        _insideArea->getObjectsNearby(definition.pullRadius, pos, [&](SpaceObject *obj)
         {
             if (obj->id == this->id)
             {
@@ -81,7 +82,7 @@ namespace space
             {
                 auto newPos = targetObject->transform().position + portalToShip; //+ dir * 20.0f;
                 auto queue = ship->id == session.playerController().controllingShip()->id;
-                session.moveSpaceObject(ship, newPos, targetObject->starSystem(), queue);
+                // session.moveSpaceObject(ship, newPos, targetObject->starSystem(), queue);
 
                 if (targetSpacePortal)
                 {
@@ -95,9 +96,9 @@ namespace space
         cleanupNearbyObjects();
     }
 
-    void SpacePortal::draw(GameSession &session, sf::RenderTarget &target)
+    void SpacePortal::draw(GameSession &session, RenderCamera &target)
     {
-        target.draw(_sprite, _worldTransform);
+        target.texture().draw(_sprite, _worldTransform);
         DrawDebug::glDraw++;
     }
 
