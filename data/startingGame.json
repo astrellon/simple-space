@@ -102,8 +102,8 @@
         {
             "planetId": "SS_PLANET_1",
             "definitionId": "PLANET_GRASSY_1",
-            "walkableArea": {
-                "characterIds": [
+            "area": {
+                "objectIds": [
                     "FRED",
                     "PLAYER_CHAR",
                     "BIRD_CHAR"
@@ -127,8 +127,8 @@
         {
             "planetId": "SS_PLANET_1",
             "definitionId": "PLANET_GRASSY_1-2",
-            "walkableArea": {
-                "characterIds": [
+            "area": {
+                "objectIds": [
                     "FRONK"
                 ],
                 "placedItems": [
@@ -148,8 +148,8 @@
         {
             "planetId": "SS_PLANET_2",
             "definitionId": "PLANET_SANDY_1",
-            "walkableArea": {
-                "characterIds": null,
+            "area": {
+                "objectIds": [],
                 "placedItems": [
                     {
                         "itemId": 4,
@@ -181,8 +181,8 @@
                 "scale": 1
             },
             "type": "ship",
-            "walkableArea": {
-                "characterIds": ["TUMBO"],
+            "area": {
+                "objectIds": ["TUMBO"],
                 "placedItems": [
                     {
                         "itemId": 20,
@@ -203,8 +203,8 @@
                 "scale": 1.0
             },
             "type": "ship",
-            "walkableArea": {
-                "characterIds": [
+            "area": {
+                "objectIds": [
                 ],
                 "placedItems": [
                     {
@@ -231,8 +231,8 @@
                 "scale": 1.0
             },
             "type": "ship",
-            "walkableArea": {
-                "characterIds": [ "GREG" ],
+            "area": {
+                "objectIds": [ "GREG" ],
                 "placedItems": [
                     {
                         "itemId": 5,
@@ -353,25 +353,31 @@
     "starSystems": [
         {
             "definitionId": "STAR_SYSTEM_1",
-            "spaceObjectIds": [
-                "PLAYER",
-                "OTHER",
-                "SPACE_STATION",
-                "SS_SPACE_PORTAL",
-                "SS_SPACE_PORTAL2"
-            ]
+            "area": {
+                "objectIds": [
+                    "PLAYER",
+                    "OTHER",
+                    "SPACE_STATION",
+                    "SS_SPACE_PORTAL",
+                    "SS_SPACE_PORTAL2"
+                ]
+            }
         },
         {
             "definitionId": "STAR_SYSTEM_2",
-            "spaceObjectIds": [
-                "SS2_SPACE_PORTAL"
-            ]
+            "area": {
+                "objectIds": [
+                    "SS2_SPACE_PORTAL"
+                ]
+            }
         },
         {
             "definitionId": "STAR_SYSTEM_3",
-            "spaceObjectIds": [
-                "SS3_SPACE_PORTAL"
-            ]
+            "area": {
+                "objectIds": [
+                    "SS3_SPACE_PORTAL"
+                ]
+            }
         }
     ]
 }

@@ -20,16 +20,20 @@ namespace space
     class PlaceableItem;
     class SpaceObject;
     class StarSystem;
-    class WalkableArea;
+    class Area;
     class GameSession;
     class TeleportClone;
     class Interactable;
 
+    template <typename T>
+    class PlacedItemPair;
+    class Teleporter;
+
     class CharacterController : private NonCopyable
     {
         public:
-            typedef std::map<Interactable &, float> InteractableMap;
-            typedef std::vector<Interactable &> InteractableList;
+            typedef std::map<Interactable *, float> InteractableMap;
+            typedef std::vector<Interactable *> InteractableList;
             // Fields
 
             // Constructor
@@ -65,7 +69,7 @@ namespace space
             bool canInteractWith(Interactable &item) const;
             InteractableMap &canInteractWith() { return _canInteractWith; }
             const InteractableList &canInteractWithInRange() { return _canInteractWithInRange; }
-            void clearCanInteractWith() { _canInteractWith.clear(); }
+            void clearCanInteractWith();
 
             void checkForInteractables(sf::Vector2f position, const Area &area);
             void checkForInTeleportRange(sf::Vector2f position, const Area &area, std::vector<PlacedItemPair<Teleporter>> &teleportersInRange);

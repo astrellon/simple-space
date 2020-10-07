@@ -8,7 +8,7 @@
 #include "../game/planet_surface.hpp"
 #include "../game/items/item.hpp"
 #include "../game/items/placeable_item.hpp"
-#include "../game/walkable_area.hpp"
+#include "../game/area.hpp"
 #include "../game/star_system.hpp"
 #include "../utils.hpp"
 
@@ -37,10 +37,10 @@ namespace space
 
         for (auto obj : area.objects())
         {
-            auto &interactable = obj->interactable();
+            auto interactable = &obj->interactable();
 
             auto find = _canInteractWith.find(interactable);
-            auto dpos = interactable.parentObject()->transform().position - playerPos;
+            auto dpos = interactable->parentObject()->transform().position - playerPos;
             auto distance = dpos.x * dpos.x + dpos.y * dpos.y;
             auto prevDist = outOfRange;
 
@@ -51,11 +51,11 @@ namespace space
 
             if (prevDist > rangeSquared && distance <= rangeSquared)
             {
-                interactable.onPlayerEnters(_session);
+                interactable->onPlayerEnters(_session);
             }
             else if (prevDist <= rangeSquared && distance > rangeSquared)
             {
-                interactable.onPlayerLeaves(_session);
+                interactable->onPlayerLeaves(_session);
             }
 
             if (distance <= rangeSquared)
@@ -96,10 +96,20 @@ namespace space
         });
     }
 
+    void CharacterController::clearCanInteractWith()
+    {
+        _canInteractWith.clear();
+        _canInteractWithInRange.clear();
+    }
+
     void CharacterController::updateAnimations(sf::Time dt)
     {
         auto seconds = dt.asSeconds();
-        auto rotSpeed = std::abs(_character->physicsBody()->GetAngularVelocity());
+        auto rotSpeed = 0.0f;
+        if (_character->physicsBody())
+        {
+            rotSpeed = std::abs(_character->physicsBody()->GetAngularVelocity());
+        }
         _dizzy += (rotSpeed - 8.0f) * seconds;
         _dizzy = Utils::clamp(_dizzy, 0, 5.0f);
 

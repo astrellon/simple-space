@@ -9,17 +9,11 @@ namespace space
             nextStarSystem = nullptr;
             nextPlanetSurface = nullptr;
 
-            _moveCharacters.clear();
             _moveSpaceObjects.clear();
         }
 
-        void NextFrameState::addMoveCharacter(Character *character, sf::Vector2f position, WalkableArea *area)
+        void NextFrameState::addMoveSpaceObject(SpaceObject *obj, sf::Vector2f position, Area *area)
         {
-            _moveCharacters.emplace_back(character, position, area);
-        }
-
-        void NextFrameState::addMoveSpaceObject(SpaceObject *obj, sf::Vector2f position, StarSystem *starSystem)
-        {
-            _moveSpaceObjects.emplace_back(obj, position, starSystem);
+            _moveSpaceObjects.emplace_back(obj, position, area);
         }
 } // space

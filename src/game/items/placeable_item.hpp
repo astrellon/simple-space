@@ -5,7 +5,7 @@
 
 namespace space
 {
-    class WalkableArea;
+    class Area;
     class GameSession;
     class PlacedItem;
 
@@ -23,7 +23,7 @@ namespace space
             static const std::string ItemType() { return "placeable-item"; }
             virtual std::string type() const { return ItemType(); }
 
-            virtual void execute(GameSession &session, const sf::Vector2f &position, WalkableArea &parentArea) { }
+            virtual void execute(GameSession &session, const sf::Vector2f &position, Area &parentArea) { }
             virtual void onPlaced(PlacedItem &area) { }
 
             virtual void onPlayerEnters(GameSession &session) { _playerInRange = true; }

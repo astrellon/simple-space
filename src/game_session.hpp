@@ -25,7 +25,7 @@ namespace space
     class PlanetSurface;
     class PlanetSurfaceDefinition;
     class Item;
-    class WalkableArea;
+    class Area;
     class Transition;
     class TransitionData;
     class TeleportScreenEffect;
@@ -146,8 +146,9 @@ namespace space
             Ship *getShipPlayerIsInsideOf() const;
             Ship *getShipPlayerCloneIsInsideOf() const;
 
-            void moveCharacter(Character *character, sf::Vector2f position, WalkableArea *area, bool queue = false);
-            void moveSpaceObject(SpaceObject *spaceObject, sf::Vector2f position, StarSystem *starSystem, bool queue = false);
+            //void moveCharacter(Character *character, sf::Vector2f position, Area *area, bool queue = false);
+            //void moveSpaceObject(SpaceObject *spaceObject, sf::Vector2f position, StarSystem *starSystem, bool queue = false);
+            void moveSpaceObject(SpaceObject *spaceObject, sf::Vector2f position, Area *area, bool queue = false);
 
             Transition *currentTransition() const { return _transition.get(); }
             void setTransition(std::unique_ptr<Transition> &transition);
@@ -197,8 +198,8 @@ namespace space
             void applyTransitionToCamera(const TransitionData &transitionData, RenderCamera &renderCamera);
             void drawTransitionWithCamera(const TransitionData &transitionData, RenderCamera &renderCamera);
 
-            void createTransition(const WalkableArea *prevArea, const WalkableArea *area, const TeleportClone &teleportClone, const Character *character);
-            void applyAreaToTransitionData(const WalkableArea *area, TransitionData &data) const;
+            void createTransition(const Area *prevArea, const Area *area, const TeleportClone &teleportClone, const Character *character);
+            void applyAreaToTransitionData(const Area *area, TransitionData &data) const;
             void clearTeleportClone();
 
             void checkNextFrameState();

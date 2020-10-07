@@ -26,6 +26,29 @@ namespace space
         _spriteBounds.left *= Utils::getInsideScale();
     }
 
+    void Character::insideArea(Area *area)
+    {
+        if (_insideArea != nullptr)
+        {
+            auto physicsWorld = _insideArea->physicsWorld();
+            if (physicsWorld)
+            {
+                removeFromPhysicsWorld(physicsWorld);
+            }
+        }
+
+        SpaceObject::insideArea(area);
+
+        if (area)
+        {
+            auto physicsWorld = area->physicsWorld();
+            if (physicsWorld)
+            {
+                addToPhysicsWorld(physicsWorld);
+            }
+        }
+    }
+
     void Character::prePhysics(GameSession &session, sf::Time dt, const sf::Transform &parentTransform)
     {
         auto seconds = dt.asSeconds();

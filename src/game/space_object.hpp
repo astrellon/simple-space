@@ -40,8 +40,8 @@ namespace space
 
             Interactable &interactable() { return _interactable; }
 
-            void insideArea(Area *area) { _insideArea = area; }
-            Area *insideArea() const { return _insideArea; }
+            virtual void insideArea(Area *area) { _insideArea = area; }
+            virtual Area *insideArea() const { return _insideArea; }
 
             virtual void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform) = 0;
             virtual void draw(GameSession &session, RenderCamera &target) = 0;

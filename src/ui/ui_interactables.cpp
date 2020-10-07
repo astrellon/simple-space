@@ -7,7 +7,7 @@
 
 #include "../game/items/placeable_item.hpp"
 #include "../game/items/placed_item.hpp"
-#include "../game/walkable_area.hpp"
+#include "../game/area.hpp"
 #include "../game_session.hpp"
 #include "../engine.hpp"
 #include "../controllers/player_controller.hpp"

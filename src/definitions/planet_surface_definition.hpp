@@ -6,7 +6,7 @@
 
 #include "base_definition.hpp"
 
-#include "../game/walkable_area_instances.hpp"
+#include "../game/area_instances.hpp"
 
 namespace tmx
 {
@@ -26,7 +26,7 @@ namespace space
             std::string tmxMapPath;
 
             tmx::Map *tmxMap;
-            WalkableAreaInstances walkableAreaInstances;
+            AreaInstances walkableAreaInstances;
 
             // Constructor
             PlanetSurfaceDefinition(DefinitionId id) : BaseDefinition(id) { }

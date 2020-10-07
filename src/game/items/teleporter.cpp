@@ -1,6 +1,8 @@
 #include "teleporter.hpp"
 
-#include "../walkable_area.hpp"
+#include "placed_item.hpp"
+
+#include "../area.hpp"
 #include "../planet_surface.hpp"
 #include "../ship.hpp"
 
@@ -11,7 +13,7 @@
 
 namespace space
 {
-    void Teleporter::execute(GameSession &session, const sf::Vector2f &position, WalkableArea &parentArea)
+    void Teleporter::execute(GameSession &session, const sf::Vector2f &position, Area &parentArea)
     {
         if (!parentArea.partOfShip() && !parentArea.partOfPlanetSurface())
         {
@@ -25,13 +27,14 @@ namespace space
 
     void Teleporter::onPlaced(PlacedItem &placedItem)
     {
-        if (placedItem.area.partOfPlanetSurface())
+        auto type = placedItem.insideArea()->type();
+        if (type == AreaType::PlanetSurface)
         {
-            _name = placedItem.area.partOfPlanetSurface()->definition.name;
+            _name = placedItem.insideArea()->partOfPlanetSurface()->definition.name;
         }
-        else if (placedItem.area.partOfShip())
+        else if (type == AreaType::Ship)
         {
-            _name = placedItem.area.partOfShip()->definition.name;
+            _name = placedItem.insideArea()->partOfShip()->definition.name;
         }
     }
 

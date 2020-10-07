@@ -2,6 +2,7 @@
 
 #include "placeable_item.hpp"
 #include "../character.hpp"
+#include "../area.hpp"
 #include "../interactions/pickup_action.hpp"
 #include "../interactions/use_item_action.hpp"
 #include "../../engine.hpp"
@@ -14,17 +15,18 @@
 
 namespace space
 {
-    PlacedItem::PlacedItem(PlaceableItem *item, const sf::Vector2f &position, WalkableArea &area, DrawLayer &onLayer) : PlacedItem(item->id, position, area, onLayer)
+    PlacedItem::PlacedItem(PlaceableItem *item) : PlacedItem(item->id)
     {
         this->item = item;
-        _transform.position = position;
 
         processItem();
     }
-    PlacedItem::PlacedItem(const ItemId &itemId, const sf::Vector2f &position, WalkableArea &area, DrawLayer &onLayer) : SpaceObject(Utils::makeItemId(itemId)),  _collider(nullptr), area(area), onLayer(onLayer), item(nullptr)
+
+    PlacedItem::PlacedItem(const ItemId &itemId) : SpaceObject(Utils::makeItemId(itemId)), _collider(nullptr)
     {
-        _transform.position = position;
+
     }
+
     PlacedItem::~PlacedItem()
     {
         assert(_collider == nullptr);
@@ -100,6 +102,29 @@ namespace space
         _collider = nullptr;
     }
 
+    void PlacedItem::insideArea(Area *area)
+    {
+        if (_insideArea != nullptr)
+        {
+            auto physicsWorld = _insideArea->physicsWorld();
+            if (physicsWorld)
+            {
+                removePhysics(*physicsWorld);
+            }
+        }
+
+        SpaceObject::insideArea(area);
+
+        if (area)
+        {
+            auto physicsWorld = area->physicsWorld();
+            if (physicsWorld)
+            {
+                addPhysics(*physicsWorld);
+            }
+        }
+    }
+
     void PlacedItem::update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform)
     {
         updateWorldTransform(parentTransform);
@@ -152,5 +177,10 @@ namespace space
         auto worldPos = Utils::getPosition(_worldTransform);
         auto local = mousePosition - worldPos;
         return _spriteBounds.contains(local);
+    }
+
+    DrawLayers::Type PlacedItem::drawLayer() const
+    {
+        return item->placeableDefinition.drawLayer;
     }
 }

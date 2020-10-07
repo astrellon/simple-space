@@ -2,12 +2,12 @@
 
 #include <iostream>
 
-#include "../walkable_area.hpp"
+#include "../area.hpp"
 #include "../../game_session.hpp"
 
 namespace space
 {
-    void Chair::execute(GameSession &session, const sf::Vector2f &position, WalkableArea &parentArea)
+    void Chair::execute(GameSession &session, const sf::Vector2f &position, Area &parentArea)
     {
         auto ship = parentArea.partOfShip();
         if (ship == nullptr)

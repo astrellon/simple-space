@@ -42,6 +42,9 @@ namespace space
 
             b2Body *physicsBody() { return _physicsBody; }
 
+            virtual void insideArea(Area *area);
+            virtual Area *insideArea() const { return _insideArea; }
+
             void addToPhysicsWorld(b2World *world);
             void removeFromPhysicsWorld(b2World *world);
 

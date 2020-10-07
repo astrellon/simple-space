@@ -3,8 +3,8 @@
 #include <map>
 #include <memory>
 
-#include "../game/walkable_area.hpp"
-#include "../game/walkable_area_instances.hpp"
+#include "../game/area.hpp"
+#include "../game/area_instances.hpp"
 
 #include "../non_copyable.hpp"
 
@@ -14,17 +14,17 @@ namespace space
     {
         public:
             // Fields
-            std::map<WalkableArea *, std::unique_ptr<WalkableAreaInstances>> postLoadWalkableAreaInstances;
+            std::map<Area *, std::unique_ptr<AreaInstances>> postLoadWalkableAreaInstances;
 
             // Constructor
 
             // Methods
-            WalkableAreaInstances *getWalkableInstances(WalkableArea *area)
+            AreaInstances *getWalkableInstances(Area *area)
             {
                 auto find = postLoadWalkableAreaInstances.find(area);
                 if (find == postLoadWalkableAreaInstances.end())
                 {
-                    auto instances = std::make_unique<WalkableAreaInstances>();
+                    auto instances = std::make_unique<AreaInstances>();
                     auto result = instances.get();
                     postLoadWalkableAreaInstances[area] = std::move(instances);
                     return result;

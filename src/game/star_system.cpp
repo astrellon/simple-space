@@ -19,7 +19,7 @@
 
 namespace space
 {
-    StarSystem::StarSystem(const StarSystemDefinition &definition) : SpaceObject(definition.id), definition(definition), _area(false, this)
+    StarSystem::StarSystem(const StarSystemDefinition &definition) : SpaceObject(definition.id), definition(definition), _area(AreaType::StarSystem, this)
     {
 
     }
@@ -53,7 +53,7 @@ namespace space
         return _area.checkForMouse(session, mousePosition);
     }
 
-    void StarSystem::onPostLoad(GameSession &session, LoadingContext &context)
+    void StarSystem::init(GameSession &session)
     {
         createCelestialBody(session, definition.rootBody.get(), sf::Transform::Identity);
         _background = std::make_unique<StarBackground>(session.engine(), definition.starBackgroundOptions);

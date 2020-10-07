@@ -348,7 +348,7 @@ namespace space
         auto walkableAreaInstancesJson = j.find("walkableAreaInstances");
         if (walkableAreaInstancesJson != j.end())
         {
-            fromJsonWalkableAreaInstances(*walkableAreaInstancesJson, result->walkableAreaInstances);
+            // fromJsonWalkableAreaInstances(*walkableAreaInstancesJson, result->walkableAreaInstances);
         }
 
         return result;

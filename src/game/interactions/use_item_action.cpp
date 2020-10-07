@@ -13,6 +13,6 @@ namespace space
 
     void UseItemAction::execute(GameSession &session)
     {
-        _placedItem->item->execute(session, _placedItem->transform().position, _placedItem->area);
+        _placedItem->item->execute(session, _placedItem->transform().position, *_placedItem->insideArea());
     }
 } // namespace space

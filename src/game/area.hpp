@@ -18,6 +18,11 @@ namespace space
     class GameSession;
     class LoadingContext;
     class RenderCamera;
+    class PlanetSurface;
+    class Ship;
+    class StarSystem;
+    class PlacedItem;
+    class PlaceableItem;
 
     template <typename T>
     class PlacedItemPair;

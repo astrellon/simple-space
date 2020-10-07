@@ -4,11 +4,11 @@
 #include "../render_camera.hpp"
 #include "../game_session.hpp"
 #include "../engine.hpp"
-#include "walkable_area_instances.hpp"
+#include "area_instances.hpp"
 
 namespace space
 {
-    PlanetSurface::PlanetSurface(const PlanetSurfaceDefinition &definition) : SpaceObject(definition.id), definition(definition), _partOfPlanet(nullptr), _area(true, this)
+    PlanetSurface::PlanetSurface(const PlanetSurfaceDefinition &definition) : SpaceObject(definition.id), definition(definition), _partOfPlanet(nullptr), _area(AreaType::PlanetSurface, this)
     {
     }
 

@@ -4,14 +4,15 @@
 #include "ship.hpp"
 #include "star_system.hpp"
 #include "planet_surface.hpp"
+#include "../serialisers/loading_context.hpp"
+#include "items/placeable_item.hpp"
+#include "items/teleporter.hpp"
+#include "items/placed_item.hpp"
 
 #include "../game_session.hpp"
 #include "../physics/polygon_collider.hpp"
 #include "../utils.hpp"
 #include "../render_camera.hpp"
-#include "items/placeable_item.hpp"
-#include "items/teleporter.hpp"
-#include "items/placed_item.hpp"
 
 namespace space
 {
@@ -49,11 +50,11 @@ namespace space
 
     void Area::onPostLoad(GameSession &session, LoadingContext &context)
     {
-        // auto find = context.postLoadWalkableAreaInstances.find(this);
-        // if (find != context.postLoadWalkableAreaInstances.end())
-        // {
-        //     find->second->applyToWalkableArea(*this, session);
-        // }
+        auto find = context.postLoadWalkableAreaInstances.find(this);
+        if (find != context.postLoadWalkableAreaInstances.end())
+        {
+            find->second->applyToWalkableArea(*this, session);
+        }
     }
 
     bool Area::checkForMouse(GameSession &session, sf::Vector2f mousePosition) const
@@ -137,14 +138,11 @@ namespace space
         position.y = std::round(position.y);
         position *= Utils::getInsideScale();
 
-        auto placedItem = session.createObject<PlacedItem>(item, position, *this, *layer);
+        auto placedItem = session.createObject<PlacedItem>(item);
+        placedItem->transform().position = position;
+        placedItem->insideArea(this);
         layer->addObject(placedItem);
         _objects.push_back(placedItem);
-
-        if (_physicsWorld)
-        {
-            placedItem->addPhysics(*_physicsWorld.get());
-        }
 
         item->onPlaced(*placedItem);
 
