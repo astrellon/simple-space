@@ -41,9 +41,7 @@ namespace space
             {"spaceObjects", toJsonArray(input.spaceObjects())},
             {"items", toJsonArray(input.items())},
             {"playerController", toJson(input.playerController())},
-            {"characterControllers", toJsonArray(input.characterControllers())},
-            {"starSystems", toJsonArray(input.starSystems())},
-            {"planetSurfaces", toJsonArray(input.planetSurfaces())}
+            {"characterControllers", toJsonArray(input.characterControllers())}
         };
 
         if (input.activeStarSystem())
@@ -61,20 +59,14 @@ namespace space
         auto result = std::make_unique<GameSession>(engine);
         auto &session = *result.get();
 
-        for (auto &spaceObject : j.at("spaceObjects"))
-            addFromJsonSpaceObject(spaceObject, session, context);
-
         for (auto &item : j.at("items"))
             addFromJsonItem(item, session);
 
+        for (auto &spaceObject : j.at("spaceObjects"))
+            addFromJsonSpaceObject(spaceObject, session, context);
+
         for (auto &characterControllers : j.at("characterControllers"))
             addFromJsonCharacterController(characterControllers, session);
-
-        for (auto &starSystem : j.at("starSystems"))
-            addFromJsonStarSystem(starSystem, session, context);
-
-        for (auto &planetSurfaces : j.at("planetSurfaces"))
-            addFromJsonPlanetSurface(planetSurfaces, session, context);
 
         auto activeStarSystem = j.find("activeStarSystem");
         if (activeStarSystem != j.end())
@@ -164,7 +156,13 @@ namespace space
             return addFromJsonSpacePortal(j, session);
 
         if (type == PlacedItem::SpaceObjectType())
-            throw std::runtime_error("Unable to add placed item without area");
+            return addFromJsonPlacedItem(j, session);
+
+        if (type == StarSystem::SpaceObjectType())
+            return addFromJsonStarSystem(j, session, context);
+
+        if (type == PlanetSurface::SpaceObjectType())
+            return addFromJsonPlanetSurface(j, session, context);
 
         if (type == GrassEffect::SpaceObjectType())
             return addFromJsonGrassEffect(j, session);
@@ -251,23 +249,22 @@ namespace space
         };
     }
 
-    // bool addFromJsonPlacedItem(const json &j, AreaInstances &area)
-    // {
-    //     auto itemId = j.at("itemId").get<ItemId>();
-    //     auto position = fromJsonVector2f(j.at("position"));
-    //     area.addPostLoadPlaceable(itemId, position);
+    bool addFromJsonPlacedItem(const json &j, GameSession &session)
+    {
+        auto itemId = j.at("itemId").get<ItemId>();
+        auto position = fromJsonVector2f(j.at("position"));
 
-    //     return true;
-    // }
+        PlaceableItem *item;
+        if (!session.tryGetItem<PlaceableItem>(itemId, &item))
+        {
+            return false;
+        }
 
-    // bool addFromJsonGrassEffect(const json &j, AreaInstances &area)
-    // {
-    //     auto defId = j.at("definitionId").get<DefinitionId>();
-    //     auto position = fromJsonVector2f(j.at("position"));
-    //     area.addPostLoadGrassEffect(defId, position);
+        auto result = session.createObject<PlacedItem>(item);
+        result->transform().position = position;
 
-    //     return true;
-    // }
+        return true;
+    }
 
     json toJson(const SpacePortal &input)
     {
@@ -297,12 +294,18 @@ namespace space
 
     json toJson(const GrassEffect &input)
     {
-        throw std::runtime_error("Cannot save grass effect!");
+        return json {
+            {"type", input.type()},
+            {"position", toJson(input.transform().position)},
+            {"definitionId", input.definition.id},
+            {"id", input.id}
+        };
     }
     bool addFromJsonGrassEffect(const json &j, GameSession &session)
     {
         auto id = j.at("id").get<ObjectId>();
         auto definitionId = j.at("definitionId").get<DefinitionId>();
+        auto position = fromJsonVector2f(j.at("position"));
 
         const GrassEffectDefinition *definition;
         if (!session.engine().definitionManager().tryGet(definitionId, &definition))
@@ -312,6 +315,7 @@ namespace space
         }
 
         auto result = session.createObject<GrassEffect>(id, *definition);
+        result->transform().position = position;
 
         return true;
     }

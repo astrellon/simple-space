@@ -36,7 +36,6 @@ namespace space
     {
         _sprite.setTexture(*item->definition.texture);
         _sprite.setOrigin(sf::Vector2f(item->definition.texture->getSize()) * 0.5f + item->definition.textureOffset);
-        _sprite.setScale(Utils::getInsideScale(), Utils::getInsideScale());
 
         _spriteBounds = _sprite.getGlobalBounds();
 

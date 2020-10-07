@@ -49,9 +49,7 @@ namespace space
     bool addFromJsonShip(const json &j, GameSession &session, LoadingContext &context);
 
     json toJson(const PlacedItem &input);
-    bool addFromJsonPlacedItem(const json &j, AreaInstances &instances);
-
-    bool addFromJsonGrassEffect(const json &j, AreaInstances &instances);
+    bool addFromJsonPlacedItem(const json &j, GameSession &session);
 
     json toJson(const Area &input);
     bool addFromJsonAreaInstances(const json &j, AreaInstances *instances);

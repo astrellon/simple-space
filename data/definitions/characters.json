@@ -51,7 +51,7 @@
         "type": "character",
         "id": "PLAYER_CHAR",
         "spriteSize": 32,
-        "speed": 30,
+        "speed": 100,
         "name": "Player",
         "animatedTextureId": "DOG_SPRITE"
     },

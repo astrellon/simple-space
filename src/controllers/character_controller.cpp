@@ -18,14 +18,14 @@ namespace space
     _interactRangeObjects(0), _interactRangeShips(0),
     _character(nullptr), _ship(nullptr), _teleportClone(nullptr), _timeToNextIdle(0.0f), _dizzy(0.0f)
     {
-        interactRangeObjects(10.0f);
+        interactRangeObjects(100.0f);
         interactRangeShips(150.0f);
     }
 
     void CharacterController::dropItem(PlaceableItem *placeableItem)
     {
         _inventory->removeItem(placeableItem);
-        //_character->insideArea()->addPlaceable(_session, placeableItem, _character->transform().position);
+        _character->insideArea()->addPlaceable(_session, placeableItem, _character->transform().position);
     }
 
     void CharacterController::checkForInteractables(sf::Vector2f position, const Area &area)
@@ -67,14 +67,13 @@ namespace space
         }
     }
 
-    void CharacterController::checkForInTeleportRange(sf::Vector2f position, const Area &area, std::vector<PlacedItemPair<Teleporter>> &teleportersInRange)
+    void CharacterController::checkForInTeleportRange(sf::Vector2f position, const Area &area)
     {
-        auto shipInsideOf = _character->insideArea()->partOfShip();
-        auto character = _character;
-
         area.getObjectsNearby(_interactRangeShips, position, [&](SpaceObject *obj)
         {
-            if (obj == shipInsideOf || obj == character)
+            auto shipInsideOf = _character->insideArea()->partOfShip();
+
+            if (obj == shipInsideOf || obj == _character)
             {
                 return;
             }
@@ -83,14 +82,14 @@ namespace space
             if (type == Ship::SpaceObjectType())
             {
                 auto ship = dynamic_cast<Ship *>(obj);
-                ship->area().addTeleporters(teleportersInRange);
+                ship->area().addTeleporters(_teleportersInRange);
             }
             else if (type == Planet::SpaceObjectType())
             {
                 auto planet = dynamic_cast<Planet *>(obj);
                 for (auto planetSurface : planet->planetSurfaces())
                 {
-                    planetSurface->area().addTeleporters(teleportersInRange);
+                    planetSurface->area().addTeleporters(_teleportersInRange);
                 }
             }
         });

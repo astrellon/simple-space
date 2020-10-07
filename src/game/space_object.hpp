@@ -43,6 +43,7 @@ namespace space
             virtual void insideArea(Area *area) { _insideArea = area; }
             virtual Area *insideArea() const { return _insideArea; }
 
+            virtual void prePhysics(GameSession &session, sf::Time dt, const sf::Transform &parentTransform) { }
             virtual void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform) = 0;
             virtual void draw(GameSession &session, RenderCamera &target) = 0;
             virtual void onPostLoad(GameSession &session, LoadingContext &context) { }

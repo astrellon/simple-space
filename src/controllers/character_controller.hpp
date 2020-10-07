@@ -7,6 +7,8 @@
 
 #include "../non_copyable.hpp"
 #include "../game/inventory.hpp"
+#include "../game/items/placed_item.hpp"
+#include "../game/items/teleporter.hpp"
 
 namespace space
 {
@@ -25,15 +27,12 @@ namespace space
     class TeleportClone;
     class Interactable;
 
-    template <typename T>
-    class PlacedItemPair;
-    class Teleporter;
-
     class CharacterController : private NonCopyable
     {
         public:
             typedef std::map<Interactable *, float> InteractableMap;
             typedef std::vector<Interactable *> InteractableList;
+            typedef std::vector<PlacedItemPair<Teleporter>> TeleporterList;
             // Fields
 
             // Constructor
@@ -72,7 +71,8 @@ namespace space
             void clearCanInteractWith();
 
             void checkForInteractables(sf::Vector2f position, const Area &area);
-            void checkForInTeleportRange(sf::Vector2f position, const Area &area, std::vector<PlacedItemPair<Teleporter>> &teleportersInRange);
+            void checkForInTeleportRange(sf::Vector2f position, const Area &area);
+            const TeleporterList &teleportersInRange() const { return _teleportersInRange;}
 
             void dropItem(PlaceableItem *placeableItem);
 
@@ -88,6 +88,7 @@ namespace space
             std::unique_ptr<Inventory> _inventory;
             InteractableMap _canInteractWith;
             InteractableList _canInteractWithInRange;
+            TeleporterList _teleportersInRange;
 
             float _interactRangeObjects;
             float _interactRangeShips;

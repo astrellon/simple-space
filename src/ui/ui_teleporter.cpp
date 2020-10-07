@@ -8,6 +8,7 @@
 #include "../game/items/teleporter.hpp"
 #include "../game/items/placed_item.hpp"
 #include "../game/area.hpp"
+#include "../game/character.hpp"
 #include "../game/ship.hpp"
 #include "../game/planet.hpp"
 #include "../game/planet_surface.hpp"
@@ -45,6 +46,13 @@ namespace space
     void UITeleporter::doDraw(Engine &engine)
     {
         auto session = engine.currentSession();
+        auto character = _characterController->controllingCharacter();
+        auto &teleporters = _characterController->teleportersInRange();
+
+        for (auto &teleporter : teleporters)
+        {
+            ImGui::Text("%s", teleporter.item->name().c_str());
+        }
         // auto ships = _characterController->shipsInTeleportRange();
         // auto planets = _characterController->planetsInTeleportRange();
 

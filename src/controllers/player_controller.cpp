@@ -26,7 +26,7 @@ namespace space
         // {
         //     auto area = _character->insideArea();
         //     auto planetSurface = area->partOfPlanetSurface();
-        //     if (planetSurface != nullptr && planetSurface->partOfPlanet() != nullptr)
+        //     if (planetSurface != nullptr && planetSurface->type() != nullptr)
         //     {
         //         auto onPlanet = area->partOfPlanetSurface()->partOfPlanet();
         //         // checkForTeleportableShips(onPlanet->transform().position, *onPlanet->starSystem());
@@ -54,6 +54,16 @@ namespace space
             if (_character && _character->insideArea())
             {
                 updateAnimations(dt);
+
+                auto insideArea = _character->insideArea();
+                checkForInteractables(_character->transform().position, *insideArea);
+
+                auto planetSurface = insideArea->partOfPlanetSurface();
+                if (planetSurface != nullptr)
+                {
+                    auto onPlanet = insideArea->partOfPlanetSurface()->partOfPlanet();
+                    checkForInTeleportRange(onPlanet->transform().position, *onPlanet->insideArea());
+                }
                 // checkForGroundInteractables(_character->transform().position, *_character->insideArea());
             }
             else

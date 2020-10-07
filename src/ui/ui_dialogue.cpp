@@ -16,6 +16,7 @@ namespace space
     UIDialogue::UIDialogue() : UIPanel("Dialogue"), _textDisplayIndex(0)
     {
         size = ImVec2(400, 120);
+        show = true;
     }
 
     bool UIDialogue::isOpen(Engine &engine)

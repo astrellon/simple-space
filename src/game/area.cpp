@@ -21,6 +21,7 @@ namespace space
         if (type == AreaType::Ship || type == AreaType::PlanetSurface)
         {
             _physicsWorld = std::make_unique<b2World>(b2Vec2(0, 0));
+            _transform = _transform.scale(Utils::getInsideScale(), Utils::getInsideScale());
         }
 
         if (type == AreaType::Ship) { _partOfShip = dynamic_cast<Ship *>(partOfObject); }
@@ -35,9 +36,21 @@ namespace space
 
     void Area::update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform)
     {
+        auto transform = parentTransform * _transform;
+        if (_physicsWorld)
+        {
+            for (auto obj : _objects)
+            {
+                obj->prePhysics(session, dt, transform);
+            }
+
+            auto physicsSteps = std::min(dt.asSeconds(), 1.0f / 60.0f);
+            _physicsWorld->Step(physicsSteps, 4, 2);
+        }
+
         for (auto obj : _objects)
         {
-            obj->update(session, dt, parentTransform);
+            obj->update(session, dt, transform);
         }
     }
 

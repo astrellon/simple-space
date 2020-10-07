@@ -81,6 +81,7 @@ namespace space
             std::vector<SpaceObject *> _objects;
             std::unique_ptr<b2World> _physicsWorld;
             SpaceObject *_partOfObject;
+            sf::Transform _transform;
 
             union
             {
