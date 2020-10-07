@@ -14,19 +14,19 @@ namespace space
     {
         public:
             // Fields
-            std::map<Area *, std::unique_ptr<AreaInstances>> postLoadWalkableAreaInstances;
+            std::map<Area *, std::unique_ptr<AreaInstances>> postLoadAreaInstances;
 
             // Constructor
 
             // Methods
-            AreaInstances *getWalkableInstances(Area *area)
+            AreaInstances *getAreaInstance(Area *area)
             {
-                auto find = postLoadWalkableAreaInstances.find(area);
-                if (find == postLoadWalkableAreaInstances.end())
+                auto find = postLoadAreaInstances.find(area);
+                if (find == postLoadAreaInstances.end())
                 {
                     auto instances = std::make_unique<AreaInstances>();
                     auto result = instances.get();
-                    postLoadWalkableAreaInstances[area] = std::move(instances);
+                    postLoadAreaInstances[area] = std::move(instances);
                     return result;
                 }
 

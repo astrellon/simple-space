@@ -21,7 +21,7 @@ namespace space
             void setMainPolygon(const Polygon &points);
             void setHole(const Polygon &points, size_t holeIndex);
 
-            void addToWorld(b2World *world);
+            void addToWorld(b2World *world, float scale);
             void removeFromWorld(b2World *world);
 
             void debugDraw(sf::RenderTarget &target, const sf::Transform &parentTransform);

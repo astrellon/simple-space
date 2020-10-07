@@ -75,6 +75,10 @@ namespace space
 
             b2World *physicsWorld() const { return _physicsWorld.get(); }
 
+            DrawLayer &background() { return _background; }
+            DrawLayer &main() { return _main; }
+            DrawLayer &foreground() { return _foreground; }
+
         private:
             // Fields
             AreaType _type;

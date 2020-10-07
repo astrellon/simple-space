@@ -63,10 +63,10 @@ namespace space
 
     void Area::onPostLoad(GameSession &session, LoadingContext &context)
     {
-        auto find = context.postLoadWalkableAreaInstances.find(this);
-        if (find != context.postLoadWalkableAreaInstances.end())
+        auto find = context.postLoadAreaInstances.find(this);
+        if (find != context.postLoadAreaInstances.end())
         {
-            find->second->applyToWalkableArea(*this, session);
+            find->second->applyToArea(*this, session);
         }
     }
 
@@ -92,7 +92,14 @@ namespace space
             std::cout << "Cannot add collider to non-physics area" << std::endl;
             return;
         }
-        collider.addToWorld(_physicsWorld.get());
+
+        auto scale = 1.0f;
+        if (_type == AreaType::Ship || _type == AreaType::PlanetSurface)
+        {
+            scale = 1.0f / Utils::getInsideScale();
+        }
+
+        collider.addToWorld(_physicsWorld.get(), scale);
     }
     void Area::removeStaticCollider(PolygonCollider &collider)
     {
@@ -101,6 +108,7 @@ namespace space
             std::cout << "Cannot remove collider from non-physics area" << std::endl;
             return;
         }
+
         collider.removeFromWorld(_physicsWorld.get());
     }
 

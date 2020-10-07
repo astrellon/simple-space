@@ -57,7 +57,7 @@ namespace space
         }
     }
 
-    void PolygonCollider::addToWorld(b2World *world)
+    void PolygonCollider::addToWorld(b2World *world, float scale)
     {
         updateEarcut();
 
@@ -82,7 +82,7 @@ namespace space
                 }
 
                 auto p = _polygons[k][index];
-                points.push_back(b2Vec2(p.x, p.y));
+                points.push_back(b2Vec2(p.x * scale, p.y * scale));
             }
 
             shape.Set(points.data(), 3);

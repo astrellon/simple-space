@@ -25,7 +25,7 @@ namespace space
                 _onPostLoadObjects.emplace_back(id);
             }
 
-            void applyToWalkableArea(Area &walkableArea, GameSession &session) const;
+            void applyToArea(Area &area, GameSession &session) const;
 
         private:
             // Fields

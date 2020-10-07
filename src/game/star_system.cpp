@@ -21,7 +21,7 @@ namespace space
 {
     StarSystem::StarSystem(const StarSystemDefinition &definition) : SpaceObject(definition.id), definition(definition), _area(AreaType::StarSystem, this)
     {
-
+        _area.main().sortEveryDraw = false;
     }
 
     void StarSystem::update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform)
@@ -57,6 +57,11 @@ namespace space
     {
         createCelestialBody(session, definition.rootBody.get(), sf::Transform::Identity);
         _background = std::make_unique<StarBackground>(session.engine(), definition.starBackgroundOptions);
+    }
+
+    void StarSystem::onPostLoad(GameSession &session, LoadingContext &context)
+    {
+        _area.onPostLoad(session, context);
     }
 
     void StarSystem::createCelestialBody(GameSession &session, const CelestialBodyDefinition *bodyDefinition, const sf::Transform &parentTransform)

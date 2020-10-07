@@ -39,6 +39,7 @@ namespace space
 
             virtual void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransforms);
             virtual void draw(GameSession &session, RenderCamera &target);
+            virtual void onPostLoad(GameSession &session, LoadingContext &context);
             virtual bool checkForMouse(GameSession &session, sf::Vector2f mousePosition);
 
         private:

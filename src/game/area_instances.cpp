@@ -13,14 +13,14 @@
 
 namespace space
 {
-    void AreaInstances::applyToWalkableArea(Area &walkableArea, GameSession &session) const
+    void AreaInstances::applyToArea(Area &area, GameSession &session) const
     {
         for (auto postLoad : _onPostLoadObjects)
         {
             SpaceObject *character;
             if (session.tryGetSpaceObject(postLoad, &character))
             {
-                walkableArea.addObject(character);
+                area.addObject(character);
             }
             else
             {

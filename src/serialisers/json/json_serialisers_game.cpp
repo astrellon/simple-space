@@ -233,7 +233,7 @@ namespace space
         if (areaJson != j.end())
         {
             auto area = &result->area();
-            auto instances = context.getWalkableInstances(area);
+            auto instances = context.getAreaInstance(area);
             addFromJsonAreaInstances(*areaJson, instances);
         }
 
@@ -361,7 +361,7 @@ namespace space
 
         auto starSystem = session.createStarSystem(*definition);
         starSystem->init(session);
-        auto instances = context.getWalkableInstances(starSystem->insideArea());
+        auto instances = context.getAreaInstance(&starSystem->area());
         addFromJsonAreaInstances(j.at("area"), instances);
 
         return true;
@@ -395,7 +395,7 @@ namespace space
         auto planetSurface = session.createPlanetSurface(*definition);
         planetSurface->partOfPlanet(planet);
 
-        auto instances = context.getWalkableInstances(&planetSurface->area());
+        auto instances = context.getAreaInstance(&planetSurface->area());
         addFromJsonAreaInstances(j.at("area"), instances);
 
         return true;

@@ -1,5 +1,6 @@
 {
-    "activePlanetSurface": "PLANET_GRASSY_1",
+    "activePlanetSurface_": "PLANET_GRASSY_1",
+    "activeStarSystem": "STAR_SYSTEM_1",
     "items": [
         {
             "definitionId": "CHAIR_1",
@@ -99,7 +100,7 @@
         }
     ],
     "playerController": {
-        "controlling": 2,
+        "controlling": 1,
         "controllingCharacter": "PLAYER_CHAR",
         "controllingShip": "PLAYER",
         "inventory": {
@@ -161,7 +162,6 @@
             "area": {
                 "objectIds": [
                     "FRED",
-                    "PLAYER_CHAR",
                     "BIRD_CHAR",
                     "ITEM_10",
                     "ITEM_3",
@@ -245,13 +245,12 @@
             "rotationSpeed": 0.0,
             "speed": [ 0.0, 0.0 ],
             "transform": {
-                "position": [ -200.0, 200.0 ],
-                "rotation": 0.0,
-                "scale": 1.0
+                "position": [ -200.0, 200.0 ]
             },
             "type": "ship",
             "area": {
                 "objectIds": [
+                    "PLAYER_CHAR",
                     "ITEM_0",
                     "ITEM_1"
                 ]
@@ -286,7 +285,7 @@
             "definitionId": "PLAYER_CHAR",
             "id": "PLAYER_CHAR",
             "transform": {
-                "position": [ 80.0, 80.0 ],
+                "position": [0, 0],
                 "rotation": 0.0
             },
             "type": "character"
