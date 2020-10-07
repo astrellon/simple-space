@@ -24,6 +24,8 @@ namespace space
             // Methods
             void draw(GameSession &session, RenderCamera &target);
 
+            const SpaceObjects &drawables() const { return _drawables; }
+
             void addObject(SpaceObject *obj);
             void removeObject(SpaceObject *obj);
 

@@ -29,7 +29,7 @@ namespace space
 
     PlacedItem::~PlacedItem()
     {
-        assert(_collider == nullptr);
+
     }
 
     void PlacedItem::processItem()

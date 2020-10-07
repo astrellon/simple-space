@@ -208,6 +208,11 @@
             "type": "planet-surface"
         },
         {
+            "type": "placed-item",
+            "itemId": 20,
+            "position": [0, 0]
+        },
+        {
             "definitionId": "SPACE_STATION_1",
             "id": "SPACE_STATION",
             "rotationSpeed": 0,
@@ -219,14 +224,7 @@
             },
             "type": "ship",
             "area": {
-                "objectIds": ["TUMBO"],
-                "placedItems": [
-                    {
-                        "itemId": 20,
-                        "position": [0, 0],
-                        "type": "placed-item"
-                    }
-                ]
+                "objectIds": ["TUMBO", "ITEM_20"]
             }
         },
         {

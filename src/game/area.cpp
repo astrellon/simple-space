@@ -122,6 +122,12 @@ namespace space
         obj->insideArea(this);
         _objects.push_back(obj);
 
+        if (obj->type() == PlacedItem::SpaceObjectType())
+        {
+            auto placedItem = dynamic_cast<PlacedItem *>(obj);
+            placedItem->item->onPlaced(*placedItem);
+        }
+
         DrawLayer *layer;
         if (tryGetLayer(obj->drawLayer(), &layer))
         {

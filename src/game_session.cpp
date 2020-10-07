@@ -245,8 +245,43 @@ namespace space
             return;
         }
 
-        area->addObject(spaceObject);
+        auto prevArea = spaceObject->insideArea();
+        auto prevTransform = spaceObject->transform();
+
         spaceObject->transform().position = position;
+        area->addObject(spaceObject);
+
+        if (spaceObject == _playerController.controllingCharacter())
+        {
+            _playerController.clearCanInteractWith();
+            if (_playerController.controlling() == ControlCharacter)
+            {
+                // if (prevArea != nullptr)
+                // {
+                //     clearTeleportClone();
+
+                //     std::stringstream newId(spaceObject->id);
+                //     newId << "_TELEPORT_CLONE_";
+                //     newId << _engine.timeSinceStart().asMicroseconds();
+                //     auto teleportClone = createObject<TeleportClone>(newId.str(), *_playerController.controllingCharacter(), prevTransform);
+                //     _playerController.teleportClone(teleportClone);
+                //     prevArea->addObject(teleportClone);
+
+                //     createTransition(prevArea, area, *teleportClone);
+                // }
+
+                if (area->partOfShip() != nullptr)
+                {
+                    _engine.sceneRender().camera().followingRotationId(area->partOfShip()->id);
+                    _nextFrameState.nextStarSystem = area->partOfShip()->insideArea()->partOfStarSystem();
+                }
+                else if (area->partOfPlanetSurface() != nullptr)
+                {
+                    _engine.sceneRender().camera().followingRotation(false);
+                    _nextFrameState.nextPlanetSurface = area->partOfPlanetSurface();
+                }
+            }
+        }
     }
 
     void GameSession::setTransition(std::unique_ptr<Transition> &transition)
@@ -520,7 +555,7 @@ namespace space
         }
     }
 
-    void GameSession::createTransition(const Area *prevArea, const Area *area, const TeleportClone &teleportClone, const Character *character)
+    void GameSession::createTransition(const Area *prevArea, const Area *area, const TeleportClone &teleportClone)
     {
         auto windowSize = _engine.windowSize();
         auto aspectRatio = static_cast<float>(windowSize.x) / static_cast<float>(windowSize.y);

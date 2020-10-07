@@ -45,9 +45,16 @@ namespace space
         //     clearShipsInTeleportRange();
         // }
 
+        _teleportersInRange.clear();
+
         if (_controlling == ControlShip)
         {
             controlShip(dt);
+
+            if (_ship)
+            {
+                checkForInTeleportRange(_ship->transform().position, *_ship->insideArea());
+            }
         }
         else if (_controlling == ControlCharacter)
         {
@@ -59,12 +66,16 @@ namespace space
                 checkForInteractables(_character->transform().position, *insideArea);
 
                 auto planetSurface = insideArea->partOfPlanetSurface();
+                auto ship = insideArea->partOfShip();
                 if (planetSurface != nullptr)
                 {
                     auto onPlanet = insideArea->partOfPlanetSurface()->partOfPlanet();
                     checkForInTeleportRange(onPlanet->transform().position, *onPlanet->insideArea());
                 }
-                // checkForGroundInteractables(_character->transform().position, *_character->insideArea());
+                else if (ship != nullptr)
+                {
+                    checkForInTeleportRange(ship->transform().position, *ship->insideArea());
+                }
             }
             else
             {
