@@ -28,6 +28,20 @@ namespace space
         _character->insideArea()->addPlaceable(_session, placeableItem, _character->transform().position);
     }
 
+    SpaceObject *CharacterController::controllingObject() const
+    {
+        if (_controlling == ControlShip)
+        {
+            return _ship;
+        }
+        if (_controlling == ControlCharacter)
+        {
+            return _character;
+        }
+
+        return nullptr;
+    }
+
     void CharacterController::checkForInteractables(sf::Vector2f position, const Area &area)
     {
         auto playerPos = _character->transform().position;

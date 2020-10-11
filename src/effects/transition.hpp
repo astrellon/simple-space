@@ -34,15 +34,17 @@ namespace space
     {
         public:
             // Fields
-            TransitionData fromData;
-            TransitionData toData;
+            // TransitionData fromData;
+            // TransitionData toData;
+            SpaceObject &fromObject;
+            SpaceObject &toObject;
 
             sf::Time startTime;
             sf::Time duration;
 
             // Constructor
-            Transition(const sf::Time &startTime, const sf::Time &duration) :
-                startTime(startTime), duration(duration)
+            Transition(const sf::Time &startTime, const sf::Time &duration, SpaceObject &fromObject, SpaceObject &toObject) :
+                startTime(startTime), duration(duration), fromObject(fromObject), toObject(toObject)
             {
 
             }

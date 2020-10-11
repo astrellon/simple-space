@@ -56,6 +56,8 @@ namespace space
             virtual void controllingCharacter(Character *character) { _character = character; }
             Character *controllingCharacter() const { return _character; }
 
+            SpaceObject *controllingObject() const;
+
             void teleportClone(TeleportClone *clone) { _teleportClone = clone; }
             TeleportClone* teleportClone() const { return _teleportClone; }
 

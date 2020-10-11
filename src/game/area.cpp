@@ -145,7 +145,7 @@ namespace space
         DrawLayer *layer;
         if (tryGetLayer(obj->drawLayer(), &layer))
         {
-            layer->addObject(obj);
+            layer->removeObject(obj);
         }
 
         obj->insideArea(nullptr);

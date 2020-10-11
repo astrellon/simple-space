@@ -4,13 +4,15 @@
 
 namespace space
 {
-    RenderCamera::RenderCamera(Engine &engine, std::string debugName) : _camera(engine, debugName), transitionData(nullptr)
+    RenderCamera::RenderCamera(Engine &engine, std::string debugName) : _camera(engine, debugName), transitionData(nullptr), ignoreObject(nullptr)
     {
 
     }
 
     void RenderCamera::update(sf::Time dt)
     {
+        ignoreObject = nullptr;
+
         _camera.update(dt);
 
         _texture.setView(_camera.view());

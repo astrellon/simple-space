@@ -52,6 +52,8 @@ namespace space
 
             virtual DrawLayers::Type drawLayer() const { return DrawLayers::Main; }
 
+            SpaceObject *rootObject();
+
         protected:
             // Fields
             SpaceTransform _transform;

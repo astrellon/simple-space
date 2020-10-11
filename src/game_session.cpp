@@ -86,13 +86,6 @@ namespace space
 
     void GameSession::setPlayerControllingShip(Ship *ship)
     {
-        _engine.spriteScale(1.0f);
-
-        auto &sceneRenderCamera = _engine.sceneRender().camera();
-        sceneRenderCamera.followingRotation(false);
-        sceneRenderCamera.followingId(ship->id);
-        sceneRenderCamera.scale(1.0f);
-
         _playerController.controllingShip(ship);
         _playerController.controlling(ControlShip);
 
@@ -100,18 +93,6 @@ namespace space
     }
     void GameSession::setPlayerControllingCharacter()
     {
-        auto scale = 1.0f / Utils::getInsideScale();
-        _engine.spriteScale(scale);
-
-        auto &sceneRenderCamera = _engine.sceneRender().camera();
-
-        auto shipInside = getShipPlayerIsInsideOf();
-        if (shipInside)
-        {
-            sceneRenderCamera.followingRotationId(shipInside->id);
-        }
-        sceneRenderCamera.followingId(_playerController.controllingCharacter()->id);
-        sceneRenderCamera.scale(scale);
         _playerController.controlling(ControlCharacter);
 
         clearTransition();
@@ -256,19 +237,19 @@ namespace space
             _playerController.clearCanInteractWith();
             if (_playerController.controlling() == ControlCharacter)
             {
-                // if (prevArea != nullptr)
-                // {
-                //     clearTeleportClone();
+                if (prevArea != nullptr)
+                {
+                    clearTeleportClone();
 
-                //     std::stringstream newId(spaceObject->id);
-                //     newId << "_TELEPORT_CLONE_";
-                //     newId << _engine.timeSinceStart().asMicroseconds();
-                //     auto teleportClone = createObject<TeleportClone>(newId.str(), *_playerController.controllingCharacter(), prevTransform);
-                //     _playerController.teleportClone(teleportClone);
-                //     prevArea->addObject(teleportClone);
+                    std::stringstream newId(spaceObject->id);
+                    newId << "_TELEPORT_CLONE_";
+                    newId << _engine.timeSinceStart().asMicroseconds();
+                    auto teleportClone = createObject<TeleportClone>(newId.str(), *_playerController.controllingCharacter(), prevTransform);
+                    _playerController.teleportClone(teleportClone);
+                    prevArea->addObject(teleportClone);
 
-                //     createTransition(prevArea, area, *teleportClone);
-                // }
+                    createTransition(prevArea, area, *teleportClone);
+                }
 
                 if (area->partOfShip() != nullptr)
                 {
@@ -375,14 +356,6 @@ namespace space
             plantSurface->update(*this, dt, sf::Transform::Identity);
 
         auto &sceneRender = _engine.sceneRender();
-        if (_transition.get())
-        {
-            auto &sceneRenderTransition = _engine.sceneRenderTransition();
-
-            applyTransitionToCamera(_transition->toData, sceneRender);
-            applyTransitionToCamera(_transition->fromData, sceneRenderTransition);
-        }
-
         _nextMouseOverObject = nullptr;
 
         auto mousePosition = sf::Mouse::getPosition(*_engine.window());
@@ -452,17 +425,13 @@ namespace space
     void GameSession::draw()
     {
         auto &sceneRender = _engine.sceneRender();
+
         if (_transition.get())
         {
             auto &sceneRenderTransition = _engine.sceneRenderTransition();
 
-            _drawingPreTeleport = false;
-            drawTransitionWithCamera(_transition->toData, sceneRender);
-
-            _drawingPreTeleport = true;
-            drawTransitionWithCamera(_transition->fromData, sceneRenderTransition);
-
-            _drawingPreTeleport = false;
+            drawAtObject(_transition->fromObject, sceneRenderTransition);
+            drawAtObject(_transition->toObject, sceneRender);
 
             sceneRenderTransition.texture().display();
 
@@ -478,31 +447,39 @@ namespace space
         }
         else
         {
-            _drawingPreTeleport = false;
-            if (_activeStarSystem)
+            auto controllingObject = _playerController.controllingObject();
+            if (controllingObject)
             {
-                _activeStarSystem->draw(*this, sceneRender);
-                // for (auto obj : _activeStarSystem->objects())
-                // {
-                //     if (obj->type() != SpacePortal::SpaceObjectType())
-                //     {
-                //         continue;
-                //     }
-
-                //     auto spacePortal = dynamic_cast<SpacePortal *>(obj);
-                //     if (spacePortal == nullptr)
-                //     {
-                //         continue;
-                //     }
-
-                //     drawSpacePortal(spacePortal);
-                // }
-            }
-            else if (_activePlanetSurface)
-            {
-                _activePlanetSurface->draw(*this, sceneRender);
+                drawAtObject(*controllingObject, sceneRender);
             }
         }
+        // else
+        // {
+        //     _drawingPreTeleport = false;
+        //     if (_activeStarSystem)
+        //     {
+        //         _activeStarSystem->draw(*this, sceneRender);
+        //         // for (auto obj : _activeStarSystem->objects())
+        //         // {
+        //         //     if (obj->type() != SpacePortal::SpaceObjectType())
+        //         //     {
+        //         //         continue;
+        //         //     }
+
+        //         //     auto spacePortal = dynamic_cast<SpacePortal *>(obj);
+        //         //     if (spacePortal == nullptr)
+        //         //     {
+        //         //         continue;
+        //         //     }
+
+        //         //     drawSpacePortal(spacePortal);
+        //         // }
+        //     }
+        //     else if (_activePlanetSurface)
+        //     {
+        //         _activePlanetSurface->draw(*this, sceneRender);
+        //     }
+        // }
     }
 
     void GameSession::onPostLoad(LoadingContext &context)
@@ -555,23 +532,13 @@ namespace space
         }
     }
 
-    void GameSession::createTransition(const Area *prevArea, const Area *area, const TeleportClone &teleportClone)
+    void GameSession::createTransition(const Area *prevArea, const Area *area, TeleportClone &teleportClone)
     {
         auto windowSize = _engine.windowSize();
         auto aspectRatio = static_cast<float>(windowSize.x) / static_cast<float>(windowSize.y);
+        auto duration = sf::seconds(2.2f * aspectRatio);
 
-        auto transition = std::make_unique<Transition>(_engine.timeSinceStart(), sf::seconds(2.2f * aspectRatio));
-
-        auto &fromData = transition->fromData;
-        auto &toData = transition->toData;
-
-        toData.cameraProps = fromData.cameraProps = _engine.sceneRender().camera().cameraProps();
-
-        fromData.cameraProps.following = true;
-        fromData.cameraProps.followingId = teleportClone.id;
-
-        applyAreaToTransitionData(prevArea, fromData);
-        applyAreaToTransitionData(area, toData);
+        auto transition = std::make_unique<Transition>(_engine.timeSinceStart(), duration, teleportClone, *_playerController.controllingObject());
 
         setTransition(transition);
     }
@@ -600,20 +567,6 @@ namespace space
             return;
         }
 
-        // if (obj->starSystem())
-        // {
-        //     obj->starSystem()->removeObject(obj);
-        // }
-
-        // Character *character = dynamic_cast<Character *>(obj);
-        // if (character != nullptr)
-        // {
-        //     if (character->insideArea() != nullptr)
-        //     {
-        //         character->insideArea()->removeObject(character);
-        //     }
-        // }
-
         if (obj->insideArea())
         {
             obj->insideArea()->removeObject(obj);
@@ -628,6 +581,8 @@ namespace space
                 break;
             }
         }
+
+        // TODO Remove star systems and planet surfaces
     }
 
     void GameSession::checkNextFrameState()
@@ -713,49 +668,124 @@ namespace space
 
         // Also bail if we can't find the target star system.
         // auto targetStarSystem = targetObject->starSystem();
-        // if (!targetStarSystem)
-        // {
-        //     return;
-        // }
+        if (!targetObject)
+        {
+            return;
+        }
 
-        // auto diff = targetObject->transform().position - spacePortal->transform().position;
-        // auto &transitionCamera = sceneRenderTransition.camera();
-        // transitionCamera.cameraProps(sceneCamera.cameraProps());
-        // transitionCamera.center(sceneCamera.center());
-        // sceneRenderTransition.texture().setView(transitionCamera.view());
-        // sceneRenderTransition.texture().clear(sf::Color(0, 0, 0, 0));
+        auto diff = targetObject->transform().position - spacePortal->transform().position;
+        auto &transitionCamera = sceneRenderTransition.camera();
+        transitionCamera.cameraProps(sceneCamera.cameraProps());
+        transitionCamera.center(sceneCamera.center());
+        sceneRenderTransition.texture().setView(transitionCamera.view());
+        sceneRenderTransition.texture().clear(sf::Color(0, 0, 0, 0));
 
-        // if (!DrawDebug::showPortalShapes)
-        // {
-        //     glEnable(GL_STENCIL_TEST);
+        if (!DrawDebug::showPortalShapes)
+        {
+            glEnable(GL_STENCIL_TEST);
 
-        //     glStencilFunc(GL_ALWAYS, 1, 0xFF);
-        //     glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
-        //     glStencilMask(0xFF);
-        //     glClearStencil(0x0);
-        //     glClear(GL_STENCIL_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+            glStencilFunc(GL_ALWAYS, 1, 0xFF);
+            glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+            glStencilMask(0xFF);
+            glClearStencil(0x0);
+            glClear(GL_STENCIL_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
-        //     spacePortal->drawPortal(*this, sceneRenderTransition.texture(), true);
+            spacePortal->drawPortal(*this, sceneRenderTransition.texture(), true);
 
-        //     glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
-        //     glStencilFunc(GL_EQUAL, 1, 0xFF);
-        //     glStencilMask(0x00);
+            glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+            glStencilFunc(GL_EQUAL, 1, 0xFF);
+            glStencilMask(0x00);
 
-        //     transitionCamera.center(sceneCamera.center() + diff);
-        //     targetStarSystem->draw(sceneRenderTransition);
+            transitionCamera.center(sceneCamera.center() + diff);
+            //targetStarSystem->draw(sceneRenderTransition);
+            // drawAtObject(*targetObject, sceneRenderTransition);
 
-        //     glDisable(GL_STENCIL_TEST);
+            glDisable(GL_STENCIL_TEST);
 
-        //     sceneRenderTransition.texture().display();
+            sceneRenderTransition.texture().display();
 
-        //     _portalOverlay.texture(&sceneRenderTransition.texture().getTexture());
-        //     _portalOverlay.draw(sceneRender.texture());
+            _portalOverlay.texture(&sceneRenderTransition.texture().getTexture());
+            _portalOverlay.draw(sceneRender.texture());
 
-        //     spacePortal->drawPortalOutlines(*this, sceneRender.texture());
-        // }
-        // else
-        // {
-        //     spacePortal->drawPortal(*this, sceneRender.texture(), false);
-        // }
+            spacePortal->drawPortalOutlines(*this, sceneRender.texture());
+        }
+        else
+        {
+            spacePortal->drawPortal(*this, sceneRender.texture(), false);
+        }
     }
-} // namespace town
+
+    void GameSession::drawAtObject(SpaceObject &spaceObject, RenderCamera &target)
+    {
+        target.camera().followingId(spaceObject.id);
+        auto insideArea = spaceObject.insideArea();
+        auto renderObject = &spaceObject;
+        Ship *ignoreShip = nullptr;
+        auto scale = 1.0f;
+
+        if (insideArea)
+        {
+            auto areaType = insideArea->type();
+            insideArea->draw(*this, target);
+            scale = areaType == AreaType::Ship || areaType == AreaType::PlanetSurface ? 1.0f / Utils::getInsideScale() : 1.0f;
+
+            if (areaType == AreaType::Ship)
+            {
+                ignoreShip = insideArea->partOfShip();
+                // TODO Needs to be on draw stack.
+                target.ignoreObject = ignoreShip;
+                renderObject = ignoreShip->insideArea()->partOfObject();
+            }
+            else
+            {
+                renderObject = insideArea->partOfObject();
+            }
+        }
+        else
+        {
+            std::cout << "Rendering object not inside anything" << std::endl;
+        }
+
+        target.camera().scale(scale);
+
+        if (renderObject)
+        {
+            if (_portalRootAreaStack.size() > 0 && renderObject == *_portalRootAreaStack.rbegin())
+            {
+                return;
+            }
+
+            renderObject->draw(*this, target);
+
+            auto starSystem = dynamic_cast<StarSystem *>(renderObject);
+            if (starSystem)
+            {
+                for (auto obj : starSystem->area().objects())
+                {
+                    if (obj->type() != SpacePortal::SpaceObjectType())
+                    {
+                        continue;
+                    }
+
+                    auto spacePortal = dynamic_cast<SpacePortal *>(obj);
+                    if (spacePortal == nullptr)
+                    {
+                        continue;
+                    }
+
+                    _portalRootAreaStack.push_back(renderObject);
+                    drawSpacePortal(spacePortal);
+                    _portalRootAreaStack.pop_back();
+                }
+            }
+        }
+
+        if (ignoreShip)
+        {
+            ignoreShip->draw(*this, target);
+            _engine.overlay().draw(target.texture(), 0.3);
+            ignoreShip->drawInterior(*this, target);
+        }
+    }
+} // namespace space
+

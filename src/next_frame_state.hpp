@@ -3,6 +3,8 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 
+#include "game/space_object.hpp"
+
 namespace space
 {
     class PlanetSurface;
@@ -39,11 +41,14 @@ namespace space
             void clear();
 
             void addMoveSpaceObject(SpaceObject *obj, sf::Vector2f position, Area *area);
+            void addRemoveObject(const ObjectId &id);
 
             const std::vector<MoveSpaceObject> &moveSpaceObject() const { return _moveSpaceObjects; }
+            const std::vector<ObjectId> &removeObjects() const { return _removeObjects; }
 
         private:
 
             std::vector<MoveSpaceObject> _moveSpaceObjects;
+            std::vector<ObjectId> _removeObjects;
     };
 } // space

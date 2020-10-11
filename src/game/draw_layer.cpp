@@ -24,6 +24,10 @@ namespace space
 
         for (auto obj : _drawables)
         {
+            if (target.ignoreObject == obj)
+            {
+                continue;
+            }
             obj->draw(session, target);
         }
     }

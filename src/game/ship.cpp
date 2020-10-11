@@ -108,18 +108,18 @@ namespace space
         target.texture().draw(_sprite, _worldTransform);
         DrawDebug::glDraw++;
 
-        if (session.isControllingCharacter())
-        {
-            auto drawPreTeleport = session.drawingPreTeleport();
+        // if (session.isControllingCharacter())
+        // {
+        //     auto drawPreTeleport = session.drawingPreTeleport();
 
-            if ((session.getShipPlayerIsInsideOf() == this && !drawPreTeleport) ||
-                (session.getShipPlayerCloneIsInsideOf() == this && drawPreTeleport))
-            {
-                target.texture().draw(_interiorSprite, _worldTransform);
-                DrawDebug::glDraw++;
-                _area.draw(session, target);
-            }
-        }
+        //     if ((session.getShipPlayerIsInsideOf() == this && !drawPreTeleport) ||
+        //         (session.getShipPlayerCloneIsInsideOf() == this && drawPreTeleport))
+        //     {
+        //         target.texture().draw(_interiorSprite, _worldTransform);
+        //         DrawDebug::glDraw++;
+        //         _area.draw(session, target);
+        //     }
+        // }
 
         for (auto &engineEffect : _engineEffects)
         {
@@ -145,6 +145,13 @@ namespace space
         auto worldPos = Utils::getPosition(_worldTransform);
         auto local = mousePosition - worldPos;
         return _spriteBounds.contains(local);
+    }
+
+    void Ship::drawInterior(GameSession &session, RenderCamera &target)
+    {
+        target.texture().draw(_interiorSprite, _worldTransform);
+        DrawDebug::glDraw++;
+        _area.draw(session, target);
     }
 
     void Ship::createMainCollider()

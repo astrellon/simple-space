@@ -146,8 +146,6 @@ namespace space
             Ship *getShipPlayerIsInsideOf() const;
             Ship *getShipPlayerCloneIsInsideOf() const;
 
-            //void moveCharacter(Character *character, sf::Vector2f position, Area *area, bool queue = false);
-            //void moveSpaceObject(SpaceObject *spaceObject, sf::Vector2f position, StarSystem *starSystem, bool queue = false);
             void moveSpaceObject(SpaceObject *spaceObject, sf::Vector2f position, Area *area, bool queue = false);
 
             Transition *currentTransition() const { return _transition.get(); }
@@ -193,17 +191,20 @@ namespace space
             bool _drawingPreTeleport;
             TextureOverlay _portalOverlay;
             int _nextId;
+            std::vector<SpaceObject *> _portalRootAreaStack;
 
             // Methods
             void applyTransitionToCamera(const TransitionData &transitionData, RenderCamera &renderCamera);
             void drawTransitionWithCamera(const TransitionData &transitionData, RenderCamera &renderCamera);
 
-            void createTransition(const Area *prevArea, const Area *area, const TeleportClone &teleportClone);
+            void createTransition(const Area *prevArea, const Area *area, TeleportClone &teleportClone);
             void applyAreaToTransitionData(const Area *area, TransitionData &data) const;
             void clearTeleportClone();
 
             void checkNextFrameState();
             void drawSpacePortal(SpacePortal *spacePortal);
             bool checkMouseSpacePortal(sf::Vector2f mousePosition, SpacePortal *spacePortal);
+
+            void drawAtObject(SpaceObject &spaceObject, RenderCamera &target);
     };
 } // town

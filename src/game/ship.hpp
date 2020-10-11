@@ -50,6 +50,8 @@ namespace space
             virtual void onPostLoad(GameSession &session, LoadingContext &context);
             virtual bool doesMouseHover(GameSession &session, sf::Vector2f mousePosition) const;
 
+            virtual void drawInterior(GameSession &session, RenderCamera &target);
+
         private:
             // Fields
             Area _area;
