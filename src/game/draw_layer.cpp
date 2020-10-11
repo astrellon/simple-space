@@ -22,9 +22,11 @@ namespace space
             sortObjects();
         }
 
+        auto &renderContext = session.sessionRender();
+
         for (auto obj : _drawables)
         {
-            if (target.ignoreObject == obj)
+            if (renderContext.ignoreObject == obj)
             {
                 continue;
             }

@@ -424,6 +424,7 @@ namespace space
 
     void GameSession::draw()
     {
+        _renderStack.clear();
         auto &sceneRender = _engine.sceneRender();
 
         if (_transition.get())
@@ -717,6 +718,9 @@ namespace space
 
     void GameSession::drawAtObject(SpaceObject &spaceObject, RenderCamera &target)
     {
+        auto &renderContext = _renderStack.emplace_back(&spaceObject);
+        renderContext.portalLevel = _renderStack.size();
+
         target.camera().followingId(spaceObject.id);
         auto insideArea = spaceObject.insideArea();
         auto renderObject = &spaceObject;
@@ -733,7 +737,7 @@ namespace space
             {
                 ignoreShip = insideArea->partOfShip();
                 // TODO Needs to be on draw stack.
-                target.ignoreObject = ignoreShip;
+                renderContext.ignoreObject = ignoreShip;
                 renderObject = ignoreShip->insideArea()->partOfObject();
             }
             else
@@ -750,9 +754,13 @@ namespace space
 
         if (renderObject)
         {
-            if (_portalRootAreaStack.size() > 0 && renderObject == *_portalRootAreaStack.rbegin())
+            if (_renderStack.size() > 1)
             {
-                return;
+                auto &prevContext = *(_renderStack.rbegin()++);
+                if (prevContext.prevPortalTarget == renderObject)
+                {
+                    return;
+                }
             }
 
             renderObject->draw(*this, target);
@@ -773,9 +781,9 @@ namespace space
                         continue;
                     }
 
-                    _portalRootAreaStack.push_back(renderObject);
+                    renderContext.prevPortalTarget = renderObject;
+
                     drawSpacePortal(spacePortal);
-                    _portalRootAreaStack.pop_back();
                 }
             }
         }
@@ -786,6 +794,8 @@ namespace space
             _engine.overlay().draw(target.texture(), 0.3);
             ignoreShip->drawInterior(*this, target);
         }
+
+        _renderStack.pop_back();
     }
 } // namespace space
 

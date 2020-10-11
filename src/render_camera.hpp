@@ -15,7 +15,6 @@ namespace space
         public:
             // Fields
             const TransitionData *transitionData;
-            SpaceObject *ignoreObject;
 
             // Constructor
             RenderCamera(Engine &engine, std::string debugName);

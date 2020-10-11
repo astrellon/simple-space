@@ -9,6 +9,7 @@
 #include "definitions/planet_definition.hpp"
 #include "game/space_object.hpp"
 #include "game/items/item.hpp"
+#include "game_session_render.hpp"
 
 #include "dialogue_manager.hpp"
 #include "controllers/player_controller.hpp"
@@ -169,6 +170,8 @@ namespace space
 
             void setNextMouseHover(SpaceObject *obj);
 
+            GameSessionRender &sessionRender() { return *_renderStack.rbegin(); }
+
         private:
             // Fields
             Engine &_engine;
@@ -191,7 +194,7 @@ namespace space
             bool _drawingPreTeleport;
             TextureOverlay _portalOverlay;
             int _nextId;
-            std::vector<SpaceObject *> _portalRootAreaStack;
+            std::vector<GameSessionRender> _renderStack;
 
             // Methods
             void applyTransitionToCamera(const TransitionData &transitionData, RenderCamera &renderCamera);
