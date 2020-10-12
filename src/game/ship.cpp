@@ -12,7 +12,7 @@
 namespace space
 {
     Ship::Ship(const ObjectId &id, const ShipDefinition &definition):
-        SpaceObject(id), definition(definition), _sprite(*definition.texture), _interiorSprite(*definition.interiorTexture), _rotationSpeed(0), rotateInput(0), _area(AreaType::Ship, this)
+        SpaceObject(id), definition(definition), _sprite(*definition.texture), _interiorSprite(*definition.interiorTexture), _rotationSpeed(0), rotateInput(0), _area(AreaType::Ship, this), disableRender(false)
     {
         auto size = definition.texture->getSize();
         _sprite.setOrigin(size.x / 2, size.y / 2);
@@ -105,21 +105,13 @@ namespace space
 
     void Ship::draw(GameSession &session, RenderCamera &target)
     {
+        if (disableRender)
+        {
+            return;
+        }
+
         target.texture().draw(_sprite, _worldTransform);
         DrawDebug::glDraw++;
-
-        // if (session.isControllingCharacter())
-        // {
-        //     auto drawPreTeleport = session.drawingPreTeleport();
-
-        //     if ((session.getShipPlayerIsInsideOf() == this && !drawPreTeleport) ||
-        //         (session.getShipPlayerCloneIsInsideOf() == this && drawPreTeleport))
-        //     {
-        //         target.texture().draw(_interiorSprite, _worldTransform);
-        //         DrawDebug::glDraw++;
-        //         _area.draw(session, target);
-        //     }
-        // }
 
         for (auto &engineEffect : _engineEffects)
         {

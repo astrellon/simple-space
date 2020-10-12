@@ -25,6 +25,7 @@ namespace space
             // Inputs
             float rotateInput;
             sf::Vector2f moveInput;
+            bool disableRender;
 
             // Constructor
             Ship(const ObjectId &id, const ShipDefinition &definition);

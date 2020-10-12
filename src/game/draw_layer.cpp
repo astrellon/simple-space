@@ -22,14 +22,8 @@ namespace space
             sortObjects();
         }
 
-        auto &renderContext = session.sessionRender();
-
         for (auto obj : _drawables)
         {
-            if (renderContext.ignoreObject == obj)
-            {
-                continue;
-            }
             obj->draw(session, target);
         }
     }
