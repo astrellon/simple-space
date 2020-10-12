@@ -36,7 +36,7 @@ namespace space
 
             bool isMouseOverPortal(sf::Vector2f mousePosition);
 
-            void drawPortal(GameSession &session, sf::RenderTarget &target, bool asPolygon);
+            void drawPortal(GameSession &session, RenderCamera &target, bool asPolygon);
             void drawPortalOutlines(GameSession &session, sf::RenderTarget &target);
 
         private:

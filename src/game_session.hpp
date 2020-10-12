@@ -152,6 +152,14 @@ namespace space
             Transition *currentTransition() const { return _transition.get(); }
             void setTransition(std::unique_ptr<Transition> &transition);
             void clearTransition();
+            GameSessionRender sessionRender()
+            {
+                if (_renderStack.size() == 0)
+                {
+                    assert(false);
+                }
+                return _renderStack.back();
+            }
 
             bool drawingPreTeleport() const { return _drawingPreTeleport; }
 
@@ -170,8 +178,6 @@ namespace space
 
             void setNextMouseHover(SpaceObject *obj);
 
-            GameSessionRender &sessionRender() { return *_renderStack.rbegin(); }
-
         private:
             // Fields
             Engine &_engine;
@@ -185,6 +191,7 @@ namespace space
             CharacterControllerList _characterControllers;
             NextFrameState _nextFrameState;
 
+            std::vector<GameSessionRender> _renderStack;
             std::unique_ptr<TeleportScreenEffect> _teleportEffect;
             StarSystem *_activeStarSystem;
             PlanetSurface *_activePlanetSurface;
@@ -194,20 +201,15 @@ namespace space
             bool _drawingPreTeleport;
             TextureOverlay _portalOverlay;
             int _nextId;
-            std::vector<GameSessionRender> _renderStack;
 
             // Methods
-            void applyTransitionToCamera(const TransitionData &transitionData, RenderCamera &renderCamera);
-            void drawTransitionWithCamera(const TransitionData &transitionData, RenderCamera &renderCamera);
-
             void createTransition(const Area *prevArea, const Area *area, TeleportClone &teleportClone);
-            void applyAreaToTransitionData(const Area *area, TransitionData &data) const;
             void clearTeleportClone();
 
             void checkNextFrameState();
             void drawSpacePortal(SpacePortal *spacePortal);
             bool checkMouseSpacePortal(sf::Vector2f mousePosition, SpacePortal *spacePortal);
 
-            void drawAtObject(SpaceObject &spaceObject, RenderCamera &target);
+            void drawAtObject(SpaceObject &spaceObject, sf::Vector2f fromPosition, RenderCamera &target);
     };
 } // town

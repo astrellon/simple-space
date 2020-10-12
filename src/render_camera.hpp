@@ -8,16 +8,15 @@
 namespace space
 {
     class Engine;
-    class TransitionData;
 
     class RenderCamera : private NonCopyable
     {
         public:
             // Fields
-            const TransitionData *transitionData;
 
             // Constructor
             RenderCamera(Engine &engine, std::string debugName);
+            ~RenderCamera();
 
             // Methods
             Camera &camera() { return _camera; }
@@ -36,5 +35,6 @@ namespace space
             // Fields
             Camera _camera;
             sf::RenderTexture _texture;
+            bool _created;
     };
 } // space

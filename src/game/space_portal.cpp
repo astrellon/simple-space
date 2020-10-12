@@ -119,7 +119,7 @@ namespace space
         return _mouseOverTriangleIndex >= 0;
     }
 
-    void SpacePortal::drawPortal(GameSession &session, sf::RenderTarget &target, bool asPolygon)
+    void SpacePortal::drawPortal(GameSession &session, RenderCamera &target, bool asPolygon)
     {
         auto pos = Utils::getPosition(_worldTransform);
         auto &camera = session.engine().sceneRender().camera();
@@ -163,7 +163,7 @@ namespace space
                 auto &point = _shadowShape[0][index];
                 polygonDraw.append(sf::Vertex(point, sf::Color::White));
             }
-            target.draw(polygonDraw, _worldTransform);
+            target.texture().draw(polygonDraw, _worldTransform);
         }
         else
         {
@@ -183,7 +183,7 @@ namespace space
                     polygonDraw[j].color.a = isOverIndex ? 255 : 120;
                 }
 
-                target.draw(polygonDraw, _worldTransform);
+                target.texture().draw(polygonDraw, _worldTransform);
             }
         }
     }

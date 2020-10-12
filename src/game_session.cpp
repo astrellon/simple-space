@@ -275,15 +275,13 @@ namespace space
     void GameSession::clearTransition()
     {
         std::cout << "Clearing transition" << std::endl;
-        _engine.sceneRender().transitionData = nullptr;
 
-        auto &renderTrans = _engine.sceneRenderTransition();
-        renderTrans.transitionData = nullptr;
+        // auto &renderTrans = _engine.sceneRenderTransition();
 
-        auto cameraProps = renderTrans.camera().cameraProps();
-        cameraProps.following = false;
-        cameraProps.followingRotation = false;
-        renderTrans.camera().cameraProps(cameraProps);
+        // auto cameraProps = renderTrans.camera().cameraProps();
+        // cameraProps.following = false;
+        // cameraProps.followingRotation = false;
+        // renderTrans.camera().cameraProps(cameraProps);
 
         _transition = std::move(nullptr);
     }
@@ -431,8 +429,8 @@ namespace space
         {
             auto &sceneRenderTransition = _engine.sceneRenderTransition();
 
-            drawAtObject(_transition->fromObject, sceneRenderTransition);
-            drawAtObject(_transition->toObject, sceneRender);
+            drawAtObject(_transition->fromObject, _transition->fromObject.transform().position, sceneRenderTransition);
+            drawAtObject(_transition->toObject, _transition->toObject.transform().position, sceneRender);
 
             sceneRenderTransition.texture().display();
 
@@ -451,7 +449,7 @@ namespace space
             auto controllingObject = _playerController.controllingObject();
             if (controllingObject)
             {
-                drawAtObject(*controllingObject, sceneRender);
+                drawAtObject(*controllingObject, controllingObject->transform().position, sceneRender);
             }
         }
         // else
@@ -504,35 +502,6 @@ namespace space
         _nextMouseOverObject = obj;
     }
 
-    void GameSession::applyTransitionToCamera(const TransitionData &transitionData, RenderCamera &renderCamera)
-    {
-        renderCamera.transitionData = &transitionData;
-
-        auto &camera = renderCamera.camera();
-        camera.cameraProps(renderCamera.transitionData->cameraProps);
-
-        if (!transitionData.cameraProps.following)
-        {
-            camera.center(transitionData.position);
-        }
-        if (!transitionData.cameraProps.followingRotation)
-        {
-            camera.rotation(transitionData.rotation);
-        }
-    }
-
-    void GameSession::drawTransitionWithCamera(const TransitionData &transitionData, RenderCamera &renderCamera)
-    {
-        if (transitionData.planetSurface)
-        {
-            transitionData.planetSurface->draw(*this, renderCamera);
-        }
-        else if (transitionData.starSystem)
-        {
-            transitionData.starSystem->draw(*this, renderCamera);
-        }
-    }
-
     void GameSession::createTransition(const Area *prevArea, const Area *area, TeleportClone &teleportClone)
     {
         auto windowSize = _engine.windowSize();
@@ -542,22 +511,6 @@ namespace space
         auto transition = std::make_unique<Transition>(_engine.timeSinceStart(), duration, teleportClone, *_playerController.controllingObject());
 
         setTransition(transition);
-    }
-
-    void GameSession::applyAreaToTransitionData(const Area *area, TransitionData &data) const
-    {
-        if (area->partOfShip())
-        {
-            // data.starSystem = area->partOfShip()->starSystem();
-            data.ship = area->partOfShip();
-            data.cameraProps.followingRotationId = area->partOfShip()->id;
-            data.cameraProps.followingRotation = true;
-        }
-        else
-        {
-            data.planetSurface = area->partOfPlanetSurface();
-            data.cameraProps.followingRotation = false;
-        }
     }
 
     void GameSession::removeSpaceObject(const ObjectId &id)
@@ -650,9 +603,8 @@ namespace space
 
     void GameSession::drawSpacePortal(SpacePortal *spacePortal)
     {
-        auto &sceneRender = _engine.sceneRender();
-        auto &sceneRenderTransition = _engine.sceneRenderTransition();
-        auto &sceneCamera = sceneRender.camera();
+        auto currentRenderContext = sessionRender();
+        auto &sceneCamera = currentRenderContext.renderTarget().camera();
 
         // Don't render portal offscreen
         if (!sceneCamera.viewport().contains(spacePortal->transform().position))
@@ -674,54 +626,65 @@ namespace space
             return;
         }
 
+        // Make sure we have a new render camera for the portal to draw to.
+        auto renderTargetEntry = _engine.renderCameras().get();
+        if (!renderTargetEntry.isValid())
+        {
+            return;
+        }
+
+        auto &renderTarget = *renderTargetEntry.value;
         auto diff = targetObject->transform().position - spacePortal->transform().position;
-        auto &transitionCamera = sceneRenderTransition.camera();
+        auto &transitionCamera = renderTarget.camera();
         transitionCamera.cameraProps(sceneCamera.cameraProps());
         transitionCamera.center(sceneCamera.center());
-        sceneRenderTransition.texture().setView(transitionCamera.view());
-        sceneRenderTransition.texture().clear(sf::Color(0, 0, 0, 0));
+        renderTarget.texture().setView(transitionCamera.view());
+        renderTarget.texture().clear(sf::Color(0, 0, 0, 0));
 
         if (!DrawDebug::showPortalShapes)
         {
             glEnable(GL_STENCIL_TEST);
 
-            glStencilFunc(GL_ALWAYS, 1, 0xFF);
+            glStencilFunc(GL_ALWAYS, currentRenderContext.portalLevel(), 0xFF);
             glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
             glStencilMask(0xFF);
             glClearStencil(0x0);
             glClear(GL_STENCIL_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
-            spacePortal->drawPortal(*this, sceneRenderTransition.texture(), true);
+            spacePortal->drawPortal(*this, renderTarget, true);
 
             glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
-            glStencilFunc(GL_EQUAL, 1, 0xFF);
+            glStencilFunc(GL_EQUAL, currentRenderContext.portalLevel(), 0xFF);
             glStencilMask(0x00);
 
-            transitionCamera.center(sceneCamera.center() + diff);
-            //targetStarSystem->draw(sceneRenderTransition);
-            // drawAtObject(*targetObject, sceneRenderTransition);
+            drawAtObject(*targetObject, sceneCamera.center() + diff, renderTarget);
 
             glDisable(GL_STENCIL_TEST);
 
-            sceneRenderTransition.texture().display();
+            renderTarget.texture().display();
 
-            _portalOverlay.texture(&sceneRenderTransition.texture().getTexture());
-            _portalOverlay.draw(sceneRender.texture());
-
-            spacePortal->drawPortalOutlines(*this, sceneRender.texture());
+            spacePortal->drawPortalOutlines(*this, currentRenderContext.renderTarget().texture());
         }
         else
         {
-            spacePortal->drawPortal(*this, sceneRender.texture(), false);
+            spacePortal->drawPortal(*this, renderTarget, false);
         }
+
+        _portalOverlay.texture(&renderTarget.texture().getTexture());
+        _portalOverlay.draw(currentRenderContext.renderTarget().texture());
     }
 
-    void GameSession::drawAtObject(SpaceObject &spaceObject, RenderCamera &target)
+    void GameSession::drawAtObject(SpaceObject &spaceObject, sf::Vector2f fromPosition, RenderCamera &target)
     {
-        auto &renderContext = _renderStack.emplace_back(&spaceObject);
-        renderContext.portalLevel = _renderStack.size();
+        if (_renderStack.size() > 1)
+        {
+            std::cout << "portal overflow\n";
+            return;
+        }
 
-        target.camera().followingId(spaceObject.id);
+        target.camera().following(false);
+        target.camera().center(fromPosition);
+
         auto insideArea = spaceObject.insideArea();
         auto renderObject = &spaceObject;
         Ship *ignoreShip = nullptr;
@@ -737,7 +700,7 @@ namespace space
             {
                 ignoreShip = insideArea->partOfShip();
                 // TODO Needs to be on draw stack.
-                renderContext.ignoreObject = ignoreShip;
+                ignoreShip->disableRender = true;
                 renderObject = ignoreShip->insideArea()->partOfObject();
             }
             else
@@ -750,39 +713,45 @@ namespace space
             std::cout << "Rendering object not inside anything" << std::endl;
         }
 
-        target.camera().scale(scale);
-
-        if (renderObject)
+        if (!renderObject)
         {
-            if (_renderStack.size() > 1)
+            return;
+        }
+
+        if (_renderStack.size() > 1)
+        {
+            auto &prevContext = _renderStack[_renderStack.size() - 3];
+            if (prevContext.prevPortalTarget() == renderObject)
             {
-                auto &prevContext = *(_renderStack.rbegin()++);
-                if (prevContext.prevPortalTarget == renderObject)
-                {
-                    return;
-                }
+                return;
             }
+        }
 
-            renderObject->draw(*this, target);
+        target.camera().scale(scale);
+        target.preDraw();
 
-            auto starSystem = dynamic_cast<StarSystem *>(renderObject);
-            if (starSystem)
+        auto &renderContext = _renderStack.emplace_back(spaceObject, target, _renderStack.size() + 1, renderObject);
+
+        renderObject->draw(*this, target);
+
+        auto starSystem = dynamic_cast<StarSystem *>(renderObject);
+        if (starSystem)
+        {
+            for (auto obj : starSystem->area().objects())
             {
-                for (auto obj : starSystem->area().objects())
+                if (obj->type() != SpacePortal::SpaceObjectType())
                 {
-                    if (obj->type() != SpacePortal::SpaceObjectType())
-                    {
-                        continue;
-                    }
+                    continue;
+                }
 
-                    auto spacePortal = dynamic_cast<SpacePortal *>(obj);
-                    if (spacePortal == nullptr)
-                    {
-                        continue;
-                    }
+                auto spacePortal = dynamic_cast<SpacePortal *>(obj);
+                if (spacePortal == nullptr)
+                {
+                    continue;
+                }
 
-                    renderContext.prevPortalTarget = renderObject;
-
+                if (_renderStack.size() <= 1)
+                {
                     drawSpacePortal(spacePortal);
                 }
             }
@@ -790,6 +759,7 @@ namespace space
 
         if (ignoreShip)
         {
+            ignoreShip->disableRender = false;
             ignoreShip->draw(*this, target);
             _engine.overlay().draw(target.texture(), 0.3);
             ignoreShip->drawInterior(*this, target);
