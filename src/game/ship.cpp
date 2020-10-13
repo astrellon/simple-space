@@ -20,7 +20,7 @@ namespace space
 
         size = definition.interiorTexture->getSize();
         _interiorSprite.setOrigin(size.x / 2, size.y / 2);
-        _interiorSprite.setScale(Utils::getInsideScale(), Utils::getInsideScale());
+        _interiorSprite.setScale(Utils::InsideScale, Utils::InsideScale);
         _interiorSprite.move(sf::Vector2f(definition.interiorTextureOffset) * 0.25f);
 
         createMainCollider();
@@ -153,7 +153,7 @@ namespace space
 
         // Fill polygon structure with actual data. Any winding order works.
         // The first polyline defines the main polygon.
-        auto maxSize = std::max(size.x, size.y) * Utils::getInsideScale();
+        auto maxSize = std::max(size.x, size.y) * Utils::InsideScale;
         collider->setMainPolygon({{maxSize, -maxSize}, {maxSize, maxSize}, {-maxSize, maxSize}, {-maxSize, -maxSize}});
 
         // Following polylines define holes.

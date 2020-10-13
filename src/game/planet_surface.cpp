@@ -28,7 +28,7 @@ namespace space
 
         sf::RenderStates states;
         sf::Transform trans;
-        trans.scale(Utils::getInsideScale(), Utils::getInsideScale());
+        trans.scale(Utils::InsideScale, Utils::InsideScale);
         states.transform = trans;
 
         target.texture().clear(sf::Color(60, 90, 70));

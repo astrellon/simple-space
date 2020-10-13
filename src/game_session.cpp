@@ -555,9 +555,12 @@ namespace space
             return;
         }
 
-        target.camera().following(false);
-        target.camera().center(fromPosition);
-        target.camera().followingRotation(false);
+        auto &camera = target.camera();
+
+        camera.following(false);
+        camera.center(fromPosition);
+        camera.followingRotation(false);
+        camera.rotation(0);
 
         auto insideArea = spaceObject.insideArea();
         auto renderObject = &spaceObject;
@@ -568,14 +571,14 @@ namespace space
         {
             auto areaType = insideArea->type();
             insideArea->draw(*this, target);
-            scale = areaType == AreaType::Ship || areaType == AreaType::PlanetSurface ? 1.0f / Utils::getInsideScale() : 1.0f;
+            scale = areaType == AreaType::Ship || areaType == AreaType::PlanetSurface ? 1.0f / Utils::InsideScale : 1.0f;
 
             if (areaType == AreaType::Ship)
             {
                 ignoreShip = insideArea->partOfShip();
                 ignoreShip->disableRender = true;
                 renderObject = ignoreShip->insideArea()->partOfObject();
-                target.camera().followingRotationId(ignoreShip->id);
+                camera.rotation(ignoreShip->transform().rotation);
             }
             else
             {
@@ -592,7 +595,7 @@ namespace space
             return;
         }
 
-        target.camera().scale(scale);
+        camera.scale(scale);
         target.preDraw();
 
         auto &renderContext = _renderStack.emplace_back(spaceObject, target, _renderStack.size() + 1, renderObject);

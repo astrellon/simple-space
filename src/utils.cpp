@@ -12,6 +12,9 @@ namespace space
     std::mt19937 Utils::_rand(Utils::_rd());
     siv::PerlinNoise Utils::_perlinNoise(Utils::_rd());
 
+    const float Utils::InsideScale = 1.0f / 6.0f;
+    const float Utils::PhysicsScale = 1.0f / 32.0f;
+
     std::vector<std::string> Utils::split(const std::string &input, char delimiter, bool trimTokens)
     {
         std::vector<std::string> result;

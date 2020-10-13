@@ -20,10 +20,10 @@ namespace space
         _sprite.sequence("idle", true);
 
         _spriteBounds = _sprite.getGlobalBounds();
-        _spriteBounds.width *= Utils::getInsideScale();
-        _spriteBounds.height *= Utils::getInsideScale();
-        _spriteBounds.top *= Utils::getInsideScale();
-        _spriteBounds.left *= Utils::getInsideScale();
+        _spriteBounds.width *= Utils::InsideScale;
+        _spriteBounds.height *= Utils::InsideScale;
+        _spriteBounds.top *= Utils::InsideScale;
+        _spriteBounds.left *= Utils::InsideScale;
     }
 
     void Character::insideArea(Area *area)

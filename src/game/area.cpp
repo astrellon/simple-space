@@ -22,7 +22,7 @@ namespace space
         if (type == AreaType::Ship || type == AreaType::PlanetSurface)
         {
             _physicsWorld = std::make_unique<b2World>(b2Vec2(0, 0));
-            _transform = _transform.scale(Utils::getInsideScale(), Utils::getInsideScale());
+            _transform = _transform.scale(Utils::InsideScale, Utils::InsideScale);
         }
 
         if (type == AreaType::Ship) { _partOfShip = dynamic_cast<Ship *>(partOfObject); }
@@ -97,7 +97,7 @@ namespace space
         auto scale = 1.0f;
         if (_type == AreaType::Ship || _type == AreaType::PlanetSurface)
         {
-            scale = 1.0f / Utils::getInsideScale();
+            scale = 1.0f / Utils::InsideScale;
         }
 
         collider.addToWorld(_physicsWorld.get(), scale);
@@ -174,10 +174,10 @@ namespace space
         }
 
         // Snap position to the inside pixel scaling.
-        position /= Utils::getInsideScale();
+        position /= Utils::InsideScale;
         position.x = std::round(position.x);
         position.y = std::round(position.y);
-        position *= Utils::getInsideScale();
+        position *= Utils::InsideScale;
 
         auto placedItem = session.createObject<PlacedItem>(item);
         placedItem->transform().position = position;

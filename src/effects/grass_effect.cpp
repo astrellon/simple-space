@@ -40,7 +40,7 @@ namespace space
         shader.setUniform("tipColour", sf::Glsl::Vec4(definition.tipColour));
         shader.setUniform("sideColour", sf::Glsl::Vec4(definition.sideColour));
         shader.setUniform("windColour", sf::Glsl::Vec4(definition.windColour));
-        shader.setUniform("insideScale", Utils::getInsideScale());
+        shader.setUniform("insideScale", Utils::InsideScale);
         shader.setUniform("worldPosition", sf::Glsl::Vec2(_transform.position));
         shader.setUniform("invTextureSize", sf::Glsl::Vec2(1.0f / size.x, 1.0f / size.y));
         shader.setUniform("timeSinceStart", session.engine().timeSinceStart().asSeconds());
