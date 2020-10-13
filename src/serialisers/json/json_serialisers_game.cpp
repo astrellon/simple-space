@@ -44,12 +44,6 @@ namespace space
             {"characterControllers", toJsonArray(input.characterControllers())}
         };
 
-        if (input.activeStarSystem())
-            result["activeStarSystem"] = input.activeStarSystem()->definition.id;
-
-        if (input.activePlanetSurface())
-            result["activePlanetSurface"] = input.activePlanetSurface()->definition.id;
-
         return result;
     }
 
@@ -67,36 +61,6 @@ namespace space
 
         for (auto &characterControllers : j.at("characterControllers"))
             addFromJsonCharacterController(characterControllers, session);
-
-        auto activeStarSystem = j.find("activeStarSystem");
-        if (activeStarSystem != j.end())
-        {
-            auto activeStarSystemId = activeStarSystem->get<DefinitionId>();
-            StarSystem *starSystem;
-            if (session.tryGetStarSystem(activeStarSystemId, &starSystem))
-            {
-                session.activeStarSystem(starSystem);
-            }
-            else
-            {
-                std::cout << "Unable to find active star system " << activeStarSystemId << std::endl;
-            }
-        }
-
-        auto activePlanetSurface = j.find("activePlanetSurface");
-        if (activePlanetSurface != j.end())
-        {
-            auto activePlanetSurfaceId = activePlanetSurface->get<DefinitionId>();
-            PlanetSurface *planetSurface;
-            if (session.tryGetPlanetSurface(activePlanetSurfaceId, &planetSurface))
-            {
-                session.activePlanetSurface(planetSurface);
-            }
-            else
-            {
-                std::cout << "Unable to find active planet surface " << activePlanetSurfaceId << std::endl;
-            }
-        }
 
         addFromJsonPlayerController(j.at("playerController"), *result);
 

@@ -122,12 +122,6 @@ namespace space
 
             void removeSpaceObject(const ObjectId &id);
 
-            StarSystem *activeStarSystem() const { return _activeStarSystem; }
-            void activeStarSystem(StarSystem *starSystem) { _activeStarSystem = starSystem; }
-
-            PlanetSurface *activePlanetSurface() const { return _activePlanetSurface; }
-            void activePlanetSurface(PlanetSurface *planetSurface) { _activePlanetSurface = planetSurface; }
-
             NextFrameState &nextFrameState() { return _nextFrameState; }
 
             bool tryGetStarSystem(const DefinitionId &id, StarSystem **result) const;
@@ -193,8 +187,6 @@ namespace space
 
             std::vector<GameSessionRender> _renderStack;
             std::unique_ptr<TeleportScreenEffect> _teleportEffect;
-            StarSystem *_activeStarSystem;
-            PlanetSurface *_activePlanetSurface;
             PlayerController _playerController;
             std::unique_ptr<Transition> _transition;
             DialogueManager _dialogueManager;

@@ -31,8 +31,6 @@ namespace space
             };
 
             // Fields
-            StarSystem *nextStarSystem;
-            PlanetSurface *nextPlanetSurface;
 
             // Constructor
             NextFrameState();
@@ -47,7 +45,7 @@ namespace space
             const std::vector<ObjectId> &removeObjects() const { return _removeObjects; }
 
         private:
-
+            // Fields
             std::vector<MoveSpaceObject> _moveSpaceObjects;
             std::vector<ObjectId> _removeObjects;
     };

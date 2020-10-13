@@ -2,13 +2,13 @@
 
 namespace space
 {
-        NextFrameState::NextFrameState() : nextStarSystem(nullptr), nextPlanetSurface(nullptr) {}
+        NextFrameState::NextFrameState()
+        {
+
+        }
 
         void NextFrameState::clear()
         {
-            nextStarSystem = nullptr;
-            nextPlanetSurface = nullptr;
-
             _moveSpaceObjects.clear();
             _removeObjects.clear();
         }
