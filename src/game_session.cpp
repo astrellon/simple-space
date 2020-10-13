@@ -422,7 +422,7 @@ namespace space
 
     void GameSession::draw()
     {
-        std::cout << "---- New Draw ----" << std::endl;
+        //std::cout << "---- New Draw ----" << std::endl;
         _renderStack.clear();
         auto &sceneRender = _engine.sceneRender();
 
