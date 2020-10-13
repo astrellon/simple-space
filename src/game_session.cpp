@@ -367,6 +367,14 @@ namespace space
         if (_activeStarSystem)
         {
             auto foundInPortal = false;
+            for (auto spacePortal : _activeStarSystem->area().spacePortals())
+            {
+                foundInPortal = checkMouseSpacePortal(worldMousePosition, spacePortal);
+                if (foundInPortal)
+                {
+                    break;
+                }
+            }
             // for (auto obj : _activeStarSystem->objects())
             // {
             //     if (obj->type() != SpacePortal::SpaceObjectType())
@@ -557,21 +565,21 @@ namespace space
         }
 
         // Also bail if we can't find the target star system.
-        // auto targetStarSystem = targetObject->starSystem();
-        // if (!targetStarSystem)
-        // {
-        //     return false;
-        // }
+        auto targetStarSystem = targetObject->insideArea()->partOfStarSystem();
+        if (!targetStarSystem)
+        {
+            return false;
+        }
 
-        // if (!spacePortal->isMouseOverPortal(mousePosition))
-        // {
-        //     return false;
-        // }
+        if (!spacePortal->isMouseOverPortal(mousePosition))
+        {
+            return false;
+        }
 
-        // auto diff = targetObject->transform().position - spacePortal->transform().position;
-        // mousePosition += diff;
+        auto diff = targetObject->transform().position - spacePortal->transform().position;
+        mousePosition += diff;
 
-        // targetStarSystem->checkForMouse(mousePosition);
+        targetStarSystem->checkForMouse(*this, mousePosition);
         return true;
     }
 
@@ -661,7 +669,7 @@ namespace space
 
     void GameSession::drawAtObject(SpaceObject &spaceObject, sf::Vector2f fromPosition, RenderCamera &target)
     {
-        if (_renderStack.size() > 2)
+        if (_renderStack.size() > 1)
         {
             std::cout << "portal overflow\n";
             return;
@@ -714,7 +722,7 @@ namespace space
         {
             for (auto spacePortal : starSystem->area().spacePortals())
             {
-                if (_renderStack.size() <= 2)
+                if (_renderStack.size() <= 1)
                 {
                     drawSpacePortal(spacePortal);
                 }
