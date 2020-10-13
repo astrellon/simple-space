@@ -82,7 +82,7 @@ namespace space
             {
                 auto newPos = targetObject->transform().position + portalToShip; //+ dir * 20.0f;
                 auto queue = ship->id == session.playerController().controllingShip()->id;
-                // session.moveSpaceObject(ship, newPos, targetObject->starSystem(), queue);
+                session.moveSpaceObject(ship, newPos, targetObject->insideArea(), queue);
 
                 if (targetSpacePortal)
                 {

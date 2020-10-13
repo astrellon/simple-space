@@ -1,6 +1,7 @@
 #include "area.hpp"
 
 #include "space_object.hpp"
+#include "space_portal.hpp"
 #include "ship.hpp"
 #include "star_system.hpp"
 #include "planet_surface.hpp"
@@ -122,6 +123,12 @@ namespace space
         obj->insideArea(this);
         _objects.push_back(obj);
 
+        if (obj->type() == SpacePortal::SpaceObjectType())
+        {
+            auto spacePortal = dynamic_cast<SpacePortal *>(obj);
+            _spacePortals.push_back(spacePortal);
+        }
+
         if (obj->type() == PlacedItem::SpaceObjectType())
         {
             auto placedItem = dynamic_cast<PlacedItem *>(obj);
@@ -142,6 +149,13 @@ namespace space
     void Area::removeObject(SpaceObject *obj)
     {
         Utils::remove(_objects, obj);
+
+        if (obj->type() == SpacePortal::SpaceObjectType())
+        {
+            auto spacePortal = dynamic_cast<SpacePortal *>(obj);
+            Utils::remove(_spacePortals, spacePortal);
+        }
+
         DrawLayer *layer;
         if (tryGetLayer(obj->drawLayer(), &layer))
         {

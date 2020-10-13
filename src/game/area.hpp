@@ -23,6 +23,7 @@ namespace space
     class StarSystem;
     class PlacedItem;
     class PlaceableItem;
+    class SpacePortal;
 
     template <typename T>
     class PlacedItemPair;
@@ -59,6 +60,7 @@ namespace space
             void addObject(SpaceObject *obj);
             void removeObject(SpaceObject *obj);
             const std::vector<SpaceObject *> &objects() const { return _objects; }
+            const std::vector<SpacePortal *> &spacePortals() const { return _spacePortals; }
 
             PlacedItem *addPlaceable(GameSession &session, PlaceableItem *item, sf::Vector2f position);
 
@@ -83,6 +85,7 @@ namespace space
             // Fields
             AreaType _type;
             std::vector<SpaceObject *> _objects;
+            std::vector<SpacePortal *> _spacePortals;
             std::unique_ptr<b2World> _physicsWorld;
             SpaceObject *_partOfObject;
             sf::Transform _transform;

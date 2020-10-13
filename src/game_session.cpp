@@ -422,6 +422,7 @@ namespace space
 
     void GameSession::draw()
     {
+        std::cout << "---- New Draw ----" << std::endl;
         _renderStack.clear();
         auto &sceneRender = _engine.sceneRender();
 
@@ -452,33 +453,6 @@ namespace space
                 drawAtObject(*controllingObject, controllingObject->transform().position, sceneRender);
             }
         }
-        // else
-        // {
-        //     _drawingPreTeleport = false;
-        //     if (_activeStarSystem)
-        //     {
-        //         _activeStarSystem->draw(*this, sceneRender);
-        //         // for (auto obj : _activeStarSystem->objects())
-        //         // {
-        //         //     if (obj->type() != SpacePortal::SpaceObjectType())
-        //         //     {
-        //         //         continue;
-        //         //     }
-
-        //         //     auto spacePortal = dynamic_cast<SpacePortal *>(obj);
-        //         //     if (spacePortal == nullptr)
-        //         //     {
-        //         //         continue;
-        //         //     }
-
-        //         //     drawSpacePortal(spacePortal);
-        //         // }
-        //     }
-        //     else if (_activePlanetSurface)
-        //     {
-        //         _activePlanetSurface->draw(*this, sceneRender);
-        //     }
-        // }
     }
 
     void GameSession::onPostLoad(LoadingContext &context)
@@ -633,6 +607,17 @@ namespace space
             return;
         }
 
+        if (_renderStack.size() > 1)
+        {
+            auto &prevContext = _renderStack[_renderStack.size() - 3];
+            if (prevContext.prevPortalTarget() == targetObject)
+            {
+                return;
+            }
+        }
+
+        std::cout << "Drawing space portal: " << spacePortal->id << " " << currentRenderContext.portalLevel() << std::endl;
+
         auto &renderTarget = *renderTargetEntry.value;
         auto diff = targetObject->transform().position - spacePortal->transform().position;
         auto &transitionCamera = renderTarget.camera();
@@ -676,7 +661,7 @@ namespace space
 
     void GameSession::drawAtObject(SpaceObject &spaceObject, sf::Vector2f fromPosition, RenderCamera &target)
     {
-        if (_renderStack.size() > 1)
+        if (_renderStack.size() > 2)
         {
             std::cout << "portal overflow\n";
             return;
@@ -699,7 +684,6 @@ namespace space
             if (areaType == AreaType::Ship)
             {
                 ignoreShip = insideArea->partOfShip();
-                // TODO Needs to be on draw stack.
                 ignoreShip->disableRender = true;
                 renderObject = ignoreShip->insideArea()->partOfObject();
             }
@@ -718,15 +702,6 @@ namespace space
             return;
         }
 
-        if (_renderStack.size() > 1)
-        {
-            auto &prevContext = _renderStack[_renderStack.size() - 3];
-            if (prevContext.prevPortalTarget() == renderObject)
-            {
-                return;
-            }
-        }
-
         target.camera().scale(scale);
         target.preDraw();
 
@@ -737,20 +712,9 @@ namespace space
         auto starSystem = dynamic_cast<StarSystem *>(renderObject);
         if (starSystem)
         {
-            for (auto obj : starSystem->area().objects())
+            for (auto spacePortal : starSystem->area().spacePortals())
             {
-                if (obj->type() != SpacePortal::SpaceObjectType())
-                {
-                    continue;
-                }
-
-                auto spacePortal = dynamic_cast<SpacePortal *>(obj);
-                if (spacePortal == nullptr)
-                {
-                    continue;
-                }
-
-                if (_renderStack.size() <= 1)
+                if (_renderStack.size() <= 2)
                 {
                     drawSpacePortal(spacePortal);
                 }
