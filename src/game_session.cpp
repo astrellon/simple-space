@@ -1,6 +1,7 @@
 #include "game_session.hpp"
 
 #include <SFML/OpenGL.hpp>
+#include "imgui/imgui.h"
 
 #include "debug/draw_debug.hpp"
 #include "engine.hpp"
@@ -258,6 +259,12 @@ namespace space
 
         auto &sceneRender = _engine.sceneRender();
         _nextMouseOverObject = nullptr;
+
+        if (ImGui::IsAnyWindowHovered() || ImGui::IsAnyItemHovered())
+        {
+            _mouseOverObject = nullptr;
+            return;
+        }
 
         auto mousePosition = sf::Mouse::getPosition(*_engine.window());
         auto worldMousePosition = _engine.window()->mapPixelToCoords(mousePosition, sceneRender.camera().view());
@@ -550,6 +557,7 @@ namespace space
 
         target.camera().following(false);
         target.camera().center(fromPosition);
+        target.camera().followingRotation(false);
 
         auto insideArea = spaceObject.insideArea();
         auto renderObject = &spaceObject;
@@ -567,6 +575,7 @@ namespace space
                 ignoreShip = insideArea->partOfShip();
                 ignoreShip->disableRender = true;
                 renderObject = ignoreShip->insideArea()->partOfObject();
+                target.camera().followingRotationId(ignoreShip->id);
             }
             else
             {
