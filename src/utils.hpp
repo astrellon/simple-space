@@ -26,13 +26,14 @@ namespace space
     class Utils
     {
         public:
+            static const float InsideScale;
+            static const float PhysicsScale;
+
             static std::vector<std::string> split(const std::string &input, char delimiter, bool trimTokens);
 
             static std::string &rtrim(std::string &str);
             static std::string &ltrim(std::string &str);
             static std::string &trim(std::string &str);
-
-            static inline float getInsideScale() { return 1.0f / 6.0f; }
 
             static std::string filenameWithoutExt(const std::string &str);
             static std::string getFilenameExt(const std::string &str);

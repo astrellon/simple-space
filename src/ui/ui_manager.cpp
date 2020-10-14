@@ -8,10 +8,12 @@
 #include "ui_debug.hpp"
 #include "ui_definitions.hpp"
 #include "ui_selected.hpp"
+#include "ui_objects.hpp"
+#include "ui_frame_buffers.hpp"
 
 namespace space
 {
-    UIManager::UIManager() : _uiInteractables(nullptr), _uiInventory(nullptr), _uiTeleporter(nullptr), _uiDialogue(nullptr), _uiSelected(nullptr)
+    UIManager::UIManager() : _uiInteractables(nullptr), _uiInventory(nullptr), _uiTeleporter(nullptr), _uiDialogue(nullptr), _uiSelected(nullptr), _uiObjects(nullptr), _uiFrameBuffers(nullptr)
     {
 
     }
@@ -25,6 +27,8 @@ namespace space
         _uiDebug = createWindow<UIDebug>();
         _uiDefinitions = createWindow<UIDefinitions>();
         _uiSelected = createWindow<UISelected>();
+        _uiObjects = createWindow<UIObjects>();
+        _uiFrameBuffers = createWindow<UIFrameBuffers>();
     }
 
     void UIManager::draw(Engine &engine)

@@ -9,6 +9,7 @@
 #include "../definitions/shader_definition.hpp"
 #include "../definitions/grass_effect_definition.hpp"
 #include "../utils.hpp"
+#include "../render_camera.hpp"
 
 namespace space
 {
@@ -22,7 +23,7 @@ namespace space
         updateWorldTransform(parentTransform);
     }
 
-    void GrassEffect::draw(GameSession &session, sf::RenderTarget &target)
+    void GrassEffect::draw(GameSession &session, RenderCamera &target)
     {
         if (!_sprite.getTexture())
         {
@@ -39,7 +40,7 @@ namespace space
         shader.setUniform("tipColour", sf::Glsl::Vec4(definition.tipColour));
         shader.setUniform("sideColour", sf::Glsl::Vec4(definition.sideColour));
         shader.setUniform("windColour", sf::Glsl::Vec4(definition.windColour));
-        shader.setUniform("insideScale", Utils::getInsideScale());
+        shader.setUniform("insideScale", Utils::InsideScale);
         shader.setUniform("worldPosition", sf::Glsl::Vec2(_transform.position));
         shader.setUniform("invTextureSize", sf::Glsl::Vec2(1.0f / size.x, 1.0f / size.y));
         shader.setUniform("timeSinceStart", session.engine().timeSinceStart().asSeconds());
@@ -55,6 +56,6 @@ namespace space
         windDirection = windDirection.normalised();
         shader.setUniform("windDirection", sf::Glsl::Vec2(windDirection));
 
-        target.draw(_sprite, states);
+        target.texture().draw(_sprite, states);
     }
 } // space

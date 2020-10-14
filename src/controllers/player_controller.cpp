@@ -22,39 +22,60 @@ namespace space
             return;
         }
 
-        if (_character && _character->insideArea())
-        {
-            auto area = _character->insideArea();
-            auto planetSurface = area->partOfPlanetSurface();
-            if (planetSurface != nullptr && planetSurface->partOfPlanet() != nullptr)
-            {
-                auto onPlanet = area->partOfPlanetSurface()->partOfPlanet();
-                checkForTeleportableShips(onPlanet->transform().position, *onPlanet->starSystem());
-                checkForTeleportablePlanets(onPlanet->transform().position, *onPlanet->starSystem());
-            }
-            else if (area->partOfShip() != nullptr)
-            {
-                auto insideShip = area->partOfShip();
-                checkForTeleportableShips(insideShip->transform().position, *insideShip->starSystem());
-                checkForTeleportablePlanets(insideShip->transform().position, *insideShip->starSystem());
-            }
-        }
-        else
-        {
-            clearPlanetsInTeleportRange();
-            clearShipsInTeleportRange();
-        }
+        // if (_character && _character->insideArea())
+        // {
+        //     auto area = _character->insideArea();
+        //     auto planetSurface = area->partOfPlanetSurface();
+        //     if (planetSurface != nullptr && planetSurface->type() != nullptr)
+        //     {
+        //         auto onPlanet = area->partOfPlanetSurface()->partOfPlanet();
+        //         // checkForTeleportableShips(onPlanet->transform().position, *onPlanet->starSystem());
+        //         // checkForTeleportablePlanets(onPlanet->transform().position, *onPlanet->starSystem());
+        //     }
+        //     else if (area->partOfShip() != nullptr)
+        //     {
+        //         auto insideShip = area->partOfShip();
+        //         checkForTeleportableShips(insideShip->transform().position, *insideShip->starSystem());
+        //         checkForTeleportablePlanets(insideShip->transform().position, *insideShip->starSystem());
+        //     }
+        // }
+        // else
+        // {
+        //     clearPlanetsInTeleportRange();
+        //     clearShipsInTeleportRange();
+        // }
+
+        _teleportersInRange.clear();
 
         if (_controlling == ControlShip)
         {
             controlShip(dt);
+
+            if (_ship)
+            {
+                checkForInTeleportRange(_ship->transform().position, *_ship->insideArea());
+            }
         }
         else if (_controlling == ControlCharacter)
         {
             if (_character && _character->insideArea())
             {
                 updateAnimations(dt);
-                checkForGroundInteractables(_character->transform().position, *_character->insideArea());
+
+                auto insideArea = _character->insideArea();
+                checkForInteractables(_character->transform().position, *insideArea);
+
+                auto planetSurface = insideArea->partOfPlanetSurface();
+                auto ship = insideArea->partOfShip();
+                if (planetSurface != nullptr)
+                {
+                    auto onPlanet = insideArea->partOfPlanetSurface()->partOfPlanet();
+                    checkForInTeleportRange(onPlanet->transform().position, *onPlanet->insideArea());
+                }
+                else if (ship != nullptr)
+                {
+                    checkForInTeleportRange(ship->transform().position, *ship->insideArea());
+                }
             }
             else
             {

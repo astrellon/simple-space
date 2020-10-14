@@ -49,6 +49,7 @@ namespace space
 
             void zoomScale(float zoomScale);
             float zoomScale() const { return _zoomScale; }
+            void setZoomScaleFromEngine();
 
             void followingId(const ObjectId &id);
             const ObjectId &followingId() const { return _props.followingId; }

@@ -9,6 +9,7 @@
 #include "definitions/planet_definition.hpp"
 #include "game/space_object.hpp"
 #include "game/items/item.hpp"
+#include "game_session_render.hpp"
 
 #include "dialogue_manager.hpp"
 #include "controllers/player_controller.hpp"
@@ -25,7 +26,7 @@ namespace space
     class PlanetSurface;
     class PlanetSurfaceDefinition;
     class Item;
-    class WalkableArea;
+    class Area;
     class Transition;
     class TransitionData;
     class TeleportScreenEffect;
@@ -40,10 +41,10 @@ namespace space
         public:
             // Fields
             typedef std::vector<std::unique_ptr<SpaceObject>> SpaceObjectList;
-            typedef std::vector<std::unique_ptr<StarSystem>> StarSystemList;
-            typedef std::vector<std::unique_ptr<PlanetSurface>> PlanetSurfaceList;
             typedef std::vector<std::unique_ptr<Item>> ItemList;
             typedef std::vector<std::unique_ptr<CharacterController>> CharacterControllerList;
+            typedef std::vector<StarSystem *> StarSystemList;
+            typedef std::vector<PlanetSurface *> PlanetSurfaceList;
 
             // Constructor
             GameSession(Engine &engine);
@@ -58,7 +59,6 @@ namespace space
 
             StarSystem *createStarSystem(const StarSystemDefinition &definition);
             PlanetSurface *createPlanetSurface(const PlanetSurfaceDefinition &definition);
-            PlanetSurface *createPlanetSurface(const PlanetSurfaceDefinition &definition, std::unique_ptr<WalkableArea> walkableArea);
 
             template <typename T, typename... TArgs>
             auto createObject(TArgs &&... args)
@@ -122,12 +122,6 @@ namespace space
 
             void removeSpaceObject(const ObjectId &id);
 
-            StarSystem *activeStarSystem() const { return _activeStarSystem; }
-            void activeStarSystem(StarSystem *starSystem) { _activeStarSystem = starSystem; }
-
-            PlanetSurface *activePlanetSurface() const { return _activePlanetSurface; }
-            void activePlanetSurface(PlanetSurface *planetSurface) { _activePlanetSurface = planetSurface; }
-
             NextFrameState &nextFrameState() { return _nextFrameState; }
 
             bool tryGetStarSystem(const DefinitionId &id, StarSystem **result) const;
@@ -147,12 +141,19 @@ namespace space
             Ship *getShipPlayerIsInsideOf() const;
             Ship *getShipPlayerCloneIsInsideOf() const;
 
-            void moveCharacter(Character *character, sf::Vector2f position, WalkableArea *area, bool queue = false);
-            void moveSpaceObject(SpaceObject *spaceObject, sf::Vector2f position, StarSystem *starSystem, bool queue = false);
+            void moveSpaceObject(SpaceObject *spaceObject, sf::Vector2f position, Area *area, bool queue = false);
 
             Transition *currentTransition() const { return _transition.get(); }
             void setTransition(std::unique_ptr<Transition> &transition);
             void clearTransition();
+            GameSessionRender sessionRender()
+            {
+                if (_renderStack.size() == 0)
+                {
+                    assert(false);
+                }
+                return _renderStack.back();
+            }
 
             bool drawingPreTeleport() const { return _drawingPreTeleport; }
 
@@ -184,9 +185,8 @@ namespace space
             CharacterControllerList _characterControllers;
             NextFrameState _nextFrameState;
 
+            std::vector<GameSessionRender> _renderStack;
             std::unique_ptr<TeleportScreenEffect> _teleportEffect;
-            StarSystem *_activeStarSystem;
-            PlanetSurface *_activePlanetSurface;
             PlayerController _playerController;
             std::unique_ptr<Transition> _transition;
             DialogueManager _dialogueManager;
@@ -195,15 +195,13 @@ namespace space
             int _nextId;
 
             // Methods
-            void applyTransitionToCamera(const TransitionData &transitionData, RenderCamera &renderCamera);
-            void drawTransitionWithCamera(const TransitionData &transitionData, RenderCamera &renderCamera);
-
-            void createTransition(const WalkableArea *prevArea, const WalkableArea *area, const TeleportClone &teleportClone, const Character *character);
-            void applyAreaToTransitionData(const WalkableArea *area, TransitionData &data) const;
+            void createTransition(const Area *prevArea, const Area *area, TeleportClone &teleportClone);
             void clearTeleportClone();
 
             void checkNextFrameState();
             void drawSpacePortal(SpacePortal *spacePortal);
             bool checkMouseSpacePortal(sf::Vector2f mousePosition, SpacePortal *spacePortal);
+
+            void drawAtObject(SpaceObject &spaceObject, sf::Vector2f fromPosition, RenderCamera &target);
     };
 } // town

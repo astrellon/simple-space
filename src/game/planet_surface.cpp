@@ -4,42 +4,31 @@
 #include "../render_camera.hpp"
 #include "../game_session.hpp"
 #include "../engine.hpp"
-#include "walkable_area_instances.hpp"
+#include "area_instances.hpp"
 
 namespace space
 {
-    PlanetSurface::PlanetSurface(GameSession &session, const PlanetSurfaceDefinition &definition) : PlanetSurface(session, definition, std::make_unique<WalkableArea>())
+    PlanetSurface::PlanetSurface(const PlanetSurfaceDefinition &definition) : SpaceObject(definition.id), definition(definition), _partOfPlanet(nullptr), _area(AreaType::PlanetSurface, this)
     {
-
     }
 
-    PlanetSurface::PlanetSurface(GameSession &session, const PlanetSurfaceDefinition &definition, std::unique_ptr<WalkableArea> walkableArea) : _session(session), definition(definition), _partOfPlanet(nullptr), _walkableArea(std::move(walkableArea))
-    {
-        const auto &layers = definition.tmxMap->getLayers();
-        for (auto i = 0; i < layers.size(); i++)
-        {
-            _mapLayers.emplace_back(std::make_unique<MapLayer>(*definition.tmxMap, session.engine().resourceManager(), i));
-        }
-        _walkableArea->partOfPlanetSurface(this);
-    }
-
-    void PlanetSurface::update(sf::Time dt)
+    void PlanetSurface::update(GameSession &session, sf::Time dt, const sf::Transform &parentTransforms)
     {
         for (auto &mapLayer : _mapLayers)
         {
             mapLayer->update(dt);
         }
 
-        _walkableArea->update(_session, dt, sf::Transform::Identity);
+        _area.update(session, dt, parentTransforms);
     }
 
-    void PlanetSurface::draw(RenderCamera &target)
+    void PlanetSurface::draw(GameSession &session, RenderCamera &target)
     {
         target.preDraw();
 
         sf::RenderStates states;
         sf::Transform trans;
-        trans.scale(Utils::getInsideScale(), Utils::getInsideScale());
+        trans.scale(Utils::InsideScale, Utils::InsideScale);
         states.transform = trans;
 
         target.texture().clear(sf::Color(60, 90, 70));
@@ -48,17 +37,23 @@ namespace space
         {
             target.texture().draw(*mapLayer, states);
         }
-        _walkableArea->draw(_session, target);
+        _area.draw(session, target);
     }
 
-    void PlanetSurface::onPostLoad(LoadingContext &context)
+    void PlanetSurface::onPostLoad(GameSession &session, LoadingContext &context)
     {
-        _walkableArea->onPostLoad(_session, context);
-        definition.walkableAreaInstances.applyToWalkableArea(*_walkableArea, _session);
+        const auto &layers = definition.tmxMap->getLayers();
+        for (auto i = 0; i < layers.size(); i++)
+        {
+            _mapLayers.emplace_back(std::make_unique<MapLayer>(*definition.tmxMap, session.engine().resourceManager(), i));
+        }
+
+        _area.onPostLoad(session, context);
+        //definition.walkableAreaInstances.applyToWalkableArea(*_walkableArea, _session);
     }
 
-    bool PlanetSurface::checkForMouse(sf::Vector2f mousePosition)
+    bool PlanetSurface::checkForMouse(GameSession &session, sf::Vector2f mousePosition)
     {
-        return _walkableArea->checkForMouse(_session, mousePosition);
+        return _area.checkForMouse(session, mousePosition);
     }
 } // namespace space

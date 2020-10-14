@@ -4,9 +4,13 @@
 
 namespace space
 {
-    RenderCamera::RenderCamera(Engine &engine, std::string debugName) : _camera(engine, debugName), transitionData(nullptr)
+    RenderCamera::RenderCamera(Engine &engine, std::string debugName) : _camera(engine, debugName), _created(false)
     {
 
+    }
+    RenderCamera::~RenderCamera()
+    {
+        std::cout << "Render camera destroyed\n";
     }
 
     void RenderCamera::update(sf::Time dt)
@@ -18,6 +22,7 @@ namespace space
 
     void RenderCamera::onResize(sf::Vector2f area, float cameraScale)
     {
+        _created = true;
         _camera.size(area);
 
         area *= 1.0f / cameraScale;
@@ -30,6 +35,8 @@ namespace space
 
     void RenderCamera::preDraw()
     {
+        //_camera.zoomScale(_camera.en.cameraScale());
+        _camera.setZoomScaleFromEngine();
         _texture.setView(_camera.view());
     }
 } // namespace space

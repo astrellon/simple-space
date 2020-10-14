@@ -14,6 +14,7 @@ namespace space
 {
     class GameSession;
     class Ship;
+    class RenderCamera;
 
     class SpacePortal : public SpaceObject
     {
@@ -30,12 +31,12 @@ namespace space
             virtual std::string type() const { return SpaceObjectType(); }
 
             virtual void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform);
-            virtual void draw(GameSession &session, sf::RenderTarget &target);
+            virtual void draw(GameSession &session, RenderCamera &target);
             virtual bool doesMouseHover(GameSession &session, sf::Vector2f mousePosition) const;
 
             bool isMouseOverPortal(sf::Vector2f mousePosition);
 
-            void drawPortal(GameSession &session, sf::RenderTarget &target, bool asPolygon);
+            void drawPortal(GameSession &session, RenderCamera &target, bool asPolygon);
             void drawPortalOutlines(GameSession &session, sf::RenderTarget &target);
 
         private:

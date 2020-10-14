@@ -3,18 +3,19 @@
 #include <algorithm>
 
 #include "space_object.hpp"
-#include "space_transform.hpp"
-
+#include "../space_transform.hpp"
 #include "../utils.hpp"
+#include "../game_session.hpp"
+#include "../render_camera.hpp"
 
 namespace space
 {
-    DrawLayer::DrawLayer() : sortEveryDraw(false)
+    DrawLayer::DrawLayer(bool sortEveryDraw) : sortEveryDraw(sortEveryDraw)
     {
 
     }
 
-    void DrawLayer::draw(GameSession &session, sf::RenderTarget &target)
+    void DrawLayer::draw(GameSession &session, RenderCamera &target)
     {
         if (sortEveryDraw)
         {
@@ -45,5 +46,19 @@ namespace space
     bool DrawLayer::sortByPosition(SpaceObject *obj1, SpaceObject *obj2)
     {
         return obj1->transform().position.y < obj2->transform().position.y;
+    }
+
+    bool DrawLayer::checkForMouse(GameSession &session, sf::Vector2f mousePosition) const
+    {
+        for (auto iter = _drawables.rbegin(); iter != _drawables.rend(); ++iter)
+        {
+            if ((*iter)->doesMouseHover(session, mousePosition))
+            {
+                session.setNextMouseHover(*iter);
+                return true;
+            }
+        }
+
+        return false;
     }
 } // namespace space

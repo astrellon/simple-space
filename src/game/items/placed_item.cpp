@@ -2,38 +2,40 @@
 
 #include "placeable_item.hpp"
 #include "../character.hpp"
+#include "../area.hpp"
 #include "../interactions/pickup_action.hpp"
 #include "../interactions/use_item_action.hpp"
 #include "../../engine.hpp"
 #include "../../game_session.hpp"
 #include "../../physics/polygon_collider.hpp"
 #include "../../utils.hpp"
+#include "../../render_camera.hpp"
 
 #include "../../debug/draw_debug.hpp"
 
 namespace space
 {
-    PlacedItem::PlacedItem(PlaceableItem *item, const sf::Vector2f &position, WalkableArea &area, DrawLayer &onLayer) : PlacedItem(item->id, position, area, onLayer)
+    PlacedItem::PlacedItem(PlaceableItem *item) : PlacedItem(item->id)
     {
         this->item = item;
-        _transform.position = position;
 
         processItem();
     }
-    PlacedItem::PlacedItem(const ItemId &itemId, const sf::Vector2f &position, WalkableArea &area, DrawLayer &onLayer) : SpaceObject(Utils::makeItemId(itemId)),  _collider(nullptr), area(area), onLayer(onLayer), item(nullptr)
+
+    PlacedItem::PlacedItem(const ItemId &itemId) : SpaceObject(Utils::makeItemId(itemId)), _collider(nullptr)
     {
-        _transform.position = position;
+
     }
+
     PlacedItem::~PlacedItem()
     {
-        assert(_collider == nullptr);
+
     }
 
     void PlacedItem::processItem()
     {
         _sprite.setTexture(*item->definition.texture);
         _sprite.setOrigin(sf::Vector2f(item->definition.texture->getSize()) * 0.5f + item->definition.textureOffset);
-        _sprite.setScale(Utils::getInsideScale(), Utils::getInsideScale());
 
         _spriteBounds = _sprite.getGlobalBounds();
 
@@ -99,14 +101,37 @@ namespace space
         _collider = nullptr;
     }
 
+    void PlacedItem::insideArea(Area *area)
+    {
+        if (_insideArea != nullptr)
+        {
+            auto physicsWorld = _insideArea->physicsWorld();
+            if (physicsWorld)
+            {
+                removePhysics(*physicsWorld);
+            }
+        }
+
+        SpaceObject::insideArea(area);
+
+        if (area)
+        {
+            auto physicsWorld = area->physicsWorld();
+            if (physicsWorld)
+            {
+                addPhysics(*physicsWorld);
+            }
+        }
+    }
+
     void PlacedItem::update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform)
     {
         updateWorldTransform(parentTransform);
     }
 
-    void PlacedItem::draw(GameSession &session, sf::RenderTarget &target)
+    void PlacedItem::draw(GameSession &session, RenderCamera &target)
     {
-        target.draw(_sprite, _worldTransform);
+        target.texture().draw(_sprite, _worldTransform);
         DrawDebug::glDraw++;
 
         if (DrawDebug::showPolygons)
@@ -118,7 +143,7 @@ namespace space
                 shape.setRadius(physicsShape.radius());
                 shape.setFillColor(sf::Color(255, 120, 100, 120));
                 shape.setPosition(sf::Vector2f(-physicsShape.radius(), -physicsShape.radius()));
-                target.draw(shape, _worldTransform);
+                target.texture().draw(shape, _worldTransform);
             }
             else if (physicsShape.type() == PhysicsShape::Rectangle)
             {
@@ -126,7 +151,7 @@ namespace space
                 shape.setSize(sf::Vector2f(physicsShape.width(), physicsShape.height()));
                 shape.setFillColor(sf::Color(120, 255, 100, 120));
                 shape.setPosition(sf::Vector2f(-physicsShape.width() * 0.5f, -physicsShape.height() * 0.5f));
-                target.draw(shape, _worldTransform);
+                target.texture().draw(shape, _worldTransform);
             }
         }
     }
@@ -151,5 +176,10 @@ namespace space
         auto worldPos = Utils::getPosition(_worldTransform);
         auto local = mousePosition - worldPos;
         return _spriteBounds.contains(local);
+    }
+
+    DrawLayers::Type PlacedItem::drawLayer() const
+    {
+        return item->placeableDefinition.drawLayer;
     }
 }

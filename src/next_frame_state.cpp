@@ -2,24 +2,24 @@
 
 namespace space
 {
-        NextFrameState::NextFrameState() : nextStarSystem(nullptr), nextPlanetSurface(nullptr) {}
+        NextFrameState::NextFrameState()
+        {
+
+        }
 
         void NextFrameState::clear()
         {
-            nextStarSystem = nullptr;
-            nextPlanetSurface = nullptr;
-
-            _moveCharacters.clear();
             _moveSpaceObjects.clear();
+            _removeObjects.clear();
         }
 
-        void NextFrameState::addMoveCharacter(Character *character, sf::Vector2f position, WalkableArea *area)
+        void NextFrameState::addMoveSpaceObject(SpaceObject *obj, sf::Vector2f position, Area *area)
         {
-            _moveCharacters.emplace_back(character, position, area);
+            _moveSpaceObjects.emplace_back(obj, position, area);
         }
 
-        void NextFrameState::addMoveSpaceObject(SpaceObject *obj, sf::Vector2f position, StarSystem *starSystem)
+        void NextFrameState::addRemoveObject(const ObjectId &id)
         {
-            _moveSpaceObjects.emplace_back(obj, position, starSystem);
+            _removeObjects.push_back(id);
         }
 } // space

@@ -1,6 +1,7 @@
 #include "game_session.hpp"
 
 #include <SFML/OpenGL.hpp>
+#include "imgui/imgui.h"
 
 #include "debug/draw_debug.hpp"
 #include "engine.hpp"
@@ -10,7 +11,7 @@
 #include "game/star_system.hpp"
 #include "game/planet_surface.hpp"
 #include "game/character.hpp"
-#include "game/walkable_area.hpp"
+#include "game/area.hpp"
 #include "game/teleport_clone.hpp"
 #include "game/space_portal.hpp"
 #include "definitions/ship_definition.hpp"
@@ -31,7 +32,7 @@
 
 namespace space
 {
-    GameSession::GameSession(Engine &engine) : _engine(engine), _activeStarSystem(nullptr), _playerController(*this), _drawingPreTeleport(false), _activePlanetSurface(nullptr), _nextId(0), _mouseOverObject(nullptr), _nextMouseOverObject(nullptr)
+    GameSession::GameSession(Engine &engine) : _engine(engine), _playerController(*this), _drawingPreTeleport(false), _nextId(0), _mouseOverObject(nullptr), _nextMouseOverObject(nullptr)
     {
         _teleportEffect = std::make_unique<TeleportScreenEffect>();
         _teleportEffect->init(engine.definitionManager());
@@ -45,19 +46,16 @@ namespace space
 
     StarSystem *GameSession::createStarSystem(const StarSystemDefinition &definition)
     {
-        auto &result = _starSystems.emplace_back(std::make_unique<StarSystem>(*this, definition));
-        return result.get();
+        auto result = createObject<StarSystem>(definition);
+        _starSystems.push_back(result);
+        return result;
     }
 
     PlanetSurface *GameSession::createPlanetSurface(const PlanetSurfaceDefinition &definition)
     {
-        auto &result = _planetSurfaces.emplace_back(std::make_unique<PlanetSurface>(*this, definition));
-        return result.get();
-    }
-    PlanetSurface *GameSession::createPlanetSurface(const PlanetSurfaceDefinition &definition, std::unique_ptr<WalkableArea> walkableArea)
-    {
-        auto &result = _planetSurfaces.emplace_back(std::make_unique<PlanetSurface>(*this, definition, std::move(walkableArea)));
-        return result.get();
+        auto result = createObject<PlanetSurface>(definition);
+        _planetSurfaces.push_back(result);
+        return result;
     }
 
     bool GameSession::tryGetItem(const ItemId &id, Item **result)
@@ -89,13 +87,6 @@ namespace space
 
     void GameSession::setPlayerControllingShip(Ship *ship)
     {
-        _engine.spriteScale(1.0f);
-
-        auto &sceneRenderCamera = _engine.sceneRender().camera();
-        sceneRenderCamera.followingRotation(false);
-        sceneRenderCamera.followingId(ship->id);
-        sceneRenderCamera.scale(1.0f);
-
         _playerController.controllingShip(ship);
         _playerController.controlling(ControlShip);
 
@@ -103,18 +94,6 @@ namespace space
     }
     void GameSession::setPlayerControllingCharacter()
     {
-        auto scale = 1.0f / Utils::getInsideScale();
-        _engine.spriteScale(scale);
-
-        auto &sceneRenderCamera = _engine.sceneRender().camera();
-
-        auto shipInside = getShipPlayerIsInsideOf();
-        if (shipInside)
-        {
-            sceneRenderCamera.followingRotationId(shipInside->id);
-        }
-        sceneRenderCamera.followingId(_playerController.controllingCharacter()->id);
-        sceneRenderCamera.scale(scale);
         _playerController.controlling(ControlCharacter);
 
         clearTransition();
@@ -154,29 +133,21 @@ namespace space
         return area->partOfShip();
     }
 
-    void GameSession::moveCharacter(Character *character, sf::Vector2f position, WalkableArea *area, bool queue)
+    void GameSession::moveSpaceObject(SpaceObject *spaceObject, sf::Vector2f position, Area *area, bool queue)
     {
         if (queue)
         {
-            _nextFrameState.addMoveCharacter(character, position, area);
+            _nextFrameState.addMoveSpaceObject(spaceObject, position, area);
             return;
         }
 
-        auto prevArea = character->insideArea();
-        if (character->insideArea() != nullptr)
-        {
-            character->insideArea()->removeCharacter(character);
-        }
+        auto prevArea = spaceObject->insideArea();
+        auto prevTransform = spaceObject->transform();
 
-        auto prevTransform = character->transform();
+        spaceObject->transform().position = position;
+        area->addObject(spaceObject);
 
-        if (area != nullptr)
-        {
-            character->transform().position = position;
-            area->addCharacter(character);
-        }
-
-        if (character == _playerController.controllingCharacter())
+        if (spaceObject == _playerController.controllingCharacter())
         {
             _playerController.clearCanInteractWith();
             if (_playerController.controlling() == ControlCharacter)
@@ -185,59 +156,16 @@ namespace space
                 {
                     clearTeleportClone();
 
-                    std::stringstream newId(character->id);
+                    std::stringstream newId(spaceObject->id);
                     newId << "_TELEPORT_CLONE_";
                     newId << _engine.timeSinceStart().asMicroseconds();
-                    auto teleportClone = createObject<TeleportClone>(newId.str(), *character, prevTransform);
+                    auto teleportClone = createObject<TeleportClone>(newId.str(), *_playerController.controllingCharacter(), prevTransform);
                     _playerController.teleportClone(teleportClone);
-                    prevArea->addCharacter(teleportClone);
+                    prevArea->addObject(teleportClone);
 
-                    createTransition(prevArea, area, *teleportClone, character);
-                }
-
-                if (area->partOfShip() != nullptr)
-                {
-                    _engine.sceneRender().camera().followingRotationId(area->partOfShip()->id);
-                    _nextFrameState.nextStarSystem = area->partOfShip()->starSystem();
-                }
-                else if (area->partOfPlanetSurface() != nullptr)
-                {
-                    _engine.sceneRender().camera().followingRotation(false);
-                    _nextFrameState.nextPlanetSurface = area->partOfPlanetSurface();
+                    createTransition(prevArea, area, *teleportClone);
                 }
             }
-        }
-    }
-
-    void GameSession::moveSpaceObject(SpaceObject *obj, sf::Vector2f position, StarSystem *starSystem, bool queue)
-    {
-        if (queue)
-        {
-            _nextFrameState.addMoveSpaceObject(obj, position, starSystem);
-            return;
-        }
-
-        if (obj->starSystem() != nullptr)
-        {
-            obj->starSystem()->removeObject(obj);
-        }
-
-        if (starSystem == nullptr)
-        {
-            return;
-        }
-
-        starSystem->addObject(obj);
-        obj->transform().position = position;
-        auto ship = dynamic_cast<Ship *>(obj);
-        if (ship)
-        {
-            ship->prevPosition(position);
-        }
-
-        if (obj->id == _playerController.controllingShip()->id)
-        {
-            _nextFrameState.nextStarSystem = starSystem;
         }
     }
 
@@ -251,15 +179,13 @@ namespace space
     void GameSession::clearTransition()
     {
         std::cout << "Clearing transition" << std::endl;
-        _engine.sceneRender().transitionData = nullptr;
 
-        auto &renderTrans = _engine.sceneRenderTransition();
-        renderTrans.transitionData = nullptr;
+        // auto &renderTrans = _engine.sceneRenderTransition();
 
-        auto cameraProps = renderTrans.camera().cameraProps();
-        cameraProps.following = false;
-        cameraProps.followingRotation = false;
-        renderTrans.camera().cameraProps(cameraProps);
+        // auto cameraProps = renderTrans.camera().cameraProps();
+        // cameraProps.following = false;
+        // cameraProps.followingRotation = false;
+        // renderTrans.camera().cameraProps(cameraProps);
 
         _transition = std::move(nullptr);
     }
@@ -275,11 +201,11 @@ namespace space
 
     bool GameSession::tryGetStarSystem(const DefinitionId &id, StarSystem **result) const
     {
-        for (auto i = _starSystems.begin(); i != _starSystems.end(); ++i)
+        for (auto starSystem : _starSystems)
         {
-            if (i->get()->definition.id == id)
+            if (starSystem->definition.id == id)
             {
-                *result = i->get();
+                *result = starSystem;
                 return true;
             }
         }
@@ -288,11 +214,11 @@ namespace space
     }
     bool GameSession::tryGetPlanetSurface(const DefinitionId &id, PlanetSurface **result) const
     {
-        for (auto i = _planetSurfaces.begin(); i != _planetSurfaces.end(); ++i)
+        for (auto planetSurface : _planetSurfaces)
         {
-            if (i->get()->definition.id == id)
+            if (planetSurface->definition.id == id)
             {
-                *result = i->get();
+                *result = planetSurface;
                 return true;
             }
         }
@@ -326,48 +252,32 @@ namespace space
             controller->update(dt);
 
         for (auto &starSystem : _starSystems)
-            starSystem->update(dt);
+            starSystem->update(*this, dt, sf::Transform::Identity);
 
         for (auto &plantSurface : _planetSurfaces)
-            plantSurface->update(dt);
+            plantSurface->update(*this, dt, sf::Transform::Identity);
 
         auto &sceneRender = _engine.sceneRender();
-        if (_transition.get())
-        {
-            auto &sceneRenderTransition = _engine.sceneRenderTransition();
-
-            applyTransitionToCamera(_transition->toData, sceneRender);
-            applyTransitionToCamera(_transition->fromData, sceneRenderTransition);
-        }
-
         _nextMouseOverObject = nullptr;
+
+        if (ImGui::IsAnyWindowHovered() || ImGui::IsAnyItemHovered())
+        {
+            _mouseOverObject = nullptr;
+            return;
+        }
 
         auto mousePosition = sf::Mouse::getPosition(*_engine.window());
         auto worldMousePosition = _engine.window()->mapPixelToCoords(mousePosition, sceneRender.camera().view());
 
-        if (_activePlanetSurface)
-        {
-            _activePlanetSurface->checkForMouse(worldMousePosition);
-        }
+        auto rootWorld = _playerController.controllingObject()->rootObject();
 
-        if (_activeStarSystem)
+        if (rootWorld->type() == StarSystem::SpaceObjectType())
         {
+            auto starSystem = dynamic_cast<StarSystem *>(rootWorld);
             auto foundInPortal = false;
-            for (auto obj : _activeStarSystem->objects())
+            for (auto spacePortal : starSystem->area().spacePortals())
             {
-                if (obj->type() != SpacePortal::SpaceObjectType())
-                {
-                    continue;
-                }
-
-                auto spacePortal = dynamic_cast<SpacePortal *>(obj);
-                if (spacePortal == nullptr)
-                {
-                    continue;
-                }
-
                 foundInPortal = checkMouseSpacePortal(worldMousePosition, spacePortal);
-                // If we have something stop checking. Having multiple portals in a system will break this.
                 if (foundInPortal)
                 {
                     break;
@@ -376,8 +286,13 @@ namespace space
 
             if (!foundInPortal)
             {
-                _activeStarSystem->checkForMouse(worldMousePosition);
+                starSystem->checkForMouse(*this, worldMousePosition);
             }
+        }
+        else if (rootWorld->type() == PlanetSurface::SpaceObjectType())
+        {
+            auto planetSurface = dynamic_cast<PlanetSurface *>(rootWorld);
+            planetSurface->checkForMouse(*this, worldMousePosition);
         }
 
         if (_nextMouseOverObject != _mouseOverObject)
@@ -408,18 +323,18 @@ namespace space
 
     void GameSession::draw()
     {
+        //std::cout << "---- New Draw ----" << std::endl;
+        _renderStack.clear();
         auto &sceneRender = _engine.sceneRender();
+
         if (_transition.get())
         {
             auto &sceneRenderTransition = _engine.sceneRenderTransition();
 
-            _drawingPreTeleport = false;
-            drawTransitionWithCamera(_transition->toData, sceneRender);
-
-            _drawingPreTeleport = true;
-            drawTransitionWithCamera(_transition->fromData, sceneRenderTransition);
-
-            _drawingPreTeleport = false;
+            auto fromPos = Utils::getPosition(_transition->fromObject.worldTransform());
+            auto toPos = Utils::getPosition(_transition->toObject.worldTransform());
+            drawAtObject(_transition->fromObject, fromPos, sceneRenderTransition);
+            drawAtObject(_transition->toObject, toPos, sceneRender);
 
             sceneRenderTransition.texture().display();
 
@@ -435,40 +350,22 @@ namespace space
         }
         else
         {
-            _drawingPreTeleport = false;
-            if (_activeStarSystem)
+            auto controllingObject = _playerController.controllingObject();
+            if (controllingObject)
             {
-                _activeStarSystem->draw(sceneRender);
-                for (auto obj : _activeStarSystem->objects())
-                {
-                    if (obj->type() != SpacePortal::SpaceObjectType())
-                    {
-                        continue;
-                    }
-
-                    auto spacePortal = dynamic_cast<SpacePortal *>(obj);
-                    if (spacePortal == nullptr)
-                    {
-                        continue;
-                    }
-
-                    drawSpacePortal(spacePortal);
-                }
-            }
-            else if (_activePlanetSurface)
-            {
-                _activePlanetSurface->draw(sceneRender);
+                auto pos = Utils::getPosition(controllingObject->worldTransform());
+                drawAtObject(*controllingObject, pos, sceneRender);
             }
         }
     }
 
     void GameSession::onPostLoad(LoadingContext &context)
     {
-        for (auto &spaceObject : _spaceObjects)
+        for (auto i = 0; i < _spaceObjects.size(); i++)
+        {
+            auto &spaceObject = _spaceObjects[i];
             spaceObject->onPostLoad(*this, context);
-
-        for (auto &planetSurface : _planetSurfaces)
-            planetSurface->onPostLoad(context);
+        }
     }
 
     ObjectId GameSession::nextObjectId()
@@ -480,73 +377,21 @@ namespace space
 
     void GameSession::setNextMouseHover(SpaceObject *obj)
     {
-        _nextMouseOverObject = obj;
-    }
-
-    void GameSession::applyTransitionToCamera(const TransitionData &transitionData, RenderCamera &renderCamera)
-    {
-        renderCamera.transitionData = &transitionData;
-
-        auto &camera = renderCamera.camera();
-        camera.cameraProps(renderCamera.transitionData->cameraProps);
-
-        if (!transitionData.cameraProps.following)
+        if (!_nextMouseOverObject)
         {
-            camera.center(transitionData.position);
-        }
-        if (!transitionData.cameraProps.followingRotation)
-        {
-            camera.rotation(transitionData.rotation);
+            _nextMouseOverObject = obj;
         }
     }
 
-    void GameSession::drawTransitionWithCamera(const TransitionData &transitionData, RenderCamera &renderCamera)
-    {
-        if (transitionData.planetSurface)
-        {
-            transitionData.planetSurface->draw(renderCamera);
-        }
-        else if (transitionData.starSystem)
-        {
-            transitionData.starSystem->draw(renderCamera);
-        }
-    }
-
-    void GameSession::createTransition(const WalkableArea *prevArea, const WalkableArea *area, const TeleportClone &teleportClone, const Character *character)
+    void GameSession::createTransition(const Area *prevArea, const Area *area, TeleportClone &teleportClone)
     {
         auto windowSize = _engine.windowSize();
         auto aspectRatio = static_cast<float>(windowSize.x) / static_cast<float>(windowSize.y);
+        auto duration = sf::seconds(2.2f * aspectRatio);
 
-        auto transition = std::make_unique<Transition>(_engine.timeSinceStart(), sf::seconds(2.2f * aspectRatio));
-
-        auto &fromData = transition->fromData;
-        auto &toData = transition->toData;
-
-        toData.cameraProps = fromData.cameraProps = _engine.sceneRender().camera().cameraProps();
-
-        fromData.cameraProps.following = true;
-        fromData.cameraProps.followingId = teleportClone.id;
-
-        applyAreaToTransitionData(prevArea, fromData);
-        applyAreaToTransitionData(area, toData);
+        auto transition = std::make_unique<Transition>(_engine.timeSinceStart(), duration, teleportClone, *_playerController.controllingObject());
 
         setTransition(transition);
-    }
-
-    void GameSession::applyAreaToTransitionData(const WalkableArea *area, TransitionData &data) const
-    {
-        if (area->partOfShip())
-        {
-            data.starSystem = area->partOfShip()->starSystem();
-            data.ship = area->partOfShip();
-            data.cameraProps.followingRotationId = area->partOfShip()->id;
-            data.cameraProps.followingRotation = true;
-        }
-        else
-        {
-            data.planetSurface = area->partOfPlanetSurface();
-            data.cameraProps.followingRotation = false;
-        }
     }
 
     void GameSession::removeSpaceObject(const ObjectId &id)
@@ -557,18 +402,9 @@ namespace space
             return;
         }
 
-        if (obj->starSystem())
+        if (obj->insideArea())
         {
-            obj->starSystem()->removeObject(obj);
-        }
-
-        Character *character = dynamic_cast<Character *>(obj);
-        if (character != nullptr)
-        {
-            if (character->insideArea() != nullptr)
-            {
-                character->insideArea()->removeCharacter(character);
-            }
+            obj->insideArea()->removeObject(obj);
         }
 
         // Need to loop as the spaceObjects is a vector of unique_ptrs.
@@ -580,32 +416,15 @@ namespace space
                 break;
             }
         }
+
+        // TODO Remove star systems and planet surfaces
     }
 
     void GameSession::checkNextFrameState()
     {
-        for (auto &moveChar : _nextFrameState.moveCharacters())
-            moveCharacter(moveChar.character, moveChar.position, moveChar.area);
-
         for (auto &moveObj : _nextFrameState.moveSpaceObject())
-            moveSpaceObject(moveObj.obj, moveObj.position, moveObj.starSystem);
-
-        if (_nextFrameState.nextPlanetSurface || _nextFrameState.nextStarSystem)
         {
-            _playerController.clearCanInteractWith();
-            _playerController.clearShipsInTeleportRange();
-
-            if (_nextFrameState.nextPlanetSurface)
-            {
-                _activePlanetSurface = _nextFrameState.nextPlanetSurface;
-                _activeStarSystem = nullptr;
-            }
-            else if (_nextFrameState.nextStarSystem)
-            {
-                _activeStarSystem = _nextFrameState.nextStarSystem;
-                _activePlanetSurface = nullptr;
-            }
-
+            moveSpaceObject(moveObj.obj, moveObj.position, moveObj.area);
         }
 
         _nextFrameState.clear();
@@ -629,7 +448,7 @@ namespace space
         }
 
         // Also bail if we can't find the target star system.
-        auto targetStarSystem = targetObject->starSystem();
+        auto targetStarSystem = targetObject->insideArea()->partOfStarSystem();
         if (!targetStarSystem)
         {
             return false;
@@ -643,15 +462,14 @@ namespace space
         auto diff = targetObject->transform().position - spacePortal->transform().position;
         mousePosition += diff;
 
-        targetStarSystem->checkForMouse(mousePosition);
+        targetStarSystem->checkForMouse(*this, mousePosition);
         return true;
     }
 
     void GameSession::drawSpacePortal(SpacePortal *spacePortal)
     {
-        auto &sceneRender = _engine.sceneRender();
-        auto &sceneRenderTransition = _engine.sceneRenderTransition();
-        auto &sceneCamera = sceneRender.camera();
+        auto currentRenderContext = sessionRender();
+        auto &sceneCamera = currentRenderContext.renderTarget().camera();
 
         // Don't render portal offscreen
         if (!sceneCamera.viewport().contains(spacePortal->transform().position))
@@ -667,50 +485,146 @@ namespace space
         }
 
         // Also bail if we can't find the target star system.
-        auto targetStarSystem = targetObject->starSystem();
-        if (!targetStarSystem)
+        // auto targetStarSystem = targetObject->starSystem();
+        if (!targetObject)
         {
             return;
         }
 
+        // Make sure we have a new render camera for the portal to draw to.
+        auto renderTargetEntry = _engine.renderCameras().get();
+        if (!renderTargetEntry.isValid())
+        {
+            return;
+        }
+
+        if (_renderStack.size() > 1)
+        {
+            auto &prevContext = _renderStack[_renderStack.size() - 3];
+            if (prevContext.prevPortalTarget() == targetObject)
+            {
+                return;
+            }
+        }
+
+        std::cout << "Drawing space portal: " << spacePortal->id << " " << currentRenderContext.portalLevel() << std::endl;
+
+        auto &renderTarget = *renderTargetEntry.value;
         auto diff = targetObject->transform().position - spacePortal->transform().position;
-        auto &transitionCamera = sceneRenderTransition.camera();
+        auto &transitionCamera = renderTarget.camera();
         transitionCamera.cameraProps(sceneCamera.cameraProps());
         transitionCamera.center(sceneCamera.center());
-        sceneRenderTransition.texture().setView(transitionCamera.view());
-        sceneRenderTransition.texture().clear(sf::Color(0, 0, 0, 0));
+        renderTarget.texture().setView(transitionCamera.view());
+        renderTarget.texture().clear(sf::Color(0, 0, 0, 0));
 
         if (!DrawDebug::showPortalShapes)
         {
             glEnable(GL_STENCIL_TEST);
 
-            glStencilFunc(GL_ALWAYS, 1, 0xFF);
+            glStencilFunc(GL_ALWAYS, currentRenderContext.portalLevel(), 0xFF);
             glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
             glStencilMask(0xFF);
             glClearStencil(0x0);
             glClear(GL_STENCIL_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
-            spacePortal->drawPortal(*this, sceneRenderTransition.texture(), true);
+            spacePortal->drawPortal(*this, renderTarget, true);
 
             glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
-            glStencilFunc(GL_EQUAL, 1, 0xFF);
+            glStencilFunc(GL_EQUAL, currentRenderContext.portalLevel(), 0xFF);
             glStencilMask(0x00);
 
-            transitionCamera.center(sceneCamera.center() + diff);
-            targetStarSystem->draw(sceneRenderTransition);
+            drawAtObject(*targetObject, sceneCamera.center() + diff, renderTarget);
 
             glDisable(GL_STENCIL_TEST);
 
-            sceneRenderTransition.texture().display();
+            renderTarget.texture().display();
 
-            _portalOverlay.texture(&sceneRenderTransition.texture().getTexture());
-            _portalOverlay.draw(sceneRender.texture());
-
-            spacePortal->drawPortalOutlines(*this, sceneRender.texture());
+            spacePortal->drawPortalOutlines(*this, currentRenderContext.renderTarget().texture());
         }
         else
         {
-            spacePortal->drawPortal(*this, sceneRender.texture(), false);
+            spacePortal->drawPortal(*this, renderTarget, false);
         }
+
+        _portalOverlay.texture(&renderTarget.texture().getTexture());
+        _portalOverlay.draw(currentRenderContext.renderTarget().texture());
     }
-} // namespace town
+
+    void GameSession::drawAtObject(SpaceObject &spaceObject, sf::Vector2f fromPosition, RenderCamera &target)
+    {
+        if (_renderStack.size() > 1)
+        {
+            std::cout << "portal overflow\n";
+            return;
+        }
+
+        auto &camera = target.camera();
+
+        camera.following(false);
+        camera.center(fromPosition);
+        camera.followingRotation(false);
+        camera.rotation(0);
+
+        auto insideArea = spaceObject.insideArea();
+        auto renderObject = &spaceObject;
+        Ship *ignoreShip = nullptr;
+        auto scale = 1.0f;
+
+        if (insideArea)
+        {
+            auto areaType = insideArea->type();
+            insideArea->draw(*this, target);
+            scale = areaType == AreaType::Ship || areaType == AreaType::PlanetSurface ? 1.0f / Utils::InsideScale : 1.0f;
+
+            if (areaType == AreaType::Ship)
+            {
+                ignoreShip = insideArea->partOfShip();
+                ignoreShip->disableRender = true;
+                renderObject = ignoreShip->insideArea()->partOfObject();
+                camera.rotation(ignoreShip->transform().rotation);
+            }
+            else
+            {
+                renderObject = insideArea->partOfObject();
+            }
+        }
+        else
+        {
+            std::cout << "Rendering object not inside anything" << std::endl;
+        }
+
+        if (!renderObject)
+        {
+            return;
+        }
+
+        camera.scale(scale);
+        target.preDraw();
+
+        auto &renderContext = _renderStack.emplace_back(spaceObject, target, _renderStack.size() + 1, renderObject);
+
+        renderObject->draw(*this, target);
+
+        auto starSystem = dynamic_cast<StarSystem *>(renderObject);
+        if (starSystem)
+        {
+            for (auto spacePortal : starSystem->area().spacePortals())
+            {
+                if (_renderStack.size() <= 1)
+                {
+                    drawSpacePortal(spacePortal);
+                }
+            }
+        }
+
+        if (ignoreShip)
+        {
+            ignoreShip->disableRender = false;
+            ignoreShip->draw(*this, target);
+            _engine.overlay().draw(target.texture(), 0.3);
+            ignoreShip->drawInterior(*this, target);
+        }
+
+        _renderStack.pop_back();
+    }
+} // namespace space

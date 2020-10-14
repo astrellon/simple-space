@@ -10,7 +10,7 @@
 namespace space
 {
     class GameSession;
-    class WalkableArea;
+    class RenderCamera;
 
     class Character : public SpaceObject
     {
@@ -31,11 +31,8 @@ namespace space
 
             virtual void prePhysics(GameSession &session, sf::Time dt, const sf::Transform &parentTransform);
             virtual void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform);
-            virtual void draw(GameSession &session, sf::RenderTarget &target);
+            virtual void draw(GameSession &session, RenderCamera &target);
             virtual bool doesMouseHover(GameSession &session, sf::Vector2f mousePosition) const;
-
-            void insideArea(WalkableArea *area) { _insideArea = area; }
-            WalkableArea *insideArea() const { return _insideArea; }
 
             void flipSprite(bool flip) { _flipSprite = flip; }
             bool flipSprite() const { return _flipSprite; }
@@ -45,6 +42,9 @@ namespace space
 
             b2Body *physicsBody() { return _physicsBody; }
 
+            virtual void insideArea(Area *area);
+            virtual Area *insideArea() const { return _insideArea; }
+
             void addToPhysicsWorld(b2World *world);
             void removeFromPhysicsWorld(b2World *world);
 
@@ -52,7 +52,6 @@ namespace space
 
         protected:
             // Fields
-            WalkableArea *_insideArea;
             b2Body *_physicsBody;
             AnimatedSprite _sprite;
             sf::FloatRect _spriteBounds;

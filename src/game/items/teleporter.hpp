@@ -6,7 +6,7 @@
 
 namespace space
 {
-    class WalkableArea;
+    class Area;
     class PlacedItem;
 
     class Teleporter : public PlaceableItem
@@ -19,7 +19,7 @@ namespace space
             virtual ~Teleporter() { }
 
             // Methods
-            virtual void execute(GameSession &session, const sf::Vector2f &position, WalkableArea &parentArea);
+            virtual void execute(GameSession &session, const sf::Vector2f &position, Area &parentArea);
             virtual void onPlaced(PlacedItem &placedItem);
             virtual void onPlayerLeaves(GameSession &session);
 

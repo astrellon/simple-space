@@ -4,6 +4,8 @@
 
 namespace space
 {
+    class RenderCamera;
+
     class TeleportClone : public Character
     {
         public:
@@ -17,7 +19,7 @@ namespace space
             std::string type() const { return SpaceObjectType(); }
 
             virtual void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform);
-            virtual void draw(GameSession &session, sf::RenderTarget &target);
+            virtual void draw(GameSession &session, RenderCamera &target);
 
         private:
             // Fields

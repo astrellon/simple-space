@@ -6,7 +6,7 @@
 #include <SFML/System.hpp>
 
 #include "space_object.hpp"
-#include "walkable_area.hpp"
+#include "area.hpp"
 #include "../definitions/ship_definition.hpp"
 #include "../effects/engine_flame_effect.hpp"
 
@@ -14,6 +14,7 @@ namespace space
 {
     class GameSession;
     class PolygonCollider;
+    class RenderCamera;
 
     class Ship : public SpaceObject
     {
@@ -24,10 +25,10 @@ namespace space
             // Inputs
             float rotateInput;
             sf::Vector2f moveInput;
+            bool disableRender;
 
             // Constructor
             Ship(const ObjectId &id, const ShipDefinition &definition);
-            Ship(const ObjectId &id, const ShipDefinition &definition, std::unique_ptr<WalkableArea> walkableArea);
 
             // Methods
             static const std::string SpaceObjectType() { return ShipDefinition::DefinitionType(); }
@@ -42,17 +43,19 @@ namespace space
             sf::Vector2f prevPosition() const { return _prevPosition; }
             void prevPosition(const sf::Vector2f &pos) { _prevPosition = pos; }
 
-            WalkableArea &walkableArea() { return *_walkableArea.get(); }
-            const WalkableArea &walkableArea() const { return *_walkableArea.get(); }
+            Area &area() { return _area; }
+            const Area &area() const { return _area; }
 
             virtual void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform);
-            virtual void draw(GameSession &session, sf::RenderTarget &target);
+            virtual void draw(GameSession &session, RenderCamera &target);
             virtual void onPostLoad(GameSession &session, LoadingContext &context);
             virtual bool doesMouseHover(GameSession &session, sf::Vector2f mousePosition) const;
 
+            virtual void drawInterior(GameSession &session, RenderCamera &target);
+
         private:
             // Fields
-            std::unique_ptr<WalkableArea> _walkableArea;
+            Area _area;
             std::vector<std::unique_ptr<PolygonCollider>> _colliders;
             std::vector<std::unique_ptr<EngineFlameEffect>> _engineEffects;
 

@@ -8,6 +8,7 @@
 #include "../debug/draw_debug.hpp"
 #include "../definitions/shader_definition.hpp"
 #include "../utils.hpp"
+#include "../render_camera.hpp"
 #include "planet_surface.hpp"
 
 namespace space
@@ -40,7 +41,7 @@ namespace space
         updateWorldTransform(parentTransform);
     }
 
-    void Planet::draw(GameSession &session, sf::RenderTarget &target)
+    void Planet::draw(GameSession &session, RenderCamera &target)
     {
         if (_shader == nullptr)
         {
@@ -83,7 +84,7 @@ namespace space
         sf::RenderStates states;
         states.transform = _worldTransform;
 
-        target.draw(sphereSprite, states);
+        target.texture().draw(sphereSprite, states);
         DrawDebug::glDraw++;
     }
 

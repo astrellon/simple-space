@@ -14,7 +14,8 @@
 #include "../../game/planet.hpp"
 #include "../../game/planet_surface.hpp"
 #include "../../game/star_system.hpp"
-#include "../../game/walkable_area.hpp"
+#include "../../game/area.hpp"
+#include "../../game/area_instances.hpp"
 #include "../../game/items/placed_item.hpp"
 #include "../../game/items/placeable_item.hpp"
 #include "../../game/items/chair.hpp"
@@ -40,16 +41,8 @@ namespace space
             {"spaceObjects", toJsonArray(input.spaceObjects())},
             {"items", toJsonArray(input.items())},
             {"playerController", toJson(input.playerController())},
-            {"characterControllers", toJsonArray(input.characterControllers())},
-            {"starSystems", toJsonArray(input.starSystems())},
-            {"planetSurfaces", toJsonArray(input.planetSurfaces())}
+            {"characterControllers", toJsonArray(input.characterControllers())}
         };
-
-        if (input.activeStarSystem())
-            result["activeStarSystem"] = input.activeStarSystem()->definition.id;
-
-        if (input.activePlanetSurface())
-            result["activePlanetSurface"] = input.activePlanetSurface()->definition.id;
 
         return result;
     }
@@ -60,50 +53,14 @@ namespace space
         auto result = std::make_unique<GameSession>(engine);
         auto &session = *result.get();
 
-        for (auto &spaceObject : j.at("spaceObjects"))
-            addFromJsonSpaceObject(spaceObject, session, context);
-
         for (auto &item : j.at("items"))
             addFromJsonItem(item, session);
 
+        for (auto &spaceObject : j.at("spaceObjects"))
+            addFromJsonSpaceObject(spaceObject, session, context);
+
         for (auto &characterControllers : j.at("characterControllers"))
             addFromJsonCharacterController(characterControllers, session);
-
-        for (auto &starSystem : j.at("starSystems"))
-            addFromJsonStarSystem(starSystem, session);
-
-        for (auto &planetSurfaces : j.at("planetSurfaces"))
-            addFromJsonPlanetSurface(planetSurfaces, session, context);
-
-        auto activeStarSystem = j.find("activeStarSystem");
-        if (activeStarSystem != j.end())
-        {
-            auto activeStarSystemId = activeStarSystem->get<DefinitionId>();
-            StarSystem *starSystem;
-            if (session.tryGetStarSystem(activeStarSystemId, &starSystem))
-            {
-                session.activeStarSystem(starSystem);
-            }
-            else
-            {
-                std::cout << "Unable to find active star system " << activeStarSystemId << std::endl;
-            }
-        }
-
-        auto activePlanetSurface = j.find("activePlanetSurface");
-        if (activePlanetSurface != j.end())
-        {
-            auto activePlanetSurfaceId = activePlanetSurface->get<DefinitionId>();
-            PlanetSurface *planetSurface;
-            if (session.tryGetPlanetSurface(activePlanetSurfaceId, &planetSurface))
-            {
-                session.activePlanetSurface(planetSurface);
-            }
-            else
-            {
-                std::cout << "Unable to find active planet surface " << activePlanetSurfaceId << std::endl;
-            }
-        }
 
         addFromJsonPlayerController(j.at("playerController"), *result);
 
@@ -123,6 +80,9 @@ namespace space
 
     json toJson(const SpaceObject &input)
     {
+        if (input.isGenerated())
+            return json {};
+
         if (input.type() == Character::SpaceObjectType())
             return toJson(dynamic_cast<const Character &>(input));
 
@@ -130,13 +90,13 @@ namespace space
             return toJson(dynamic_cast<const Ship &>(input));
 
         else if (input.type() == Planet::SpaceObjectType())
-            return json {};
+            return toJson(dynamic_cast<const Planet &>(input));
 
         else if (input.type() == SpacePortal::SpaceObjectType())
             return toJson(dynamic_cast<const SpacePortal &>(input));
 
         else if (input.type() == PlacedItem::SpaceObjectType())
-            return json {};
+            return toJson(dynamic_cast<const PlacedItem &>(input));
 
         else if (input.type() == GrassEffect::SpaceObjectType())
             return toJson(dynamic_cast<const GrassEffect &>(input));
@@ -160,7 +120,13 @@ namespace space
             return addFromJsonSpacePortal(j, session);
 
         if (type == PlacedItem::SpaceObjectType())
-            throw std::runtime_error("Unable to add placed item without walkable area");
+            return addFromJsonPlacedItem(j, session);
+
+        if (type == StarSystem::SpaceObjectType())
+            return addFromJsonStarSystem(j, session, context);
+
+        if (type == PlanetSurface::SpaceObjectType())
+            return addFromJsonPlanetSurface(j, session, context);
 
         if (type == GrassEffect::SpaceObjectType())
             return addFromJsonGrassEffect(j, session);
@@ -197,7 +163,7 @@ namespace space
         auto result = toJsonBase(input);
         result["rotationSpeed"] = input.rotationSpeed();
         result["speed"] = toJson(input.speed());
-        result["walkableArea"] = toJson(input.walkableArea());
+        result["area"] = toJson(input.area());
         result["definitionId"] = input.definition.id;
         result["prevPosition"] = toJson(input.prevPosition());
 
@@ -215,9 +181,7 @@ namespace space
             return false;
         }
 
-        auto walkableArea = fromJsonWalkableArea(j.at("walkableArea"), session, context);
-
-        auto result = session.createObject<Ship>(id, *definition, std::move(walkableArea));
+        auto result = session.createObject<Ship>(id, *definition);
         result->transform(fromJsonTransform(j.at("transform")));
         sf::Vector2f prevPosition;
         if (!Utils::json_try_set(j, "prevPosition", prevPosition))
@@ -228,6 +192,14 @@ namespace space
 
         result->rotationSpeed(j.at("rotationSpeed").get<float>());
         result->speed(fromJsonVector2f(j.at("speed")));
+
+        auto areaJson = j.find("area");
+        if (areaJson != j.end())
+        {
+            auto area = &result->area();
+            auto instances = context.getAreaInstance(area);
+            addFromJsonAreaInstances(*areaJson, instances);
+        }
 
         return true;
     }
@@ -241,20 +213,19 @@ namespace space
         };
     }
 
-    bool addFromJsonPlacedItem(const json &j, WalkableAreaInstances &area)
+    bool addFromJsonPlacedItem(const json &j, GameSession &session)
     {
         auto itemId = j.at("itemId").get<ItemId>();
         auto position = fromJsonVector2f(j.at("position"));
-        area.addPostLoadPlaceable(itemId, position);
 
-        return true;
-    }
+        PlaceableItem *item;
+        if (!session.tryGetItem<PlaceableItem>(itemId, &item))
+        {
+            return false;
+        }
 
-    bool addFromJsonGrassEffect(const json &j, WalkableAreaInstances &area)
-    {
-        auto defId = j.at("definitionId").get<DefinitionId>();
-        auto position = fromJsonVector2f(j.at("position"));
-        area.addPostLoadGrassEffect(defId, position);
+        auto result = session.createObject<PlacedItem>(item);
+        result->transform().position = position;
 
         return true;
     }
@@ -287,12 +258,18 @@ namespace space
 
     json toJson(const GrassEffect &input)
     {
-        throw std::runtime_error("Cannot save grass effect!");
+        return json {
+            {"type", input.type()},
+            {"position", toJson(input.transform().position)},
+            {"definitionId", input.definition.id},
+            {"id", input.id}
+        };
     }
     bool addFromJsonGrassEffect(const json &j, GameSession &session)
     {
         auto id = j.at("id").get<ObjectId>();
         auto definitionId = j.at("definitionId").get<DefinitionId>();
+        auto position = fromJsonVector2f(j.at("position"));
 
         const GrassEffectDefinition *definition;
         if (!session.engine().definitionManager().tryGet(definitionId, &definition))
@@ -302,65 +279,28 @@ namespace space
         }
 
         auto result = session.createObject<GrassEffect>(id, *definition);
+        result->transform().position = position;
 
         return true;
     }
 
-    json toJson(const WalkableArea &input)
+    json toJson(const Area &input)
     {
-        json charactersJson;
-        for (auto character : input.characters())
-            charactersJson.push_back(character->id);
-
-        json grassEffectJson;
-        for (auto grassEffect : input.grassEffects())
-            grassEffectJson.push_back(grassEffect->id);
+        json objIdsJson;
+        for (auto obj : input.objects())
+            objIdsJson.push_back(obj->id);
 
         return json {
-            {"characterIds", charactersJson},
-            {"placedItems", toJsonArray(input.placedItems())},
-            {"grassEffectIds", grassEffectJson}
+            {"objectIds", objIdsJson}
         };
     }
 
-    std::unique_ptr<WalkableArea> fromJsonWalkableArea(const json &j, GameSession &session, LoadingContext &context)
+    bool addFromJsonAreaInstances(const json &j, AreaInstances *instances)
     {
-        auto result = std::make_unique<WalkableArea>();
-        auto instances = context.getWalkableInstances(result.get());
-
-        fromJsonWalkableAreaInstances(j, *instances);
-
-        return result;
-    }
-
-    bool fromJsonWalkableAreaInstances(const json &j, WalkableAreaInstances &instances)
-    {
-        auto characterIds = j.find("characterIds");
-        if (characterIds != j.end())
+        auto objectIds = j.at("objectIds");
+        for (auto objectId : objectIds)
         {
-            for (auto &jsonId : *characterIds)
-            {
-                auto id = jsonId.get<ObjectId>();
-                instances.addPostLoadCharacter(id);
-            }
-        }
-
-        auto placedItems = j.find("placedItems");
-        if (placedItems != j.end())
-        {
-            for (auto &placedItem : *placedItems)
-            {
-                addFromJsonPlacedItem(placedItem, instances);
-            }
-        }
-
-        auto grassEffects = j.find("grassEffects");
-        if (grassEffects != j.end())
-        {
-            for (auto &grassEffect : *grassEffects)
-            {
-                addFromJsonGrassEffect(grassEffect, instances);
-            }
+            instances->addPostLoadObject(objectId);
         }
 
         return true;
@@ -368,21 +308,12 @@ namespace space
 
     json toJson(const StarSystem &input)
     {
-        json spaceObjectIds;
-        for (auto obj : input.objects())
-        {
-            if (obj->type() == Planet::SpaceObjectType())
-                continue;
-
-            spaceObjectIds.push_back(obj->id);
-        }
-
         return json {
             {"definitionId", input.definition.id},
-            {"spaceObjectIds", spaceObjectIds}
+            {"area", toJson(input.area())}
         };
     }
-    bool addFromJsonStarSystem(const json &j, GameSession &session)
+    bool addFromJsonStarSystem(const json &j, GameSession &session, LoadingContext &context)
     {
         auto definitionId = j.at("definitionId").get<DefinitionId>();
         const StarSystemDefinition *definition;
@@ -393,21 +324,9 @@ namespace space
         }
 
         auto starSystem = session.createStarSystem(*definition);
-        starSystem->initFromDefinition();
-
-        auto spaceObjectIds = j.at("spaceObjectIds");
-        for (auto &spaceObjectId : spaceObjectIds)
-        {
-            auto id = spaceObjectId.get<ObjectId>();
-            SpaceObject *obj;
-            if (!session.tryGetSpaceObject(id, &obj))
-            {
-                std::cout << "Unable to find space object " << id << " for star system " << definitionId << std::endl;
-                continue;
-            }
-
-            starSystem->addObject(obj);
-        }
+        starSystem->init(session);
+        auto instances = context.getAreaInstance(&starSystem->area());
+        addFromJsonAreaInstances(j.at("area"), instances);
 
         return true;
     }
@@ -417,7 +336,7 @@ namespace space
         return json {
             {"planetId", input.partOfPlanet()->id},
             {"definitionId", input.definition.id},
-            {"walkableArea", toJson(input.walkableArea())}
+            {"area", toJson(input.area())}
         };
     }
     bool addFromJsonPlanetSurface(const json &j, GameSession &session, LoadingContext &context)
@@ -437,9 +356,11 @@ namespace space
             std::cout << "Unable to find planet " << planetId << " for planet surface" << std::endl;
             return false;
         }
-        auto walkableArea = fromJsonWalkableArea(j.at("walkableArea"), session, context);
-        auto planetSurface = session.createPlanetSurface(*definition, std::move(walkableArea));
+        auto planetSurface = session.createPlanetSurface(*definition);
         planetSurface->partOfPlanet(planet);
+
+        auto instances = context.getAreaInstance(&planetSurface->area());
+        addFromJsonAreaInstances(j.at("area"), instances);
 
         return true;
     }

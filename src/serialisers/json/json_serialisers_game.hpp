@@ -15,8 +15,8 @@ namespace space
     class Ship;
     class Planet;
     class PlacedItem;
-    class WalkableArea;
-    class WalkableAreaInstances;
+    class Area;
+    class AreaInstances;
     class SpaceTransform;
     class CharacterController;
     class NpcController;
@@ -49,17 +49,13 @@ namespace space
     bool addFromJsonShip(const json &j, GameSession &session, LoadingContext &context);
 
     json toJson(const PlacedItem &input);
-    bool addFromJsonPlacedItem(const json &j, WalkableAreaInstances &instances);
+    bool addFromJsonPlacedItem(const json &j, GameSession &session);
 
-    bool addFromJsonGrassEffect(const json &j, WalkableAreaInstances &instances);
-
-    json toJson(const WalkableArea &input);
-    std::unique_ptr<WalkableArea> fromJsonWalkableArea(const json &j, GameSession &session, LoadingContext &context);
-
-    bool fromJsonWalkableAreaInstances(const json &j, WalkableAreaInstances &instances);
+    json toJson(const Area &input);
+    bool addFromJsonAreaInstances(const json &j, AreaInstances *instances);
 
     json toJson(const StarSystem &input);
-    bool addFromJsonStarSystem(const json &j, GameSession &session);
+    bool addFromJsonStarSystem(const json &j, GameSession &session, LoadingContext &context);
 
     json toJson(const PlanetSurface &input);
     bool addFromJsonPlanetSurface(const json &j, GameSession &session, LoadingContext &context);

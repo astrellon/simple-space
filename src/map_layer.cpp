@@ -122,8 +122,8 @@ namespace space
 
     void MapLayer::updateVisibility(const sf::View& view) const
     {
-        auto viewCorner = view.getCenter() / Utils::getInsideScale();
-        auto size = view.getSize() / Utils::getInsideScale();
+        auto viewCorner = view.getCenter() / Utils::InsideScale;
+        auto size = view.getSize() / Utils::InsideScale;
         viewCorner -= size / 2.f;
 
         int posX = static_cast<int>(std::floor(viewCorner.x / m_chunkSize.x));

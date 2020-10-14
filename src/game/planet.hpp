@@ -13,6 +13,7 @@ namespace space
     class GameSession;
     class PlanetSurface;
     class LoadingContext;
+    class RenderCamera;
 
     class Planet : public CelestialBody
     {
@@ -30,9 +31,11 @@ namespace space
             virtual std::string type() const { return SpaceObjectType(); }
 
             virtual void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform);
-            virtual void draw(GameSession &session, sf::RenderTarget &target);
+            virtual void draw(GameSession &session, RenderCamera &target);
             virtual void onPostLoad(GameSession &session, LoadingContext &context);
             virtual bool doesMouseHover(GameSession &session, sf::Vector2f mousePosition) const;
+            virtual bool isGenerated() const { return true; }
+            virtual DrawLayers::Type drawLayer() const { return DrawLayers::Background; }
 
             void addPostLoadPlanetSurfaceId(const DefinitionId &id) { _onPostLoadPlanetSurfaceIds.push_back(id); }
             void addPlanetSurface(PlanetSurface *planetSurface);

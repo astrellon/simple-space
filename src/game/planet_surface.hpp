@@ -6,8 +6,8 @@
 
 #include "../non_copyable.hpp"
 #include "../definitions/planet_surface_definition.hpp"
-#include "walkable_area.hpp"
 #include "../map_layer.hpp"
+#include "area.hpp"
 
 namespace space
 {
@@ -17,24 +17,27 @@ namespace space
     class RenderCamera;
     class LoadingContext;
 
-    class PlanetSurface : private NonCopyable
+    class PlanetSurface : public SpaceObject
     {
         public:
             // Fields
             const PlanetSurfaceDefinition &definition;
 
             // Constructor
-            PlanetSurface(GameSession &session, const PlanetSurfaceDefinition &definition);
-            PlanetSurface(GameSession &session, const PlanetSurfaceDefinition &definition, std::unique_ptr<WalkableArea> walkableArea);
+            PlanetSurface(const PlanetSurfaceDefinition &definition);
+            virtual ~PlanetSurface() { }
 
             // Methods
-            WalkableArea &walkableArea() { return *_walkableArea.get(); }
-            const WalkableArea &walkableArea() const { return *_walkableArea.get(); }
+            static const std::string SpaceObjectType() { return PlanetSurfaceDefinition::DefinitionType(); }
+            virtual std::string type() const { return SpaceObjectType(); }
 
-            void update(sf::Time dt);
-            void draw(RenderCamera &target);
-            void onPostLoad(LoadingContext &context);
-            bool checkForMouse(sf::Vector2f mousePosition);
+            Area &area() { return _area; }
+            const Area &area () const { return _area; }
+
+            virtual void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransforms);
+            virtual void draw(GameSession &session, RenderCamera &target);
+            virtual void onPostLoad(GameSession &session, LoadingContext &context);
+            virtual bool checkForMouse(GameSession &session, sf::Vector2f mousePosition);
 
             void partOfPlanet(Planet *planet) { _partOfPlanet = planet; }
             Planet *partOfPlanet() const { return _partOfPlanet; }
@@ -42,8 +45,7 @@ namespace space
         private:
 
             // Fields
-            GameSession &_session;
-            std::unique_ptr<WalkableArea> _walkableArea;
+            Area _area;
             Planet *_partOfPlanet;
             std::vector<std::unique_ptr<MapLayer>> _mapLayers;
 

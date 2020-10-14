@@ -2,23 +2,18 @@
 
 #include "../utils.hpp"
 #include "../game_session.hpp"
-#include "walkable_area.hpp"
-
-#include "items/placed_item.hpp"
-
 #include "../physics/polygon_collider.hpp"
-
 #include "../debug/draw_debug.hpp"
+#include "../render_camera.hpp"
+#include "../controllers/player_controller.hpp"
+#include "character.hpp"
+#include "items/placed_item.hpp"
+#include "area.hpp"
 
 namespace space
 {
-    Ship::Ship(const ObjectId &id, const ShipDefinition &definition) : Ship(id, definition, std::make_unique<WalkableArea>())
-    {
-
-    }
-
-    Ship::Ship(const ObjectId &id, const ShipDefinition &definition, std::unique_ptr<WalkableArea> walkableArea):
-        SpaceObject(id), definition(definition), _sprite(*definition.texture), _interiorSprite(*definition.interiorTexture), _rotationSpeed(0), rotateInput(0), _walkableArea(std::move(walkableArea))
+    Ship::Ship(const ObjectId &id, const ShipDefinition &definition):
+        SpaceObject(id), definition(definition), _sprite(*definition.texture), _interiorSprite(*definition.interiorTexture), _rotationSpeed(0), rotateInput(0), _area(AreaType::Ship, this), disableRender(false)
     {
         auto size = definition.texture->getSize();
         _sprite.setOrigin(size.x / 2, size.y / 2);
@@ -26,7 +21,7 @@ namespace space
 
         size = definition.interiorTexture->getSize();
         _interiorSprite.setOrigin(size.x / 2, size.y / 2);
-        _interiorSprite.setScale(Utils::getInsideScale(), Utils::getInsideScale());
+        _interiorSprite.setScale(Utils::InsideScale, Utils::InsideScale);
         _interiorSprite.move(sf::Vector2f(definition.interiorTextureOffset) * 0.25f);
 
         createMainCollider();
@@ -35,11 +30,9 @@ namespace space
             createExtraCollider(points);
         }
 
-        _walkableArea->partOfShip(this);
-
         for (auto &collider : _colliders)
         {
-            _walkableArea->addStaticCollider(*collider);
+            _area.addStaticCollider(*collider);
         }
 
         if (definition.engineGlowTexture != nullptr)
@@ -103,7 +96,7 @@ namespace space
 
         updateWorldTransform(parentTransform);
 
-        _walkableArea->update(session, dt, _worldTransform);
+        _area.update(session, dt, _worldTransform);
 
         for (auto &engineEffect : _engineEffects)
         {
@@ -111,23 +104,15 @@ namespace space
         }
     }
 
-    void Ship::draw(GameSession &session, sf::RenderTarget &target)
+    void Ship::draw(GameSession &session, RenderCamera &target)
     {
-        target.draw(_sprite, _worldTransform);
-        DrawDebug::glDraw++;
-
-        if (session.isControllingCharacter())
+        if (disableRender)
         {
-            auto drawPreTeleport = session.drawingPreTeleport();
-
-            if ((session.getShipPlayerIsInsideOf() == this && !drawPreTeleport) ||
-                (session.getShipPlayerCloneIsInsideOf() == this && drawPreTeleport))
-            {
-                target.draw(_interiorSprite, _worldTransform);
-                DrawDebug::glDraw++;
-                _walkableArea->draw(session, target);
-            }
+            return;
         }
+
+        target.texture().draw(_sprite, _worldTransform);
+        DrawDebug::glDraw++;
 
         for (auto &engineEffect : _engineEffects)
         {
@@ -145,14 +130,29 @@ namespace space
     void Ship::onPostLoad(GameSession &session, LoadingContext &context)
     {
         SpaceObject::onPostLoad(session, context);
-        _walkableArea->onPostLoad(session, context);
+        _area.onPostLoad(session, context);
     }
 
     bool Ship::doesMouseHover(GameSession &session, sf::Vector2f mousePosition) const
     {
-        auto worldPos = Utils::getPosition(_worldTransform);
-        auto local = mousePosition - worldPos;
-        return _spriteBounds.contains(local);
+        auto &controller = session.playerController();
+        if (controller.controlling() == ControlCharacter && controller.controllingCharacter()->insideArea()->partOfShip() == this)
+        {
+            return _area.checkForMouse(session, mousePosition);
+        }
+        else
+        {
+            auto worldPos = Utils::getPosition(_worldTransform);
+            auto local = mousePosition - worldPos;
+            return _spriteBounds.contains(local);
+        }
+    }
+
+    void Ship::drawInterior(GameSession &session, RenderCamera &target)
+    {
+        target.texture().draw(_interiorSprite, _worldTransform);
+        DrawDebug::glDraw++;
+        _area.draw(session, target);
     }
 
     void Ship::createMainCollider()
@@ -162,7 +162,7 @@ namespace space
 
         // Fill polygon structure with actual data. Any winding order works.
         // The first polyline defines the main polygon.
-        auto maxSize = std::max(size.x, size.y) * Utils::getInsideScale();
+        auto maxSize = std::max(size.x, size.y) * Utils::InsideScale;
         collider->setMainPolygon({{maxSize, -maxSize}, {maxSize, maxSize}, {-maxSize, maxSize}, {-maxSize, -maxSize}});
 
         // Following polylines define holes.

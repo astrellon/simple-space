@@ -3,50 +3,34 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 
+#include "game/space_object.hpp"
+
 namespace space
 {
     class PlanetSurface;
     class StarSystem;
     class SpaceObject;
-    class Character;
-    class WalkableArea;
+    class Area;
 
     class NextFrameState
     {
         public:
-            class MoveCharacter
-            {
-                public:
-                    // Fields
-                    Character *character;
-                    sf::Vector2f position;
-                    WalkableArea *area;
-
-                    // Constructor
-                    MoveCharacter(Character *character, sf::Vector2f position, WalkableArea *area) :
-                        character(character), position(position), area(area) {}
-
-                    // Methods
-            };
-
             class MoveSpaceObject
             {
                 public:
                     // Fields
                     SpaceObject *obj;
                     sf::Vector2f position;
-                    StarSystem *starSystem;
+                    Area *area;
 
                     // Constructor
-                    MoveSpaceObject(SpaceObject *obj, sf::Vector2f position, StarSystem *starSystem) :
-                        obj(obj), position(position), starSystem(starSystem) {}
+                    MoveSpaceObject(SpaceObject *obj, sf::Vector2f position, Area *area) :
+                        obj(obj), position(position), area(area) {}
 
                     // Methods
             };
 
             // Fields
-            StarSystem *nextStarSystem;
-            PlanetSurface *nextPlanetSurface;
 
             // Constructor
             NextFrameState();
@@ -54,15 +38,15 @@ namespace space
             // Methods
             void clear();
 
-            void addMoveCharacter(Character *character, sf::Vector2f position, WalkableArea *area);
-            void addMoveSpaceObject(SpaceObject *obj, sf::Vector2f position, StarSystem *starSystem);
+            void addMoveSpaceObject(SpaceObject *obj, sf::Vector2f position, Area *area);
+            void addRemoveObject(const ObjectId &id);
 
-            const std::vector<MoveCharacter> &moveCharacters() const { return _moveCharacters; }
             const std::vector<MoveSpaceObject> &moveSpaceObject() const { return _moveSpaceObjects; }
+            const std::vector<ObjectId> &removeObjects() const { return _removeObjects; }
 
         private:
-
-            std::vector<MoveCharacter> _moveCharacters;
+            // Fields
             std::vector<MoveSpaceObject> _moveSpaceObjects;
+            std::vector<ObjectId> _removeObjects;
     };
 } // space

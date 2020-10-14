@@ -6,16 +6,18 @@
 
 #include "../non_copyable.hpp"
 #include "../space_transform.hpp"
-#include "interactions/interactable.hpp"
 #include "../definitions/base_definition.hpp"
+#include "draw_layers.hpp"
+#include "interactions/interactable.hpp"
 
 namespace space
 {
     typedef std::string ObjectId;
 
     class GameSession;
-    class StarSystem;
     class LoadingContext;
+    class Area;
+    class RenderCamera;
 
     class SpaceObject : private NonCopyable
     {
@@ -24,7 +26,7 @@ namespace space
             const ObjectId id;
 
             // Constructor
-            SpaceObject(const ObjectId &id) : id(id), _insideStarSystem(nullptr), _interactable(this) { }
+            SpaceObject(const ObjectId &id) : id(id), _insideArea(nullptr), _interactable(this) { }
             virtual ~SpaceObject() { }
 
             // Methods
@@ -32,35 +34,35 @@ namespace space
 
             const SpaceTransform &transform() const { return _transform; }
             SpaceTransform &transform() { return _transform; }
-
             void transform(const SpaceTransform &transform) { _transform = transform; }
             void transform(const SpaceTransform &&transform) { _transform = transform; }
-
             const sf::Transform &worldTransform() const { return _worldTransform; }
 
-            void starSystemId(const DefinitionId &id) { _insideStarSystemId = id; }
-            void starSystem(StarSystem *starSystem) { _insideStarSystem = starSystem; }
-            StarSystem *starSystem() const { return _insideStarSystem; }
-
-            virtual void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform) = 0;
-            virtual void draw(GameSession &session, sf::RenderTarget &target) = 0;
-
-            virtual void onPostLoad(GameSession &session, LoadingContext &context) { }
-
-            virtual bool doesMouseHover(GameSession &session, sf::Vector2f mousePosition) const { return false; }
-
             Interactable &interactable() { return _interactable; }
+
+            virtual void insideArea(Area *area) { _insideArea = area; }
+            virtual Area *insideArea() const { return _insideArea; }
+
+            virtual void prePhysics(GameSession &session, sf::Time dt, const sf::Transform &parentTransform) { }
+            virtual void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform) = 0;
+            virtual void draw(GameSession &session, RenderCamera &target) = 0;
+            virtual void onPostLoad(GameSession &session, LoadingContext &context) { }
+            virtual bool doesMouseHover(GameSession &session, sf::Vector2f mousePosition) const { return false; }
+            virtual bool isGenerated() const { return false; }
+
+            virtual DrawLayers::Type drawLayer() const { return DrawLayers::Main; }
+
+            SpaceObject *rootObject();
 
         protected:
             // Fields
             SpaceTransform _transform;
             sf::Transform _worldTransform;
-            DefinitionId _insideStarSystemId;
-            StarSystem *_insideStarSystem;
+            Area *_insideArea;
             Interactable _interactable;
 
             // Methods
-            void updateWorldTransform(const sf::Transform &parentTransform)
+            inline void updateWorldTransform(const sf::Transform &parentTransform)
             {
                 _worldTransform = parentTransform * _transform.getTransform();
             }

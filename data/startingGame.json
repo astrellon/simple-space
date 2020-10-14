@@ -1,5 +1,4 @@
 {
-    "activePlanetSurface": "PLANET_GRASSY_1",
     "items": [
         {
             "definitionId": "CHAIR_1",
@@ -98,37 +97,82 @@
             "controllingCharacter": "BIRD_CHAR"
         }
     ],
-    "planetSurfaces": [
+    "playerController": {
+        "controlling": 1,
+        "controllingCharacter": "PLAYER_CHAR",
+        "controllingShip": "PLAYER",
+        "inventory": {
+            "items": [
+            ]
+        }
+    },
+    "spaceObjects": [
+        {
+            "definitionId": "STAR_SYSTEM_1",
+            "area": {
+                "objectIds": [
+                    "PLAYER",
+                    "OTHER",
+                    "SPACE_STATION",
+                    "SS_SPACE_PORTAL",
+                    "SS_SPACE_PORTAL2"
+                ]
+            },
+            "type": "star-system"
+        },
+        {
+            "definitionId": "STAR_SYSTEM_2",
+            "area": {
+                "objectIds": [
+                    "SS2_SPACE_PORTAL"
+                ]
+            },
+            "type": "star-system"
+        },
+        {
+            "definitionId": "STAR_SYSTEM_3",
+            "area": {
+                "objectIds": [
+                    "SS3_SPACE_PORTAL"
+                ]
+            },
+            "type": "star-system"
+        },
+        {
+            "type": "grass-effect",
+            "id": "PLANET1_GRASS_1",
+            "definitionId": "GRASS_1",
+            "position": [150, 150]
+        },
+        {
+            "type": "placed-item",
+            "itemId": 10,
+            "position": [50, 50]
+        },
+        {
+            "type": "placed-item",
+            "itemId": 3,
+            "position": [150, 50]
+        },
         {
             "planetId": "SS_PLANET_1",
             "definitionId": "PLANET_GRASSY_1",
-            "walkableArea": {
-                "characterIds": [
+            "area": {
+                "objectIds": [
                     "FRED",
-                    "PLAYER_CHAR",
-                    "BIRD_CHAR"
-                ],
-                "placedItems": [
-                    {
-                        "itemId": 10,
-                        "position": [ 100.0, 50.0 ],
-                        "type": "placed-item"
-                    },
-                    {
-                        "itemId": 3,
-                        "position": [ 50.0, 50.0 ],
-                        "type": "placed-item"
-                    }
-                ],
-                "grassEffects": [
+                    "BIRD_CHAR",
+                    "ITEM_10",
+                    "ITEM_3",
+                    "PLANET1_GRASS_1"
                 ]
-            }
+            },
+            "type": "planet-surface"
         },
         {
             "planetId": "SS_PLANET_1",
             "definitionId": "PLANET_GRASSY_1-2",
-            "walkableArea": {
-                "characterIds": [
+            "area": {
+                "objectIds": [
                     "FRONK"
                 ],
                 "placedItems": [
@@ -143,13 +187,14 @@
                         "type": "placed-item"
                     }
                 ]
-            }
+            },
+            "type": "planet-surface"
         },
         {
             "planetId": "SS_PLANET_2",
             "definitionId": "PLANET_SANDY_1",
-            "walkableArea": {
-                "characterIds": null,
+            "area": {
+                "objectIds": [],
                 "placedItems": [
                     {
                         "itemId": 4,
@@ -157,19 +202,14 @@
                         "type": "placed-item"
                     }
                 ]
-            }
-        }
-    ],
-    "playerController": {
-        "controlling": 2,
-        "controllingCharacter": "PLAYER_CHAR",
-        "controllingShip": "PLAYER",
-        "inventory": {
-            "items": [
-            ]
-        }
-    },
-    "spaceObjects": [
+            },
+            "type": "planet-surface"
+        },
+        {
+            "type": "placed-item",
+            "itemId": 20,
+            "position": [0, 0]
+        },
         {
             "definitionId": "SPACE_STATION_1",
             "id": "SPACE_STATION",
@@ -181,16 +221,19 @@
                 "scale": 1
             },
             "type": "ship",
-            "walkableArea": {
-                "characterIds": ["TUMBO"],
-                "placedItems": [
-                    {
-                        "itemId": 20,
-                        "position": [0, 0],
-                        "type": "placed-item"
-                    }
-                ]
+            "area": {
+                "objectIds": ["TUMBO", "ITEM_20"]
             }
+        },
+        {
+            "type": "placed-item",
+            "itemId": 0,
+            "position": [0, -10]
+        },
+        {
+            "type": "placed-item",
+            "itemId": 1,
+            "position": [0, 0]
         },
         {
             "definitionId": "SHIP_1",
@@ -198,25 +241,14 @@
             "rotationSpeed": 0.0,
             "speed": [ 0.0, 0.0 ],
             "transform": {
-                "position": [ -200.0, 200.0 ],
-                "rotation": 0.0,
-                "scale": 1.0
+                "position": [ -200.0, 200.0 ]
             },
             "type": "ship",
-            "walkableArea": {
-                "characterIds": [
-                ],
-                "placedItems": [
-                    {
-                        "itemId": 0,
-                        "position": [ 0.0, -10.0 ],
-                        "type": "placed-item"
-                    },
-                    {
-                        "itemId": 1,
-                        "position": [ 0.0, 0.0 ],
-                        "type": "placed-item"
-                    }
+            "area": {
+                "objectIds": [
+                    "PLAYER_CHAR",
+                    "ITEM_0",
+                    "ITEM_1"
                 ]
             }
         },
@@ -226,13 +258,11 @@
             "rotationSpeed": 0.0,
             "speed": [ 0.0, 0.0 ],
             "transform": {
-                "position": [ 200.0, 0.0 ],
-                "rotation": 0.0,
-                "scale": 1.0
+                "position": [ 200.0, 0.0 ]
             },
             "type": "ship",
-            "walkableArea": {
-                "characterIds": [ "GREG" ],
+            "area": {
+                "objectIds": [ "GREG" ],
                 "placedItems": [
                     {
                         "itemId": 5,
@@ -251,9 +281,8 @@
             "definitionId": "PLAYER_CHAR",
             "id": "PLAYER_CHAR",
             "transform": {
-                "position": [ 80.0, 80.0 ],
-                "rotation": 0.0,
-                "scale": 0.1666666716337204
+                "position": [0, 0],
+                "rotation": 0.0
             },
             "type": "character"
         },
@@ -262,16 +291,14 @@
             "id": "BIRD_CHAR",
             "type": "character",
             "transform": {
-                "position": [ 40, 40 ]
+                "position": [80, 80]
             }
         },
         {
             "definitionId": "GREG_CHAR",
             "id": "GREG",
             "transform": {
-                "position": [ 0.0, 0.0 ],
-                "rotation": 0.0,
-                "scale": 0.1666666716337204
+                "position": [ 0.0, 0.0 ]
             },
             "type": "character"
         },
@@ -279,9 +306,7 @@
             "definitionId": "FRED_CHAR",
             "id": "FRED",
             "transform": {
-                "position": [ 40.0, 20.0 ],
-                "rotation": 0.0,
-                "scale": 0.1666666716337204
+                "position": [ 40.0, 20.0 ]
             },
             "type": "character"
         },
@@ -289,9 +314,7 @@
             "definitionId": "FRONK_CHAR",
             "id": "FRONK",
             "transform": {
-                "position": [ 20.0, 30.0 ],
-                "rotation": 0.0,
-                "scale": 0.1666666716337204
+                "position": [ 20.0, 30.0 ]
             },
             "type": "character"
         },
@@ -299,9 +322,7 @@
             "definitionId": "TUMBO_CHAR",
             "id": "TUMBO",
             "transform": {
-                "position": [ 0.0, -26.0 ],
-                "rotation": 0.0,
-                "scale": 0.1666666716337204
+                "position": [ 0.0, -26.0 ]
             },
             "type": "character"
         },
@@ -311,9 +332,7 @@
             "type": "space-portal",
             "targetObjectId": "SS2_SPACE_PORTAL",
             "transform": {
-                "position": [ 300, 0 ],
-                "rotation": 0,
-                "scale": 1
+                "position": [ 300, 0 ]
             }
         },
         {
@@ -322,9 +341,7 @@
             "type": "space-portal",
             "targetObjectId": "SS3_SPACE_PORTAL",
             "transform": {
-                "position": [ -800, 0 ],
-                "rotation": 0,
-                "scale": 1
+                "position": [ -800, 0 ]
             }
         },
         {
@@ -333,9 +350,7 @@
             "type": "space-portal",
             "targetObjectId": "SS_SPACE_PORTAL",
             "transform": {
-                "position": [ 400, 0 ],
-                "rotation": 0,
-                "scale": 1
+                "position": [ 400, 0 ]
             }
         },
         {
@@ -344,34 +359,8 @@
             "type": "space-portal",
             "targetObjectId": "SS_SPACE_PORTAL2",
             "transform": {
-                "position": [ -400, 0 ],
-                "rotation": 0,
-                "scale": 1
+                "position": [ -400, 0 ]
             }
-        }
-    ],
-    "starSystems": [
-        {
-            "definitionId": "STAR_SYSTEM_1",
-            "spaceObjectIds": [
-                "PLAYER",
-                "OTHER",
-                "SPACE_STATION",
-                "SS_SPACE_PORTAL",
-                "SS_SPACE_PORTAL2"
-            ]
-        },
-        {
-            "definitionId": "STAR_SYSTEM_2",
-            "spaceObjectIds": [
-                "SS2_SPACE_PORTAL"
-            ]
-        },
-        {
-            "definitionId": "STAR_SYSTEM_3",
-            "spaceObjectIds": [
-                "SS3_SPACE_PORTAL"
-            ]
         }
     ]
 }

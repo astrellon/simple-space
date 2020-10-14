@@ -17,7 +17,7 @@ namespace space
 
     void Camera::update(sf::Time dt)
     {
-        zoomScale(_engine.cameraScale());
+        setZoomScaleFromEngine();
 
         if (_props.following)
         {
@@ -68,6 +68,11 @@ namespace space
             _zoomScale = scale;
             updateViewSize();
         }
+    }
+
+    void Camera::setZoomScaleFromEngine()
+    {
+        zoomScale(_engine.cameraScale());
     }
 
     void Camera::size(sf::Vector2f size)

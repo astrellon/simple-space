@@ -5,6 +5,7 @@
 #include "definition_manager.hpp"
 #include "camera.hpp"
 #include "render_camera.hpp"
+#include "limited_object_pool.hpp"
 
 #include <chrono>
 #include <SFML/Graphics.hpp>
@@ -56,10 +57,12 @@ namespace space
             sf::Time timeSinceStart() const;
             sf::Time timeSinceStartOnUpdate() const;
 
-            RenderCamera &sceneRender() { return _sceneRender; }
-            RenderCamera &sceneRenderTransition() { return _sceneRenderTransition; }
+            RenderCamera &sceneRender() { return *_sceneRender; }
+            RenderCamera &sceneRenderTransition() { return *_sceneRenderTransition; }
 
             sf::RenderWindow *window() { return _window; }
+
+            LimitedObjectPool<RenderCamera> &renderCameras() { return _renderCameras; }
 
             void initEffects();
 
@@ -77,17 +80,18 @@ namespace space
             std::unique_ptr<DefinitionManager> _definitionManager;
             std::unique_ptr<UIManager> _uiManager;
 
-            RenderCamera _sceneRender;
-            RenderCamera _sceneRenderTransition;
+            RenderCamera *_sceneRender;
+            RenderCamera *_sceneRenderTransition;
+            LimitedObjectPool<RenderCamera> _renderCameras;
             std::unique_ptr<BloomEffect> _bloomEffect;
             std::unique_ptr<Overlay> _overlay;
 
             float _spriteScale;
             float _cameraScale;
             bool _initedImgui;
+            bool _headlessMode;
             std::unique_ptr<GameSession> _currentSession;
             sf::RenderWindow *_window;
-            bool _headlessMode;
             sf::Clock _timer;
             sf::Clock _timerSinceStart;
             sf::Time _deltaTime;

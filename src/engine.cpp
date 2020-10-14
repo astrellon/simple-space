@@ -29,13 +29,23 @@ namespace space
 {
     Engine::Engine(sf::RenderWindow *window) :
         _spriteScale(1.0f), _window(window), _deltaTime(sf::Time::Zero), _timeSinceStartOnUpdate(sf::Time::Zero),
-        enableBloom(true), _cameraScale(2.0f), _initedImgui(false), _sceneRender(*this, "SceneRender"), _sceneRenderTransition(*this, "SceneRenderTrans"), _headlessMode(window == nullptr)
+        enableBloom(true), _cameraScale(2.0f), _initedImgui(false), _sceneRender(nullptr), _sceneRenderTransition(nullptr), _headlessMode(window == nullptr)
     {
         _resourceManager = std::make_unique<ResourceManager>();
         _definitionManager = std::make_unique<DefinitionManager>();
         _uiManager = std::make_unique<UIManager>();
 
         _frameStart = std::chrono::high_resolution_clock::now();
+
+        _sceneRender = _renderCameras.create(*this, "MainSceneCamera");
+        _sceneRenderTransition = _renderCameras.create(*this, "MainSceneCameraTransition");
+
+        for (auto i = 1; i < 4; i++)
+        {
+            std::stringstream ss;
+            ss << "RenderCamera " << i;
+            _renderCameras.create(*this, ss.str());
+        }
     }
     Engine::~Engine()
     {
@@ -71,7 +81,7 @@ namespace space
 
     sf::Vector2u Engine::renderSize() const
     {
-        return _sceneRender.texture().getSize();
+        return _sceneRender->texture().getSize();
     }
 
     GameSession *Engine::currentSession() const
@@ -178,13 +188,15 @@ namespace space
 
     void Engine::onResize(sf::Vector2f area)
     {
-        _sceneRender.onResize(area, _cameraScale);
-        _sceneRenderTransition.onResize(area, _cameraScale);
+        for (auto &renderCamera : _renderCameras.objects())
+        {
+            renderCamera->onResize(area, _cameraScale);
+        }
 
         if (!_headlessMode && !_initedImgui)
         {
             _initedImgui = true;
-            ImGui::SFML::Init(*_window, _sceneRender.texture(), true);
+            ImGui::SFML::Init(*_window, _sceneRender->texture(), true);
             auto &style = ImGui::GetStyle();
             style.WindowRounding = 0;
             style.ChildRounding = 0;
@@ -212,7 +224,7 @@ namespace space
 
         if (_initedImgui)
         {
-            ImGui::SFML::Update(_cameraScale, *_window, _sceneRender.texture(), _deltaTime);
+            ImGui::SFML::Update(_cameraScale, *_window, _sceneRender->texture(), _deltaTime);
         }
 
         //ImGui::IsMouseHoveringRect()
@@ -227,8 +239,10 @@ namespace space
             _currentSession->update(_deltaTime);
         }
 
-        _sceneRender.update(_deltaTime);
-        _sceneRenderTransition.update(_deltaTime);
+        for (auto usedRenderCamera : _renderCameras.used())
+        {
+            usedRenderCamera->update(_deltaTime);
+        }
 
         if (Keyboard::isKeyDown(sf::Keyboard::Tilde))
         {
@@ -247,7 +261,7 @@ namespace space
 
         if (DrawDebug::hideBackground)
         {
-            _sceneRender.texture().clear();
+            _sceneRender->texture().clear();
         }
 
         // Draw main scene
@@ -259,21 +273,21 @@ namespace space
         if (_initedImgui)
         {
             _uiManager->draw(*this);
-            ImGui::SFML::Render(_sceneRender.texture());
+            ImGui::SFML::Render(_sceneRender->texture());
         }
 
-        _sceneRender.texture().display();
+        _sceneRender->texture().display();
 
         // Draw from render texture to window
         _window->setActive(true);
         _window->clear();
         if (enableBloom)
         {
-            _bloomEffect->apply(_sceneRender.texture(), *_window);
+            _bloomEffect->apply(_sceneRender->texture(), *_window);
         }
         else
         {
-            sf::Sprite sprite(_sceneRender.texture().getTexture());
+            sf::Sprite sprite(_sceneRender->texture().getTexture());
             sprite.setScale(_cameraScale, _cameraScale);
 
             DrawDebug::glDraw++;

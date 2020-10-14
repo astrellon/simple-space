@@ -8,83 +8,18 @@
 #include "../game/planet_surface.hpp"
 #include "../game/items/item.hpp"
 #include "../game/items/placeable_item.hpp"
-#include "../game/walkable_area.hpp"
+#include "../game/area.hpp"
 #include "../game/star_system.hpp"
 #include "../utils.hpp"
 
 namespace space
 {
     CharacterController::CharacterController(GameSession &session) : _session(session), _controlling(ControlNone), _inventory(std::make_unique<Inventory>()),
-    _interactRangeObjects(0), _interactRangeObjectsSquared(0),
-    _interactRangeShips(0), _interactRangeShipsSquared(0),
+    _interactRangeObjects(0), _interactRangeShips(0),
     _character(nullptr), _ship(nullptr), _teleportClone(nullptr), _timeToNextIdle(0.0f), _dizzy(0.0f)
     {
-        interactRangeObjects(10.0f);
+        interactRangeObjects(100.0f);
         interactRangeShips(150.0f);
-    }
-
-    bool CharacterController::addCanInteractWith(Interactable *item)
-    {
-        auto find = std::find(_canInteractWith.begin(), _canInteractWith.end(), item);
-        if (find == _canInteractWith.end())
-        {
-            _canInteractWith.push_back(item);
-            return true;
-        }
-
-        return false;
-    }
-    bool CharacterController::removeCanInteractWith(Interactable *item)
-    {
-        auto find = std::find(_canInteractWith.begin(), _canInteractWith.end(), item);
-        if (find != _canInteractWith.end())
-        {
-            _canInteractWith.erase(find);
-            return true;
-        }
-
-        return false;
-    }
-    bool CharacterController::canInteractWith(Interactable *item) const
-    {
-        auto find = std::find(_canInteractWith.begin(), _canInteractWith.end(), item);
-        return find != _canInteractWith.end();
-    }
-
-    void CharacterController::addShipInTeleportRange(Ship *ship)
-    {
-        _shipsInTeleportRange.push_back(ship);
-    }
-    void CharacterController::removeShipInTeleportRange(Ship *ship)
-    {
-        auto find = std::find(_shipsInTeleportRange.begin(), _shipsInTeleportRange.end(), ship);
-        if (find != _shipsInTeleportRange.end())
-        {
-            _shipsInTeleportRange.erase(find);
-        }
-    }
-    bool CharacterController::shipInTeleportRange(Ship *ship) const
-    {
-        auto find = std::find(_shipsInTeleportRange.begin(), _shipsInTeleportRange.end(), ship);
-        return find != _shipsInTeleportRange.end();
-    }
-
-    void CharacterController::addPlanetInTeleportRange(Planet *planet)
-    {
-        _planetsInTeleportRange.push_back(planet);
-    }
-    void CharacterController::removePlanetInTeleportRange(Planet *planet)
-    {
-        auto find = std::find(_planetsInTeleportRange.begin(), _planetsInTeleportRange.end(), planet);
-        if (find != _planetsInTeleportRange.end())
-        {
-            _planetsInTeleportRange.erase(find);
-        }
-    }
-    bool CharacterController::planetInTeleportRange(Planet *planet) const
-    {
-        auto find = std::find(_planetsInTeleportRange.begin(), _planetsInTeleportRange.end(), planet);
-        return find != _planetsInTeleportRange.end();
     }
 
     void CharacterController::dropItem(PlaceableItem *placeableItem)
@@ -93,133 +28,101 @@ namespace space
         _character->insideArea()->addPlaceable(_session, placeableItem, _character->transform().position);
     }
 
-    void CharacterController::checkForTeleportableShips(sf::Vector2f position, const StarSystem &starSystem)
+    SpaceObject *CharacterController::controllingObject() const
     {
-        auto shipInsideOf = _character->insideArea()->partOfShip();
-
-        // Check existing items
-        for (auto ship : _shipsInTeleportRange)
+        if (_controlling == ControlShip)
         {
-            if (ship == shipInsideOf)
-            {
-                removeShipInTeleportRange(ship);
-                continue;
-            }
-
-            auto dpos = ship->transform().position - position;
-            auto distance = dpos.x * dpos.x + dpos.y * dpos.y;
-            if (distance - interactRangeShipsSquared() > 0.0f)
-            {
-                removeShipInTeleportRange(ship);
-            }
+            return _ship;
+        }
+        if (_controlling == ControlCharacter)
+        {
+            return _character;
         }
 
-        for (auto obj : starSystem.objects())
-        {
-            auto ship = dynamic_cast<Ship *>(obj);
-            if (ship == nullptr || ship == shipInsideOf || shipInTeleportRange(ship))
-            {
-                continue;
-            }
-
-            auto dpos = ship->transform().position - position;
-            auto distance = dpos.x * dpos.x + dpos.y * dpos.y;
-            if (distance - interactRangeShipsSquared() < 0.0f)
-            {
-                addShipInTeleportRange(ship);
-            }
-        }
+        return nullptr;
     }
 
-    void CharacterController::checkForTeleportablePlanets(sf::Vector2f position, const StarSystem &starSystem)
+    void CharacterController::checkForInteractables(sf::Vector2f position, const Area &area)
     {
-        // Check existing items
-        for (auto planet : _planetsInTeleportRange)
-        {
-            auto dpos = planet->transform().position - position;
-            auto distance = dpos.x * dpos.x + dpos.y * dpos.y;
-            if (distance - interactRangeShipsSquared() > 0.0f)
-            {
-                removePlanetInTeleportRange(planet);
-            }
-        }
-
-        for (auto obj : starSystem.objects())
-        {
-            auto planet = dynamic_cast<Planet *>(obj);
-            if (planet == nullptr || planetInTeleportRange(planet))
-            {
-                continue;
-            }
-
-            auto dpos = planet->transform().position - position;
-            auto distance = dpos.x * dpos.x + dpos.y * dpos.y;
-            if (distance - interactRangeShipsSquared() < 0.0f)
-            {
-                addPlanetInTeleportRange(planet);
-            }
-        }
-    }
-
-    void CharacterController::checkForGroundInteractables(sf::Vector2f position, const WalkableArea &area)
-    {
-        // Check existing items
         auto playerPos = _character->transform().position;
-        for (auto interactable : canInteractWith())
+        auto rangeSquared = _interactRangeObjects * _interactRangeObjects;
+        auto outOfRange = rangeSquared + 1.0f;
+        _canInteractWithInRange.clear();
+
+        for (auto obj : area.objects())
         {
+            auto interactable = &obj->interactable();
+
+            auto find = _canInteractWith.find(interactable);
             auto dpos = interactable->parentObject()->transform().position - playerPos;
             auto distance = dpos.x * dpos.x + dpos.y * dpos.y;
-            if (distance - interactRangeObjectsSquared() > 0.0f)
-            {
-                removeCanInteractWith(interactable);
-                if (interactable->isPlayerInRange())
-                {
-                    interactable->onPlayerLeaves(_session);
-                }
-            }
-        }
+            auto prevDist = outOfRange;
 
-        for (auto &iter : area.placedItems())
-        {
-            checkInRangeOfInteractable(&iter->interactable());
-        }
-
-        for (auto &iter : area.characters())
-        {
-            if (iter == _character)
+            if (find != _canInteractWith.end())
             {
-                continue;
+                prevDist = find->second;
             }
-            checkInRangeOfInteractable(&iter->interactable());
+
+            if (prevDist > rangeSquared && distance <= rangeSquared)
+            {
+                interactable->onPlayerEnters(_session);
+            }
+            else if (prevDist <= rangeSquared && distance > rangeSquared)
+            {
+                interactable->onPlayerLeaves(_session);
+            }
+
+            if (distance <= rangeSquared)
+            {
+                _canInteractWithInRange.push_back(interactable);
+            }
+
+            _canInteractWith[interactable] = distance;
         }
     }
 
-    void CharacterController::checkInRangeOfInteractable(Interactable *interactable)
+    void CharacterController::checkForInTeleportRange(sf::Vector2f position, const Area &area)
     {
-        if (canInteractWith(interactable))
+        area.getObjectsNearby(_interactRangeShips, position, [&](SpaceObject *obj)
         {
-            return;
-        }
+            auto shipInsideOf = _character->insideArea()->partOfShip();
 
-        auto playerPos = _character->transform().position;
-        auto dpos = interactable->parentObject()->transform().position - playerPos;
-        auto distance = dpos.x * dpos.x + dpos.y * dpos.y;
-        if (distance - interactRangeObjectsSquared() < 0.0f)
-        {
-            if (addCanInteractWith(interactable))
+            if (obj == shipInsideOf || obj == _character)
             {
-                if (!interactable->isPlayerInRange())
+                return;
+            }
+
+            auto type = obj->type();
+            if (type == Ship::SpaceObjectType())
+            {
+                auto ship = dynamic_cast<Ship *>(obj);
+                ship->area().addTeleporters(_teleportersInRange);
+            }
+            else if (type == Planet::SpaceObjectType())
+            {
+                auto planet = dynamic_cast<Planet *>(obj);
+                for (auto planetSurface : planet->planetSurfaces())
                 {
-                    interactable->onPlayerEnters(_session);
+                    planetSurface->area().addTeleporters(_teleportersInRange);
                 }
             }
-        }
+        });
+    }
+
+    void CharacterController::clearCanInteractWith()
+    {
+        _canInteractWith.clear();
+        _canInteractWithInRange.clear();
     }
 
     void CharacterController::updateAnimations(sf::Time dt)
     {
         auto seconds = dt.asSeconds();
-        auto rotSpeed = std::abs(_character->physicsBody()->GetAngularVelocity());
+        auto rotSpeed = 0.0f;
+        if (_character->physicsBody())
+        {
+            rotSpeed = std::abs(_character->physicsBody()->GetAngularVelocity());
+        }
         _dizzy += (rotSpeed - 8.0f) * seconds;
         _dizzy = Utils::clamp(_dizzy, 0, 5.0f);
 
