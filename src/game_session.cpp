@@ -377,7 +377,10 @@ namespace space
 
     void GameSession::setNextMouseHover(SpaceObject *obj)
     {
-        _nextMouseOverObject = obj;
+        if (!_nextMouseOverObject)
+        {
+            _nextMouseOverObject = obj;
+        }
     }
 
     void GameSession::createTransition(const Area *prevArea, const Area *area, TeleportClone &teleportClone)

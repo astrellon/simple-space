@@ -5,7 +5,8 @@
 #include "../physics/polygon_collider.hpp"
 #include "../debug/draw_debug.hpp"
 #include "../render_camera.hpp"
-
+#include "../controllers/player_controller.hpp"
+#include "character.hpp"
 #include "items/placed_item.hpp"
 #include "area.hpp"
 
@@ -134,9 +135,17 @@ namespace space
 
     bool Ship::doesMouseHover(GameSession &session, sf::Vector2f mousePosition) const
     {
-        auto worldPos = Utils::getPosition(_worldTransform);
-        auto local = mousePosition - worldPos;
-        return _spriteBounds.contains(local);
+        auto &controller = session.playerController();
+        if (controller.controlling() == ControlCharacter && controller.controllingCharacter()->insideArea()->partOfShip() == this)
+        {
+            return _area.checkForMouse(session, mousePosition);
+        }
+        else
+        {
+            auto worldPos = Utils::getPosition(_worldTransform);
+            auto local = mousePosition - worldPos;
+            return _spriteBounds.contains(local);
+        }
     }
 
     void Ship::drawInterior(GameSession &session, RenderCamera &target)
