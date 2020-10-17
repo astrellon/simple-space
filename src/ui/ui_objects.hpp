@@ -32,5 +32,7 @@ namespace space
             void drawLayer(DrawLayer &layer);
 
             static const char *areaTypeString(AreaType type);
+
+            static bool inputVector2f(const std::string &label, sf::Vector2f &input);
     };
 } // space

@@ -79,8 +79,8 @@ namespace space
         }
 
         auto &trans = spaceObject.transform();
-        ImGui::Text("Position: %f, %f", trans.position.x, trans.position.y);
-        ImGui::Text("Rotation: %f deg", trans.rotation);
+        inputVector2f("Position: ", trans.position);
+        ImGui::InputFloat("Rotation deg", &trans.rotation);
 
         if (spaceObject.type() == StarSystem::SpaceObjectType())
         {
@@ -140,5 +140,17 @@ namespace space
             case AreaType::PlanetSurface: return "Planet Surface";
             default: return "Unknown";
         }
+    }
+
+    bool UIObjects::inputVector2f(const std::string &label, sf::Vector2f &input)
+    {
+        float v[2] = {input.x, input.y};
+        if (ImGui::InputFloat2(label.c_str(), v))
+        {
+            input.x = v[0];
+            input.y = v[1];
+            return true;
+        }
+        return false;
     }
 } // space
