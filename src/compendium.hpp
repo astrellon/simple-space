@@ -3,6 +3,7 @@
 #include <map>
 #include <memory>
 
+#include "definitions/base_definition.hpp"
 #include "non_copyable.hpp"
 
 namespace space
@@ -11,6 +12,8 @@ namespace space
     {
         public:
             // Fields
+            bool discovered;
+
             // Where and when discovered
             // Texture to photo?
 

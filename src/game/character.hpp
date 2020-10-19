@@ -45,6 +45,8 @@ namespace space
             virtual void insideArea(Area *area);
             virtual Area *insideArea() const { return _insideArea; }
 
+            virtual const CompendiumDefinition *compendiumDefinition() const { return definition.compendiumDef; }
+
             void addToPhysicsWorld(b2World *world);
             void removeFromPhysicsWorld(b2World *world);
 

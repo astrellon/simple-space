@@ -23,6 +23,7 @@
 #include "../../definitions/space_portal_definition.hpp"
 #include "../../definitions/shader_definition.hpp"
 #include "../../definitions/grass_effect_definition.hpp"
+#include "../../definitions/compendium_definition.hpp"
 
 using nlohmann::json;
 
@@ -68,6 +69,9 @@ namespace space
         else if (type == GrassEffectDefinition::DefinitionType())
             j = toJson(dynamic_cast<const GrassEffectDefinition &>(input));
 
+        else if (type == CompendiumDefinition::DefinitionType())
+            j = toJson(dynamic_cast<const CompendiumDefinition &>(input));
+
         else
             std::cout << "Error!" << std::endl;
 
@@ -112,6 +116,9 @@ namespace space
 
         if (type == GrassEffectDefinition::DefinitionType())
             return fromJsonGrassEffectDefinition(j);
+
+        if (type == CompendiumDefinition::DefinitionType())
+            return fromJsonCompendiumDefinition(j);
 
         throw std::runtime_error("Oh no");
     }
@@ -196,6 +203,7 @@ namespace space
             {"name", input.name},
             {"spriteSize", input.spriteSize},
             {"speed", input.speed},
+            {"compendiumId", input.compendiumId}
         };
     }
 
@@ -207,6 +215,8 @@ namespace space
         j.at("name").get_to(input->name);
         j.at("spriteSize").get_to(input->spriteSize);
         j.at("speed").get_to(input->speed);
+
+        Utils::json_try_set(j, "compendiumId", input->compendiumId);
 
         return input;
     }
@@ -528,6 +538,29 @@ namespace space
         result->tipColour = Utils::fromHexString(j.at("tipColour").get<std::string>());
         result->sideColour = Utils::fromHexString(j.at("sideColour").get<std::string>());
         result->windColour = Utils::fromHexString(j.at("windColour").get<std::string>());
+
+        return result;
+    }
+
+    json toJson(const CompendiumDefinition &input)
+    {
+        return json {
+            {"id", input.id},
+            {"name", input.name},
+            {"description", input.description},
+            {"species", input.species},
+            {"picturePath", input.picturePath}
+        };
+    }
+    std::unique_ptr<CompendiumDefinition> fromJsonCompendiumDefinition(const json &j)
+    {
+        auto id = j.at("id").get<DefinitionId>();
+        auto result = std::make_unique<CompendiumDefinition>(id);
+
+        j.at("name").get_to(result->name);
+        j.at("species").get_to(result->species);
+        j.at("description").get_to(result->description);
+        //j.at("picturePath").get_to(result->picturePath);
 
         return result;
     }

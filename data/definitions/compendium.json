@@ -1,0 +1,16 @@
+[
+    {
+        "id": "COMP_DOG",
+        "type": "compendium",
+        "name": "Dog",
+        "species": "Doggo",
+        "description": "A doggo"
+    },
+    {
+        "id": "BIRD_COMP",
+        "type": "compendium",
+        "name": "Bird",
+        "species": "Birdo",
+        "description":"A bird"
+    }
+]

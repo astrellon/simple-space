@@ -11,6 +11,7 @@ namespace space
 {
     class Engine;
     class AnimatedTexture;
+    class CompendiumDefinition;
 
     class CharacterDefinition : public BaseDefinition
     {
@@ -20,12 +21,13 @@ namespace space
             std::string name;
             uint spriteSize;
             float speed;
+            DefinitionId compendiumId;
 
             const AnimatedTexture *texture;
-            //Tiles tiles;
+            const CompendiumDefinition *compendiumDef;
 
             // Constructor
-            CharacterDefinition(const DefinitionId &id) : BaseDefinition(id), texture(nullptr) { }
+            CharacterDefinition(const DefinitionId &id) : BaseDefinition(id), texture(nullptr), compendiumDef(nullptr) { }
             virtual ~CharacterDefinition() { }
 
             // Methods

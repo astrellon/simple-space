@@ -18,6 +18,7 @@ namespace space
     class LoadingContext;
     class Area;
     class RenderCamera;
+    class CompendiumDefinition;
 
     class SpaceObject : private NonCopyable
     {
@@ -49,6 +50,8 @@ namespace space
             virtual void onPostLoad(GameSession &session, LoadingContext &context) { }
             virtual bool doesMouseHover(GameSession &session, sf::Vector2f mousePosition) const { return false; }
             virtual bool isGenerated() const { return false; }
+
+            virtual const CompendiumDefinition *compendiumDefinition() const { return nullptr; }
 
             virtual DrawLayers::Type drawLayer() const { return DrawLayers::Main; }
 

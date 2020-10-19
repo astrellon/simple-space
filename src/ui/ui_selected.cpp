@@ -6,6 +6,7 @@
 #include "../engine.hpp"
 #include "../game_session.hpp"
 #include "../controllers/player_controller.hpp"
+#include "../definitions/compendium_definition.hpp"
 
 namespace space
 {
@@ -51,5 +52,15 @@ namespace space
         }
 
         ImGui::Text("%s: %s", obj->id.c_str(), obj->type().c_str());
+
+        auto compendiumDef = obj->compendiumDefinition();
+        if (compendiumDef)
+        {
+            ImGui::NewLine();
+            ImGui::Text("Compendium:");
+            ImGui::Text("Name: %s", compendiumDef->name.c_str());
+            ImGui::Text("Species: %s", compendiumDef->species.c_str());
+            ImGui::Text("Description: %s", compendiumDef->description.c_str());
+        }
     }
 } // space
