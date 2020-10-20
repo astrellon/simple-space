@@ -44,20 +44,6 @@ namespace space
 
     }
 
-    StarSystem *GameSession::createStarSystem(const StarSystemDefinition &definition)
-    {
-        auto result = createObject<StarSystem>(definition);
-        _starSystems.push_back(result);
-        return result;
-    }
-
-    PlanetSurface *GameSession::createPlanetSurface(const PlanetSurfaceDefinition &definition)
-    {
-        auto result = createObject<PlanetSurface>(definition);
-        _planetSurfaces.push_back(result);
-        return result;
-    }
-
     bool GameSession::tryGetItem(const ItemId &id, Item **result)
     {
         for (auto &item : _items)
@@ -199,33 +185,6 @@ namespace space
         }
     }
 
-    bool GameSession::tryGetStarSystem(const DefinitionId &id, StarSystem **result) const
-    {
-        for (auto starSystem : _starSystems)
-        {
-            if (starSystem->definition.id == id)
-            {
-                *result = starSystem;
-                return true;
-            }
-        }
-
-        return false;
-    }
-    bool GameSession::tryGetPlanetSurface(const DefinitionId &id, PlanetSurface **result) const
-    {
-        for (auto planetSurface : _planetSurfaces)
-        {
-            if (planetSurface->definition.id == id)
-            {
-                *result = planetSurface;
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     void GameSession::saveGame()
     {
         auto json = toJson(*this);
@@ -251,11 +210,8 @@ namespace space
         for (auto &controller : _characterControllers)
             controller->update(dt);
 
-        for (auto &starSystem : _starSystems)
-            starSystem->update(*this, dt, sf::Transform::Identity);
-
-        for (auto &plantSurface : _planetSurfaces)
-            plantSurface->update(*this, dt, sf::Transform::Identity);
+        for (auto &spaceObject : _spaceObjectsUpdateEveryFrame)
+            spaceObject->update(*this, dt, sf::Transform::Identity);
 
         auto &sceneRender = _engine.sceneRender();
         _nextMouseOverObject = nullptr;
@@ -400,6 +356,11 @@ namespace space
         if (!tryGetSpaceObject(id, &obj))
         {
             return;
+        }
+
+        if (obj->doUpdateEveryFrame())
+        {
+            Utils::remove(_spaceObjectsUpdateEveryFrame, obj);
         }
 
         if (obj->insideArea())

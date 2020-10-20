@@ -19,7 +19,7 @@
 
 namespace space
 {
-    StarSystem::StarSystem(const StarSystemDefinition &definition) : SpaceObject(definition.id), definition(definition), _area(AreaType::StarSystem, this)
+    StarSystem::StarSystem(const ObjectId &id, const StarSystemDefinition &definition) : SpaceObject(id), definition(definition), _area(AreaType::StarSystem, this)
     {
         _area.main().sortEveryDraw = false;
     }
@@ -70,7 +70,11 @@ namespace space
         if (type == PlanetDefinition::DefinitionType())
         {
             auto planetDefinition = dynamic_cast<const PlanetDefinition *>(bodyDefinition);
-            auto planet = session.createObject<Planet>(planetDefinition->id, *planetDefinition);
+
+            std::stringstream idss;
+            idss << id << ':' << planetDefinition->id;
+
+            auto planet = session.createObject<Planet>(idss.str(), *planetDefinition);
             _area.addObject(planet);
         }
         else if (type == OrbitPointCelestialDefinition::DefinitionType())

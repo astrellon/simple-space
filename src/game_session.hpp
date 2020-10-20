@@ -43,8 +43,6 @@ namespace space
             typedef std::vector<std::unique_ptr<SpaceObject>> SpaceObjectList;
             typedef std::vector<std::unique_ptr<Item>> ItemList;
             typedef std::vector<std::unique_ptr<CharacterController>> CharacterControllerList;
-            typedef std::vector<StarSystem *> StarSystemList;
-            typedef std::vector<PlanetSurface *> PlanetSurfaceList;
 
             // Constructor
             GameSession(Engine &engine);
@@ -52,13 +50,8 @@ namespace space
 
             // Methods
             const SpaceObjectList &spaceObjects() const { return _spaceObjects; }
-            const StarSystemList &starSystems() const { return _starSystems; }
-            const PlanetSurfaceList &planetSurfaces() const { return _planetSurfaces; }
             const ItemList &items() const { return _items; }
             const CharacterControllerList &characterControllers() const { return _characterControllers; }
-
-            StarSystem *createStarSystem(const StarSystemDefinition &definition);
-            PlanetSurface *createPlanetSurface(const PlanetSurfaceDefinition &definition);
 
             template <typename T, typename... TArgs>
             auto createObject(TArgs &&... args)
@@ -67,6 +60,11 @@ namespace space
                 auto obj = std::make_unique<T>(std::forward<TArgs>(args)...);
                 auto result = obj.get();
                 _spaceObjects.emplace_back(std::move(obj));
+
+                if (result->doUpdateEveryFrame())
+                {
+                    _spaceObjectsUpdateEveryFrame.emplace_back(result);
+                }
 
                 return result;
             }
@@ -124,9 +122,6 @@ namespace space
 
             NextFrameState &nextFrameState() { return _nextFrameState; }
 
-            bool tryGetStarSystem(const DefinitionId &id, StarSystem **result) const;
-            bool tryGetPlanetSurface(const DefinitionId &id, PlanetSurface **result) const;
-
             PlayerController &playerController() { return _playerController; }
             const PlayerController &playerController() const { return _playerController; }
 
@@ -179,8 +174,7 @@ namespace space
             SpaceObject *_nextMouseOverObject;
 
             SpaceObjectList _spaceObjects;
-            StarSystemList _starSystems;
-            PlanetSurfaceList _planetSurfaces;
+            std::vector<SpaceObject *> _spaceObjectsUpdateEveryFrame;
             ItemList _items;
             CharacterControllerList _characterControllers;
             NextFrameState _nextFrameState;

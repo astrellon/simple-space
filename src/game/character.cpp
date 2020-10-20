@@ -26,6 +26,11 @@ namespace space
         _spriteBounds.left *= Utils::InsideScale;
     }
 
+    Character *Character::cloneCharacter(const ObjectId &newId, GameSession &session)
+    {
+        return session.createObject<Character>(newId, definition);
+    }
+
     void Character::insideArea(Area *area)
     {
         if (_insideArea != nullptr)

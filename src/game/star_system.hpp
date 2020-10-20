@@ -25,7 +25,7 @@ namespace space
             const StarSystemDefinition &definition;
 
             // Constructor
-            StarSystem(const StarSystemDefinition &definition);
+            StarSystem(const ObjectId &id, const StarSystemDefinition &definition);
             virtual ~StarSystem() { }
 
             // Methods
@@ -41,6 +41,7 @@ namespace space
             virtual void draw(GameSession &session, RenderCamera &target);
             virtual void onPostLoad(GameSession &session, LoadingContext &context);
             virtual bool checkForMouse(GameSession &session, sf::Vector2f mousePosition);
+            virtual bool doUpdateEveryFrame() const { return true; }
 
         private:
             // Fields

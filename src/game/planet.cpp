@@ -32,7 +32,7 @@ namespace space
             for (auto surfaceId : definition.planetSurfaceIds)
             {
                 PlanetSurface *surface;
-                if (session.tryGetPlanetSurface(surfaceId, &surface))
+                if (session.tryGetSpaceObject<PlanetSurface>(surfaceId, &surface))
                 {
                     addPlanetSurface(surface);
                 }
@@ -93,7 +93,7 @@ namespace space
         for (auto &id : _onPostLoadPlanetSurfaceIds)
         {
             PlanetSurface *planetSurface;
-            if (!session.tryGetPlanetSurface(id, &planetSurface))
+            if (!session.tryGetSpaceObject<PlanetSurface>(id, &planetSurface))
             {
                 std::cout << "Unable to find planet surface: " << id << std::endl;
                 continue;

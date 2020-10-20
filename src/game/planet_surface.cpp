@@ -8,8 +8,13 @@
 
 namespace space
 {
-    PlanetSurface::PlanetSurface(const PlanetSurfaceDefinition &definition) : SpaceObject(definition.id), definition(definition), _partOfPlanet(nullptr), _area(AreaType::PlanetSurface, this)
+    PlanetSurface::PlanetSurface(const ObjectId &id, const PlanetSurfaceDefinition &definition) : SpaceObject(id), definition(definition), _partOfPlanet(nullptr), _area(AreaType::PlanetSurface, this)
     {
+    }
+
+    PlanetSurface *PlanetSurface::clonePlanetSurface(const ObjectId &newId, GameSession &session)
+    {
+        return session.createObject<PlanetSurface>(newId, definition);
     }
 
     void PlanetSurface::update(GameSession &session, sf::Time dt, const sf::Transform &parentTransforms)

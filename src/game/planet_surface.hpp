@@ -24,10 +24,13 @@ namespace space
             const PlanetSurfaceDefinition &definition;
 
             // Constructor
-            PlanetSurface(const PlanetSurfaceDefinition &definition);
+            PlanetSurface(const ObjectId &id, const PlanetSurfaceDefinition &definition);
             virtual ~PlanetSurface() { }
 
             // Methods
+            virtual SpaceObject *clone(const ObjectId &newId, GameSession &session) { return clonePlanetSurface(newId, session); }
+            PlanetSurface *clonePlanetSurface(const ObjectId &newId, GameSession &session);
+
             static const std::string SpaceObjectType() { return PlanetSurfaceDefinition::DefinitionType(); }
             virtual std::string type() const { return SpaceObjectType(); }
 
@@ -38,6 +41,7 @@ namespace space
             virtual void draw(GameSession &session, RenderCamera &target);
             virtual void onPostLoad(GameSession &session, LoadingContext &context);
             virtual bool checkForMouse(GameSession &session, sf::Vector2f mousePosition);
+            virtual bool doUpdateEveryFrame() const { return true; }
 
             void partOfPlanet(Planet *planet) { _partOfPlanet = planet; }
             Planet *partOfPlanet() const { return _partOfPlanet; }

@@ -31,6 +31,7 @@ namespace space
             virtual ~SpaceObject() { }
 
             // Methods
+            virtual SpaceObject *clone(const ObjectId &newId, GameSession &session) { return nullptr; }
             virtual std::string type() const = 0;
 
             const SpaceTransform &transform() const { return _transform; }
@@ -50,6 +51,7 @@ namespace space
             virtual void onPostLoad(GameSession &session, LoadingContext &context) { }
             virtual bool doesMouseHover(GameSession &session, sf::Vector2f mousePosition) const { return false; }
             virtual bool isGenerated() const { return false; }
+            virtual bool doUpdateEveryFrame() const { return false; }
 
             virtual const CompendiumDefinition *compendiumDefinition() const { return nullptr; }
 

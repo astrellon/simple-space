@@ -323,7 +323,7 @@ namespace space
             return false;
         }
 
-        auto starSystem = session.createStarSystem(*definition);
+        auto starSystem = session.createObject<StarSystem>(definition->id, *definition);
         starSystem->init(session);
         auto instances = context.getAreaInstance(&starSystem->area());
         addFromJsonAreaInstances(j.at("area"), instances);
@@ -356,7 +356,7 @@ namespace space
             std::cout << "Unable to find planet " << planetId << " for planet surface" << std::endl;
             return false;
         }
-        auto planetSurface = session.createPlanetSurface(*definition);
+        auto planetSurface = session.createObject<PlanetSurface>(definition->id, *definition);
         planetSurface->partOfPlanet(planet);
 
         auto instances = context.getAreaInstance(&planetSurface->area());
