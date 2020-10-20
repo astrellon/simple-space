@@ -279,26 +279,30 @@ namespace space
         _sceneRender->texture().display();
 
         // Draw from render texture to window
-        _window->setActive(true);
-        _window->clear();
-        if (enableBloom)
-        {
-            _bloomEffect->apply(_sceneRender->texture(), *_window);
-        }
-        else
-        {
-            sf::Sprite sprite(_sceneRender->texture().getTexture());
-            sprite.setScale(_cameraScale, _cameraScale);
-
-            DrawDebug::glDraw++;
-            _window->draw(sprite);
-        }
-
+        finalDraw(*_sceneRender, *_window);
         _window->display();
     }
 
     void Engine::shutdown()
     {
         ImGui::SFML::Shutdown();
+    }
+
+    void Engine::finalDraw(sf::RenderTexture &from, sf::RenderTarget &to)
+    {
+        to.setActive(true);
+        to.clear();
+        if (enableBloom)
+        {
+            _bloomEffect->apply(from, to);
+        }
+        else
+        {
+            sf::Sprite sprite(from.getTexture());
+            sprite.setScale(_cameraScale, _cameraScale);
+
+            DrawDebug::glDraw++;
+            to.draw(sprite);
+        }
     }
 }

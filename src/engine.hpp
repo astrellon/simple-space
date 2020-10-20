@@ -98,5 +98,8 @@ namespace space
             sf::Time _timeSinceStartOnUpdate;
 
             std::chrono::system_clock::time_point _frameStart;
+
+            // Methods
+            void finalDraw(sf::RenderTexture &from, sf::RenderTarget &to);
     };
 } // town
