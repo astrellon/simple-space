@@ -15,6 +15,11 @@ namespace space
 
     }
 
+    TeleportClone *TeleportClone::cloneTeleportClone(const ObjectId &newId, GameSession &session)
+    {
+        throw std::runtime_error("Cannot clone teleport clone!");
+    }
+
     void TeleportClone::update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform)
     {
         if (!tryGetClone(session, &_cloneFound))

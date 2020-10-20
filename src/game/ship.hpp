@@ -31,6 +31,9 @@ namespace space
             Ship(const ObjectId &id, const ShipDefinition &definition);
 
             // Methods
+            virtual SpaceObject *clone(const ObjectId &newId, GameSession &session) { return cloneShip(newId, session); }
+            Ship *cloneShip(const ObjectId &newId, GameSession &session);
+
             static const std::string SpaceObjectType() { return ShipDefinition::DefinitionType(); }
             virtual std::string type() const { return SpaceObjectType(); }
 

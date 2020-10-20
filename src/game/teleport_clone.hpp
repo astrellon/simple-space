@@ -15,6 +15,9 @@ namespace space
             TeleportClone(const ObjectId &id, const Character &clone, const SpaceTransform &preTeleport);
 
             // Methods
+            virtual SpaceObject *clone(const ObjectId &newId, GameSession &session) { return cloneTeleportClone(newId, session); }
+            TeleportClone *cloneTeleportClone(const ObjectId &newId, GameSession &session);
+
             static const std::string SpaceObjectType() { return "teleport-clone"; }
             std::string type() const { return SpaceObjectType(); }
 

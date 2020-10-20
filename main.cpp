@@ -14,6 +14,7 @@
 #include "src/tiles.hpp"
 #include "src/game_session.hpp"
 #include "src/utils.hpp"
+#include "src/game/live_photo.hpp"
 #include "src/definitions/ship_definition.hpp"
 #include "src/definitions/character_definition.hpp"
 #include "src/definitions/star_system_definition.hpp"
@@ -112,6 +113,20 @@ int main()
     auto gameSessionTemp = space::fromJsonGameSession(engine, startingGameJson);
     auto gameSession = gameSessionTemp.get();
     engine.currentSession(std::move(gameSessionTemp));
+
+    auto livePhoto = gameSession->createObject<space::LivePhoto>("LIVE_PHOTO_1");
+    livePhoto->init(engine, sf::Vector2f(128, 128), engine.cameraScale());
+
+    space::StarSystem *starSystem2, *starSystem;
+    gameSession->tryGetSpaceObject<space::StarSystem>("STAR_SYSTEM_2", &starSystem2);
+    gameSession->tryGetSpaceObject<space::StarSystem>("STAR_SYSTEM_1", &starSystem);
+
+    auto clone = starSystem2->cloneStarSystem("LIVE_PHOTO:STAR_SYSTEM_2", *gameSession);
+    clone->init(*gameSession);
+
+    livePhoto->rootObject(clone);
+
+    starSystem->area().addObject(livePhoto);
 
     while (window.isOpen())
     {

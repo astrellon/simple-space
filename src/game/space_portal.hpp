@@ -27,6 +27,9 @@ namespace space
             SpacePortal(const ObjectId &id, const SpacePortalDefinition &definition);
 
             // Methods
+            virtual SpaceObject *clone(const ObjectId &newId, GameSession &session) { return cloneSpacePortal(newId, session); }
+            SpacePortal *cloneSpacePortal(const ObjectId &newId, GameSession &session);
+
             static const std::string SpaceObjectType() { return SpacePortalDefinition::DefinitionType(); }
             virtual std::string type() const { return SpaceObjectType(); }
 

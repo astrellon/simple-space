@@ -45,6 +45,11 @@ namespace space
         }
     }
 
+    Ship *Ship::cloneShip(const ObjectId &newId, GameSession &session)
+    {
+        return session.createObject<Ship>(newId, definition);
+    }
+
     void Ship::update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform)
     {
         auto seconds = dt.asSeconds();

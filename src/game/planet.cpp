@@ -23,6 +23,11 @@ namespace space
         setTransformFromLocation();
     }
 
+    Planet *Planet::clonePlanet(const ObjectId &newId, GameSession &session)
+    {
+        return session.createObject<Planet>(newId, definition);
+    }
+
     void Planet::update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform)
     {
         if (!_initedSurfaces)

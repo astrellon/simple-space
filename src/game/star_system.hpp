@@ -29,6 +29,9 @@ namespace space
             virtual ~StarSystem() { }
 
             // Methods
+            virtual SpaceObject *clone(const ObjectId &newId, GameSession &session) { return cloneStarSystem(newId, session); }
+            StarSystem *cloneStarSystem(const ObjectId &newId, GameSession &session);
+
             static const std::string SpaceObjectType() { return StarSystemDefinition::DefinitionType(); }
             virtual std::string type() const { return SpaceObjectType(); }
 

@@ -27,6 +27,9 @@ namespace space
             Planet(const ObjectId &id, const PlanetDefinition &definition);
 
             // Methods
+            virtual SpaceObject *clone(const ObjectId &newId, GameSession &session) { return clonePlanet(newId, session); }
+            Planet *clonePlanet(const ObjectId &newId, GameSession &session);
+
             static const std::string SpaceObjectType() { return PlanetDefinition::DefinitionType(); }
             virtual std::string type() const { return SpaceObjectType(); }
 

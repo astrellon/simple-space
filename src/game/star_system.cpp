@@ -24,6 +24,11 @@ namespace space
         _area.main().sortEveryDraw = false;
     }
 
+    StarSystem *StarSystem::cloneStarSystem(const ObjectId &newId, GameSession &session)
+    {
+        return session.createObject<StarSystem>(newId, definition);
+    }
+
     void StarSystem::update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform)
     {
         updateWorldTransform(parentTransform);

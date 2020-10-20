@@ -22,6 +22,11 @@ namespace space
         _spriteBounds = _sprite.getGlobalBounds();
     }
 
+    SpacePortal *SpacePortal::cloneSpacePortal(const ObjectId &newId, GameSession &session)
+    {
+        return session.createObject<SpacePortal>(newId, definition);
+    }
+
     void SpacePortal::update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform)
     {
         updateWorldTransform(parentTransform);
