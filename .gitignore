@@ -3,6 +3,7 @@
 /build_test
 /build_debug
 /debug
+/cmake-build-debug
 
 # Prerequisites
 *.d
