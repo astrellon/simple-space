@@ -155,7 +155,7 @@
             "position": [150, 50]
         },
         {
-            "planetId": "SS_PLANET_1",
+            "planetId": "STAR_SYSTEM_1:SS_PLANET_1",
             "definitionId": "PLANET_GRASSY_1",
             "area": {
                 "objectIds": [

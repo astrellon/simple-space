@@ -9,7 +9,17 @@
 
 namespace space
 {
-    LivePhoto::LivePhoto(const ObjectId &id) : SpaceObject(id), _rootObject(nullptr)
+    LivePhotoTarget::LivePhotoTarget(const ObjectId &id) : SpaceObject(id)
+    {
+
+    }
+
+    LivePhotoTarget *LivePhotoTarget::cloneLivePhotoTarget(const ObjectId &newId, GameSession &session)
+    {
+        return session.createObject<LivePhotoTarget>(newId);
+    }
+
+    LivePhoto::LivePhoto(const ObjectId &id) : SpaceObject(id), _targetObject(nullptr)
     {
 
     }
@@ -36,23 +46,19 @@ namespace space
     {
         updateWorldTransform(parentTransform);
 
-        // auto angle = (session.engine().timeSinceStart().asSeconds());
-        // sf::Vector2f pos(std::cos(angle) * 100, std::sin(angle) * 100);
-        // _camera->camera().center(pos);
-
-        if (_rootObject)
+        if (_targetObject)
         {
-            _rootObject->update(session, dt, parentTransform);
+            _targetObject->update(session, dt, parentTransform);
         }
     }
 
     void LivePhoto::draw(GameSession &session, RenderCamera &target)
     {
-        if (_rootObject)
+        if (_targetObject)
         {
             _camera->preDraw();
-            _rootObject->draw(session, *_camera.get());
 
+            session.drawAtObject(*_targetObject, _targetObject->transform().position, *_camera.get());
             target.texture().draw(_cameraSprite, _worldTransform);
         }
     }

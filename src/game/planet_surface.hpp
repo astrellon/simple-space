@@ -54,5 +54,6 @@ namespace space
             std::vector<std::unique_ptr<MapLayer>> _mapLayers;
 
             // Methods
+            void createMapLayersFromDefinition(GameSession &session);
     };
 } // space

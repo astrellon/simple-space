@@ -115,16 +115,20 @@ int main()
     engine.currentSession(std::move(gameSessionTemp));
 
     auto livePhoto = gameSession->createObject<space::LivePhoto>("LIVE_PHOTO_1");
-    livePhoto->init(engine, sf::Vector2f(128, 128), engine.cameraScale());
+    livePhoto->init(engine, sf::Vector2f(256, 256), engine.cameraScale());
 
-    space::StarSystem *starSystem2, *starSystem;
-    gameSession->tryGetSpaceObject<space::StarSystem>("STAR_SYSTEM_2", &starSystem2);
+    space::StarSystem *starSystem;
+    space::PlanetSurface *planetSurface;
+    auto foundPlanet = gameSession->tryGetSpaceObject<space::PlanetSurface>("PLANET_GRASSY_1", &planetSurface);
     gameSession->tryGetSpaceObject<space::StarSystem>("STAR_SYSTEM_1", &starSystem);
 
-    auto clone = starSystem2->cloneStarSystem("LIVE_PHOTO:STAR_SYSTEM_2", *gameSession);
-    clone->init(*gameSession);
+    auto clone = planetSurface->clonePlanetSurface("LIVE_PHOTO:1", *gameSession);
+    auto target = gameSession->createObject<space::LivePhotoTarget>("LIVE_PHOTO_1:TARGET");
+    clone->area().addObject(target);
+    target->transform().position = sf::Vector2f(10, 10);
+    //clone->init(*gameSession);
 
-    livePhoto->rootObject(clone);
+    livePhoto->targetObject(target);
 
     starSystem->area().addObject(livePhoto);
 

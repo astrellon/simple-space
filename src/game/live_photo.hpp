@@ -11,6 +11,26 @@ namespace space
     class GameSession;
     class Engine;
 
+    class LivePhotoTarget : public SpaceObject
+    {
+        public:
+            // Fields
+
+            // Constructor
+            LivePhotoTarget(const ObjectId &id);
+            ~LivePhotoTarget() { }
+
+            // Methods
+            virtual SpaceObject *clone(const ObjectId &newId, GameSession &session) { return cloneLivePhotoTarget(newId, session); }
+            LivePhotoTarget *cloneLivePhotoTarget(const ObjectId &newId, GameSession &session);
+
+            static const std::string SpaceObjectType() { return "live-photo-target"; }
+            virtual std::string type() const { return SpaceObjectType(); }
+
+            virtual void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform) { }
+            virtual void draw(GameSession &session, RenderCamera &target) { }
+    };
+
     class LivePhoto : public SpaceObject
     {
         public:
@@ -32,12 +52,12 @@ namespace space
             virtual void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform);
             virtual void draw(GameSession &session, RenderCamera &target);
 
-            void rootObject(SpaceObject *obj) { _rootObject = obj; }
-            SpaceObject *rootObject() const { return _rootObject; }
+            void targetObject(SpaceObject *obj) { _targetObject = obj; }
+            SpaceObject *targetObject() const { return _targetObject; }
 
         private:
             // Fields
-            SpaceObject *_rootObject;
+            SpaceObject *_targetObject;
             std::unique_ptr<RenderCamera> _camera;
             sf::Sprite _cameraSprite;
 

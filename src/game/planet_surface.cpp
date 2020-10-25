@@ -14,7 +14,11 @@ namespace space
 
     PlanetSurface *PlanetSurface::clonePlanetSurface(const ObjectId &newId, GameSession &session)
     {
-        return session.createObject<PlanetSurface>(newId, definition);
+        std::cout << "Clone definition: " << definition.name << std::endl;
+        auto result = session.createObject<PlanetSurface>(newId, definition);
+        result->createMapLayersFromDefinition(session);
+
+        return result;
     }
 
     void PlanetSurface::update(GameSession &session, sf::Time dt, const sf::Transform &parentTransforms)
@@ -47,11 +51,7 @@ namespace space
 
     void PlanetSurface::onPostLoad(GameSession &session, LoadingContext &context)
     {
-        const auto &layers = definition.tmxMap->getLayers();
-        for (auto i = 0; i < layers.size(); i++)
-        {
-            _mapLayers.emplace_back(std::make_unique<MapLayer>(*definition.tmxMap, session.engine().resourceManager(), i));
-        }
+        createMapLayersFromDefinition(session);
 
         _area.onPostLoad(session, context);
         //definition.walkableAreaInstances.applyToWalkableArea(*_walkableArea, _session);
@@ -60,5 +60,14 @@ namespace space
     bool PlanetSurface::checkForMouse(GameSession &session, sf::Vector2f mousePosition)
     {
         return _area.checkForMouse(session, mousePosition);
+    }
+
+    void PlanetSurface::createMapLayersFromDefinition(GameSession &session)
+    {
+        const auto &layers = definition.tmxMap->getLayers();
+        for (auto i = 0; i < layers.size(); i++)
+        {
+            _mapLayers.emplace_back(std::make_unique<MapLayer>(*definition.tmxMap, session.engine().resourceManager(), i));
+        }
     }
 } // namespace space

@@ -158,6 +158,7 @@ namespace space
 
             void update(sf::Time dt);
             void draw();
+            void drawAtObject(SpaceObject &spaceObject, sf::Vector2f fromPosition, RenderCamera &target);
             void onPostLoad(LoadingContext &context);
 
             void nextId(int id) { _nextId = id; }
@@ -196,6 +197,5 @@ namespace space
             void drawSpacePortal(SpacePortal *spacePortal);
             bool checkMouseSpacePortal(sf::Vector2f mousePosition, SpacePortal *spacePortal);
 
-            void drawAtObject(SpaceObject &spaceObject, sf::Vector2f fromPosition, RenderCamera &target);
     };
 } // town
