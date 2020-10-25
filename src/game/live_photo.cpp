@@ -40,6 +40,7 @@ namespace space
         _camera->camera().center(sf::Vector2f());
 
         _cameraSprite.setTexture(_camera->texture().getTexture());
+        _cameraSprite.setScale(sf::Vector2f(1, -1));
     }
 
     void LivePhoto::update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform)
