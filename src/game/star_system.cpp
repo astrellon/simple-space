@@ -26,7 +26,9 @@ namespace space
 
     StarSystem *StarSystem::cloneStarSystem(const ObjectId &newId, GameSession &session)
     {
-        return session.createObject<StarSystem>(newId, definition);
+        auto result = session.createObject<StarSystem>(newId, definition);
+        result->transform(_transform);
+        return result;
     }
 
     void StarSystem::update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform)

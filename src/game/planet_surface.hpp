@@ -8,6 +8,7 @@
 #include "../definitions/planet_surface_definition.hpp"
 #include "../map_layer.hpp"
 #include "area.hpp"
+#include "ihas_area.hpp"
 
 namespace space
 {
@@ -17,7 +18,7 @@ namespace space
     class RenderCamera;
     class LoadingContext;
 
-    class PlanetSurface : public SpaceObject
+    class PlanetSurface : public SpaceObject, public IHasArea
     {
         public:
             // Fields
@@ -29,13 +30,14 @@ namespace space
 
             // Methods
             virtual SpaceObject *clone(const ObjectId &newId, GameSession &session) { return clonePlanetSurface(newId, session); }
+            virtual SpaceObject *deepClone(const ObjectId &newIdPrefix, GameSession &session);
             PlanetSurface *clonePlanetSurface(const ObjectId &newId, GameSession &session);
 
             static const std::string SpaceObjectType() { return PlanetSurfaceDefinition::DefinitionType(); }
             virtual std::string type() const { return SpaceObjectType(); }
 
-            Area &area() { return _area; }
-            const Area &area () const { return _area; }
+            virtual Area &area() { return _area; }
+            virtual const Area &area () const { return _area; }
 
             virtual void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransforms);
             virtual void draw(GameSession &session, RenderCamera &target);

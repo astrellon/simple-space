@@ -12,12 +12,21 @@ namespace space
     {
     }
 
+    SpaceObject *PlanetSurface::deepClone(const ObjectId &newIdPrefix, GameSession &session)
+    {
+        auto result = clonePlanetSurface(newIdPrefix + id, session);
+
+        //result->insideArea()->addObject()
+
+        return result;
+    }
+
     PlanetSurface *PlanetSurface::clonePlanetSurface(const ObjectId &newId, GameSession &session)
     {
         std::cout << "Clone definition: " << definition.name << std::endl;
         auto result = session.createObject<PlanetSurface>(newId, definition);
         result->createMapLayersFromDefinition(session);
-
+        result->transform(_transform);
         return result;
     }
 

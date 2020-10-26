@@ -47,7 +47,9 @@ namespace space
 
     Ship *Ship::cloneShip(const ObjectId &newId, GameSession &session)
     {
-        return session.createObject<Ship>(newId, definition);
+        auto result = session.createObject<Ship>(newId, definition);
+        result->transform(_transform);
+        return result;
     }
 
     void Ship::update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform)

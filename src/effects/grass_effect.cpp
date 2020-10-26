@@ -20,7 +20,9 @@ namespace space
 
     GrassEffect *GrassEffect::cloneGrassEffect(const ObjectId &newId, GameSession &session)
     {
-        return session.createObject<GrassEffect>(newId, definition);
+        auto result = session.createObject<GrassEffect>(newId, definition);
+        result->transform(_transform);
+        return result;
     }
 
     void GrassEffect::update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform)

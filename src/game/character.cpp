@@ -28,7 +28,10 @@ namespace space
 
     Character *Character::cloneCharacter(const ObjectId &newId, GameSession &session)
     {
-        return session.createObject<Character>(newId, definition);
+        auto result = session.createObject<Character>(newId, definition);
+        result->flipSprite(_flipSprite);
+        result->transform(_transform);
+        return result;
     }
 
     void Character::insideArea(Area *area)

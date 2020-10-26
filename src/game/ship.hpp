@@ -9,6 +9,7 @@
 #include "area.hpp"
 #include "../definitions/ship_definition.hpp"
 #include "../effects/engine_flame_effect.hpp"
+#include "ihas_area.hpp"
 
 namespace space
 {
@@ -16,7 +17,7 @@ namespace space
     class PolygonCollider;
     class RenderCamera;
 
-    class Ship : public SpaceObject
+    class Ship : public SpaceObject, public IHasArea
     {
         public:
             // Fields
@@ -46,8 +47,8 @@ namespace space
             sf::Vector2f prevPosition() const { return _prevPosition; }
             void prevPosition(const sf::Vector2f &pos) { _prevPosition = pos; }
 
-            Area &area() { return _area; }
-            const Area &area() const { return _area; }
+            virtual Area &area() { return _area; }
+            virtual const Area &area() const { return _area; }
 
             virtual void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform);
             virtual void draw(GameSession &session, RenderCamera &target);

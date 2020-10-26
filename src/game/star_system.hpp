@@ -11,6 +11,7 @@
 #include "../star_background.hpp"
 #include "space_object.hpp"
 #include "area.hpp"
+#include "ihas_area.hpp"
 
 namespace space
 {
@@ -18,7 +19,7 @@ namespace space
     class RenderCamera;
     class LoadingContext;
 
-    class StarSystem : public SpaceObject
+    class StarSystem : public SpaceObject, public IHasArea
     {
         public:
             // Fields
@@ -35,8 +36,8 @@ namespace space
             static const std::string SpaceObjectType() { return StarSystemDefinition::DefinitionType(); }
             virtual std::string type() const { return SpaceObjectType(); }
 
-            Area &area() { return _area; }
-            const Area &area () const { return _area; }
+            virtual Area &area() { return _area; }
+            virtual const Area &area () const { return _area; }
 
             void init(GameSession &session);
 

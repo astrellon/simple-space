@@ -26,7 +26,9 @@ namespace space
 
     LivePhoto *LivePhoto::cloneLivePhoto(const ObjectId &newId, GameSession &session)
     {
-        return session.createObject<LivePhoto>(newId);
+        auto result = session.createObject<LivePhoto>(newId);
+        result->transform(_transform);
+        return result;
     }
 
     void LivePhoto::init(Engine &engine, sf::Vector2f size, float cameraScale)

@@ -35,6 +35,7 @@ namespace space
     class CharacterController;
     class SpacePortal;
     class LoadingContext;
+    class LivePhoto;
 
     class GameSession
     {
@@ -119,6 +120,8 @@ namespace space
             }
 
             void removeSpaceObject(const ObjectId &id);
+
+            LivePhoto *createLivePhoto(Area *insideArea, sf::IntRect photoArea);
 
             NextFrameState &nextFrameState() { return _nextFrameState; }
 

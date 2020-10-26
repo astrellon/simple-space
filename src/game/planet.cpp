@@ -25,7 +25,9 @@ namespace space
 
     Planet *Planet::clonePlanet(const ObjectId &newId, GameSession &session)
     {
-        return session.createObject<Planet>(newId, definition);
+        auto result = session.createObject<Planet>(newId, definition);
+        result->transform(_transform);
+        return result;
     }
 
     void Planet::update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform)

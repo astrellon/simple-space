@@ -14,6 +14,7 @@
 #include "game/area.hpp"
 #include "game/teleport_clone.hpp"
 #include "game/space_portal.hpp"
+#include "game/live_photo.hpp"
 #include "definitions/ship_definition.hpp"
 #include "definitions/planet_definition.hpp"
 #include "definitions/star_system_definition.hpp"
@@ -69,6 +70,43 @@ namespace space
         }
 
         return false;
+    }
+
+    LivePhoto *GameSession::createLivePhoto(Area *insideArea, sf::IntRect photoArea)
+    {
+        auto newIdNumber = nextId();
+        std::stringstream newIdSS;
+        newIdSS << "LIVE_PHOTO_" << newIdNumber;
+
+        auto newId = newIdSS.str();
+        auto newIdPrefix = newId + ":";
+
+        auto parentObject = insideArea->partOfObject();
+        auto rootObject = parentObject->rootObject();
+        auto deepClone = rootObject->deepClone(newIdPrefix, *this);
+        auto newParentObjectId = newIdPrefix + parentObject->id;
+
+        SpaceObject *newParent;
+        if (!tryGetSpaceObject(newParentObjectId, &newParent))
+        {
+            std::cout << "Failed to find new live photo parent: " << newParentObjectId << std::endl;
+            return nullptr;
+        }
+
+        IHasArea *newParentArea = dynamic_cast<IHasArea *>(newParent);
+        if (!newParentArea)
+        {
+            std::cout << "New parent is not an IHasArea" << std::endl;
+            return nullptr;
+        }
+
+        auto target = createObject<LivePhotoTarget>(newIdPrefix + ":TARGET");
+        newParentArea->area().addObject(target);
+
+        auto result = createObject<LivePhoto>(newId);
+        result->targetObject(target);
+
+        return result;
     }
 
     void GameSession::setPlayerControllingShip(Ship *ship)

@@ -24,7 +24,9 @@ namespace space
 
     SpacePortal *SpacePortal::cloneSpacePortal(const ObjectId &newId, GameSession &session)
     {
-        return session.createObject<SpacePortal>(newId, definition);
+        auto result = session.createObject<SpacePortal>(newId, definition);
+        result->transform(_transform);
+        return result;
     }
 
     void SpacePortal::update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform)

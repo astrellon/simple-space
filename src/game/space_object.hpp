@@ -32,6 +32,7 @@ namespace space
 
             // Methods
             virtual SpaceObject *clone(const ObjectId &newId, GameSession &session) { return nullptr; }
+            virtual SpaceObject *deepClone(const ObjectId &newIdPrefix, GameSession &session) { return clone(newIdPrefix + id, session); }
             virtual std::string type() const = 0;
 
             const SpaceTransform &transform() const { return _transform; }
