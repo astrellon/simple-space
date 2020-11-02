@@ -31,6 +31,7 @@ namespace space
 
             // Methods
             virtual SpaceObject *clone(const ObjectId &newId, GameSession &session) { return cloneStarSystem(newId, session); }
+            virtual SpaceObject *deepClone(const ObjectId &newIdPrefix, GameSession &session);
             StarSystem *cloneStarSystem(const ObjectId &newId, GameSession &session);
 
             static const std::string SpaceObjectType() { return StarSystemDefinition::DefinitionType(); }

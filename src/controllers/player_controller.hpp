@@ -2,7 +2,7 @@
 
 #include <SFML/System.hpp>
 
-#include "../game/space_object.hpp"
+#include "../types.hpp"
 #include "character_controller.hpp"
 
 namespace space

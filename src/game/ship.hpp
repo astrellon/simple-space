@@ -33,6 +33,7 @@ namespace space
 
             // Methods
             virtual SpaceObject *clone(const ObjectId &newId, GameSession &session) { return cloneShip(newId, session); }
+            virtual SpaceObject *deepClone(const ObjectId &newIdPrefix, GameSession &session);
             Ship *cloneShip(const ObjectId &newId, GameSession &session);
 
             static const std::string SpaceObjectType() { return ShipDefinition::DefinitionType(); }

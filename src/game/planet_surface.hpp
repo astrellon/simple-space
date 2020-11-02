@@ -7,6 +7,7 @@
 #include "../non_copyable.hpp"
 #include "../definitions/planet_surface_definition.hpp"
 #include "../map_layer.hpp"
+#include "space_object.hpp"
 #include "area.hpp"
 #include "ihas_area.hpp"
 

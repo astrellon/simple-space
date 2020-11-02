@@ -45,6 +45,15 @@ namespace space
         }
     }
 
+    SpaceObject *Ship::deepClone(const ObjectId &newIdPrefix, GameSession &session)
+    {
+        auto result = cloneShip(newIdPrefix + id, session);
+
+        _area.cloneInto(newIdPrefix, session, result->area());
+
+        return result;
+    }
+
     Ship *Ship::cloneShip(const ObjectId &newId, GameSession &session)
     {
         auto result = session.createObject<Ship>(newId, definition);

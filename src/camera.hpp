@@ -2,7 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 
-#include "game/space_object.hpp"
+#include "types.hpp"
 
 namespace space
 {

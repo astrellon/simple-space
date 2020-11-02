@@ -121,7 +121,7 @@ namespace space
 
             void removeSpaceObject(const ObjectId &id);
 
-            LivePhoto *createLivePhoto(Area *insideArea, sf::IntRect photoArea);
+            LivePhoto *createLivePhoto(Area &insideArea, sf::IntRect photoArea);
 
             NextFrameState &nextFrameState() { return _nextFrameState; }
 

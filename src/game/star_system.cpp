@@ -24,6 +24,15 @@ namespace space
         _area.main().sortEveryDraw = false;
     }
 
+    SpaceObject *StarSystem::deepClone(const ObjectId &newIdPrefix, GameSession &session)
+    {
+        auto result = cloneStarSystem(newIdPrefix + id, session);
+
+        _area.cloneInto(newIdPrefix, session, result->area());
+
+        return result;
+    }
+
     StarSystem *StarSystem::cloneStarSystem(const ObjectId &newId, GameSession &session)
     {
         auto result = session.createObject<StarSystem>(newId, definition);

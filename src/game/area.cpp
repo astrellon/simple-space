@@ -35,6 +35,15 @@ namespace space
 
     }
 
+    void Area::cloneInto(const ObjectId &newIdPrefix, GameSession &session, Area &targetArea) const
+    {
+        for (auto spaceObject : _objects)
+        {
+            auto newObject = spaceObject->deepClone(newIdPrefix, session);
+            targetArea.addObject(newObject);
+        }
+    }
+
     void Area::update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform)
     {
         auto transform = parentTransform * _transform;

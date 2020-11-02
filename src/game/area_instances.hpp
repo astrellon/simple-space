@@ -2,8 +2,9 @@
 
 #include <vector>
 
-#include "space_object.hpp"
 #include "items/item.hpp"
+
+#include "../types.hpp"
 #include "../non_copyable.hpp"
 #include "../definitions/grass_effect_definition.hpp"
 

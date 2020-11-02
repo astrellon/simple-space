@@ -7,13 +7,12 @@
 #include "../non_copyable.hpp"
 #include "../space_transform.hpp"
 #include "../definitions/base_definition.hpp"
+#include "../types.hpp"
 #include "draw_layers.hpp"
 #include "interactions/interactable.hpp"
 
 namespace space
 {
-    typedef std::string ObjectId;
-
     class GameSession;
     class LoadingContext;
     class Area;
@@ -31,7 +30,7 @@ namespace space
             virtual ~SpaceObject() { }
 
             // Methods
-            virtual SpaceObject *clone(const ObjectId &newId, GameSession &session) { return nullptr; }
+            virtual SpaceObject *clone(const ObjectId &newId, GameSession &session) = 0;
             virtual SpaceObject *deepClone(const ObjectId &newIdPrefix, GameSession &session) { return clone(newIdPrefix + id, session); }
             virtual std::string type() const = 0;
 

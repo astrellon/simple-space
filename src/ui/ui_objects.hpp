@@ -1,12 +1,13 @@
 #pragma once
 
 #include "ui_window.hpp"
-#include "../game/space_object.hpp"
+#include "../types.hpp"
 #include "../game/area.hpp"
 
 namespace space
 {
     class Engine;
+    class SpaceObject;
 
     class UIObjects : public UIWindow
     {

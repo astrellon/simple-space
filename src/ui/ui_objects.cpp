@@ -4,6 +4,7 @@
 
 #include "../engine.hpp"
 #include "../game_session.hpp"
+#include "../game/space_object.hpp"
 #include "../game/star_system.hpp"
 #include "../game/planet_surface.hpp"
 #include "../game/ship.hpp"

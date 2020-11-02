@@ -27,9 +27,29 @@ namespace space
 
     }
 
+    PlacedItem::PlacedItem(const ObjectId &id, PlaceableItem *item) : PlacedItem(id, item->id)
+    {
+        this->item = item;
+
+        processItem();
+    }
+
+    PlacedItem::PlacedItem(const ObjectId &id, const ItemId &itemId) : SpaceObject(id), _collider(nullptr)
+    {
+
+    }
+
+
     PlacedItem::~PlacedItem()
     {
 
+    }
+
+    PlacedItem *PlacedItem::clonePlacedItem(const ObjectId &newId, GameSession &session)
+    {
+        auto result = session.createObject<PlacedItem>(newId, item);
+        result->transform(_transform);
+        return result;
     }
 
     void PlacedItem::processItem()

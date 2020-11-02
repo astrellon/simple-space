@@ -10,7 +10,6 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 
-#include "game/space_object.hpp"
 #include "game/items/item.hpp"
 
 #include "serialisers/json/json.hpp"
@@ -18,6 +17,7 @@
 #include "PerlinNoise.hpp"
 #include "earcut.hpp"
 #include "physics/polygon.hpp"
+#include "types.hpp"
 
 using nlohmann::json;
 

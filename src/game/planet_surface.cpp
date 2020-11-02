@@ -16,7 +16,7 @@ namespace space
     {
         auto result = clonePlanetSurface(newIdPrefix + id, session);
 
-        //result->insideArea()->addObject()
+        _area.cloneInto(newIdPrefix, session, result->area());
 
         return result;
     }

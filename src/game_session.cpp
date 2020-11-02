@@ -72,7 +72,7 @@ namespace space
         return false;
     }
 
-    LivePhoto *GameSession::createLivePhoto(Area *insideArea, sf::IntRect photoArea)
+    LivePhoto *GameSession::createLivePhoto(Area &insideArea, sf::IntRect photoArea)
     {
         auto newIdNumber = nextId();
         std::stringstream newIdSS;
@@ -81,7 +81,7 @@ namespace space
         auto newId = newIdSS.str();
         auto newIdPrefix = newId + ":";
 
-        auto parentObject = insideArea->partOfObject();
+        auto parentObject = insideArea.partOfObject();
         auto rootObject = parentObject->rootObject();
         auto deepClone = rootObject->deepClone(newIdPrefix, *this);
         auto newParentObjectId = newIdPrefix + parentObject->id;
@@ -102,9 +102,11 @@ namespace space
 
         auto target = createObject<LivePhotoTarget>(newIdPrefix + ":TARGET");
         newParentArea->area().addObject(target);
+        target->transform().position = sf::Vector2f(photoArea.left, photoArea.top);
 
         auto result = createObject<LivePhoto>(newId);
         result->targetObject(target);
+        result->init(_engine, sf::Vector2f(photoArea.width, photoArea.height), _engine.cameraScale());
 
         return result;
     }

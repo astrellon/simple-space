@@ -28,9 +28,14 @@ namespace space
             // Constructor
             PlacedItem(const ItemId &itemId);
             PlacedItem(PlaceableItem *item);
+            PlacedItem(const ObjectId &id, PlaceableItem *item);
+            PlacedItem(const ObjectId &id, const ItemId &itemId);
             virtual ~PlacedItem();
 
             // Methods
+            virtual SpaceObject *clone(const ObjectId &newId, GameSession &session) { return clonePlacedItem(newId, session); }
+            PlacedItem *clonePlacedItem(const ObjectId &newId, GameSession &session);
+
             static const std::string SpaceObjectType() { return "placed-item"; }
             virtual std::string type() const { return SpaceObjectType(); }
 
