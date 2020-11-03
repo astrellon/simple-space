@@ -306,7 +306,7 @@
             "definitionId": "FRED_CHAR",
             "id": "FRED",
             "transform": {
-                "position": [ 40.0, 20.0 ]
+                "position": [ 120.0, 20.0 ]
             },
             "type": "character"
         },
