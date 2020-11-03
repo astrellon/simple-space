@@ -37,6 +37,7 @@ namespace space
     {
         auto result = session.createObject<StarSystem>(newId, definition);
         result->transform(_transform);
+        result->init(session);
         return result;
     }
 

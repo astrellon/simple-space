@@ -124,6 +124,11 @@ namespace space
 
     void Area::addObject(SpaceObject *obj)
     {
+        if (obj == nullptr)
+        {
+            throw std::runtime_error("Cannot add null object to area");
+        }
+
         if (obj->insideArea() != nullptr)
         {
             obj->insideArea()->removeObject(obj);
