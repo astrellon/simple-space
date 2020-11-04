@@ -21,9 +21,10 @@ namespace space
         {
             return false;
         }
+        auto &session = *engine.currentSession();
 
-        auto &player = engine.currentSession()->playerController();
-        return show && !engine.currentSession()->dialogueManager().isInDialogue();
+        auto &player = session.playerController();
+        return show && !session.dialogueManager().isInDialogue() && !session.isTakingAPhoto();
     }
 
     void UIPhotoAlbum::doDraw(Engine &engine)
@@ -32,6 +33,11 @@ namespace space
         auto &album = session.playerController().photoAlbum();
 
         ImGui::Text("Photos: %i", (int)album.photos().size());
+
+        if (ImGui::Button("Take a photo!"))
+        {
+            session.takingAPhoto(true);
+        }
 
         for (auto photo : album.photos())
         {

@@ -167,6 +167,9 @@ namespace space
             void nextId(int id) { _nextId = id; }
             int nextId() { return ++_nextId; }
 
+            void takingAPhoto(bool value) { _takingAPhoto = value; }
+            bool isTakingAPhoto() const { return _takingAPhoto; }
+
             ObjectId nextObjectId();
 
             void setNextMouseHover(SpaceObject *obj);
@@ -191,6 +194,7 @@ namespace space
             bool _drawingPreTeleport;
             TextureOverlay _portalOverlay;
             int _nextId;
+            bool _takingAPhoto;
 
             // Methods
             void createTransition(const Area *prevArea, const Area *area, TeleportClone &teleportClone);

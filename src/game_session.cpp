@@ -33,7 +33,7 @@
 
 namespace space
 {
-    GameSession::GameSession(Engine &engine) : _engine(engine), _playerController(*this), _drawingPreTeleport(false), _nextId(0), _mouseOverObject(nullptr), _nextMouseOverObject(nullptr)
+    GameSession::GameSession(Engine &engine) : _engine(engine), _playerController(*this), _drawingPreTeleport(false), _nextId(0), _mouseOverObject(nullptr), _nextMouseOverObject(nullptr), _takingAPhoto(false)
     {
         _teleportEffect = std::make_unique<TeleportScreenEffect>();
         _teleportEffect->init(engine.definitionManager());
@@ -268,6 +268,23 @@ namespace space
         auto worldMousePosition = _engine.window()->mapPixelToCoords(mousePosition, sceneRender.camera().view());
 
         auto rootWorld = _playerController.controllingObject()->rootObject();
+
+        if (Keyboard::isKeyPressed(sf::Keyboard::Escape))
+        {
+            _takingAPhoto = false;
+        }
+
+        if (_takingAPhoto)
+        {
+            if (Mouse::isMousePressed(sf::Mouse::Left))
+            {
+                auto livePhoto = createLivePhoto(*_playerController.controllingObject()->insideArea(), sf::IntRect(worldMousePosition.x, worldMousePosition.y, 256, 256));
+
+                _playerController.photoAlbum().addPhoto(livePhoto);
+                _takingAPhoto = false;
+                return;
+            }
+        }
 
         if (rootWorld->type() == StarSystem::SpaceObjectType())
         {
