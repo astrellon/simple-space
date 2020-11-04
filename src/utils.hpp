@@ -51,7 +51,7 @@ namespace space
             }
 
             template <typename T>
-            static bool json_try_set(const json &j, const std::string &name, T &result)
+            static bool json_try_get(const json &j, const std::string &name, T &result)
             {
                 auto find = j.find(name);
                 if (find != j.end())
@@ -64,7 +64,7 @@ namespace space
             }
 
             template <typename T>
-            static bool json_try_set(const json &j, const std::string &name, sf::Vector2<T> &result)
+            static bool json_try_get(const json &j, const std::string &name, sf::Vector2<T> &result)
             {
                 auto find = j.find(name);
                 if (find != j.end())

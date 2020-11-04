@@ -33,8 +33,8 @@ namespace space
             virtual ~PlacedItem();
 
             // Methods
-            virtual SpaceObject *clone(const ObjectId &newId, GameSession &session) { return clonePlacedItem(newId, session); }
-            PlacedItem *clonePlacedItem(const ObjectId &newId, GameSession &session);
+            virtual SpaceObject *clone(const ObjectId &newId, const CloneContext &context) { return clonePlacedItem(newId, context); }
+            PlacedItem *clonePlacedItem(const ObjectId &newId, const CloneContext &context);
 
             static const std::string SpaceObjectType() { return "placed-item"; }
             virtual std::string type() const { return SpaceObjectType(); }

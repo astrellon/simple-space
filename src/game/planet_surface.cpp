@@ -8,24 +8,24 @@
 
 namespace space
 {
-    PlanetSurface::PlanetSurface(const ObjectId &id, const PlanetSurfaceDefinition &definition) : SpaceObject(id), definition(definition), _partOfPlanet(nullptr), _area(AreaType::PlanetSurface, this)
+    PlanetSurface::PlanetSurface(const ObjectId &id, const PlanetSurfaceDefinition &definition, bool isPartOfLivePhoto) : SpaceObject(id), definition(definition), _partOfPlanet(nullptr), _area(AreaType::PlanetSurface, this), _isPartOfLivePhoto(isPartOfLivePhoto)
     {
     }
 
-    SpaceObject *PlanetSurface::deepClone(const ObjectId &newIdPrefix, GameSession &session)
+    SpaceObject *PlanetSurface::deepClone(const ObjectId &newIdPrefix, const CloneContext &context)
     {
-        auto result = clonePlanetSurface(newIdPrefix + id, session);
+        auto result = clonePlanetSurface(newIdPrefix + id, context);
 
-        _area.cloneInto(newIdPrefix, session, result->area());
+        _area.cloneInto(newIdPrefix, result->area(), context);
 
         return result;
     }
 
-    PlanetSurface *PlanetSurface::clonePlanetSurface(const ObjectId &newId, GameSession &session)
+    PlanetSurface *PlanetSurface::clonePlanetSurface(const ObjectId &newId, const CloneContext &context)
     {
         std::cout << "Clone definition: " << definition.name << std::endl;
-        auto result = session.createObject<PlanetSurface>(newId, definition);
-        result->createMapLayersFromDefinition(session);
+        auto result = context.session.createObject<PlanetSurface>(newId, definition, context.isForLivePhoto);
+        result->createMapLayersFromDefinition(context.session);
         result->transform(_transform);
         return result;
     }

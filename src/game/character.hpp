@@ -26,8 +26,8 @@ namespace space
             Character(const ObjectId &id, const CharacterDefinition &definition);
 
             // Methods
-            virtual SpaceObject *clone(const ObjectId &newId, GameSession &session) { return cloneCharacter(newId, session); }
-            Character *cloneCharacter(const ObjectId &newId, GameSession &session);
+            virtual SpaceObject *clone(const ObjectId &newId, const CloneContext &context) { return cloneCharacter(newId, context); }
+            Character *cloneCharacter(const ObjectId &newId, const CloneContext &context);
 
             static const std::string SpaceObjectType() { return CharacterDefinition::DefinitionType(); }
             virtual std::string type() const { return SpaceObjectType(); }

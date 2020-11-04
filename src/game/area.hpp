@@ -11,6 +11,7 @@
 #include "draw_layers.hpp"
 #include "../non_copyable.hpp"
 #include "../types.hpp"
+#include "clone_context.hpp"
 
 namespace space
 {
@@ -50,7 +51,7 @@ namespace space
             // Methods
             AreaType type() const { return _type; }
 
-            void cloneInto(const ObjectId &newIdPrefix, GameSession &session, Area &targetArea) const;
+            void cloneInto(const ObjectId &newIdPrefix, Area &targetArea, const CloneContext &context) const;
 
             void addStaticCollider(PolygonCollider &collider);
             void removeStaticCollider(PolygonCollider &collider);

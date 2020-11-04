@@ -26,13 +26,13 @@ namespace space
             const PlanetSurfaceDefinition &definition;
 
             // Constructor
-            PlanetSurface(const ObjectId &id, const PlanetSurfaceDefinition &definition);
+            PlanetSurface(const ObjectId &id, const PlanetSurfaceDefinition &definition, bool isPartOfLivePhoto);
             virtual ~PlanetSurface() { }
 
             // Methods
-            virtual SpaceObject *clone(const ObjectId &newId, GameSession &session) { return clonePlanetSurface(newId, session); }
-            virtual SpaceObject *deepClone(const ObjectId &newIdPrefix, GameSession &session);
-            PlanetSurface *clonePlanetSurface(const ObjectId &newId, GameSession &session);
+            virtual SpaceObject *clone(const ObjectId &newId, const CloneContext &context) { return clonePlanetSurface(newId, context); }
+            virtual SpaceObject *deepClone(const ObjectId &newIdPrefix, const CloneContext &context);
+            PlanetSurface *clonePlanetSurface(const ObjectId &newId, const CloneContext &context);
 
             static const std::string SpaceObjectType() { return PlanetSurfaceDefinition::DefinitionType(); }
             virtual std::string type() const { return SpaceObjectType(); }
@@ -44,10 +44,12 @@ namespace space
             virtual void draw(GameSession &session, RenderCamera &target);
             virtual void onPostLoad(GameSession &session, LoadingContext &context);
             virtual bool checkForMouse(GameSession &session, sf::Vector2f mousePosition);
-            virtual bool doUpdateEveryFrame() const { return true; }
+            virtual bool doUpdateEveryFrame() const { return !_isPartOfLivePhoto; }
 
             void partOfPlanet(Planet *planet) { _partOfPlanet = planet; }
             Planet *partOfPlanet() const { return _partOfPlanet; }
+
+            bool isPartOfLivePhoto() const { return _isPartOfLivePhoto; }
 
         private:
 
@@ -55,6 +57,7 @@ namespace space
             Area _area;
             Planet *_partOfPlanet;
             std::vector<std::unique_ptr<MapLayer>> _mapLayers;
+            bool _isPartOfLivePhoto;
 
             // Methods
             void createMapLayersFromDefinition(GameSession &session);

@@ -28,14 +28,16 @@ namespace space
 
     void UIPhotoAlbum::doDraw(Engine &engine)
     {
-        auto &album = engine.currentSession()->playerController().photoAlbum();
+        auto &session = *engine.currentSession();
+        auto &album = session.playerController().photoAlbum();
 
         ImGui::Text("Photos: %i", (int)album.photos().size());
 
         for (auto photo : album.photos())
         {
             ImGui::Text("- Photo %s", photo->id.c_str());
-            photo->drawToInternalTexture(*engine.currentSession());
+            photo->updateInternalTarget(session, engine.deltaTime());
+            photo->drawToInternalTexture(session);
 
             // Somewhat awkward way to flip the texture upside down.
             auto &texture = photo->texture().getTexture();

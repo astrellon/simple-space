@@ -19,25 +19,25 @@
 
 namespace space
 {
-    StarSystem::StarSystem(const ObjectId &id, const StarSystemDefinition &definition) : SpaceObject(id), definition(definition), _area(AreaType::StarSystem, this)
+    StarSystem::StarSystem(const ObjectId &id, const StarSystemDefinition &definition, bool isPartOfLivePhoto) : SpaceObject(id), definition(definition), _area(AreaType::StarSystem, this), _isPartOfLivePhoto(isPartOfLivePhoto)
     {
         _area.main().sortEveryDraw = false;
     }
 
-    SpaceObject *StarSystem::deepClone(const ObjectId &newIdPrefix, GameSession &session)
+    SpaceObject *StarSystem::deepClone(const ObjectId &newIdPrefix, const CloneContext &context)
     {
-        auto result = cloneStarSystem(newIdPrefix + id, session);
+        auto result = cloneStarSystem(newIdPrefix + id, context);
 
-        _area.cloneInto(newIdPrefix, session, result->area());
+        _area.cloneInto(newIdPrefix, result->area(), context);
 
         return result;
     }
 
-    StarSystem *StarSystem::cloneStarSystem(const ObjectId &newId, GameSession &session)
+    StarSystem *StarSystem::cloneStarSystem(const ObjectId &newId, const CloneContext &context)
     {
-        auto result = session.createObject<StarSystem>(newId, definition);
+        auto result = context.session.createObject<StarSystem>(newId, definition, context.isForLivePhoto);
         result->transform(_transform);
-        result->init(session);
+        result->init(context.session);
         return result;
     }
 

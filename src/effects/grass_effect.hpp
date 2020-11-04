@@ -20,8 +20,8 @@ namespace space
             GrassEffect(const ObjectId &id, const GrassEffectDefinition &definition);
 
             // Methods
-            virtual SpaceObject *clone(const ObjectId &newId, GameSession &session) { return cloneGrassEffect(newId, session); }
-            GrassEffect *cloneGrassEffect(const ObjectId &newId, GameSession &session);
+            virtual SpaceObject *clone(const ObjectId &newId, const CloneContext &context) { return cloneGrassEffect(newId, context); }
+            GrassEffect *cloneGrassEffect(const ObjectId &newId, const CloneContext &context);
 
             virtual void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform);
             virtual void draw(GameSession &session, RenderCamera &target);

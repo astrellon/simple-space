@@ -83,7 +83,9 @@ namespace space
 
         auto parentObject = insideArea.partOfObject();
         auto rootObject = parentObject->rootObject();
-        auto deepClone = rootObject->deepClone(newIdPrefix, *this);
+
+        CloneContext cloneContext(*this, true, photoArea);
+        auto deepClone = rootObject->deepClone(newIdPrefix, cloneContext);
         auto newParentObjectId = newIdPrefix + parentObject->id;
 
         SpaceObject *newParent;

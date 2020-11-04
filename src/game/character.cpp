@@ -26,9 +26,9 @@ namespace space
         _spriteBounds.left *= Utils::InsideScale;
     }
 
-    Character *Character::cloneCharacter(const ObjectId &newId, GameSession &session)
+    Character *Character::cloneCharacter(const ObjectId &newId, const CloneContext &context)
     {
-        auto result = session.createObject<Character>(newId, definition);
+        auto result = context.session.createObject<Character>(newId, definition);
         result->flipSprite(_flipSprite);
         result->transform(_transform);
         return result;

@@ -22,9 +22,9 @@ namespace space
         _spriteBounds = _sprite.getGlobalBounds();
     }
 
-    SpacePortal *SpacePortal::cloneSpacePortal(const ObjectId &newId, GameSession &session)
+    SpacePortal *SpacePortal::cloneSpacePortal(const ObjectId &newId, const CloneContext &context)
     {
-        auto result = session.createObject<SpacePortal>(newId, definition);
+        auto result = context.session.createObject<SpacePortal>(newId, definition);
         result->transform(_transform);
         return result;
     }

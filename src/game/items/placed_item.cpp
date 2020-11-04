@@ -45,9 +45,9 @@ namespace space
 
     }
 
-    PlacedItem *PlacedItem::clonePlacedItem(const ObjectId &newId, GameSession &session)
+    PlacedItem *PlacedItem::clonePlacedItem(const ObjectId &newId, const CloneContext &context)
     {
-        auto result = session.createObject<PlacedItem>(newId, item);
+        auto result = context.session.createObject<PlacedItem>(newId, item);
         result->transform(_transform);
         return result;
     }

@@ -97,8 +97,8 @@ namespace space
         float scale = 1.0f, rotation = 0.0f;
         auto position = fromJsonVector2f(j.at("position"));
 
-        Utils::json_try_set(j, "scale", scale);
-        Utils::json_try_set(j, "rotation", rotation);
+        Utils::json_try_get(j, "scale", scale);
+        Utils::json_try_get(j, "rotation", rotation);
 
         return SpaceTransform(rotation, position, scale);
     }

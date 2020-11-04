@@ -21,8 +21,8 @@ namespace space
             ~LivePhotoTarget() { }
 
             // Methods
-            virtual SpaceObject *clone(const ObjectId &newId, GameSession &session) { return cloneLivePhotoTarget(newId, session); }
-            LivePhotoTarget *cloneLivePhotoTarget(const ObjectId &newId, GameSession &session);
+            virtual SpaceObject *clone(const ObjectId &newId, const CloneContext &context) { return cloneLivePhotoTarget(newId, context); }
+            LivePhotoTarget *cloneLivePhotoTarget(const ObjectId &newId, const CloneContext &context);
 
             static const std::string SpaceObjectType() { return "live-photo-target"; }
             virtual std::string type() const { return SpaceObjectType(); }
@@ -41,8 +41,8 @@ namespace space
             ~LivePhoto() { }
 
             // Methods
-            virtual SpaceObject *clone(const ObjectId &newId, GameSession &session) { return cloneLivePhoto(newId, session); }
-            LivePhoto *cloneLivePhoto(const ObjectId &newId, GameSession &session);
+            virtual SpaceObject *clone(const ObjectId &newId, const CloneContext &context) { return cloneLivePhoto(newId, context); }
+            LivePhoto *cloneLivePhoto(const ObjectId &newId, const CloneContext &context);
 
             void init(Engine &engine, sf::Vector2f size, float cameraScale);
 
@@ -52,7 +52,8 @@ namespace space
             virtual void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform);
             virtual void draw(GameSession &session, RenderCamera &target);
 
-            virtual void drawToInternalTexture(GameSession &session);
+            void updateInternalTarget(GameSession &session, sf::Time dt);
+            void drawToInternalTexture(GameSession &session);
 
             sf::RenderTexture &texture() const;
 

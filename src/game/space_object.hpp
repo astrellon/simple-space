@@ -10,6 +10,7 @@
 #include "../types.hpp"
 #include "draw_layers.hpp"
 #include "interactions/interactable.hpp"
+#include "clone_context.hpp"
 
 namespace space
 {
@@ -30,8 +31,8 @@ namespace space
             virtual ~SpaceObject() { }
 
             // Methods
-            virtual SpaceObject *clone(const ObjectId &newId, GameSession &session) = 0;
-            virtual SpaceObject *deepClone(const ObjectId &newIdPrefix, GameSession &session) { return clone(newIdPrefix + id, session); }
+            virtual SpaceObject *clone(const ObjectId &newId, const CloneContext &context) = 0;
+            virtual SpaceObject *deepClone(const ObjectId &newIdPrefix, const CloneContext &context) { return clone(newIdPrefix + id, context); }
             virtual std::string type() const = 0;
 
             const SpaceTransform &transform() const { return _transform; }

@@ -23,9 +23,9 @@ namespace space
         setTransformFromLocation();
     }
 
-    Planet *Planet::clonePlanet(const ObjectId &newId, GameSession &session)
+    Planet *Planet::clonePlanet(const ObjectId &newId, const CloneContext &context)
     {
-        auto result = session.createObject<Planet>(newId, definition);
+        auto result = context.session.createObject<Planet>(newId, definition);
         result->transform(_transform);
         return result;
     }

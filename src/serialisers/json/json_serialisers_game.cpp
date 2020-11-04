@@ -184,7 +184,7 @@ namespace space
         auto result = session.createObject<Ship>(id, *definition);
         result->transform(fromJsonTransform(j.at("transform")));
         sf::Vector2f prevPosition;
-        if (!Utils::json_try_set(j, "prevPosition", prevPosition))
+        if (!Utils::json_try_get(j, "prevPosition", prevPosition))
         {
             prevPosition = result->transform().position;
         }
@@ -310,7 +310,8 @@ namespace space
     {
         return json {
             {"definitionId", input.definition.id},
-            {"area", toJson(input.area())}
+            {"area", toJson(input.area())},
+            {"partOfLivePhoto", input.isPartOfLivePhoto()}
         };
     }
     bool addFromJsonStarSystem(const json &j, GameSession &session, LoadingContext &context)
@@ -323,7 +324,10 @@ namespace space
             return false;
         }
 
-        auto starSystem = session.createObject<StarSystem>(definition->id, *definition);
+        auto partOfLivePhoto = false;
+        Utils::json_try_get(j, "partOfLivePhoto", partOfLivePhoto);
+
+        auto starSystem = session.createObject<StarSystem>(definition->id, *definition, partOfLivePhoto);
         starSystem->init(session);
         auto instances = context.getAreaInstance(&starSystem->area());
         addFromJsonAreaInstances(j.at("area"), instances);
@@ -336,7 +340,8 @@ namespace space
         return json {
             {"planetId", input.partOfPlanet()->id},
             {"definitionId", input.definition.id},
-            {"area", toJson(input.area())}
+            {"area", toJson(input.area())},
+            {"partOfLivePhoto", input.isPartOfLivePhoto()}
         };
     }
     bool addFromJsonPlanetSurface(const json &j, GameSession &session, LoadingContext &context)
@@ -356,7 +361,11 @@ namespace space
             std::cout << "Unable to find planet " << planetId << " for planet surface" << std::endl;
             return false;
         }
-        auto planetSurface = session.createObject<PlanetSurface>(definition->id, *definition);
+
+        auto partOfLivePhoto = false;
+        Utils::json_try_get(j, "partOfLivePhoto", partOfLivePhoto);
+
+        auto planetSurface = session.createObject<PlanetSurface>(definition->id, *definition, partOfLivePhoto);
         planetSurface->partOfPlanet(planet);
 
         auto instances = context.getAreaInstance(&planetSurface->area());
@@ -416,14 +425,14 @@ namespace space
     bool addFromJsonCharacterControllerBase(const json &j, GameSession &session, CharacterController &controller)
     {
         ControllingValue controlling = ControlNone;
-        if (Utils::json_try_set<ControllingValue>(j, "controlling", controlling))
+        if (Utils::json_try_get<ControllingValue>(j, "controlling", controlling))
         {
             controller.controlling(controlling);
         }
 
         ObjectId controllingCharacterId, controllingShipId;
 
-        if (Utils::json_try_set(j, "controllingCharacter", controllingCharacterId))
+        if (Utils::json_try_get(j, "controllingCharacter", controllingCharacterId))
         {
             Character *character;
             if (session.tryGetSpaceObject<Character>(controllingCharacterId, &character))
@@ -436,7 +445,7 @@ namespace space
             }
         }
 
-        if (Utils::json_try_set(j, "controllingShip", controllingShipId))
+        if (Utils::json_try_get(j, "controllingShip", controllingShipId))
         {
             Ship *ship;
             if (session.tryGetSpaceObject<Ship>(controllingShipId, &ship))

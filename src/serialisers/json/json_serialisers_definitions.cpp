@@ -149,7 +149,7 @@ namespace space
         j.at("texturePath").get_to(result->texturePath);
         j.at("interiorTexturePath").get_to(result->interiorTexturePath);
 
-        Utils::json_try_set(j, "interiorTextureOffset", result->interiorTextureOffset);
+        Utils::json_try_get(j, "interiorTextureOffset", result->interiorTextureOffset);
 
         auto interiorPolygon = j.find("interiorPolygon");
         if (interiorPolygon != j.end())
@@ -185,7 +185,7 @@ namespace space
             }
         }
 
-        Utils::json_try_set(j, "engineGlowTexturePath", result->engineGlowTexturePath);
+        Utils::json_try_get(j, "engineGlowTexturePath", result->engineGlowTexturePath);
         j.at("name").get_to(result->name);
         j.at("maxRotation").get_to(result->maxRotation);
         j.at("maxSpeed").get_to(result->maxSpeed);
@@ -216,7 +216,7 @@ namespace space
         j.at("spriteSize").get_to(input->spriteSize);
         j.at("speed").get_to(input->speed);
 
-        Utils::json_try_set(j, "compendiumId", input->compendiumId);
+        Utils::json_try_get(j, "compendiumId", input->compendiumId);
 
         return input;
     }
@@ -301,7 +301,7 @@ namespace space
         j.at("size").get_to(result->size);
         j.at("scale").get_to(result->scale);
 
-        Utils::json_try_set(j, "oscillateNoise", result->oscillateNoise);
+        Utils::json_try_get(j, "oscillateNoise", result->oscillateNoise);
 
         auto planetSurfaceIds = j.find("planetSurfaceIds");
         if (planetSurfaceIds != j.end())
@@ -416,8 +416,8 @@ namespace space
         auto result = std::make_unique<PlaceableItemDefinition>(id);
         j.at("name").get_to(result->name);
         j.at("texturePath").get_to(result->texturePath);
-        Utils::json_try_set(j, "canPickup", result->canPickup);
-        Utils::json_try_set(j, "textureOffset", result->textureOffset);
+        Utils::json_try_get(j, "canPickup", result->canPickup);
+        Utils::json_try_get(j, "textureOffset", result->textureOffset);
 
         auto physicsShapeFind = j.find("physicsShape");
         if (physicsShapeFind != j.end())
@@ -426,7 +426,7 @@ namespace space
         }
 
         std::string drawLayerString;
-        if (Utils::json_try_set(j, "drawLayer", drawLayerString))
+        if (Utils::json_try_get(j, "drawLayer", drawLayerString))
         {
             result->drawLayer = DrawLayers::fromString(drawLayerString);
         }
@@ -511,7 +511,7 @@ namespace space
 
         j.at("fragmentPath").get_to(result->fragementPath);
         j.at("vertexPath").get_to(result->vertexPath);
-        Utils::json_try_set(j, "name", result->name);
+        Utils::json_try_get(j, "name", result->name);
 
         return result;
     }
@@ -640,10 +640,10 @@ namespace space
     {
         StarBackgroundOptions result;
 
-        Utils::json_try_set(j, "shaderName", result.shaderName);
-        Utils::json_try_set(j, "area", result.area);
-        Utils::json_try_set(j, "numLayers", result.numLayers);
-        Utils::json_try_set(j, "numParticles", result.numParticles);
+        Utils::json_try_get(j, "shaderName", result.shaderName);
+        Utils::json_try_get(j, "area", result.area);
+        Utils::json_try_get(j, "numLayers", result.numLayers);
+        Utils::json_try_get(j, "numParticles", result.numParticles);
 
         auto backgroundColourString = j.find("backgroundColour");
         if (backgroundColourString != j.end())

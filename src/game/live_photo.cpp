@@ -14,9 +14,9 @@ namespace space
 
     }
 
-    LivePhotoTarget *LivePhotoTarget::cloneLivePhotoTarget(const ObjectId &newId, GameSession &session)
+    LivePhotoTarget *LivePhotoTarget::cloneLivePhotoTarget(const ObjectId &newId, const CloneContext &context)
     {
-        return session.createObject<LivePhotoTarget>(newId);
+        return context.session.createObject<LivePhotoTarget>(newId);
     }
 
     LivePhoto::LivePhoto(const ObjectId &id) : SpaceObject(id), _targetObject(nullptr)
@@ -24,9 +24,9 @@ namespace space
 
     }
 
-    LivePhoto *LivePhoto::cloneLivePhoto(const ObjectId &newId, GameSession &session)
+    LivePhoto *LivePhoto::cloneLivePhoto(const ObjectId &newId, const CloneContext &context)
     {
-        auto result = session.createObject<LivePhoto>(newId);
+        auto result = context.session.createObject<LivePhoto>(newId);
         result->transform(_transform);
         return result;
     }
@@ -53,11 +53,6 @@ namespace space
     void LivePhoto::update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform)
     {
         updateWorldTransform(parentTransform);
-
-        if (_targetObject)
-        {
-            _targetObject->update(session, dt, parentTransform);
-        }
     }
 
     void LivePhoto::draw(GameSession &session, RenderCamera &target)
@@ -66,6 +61,18 @@ namespace space
         {
             drawToInternalTexture(session);
             target.texture().draw(_cameraSprite, _worldTransform);
+        }
+    }
+
+    void LivePhoto::updateInternalTarget(GameSession &session, sf::Time dt)
+    {
+        if (_targetObject)
+        {
+            auto root = _targetObject->rootObject();
+            if (root)
+            {
+                root->update(session, dt, sf::Transform::Identity);
+            }
         }
     }
 
