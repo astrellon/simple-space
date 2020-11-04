@@ -10,10 +10,11 @@
 #include "ui_selected.hpp"
 #include "ui_objects.hpp"
 #include "ui_frame_buffers.hpp"
+#include "ui_photo_album.hpp"
 
 namespace space
 {
-    UIManager::UIManager() : _uiInteractables(nullptr), _uiInventory(nullptr), _uiTeleporter(nullptr), _uiDialogue(nullptr), _uiSelected(nullptr), _uiObjects(nullptr), _uiFrameBuffers(nullptr)
+    UIManager::UIManager() : _uiInteractables(nullptr), _uiInventory(nullptr), _uiTeleporter(nullptr), _uiDialogue(nullptr), _uiSelected(nullptr), _uiObjects(nullptr), _uiFrameBuffers(nullptr), _uiPhotoAlbum(nullptr)
     {
 
     }
@@ -29,6 +30,7 @@ namespace space
         _uiSelected = createWindow<UISelected>();
         _uiObjects = createWindow<UIObjects>();
         _uiFrameBuffers = createWindow<UIFrameBuffers>();
+        _uiPhotoAlbum = createWindow<UIPhotoAlbum>();
     }
 
     void UIManager::draw(Engine &engine)

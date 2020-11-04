@@ -52,6 +52,10 @@ namespace space
             virtual void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform);
             virtual void draw(GameSession &session, RenderCamera &target);
 
+            virtual void drawToInternalTexture(GameSession &session);
+
+            sf::RenderTexture &texture() const;
+
             void targetObject(SpaceObject *obj) { _targetObject = obj; }
             SpaceObject *targetObject() const { return _targetObject; }
 

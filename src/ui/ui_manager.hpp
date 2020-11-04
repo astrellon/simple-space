@@ -18,6 +18,7 @@ namespace space
     class UISelected;
     class UIObjects;
     class UIFrameBuffers;
+    class UIPhotoAlbum;
 
     class UIManager
     {
@@ -54,6 +55,7 @@ namespace space
             UISelected &uiSelected() { return *_uiSelected; }
             UIObjects &uiObjects() { return *_uiObjects; }
             UIFrameBuffers &uiFrameBuffers() { return *_uiFrameBuffers; }
+            UIPhotoAlbum &uiPhotoAlbum() { return *_uiPhotoAlbum; }
 
         private:
             // Fields
@@ -68,6 +70,7 @@ namespace space
             UISelected *_uiSelected;
             UIObjects *_uiObjects;
             UIFrameBuffers *_uiFrameBuffers;
+            UIPhotoAlbum *_uiPhotoAlbum;
 
             // Methods
     };

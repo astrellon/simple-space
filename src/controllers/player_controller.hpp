@@ -4,6 +4,7 @@
 
 #include "../types.hpp"
 #include "character_controller.hpp"
+#include "../photo_album.hpp"
 
 namespace space
 {
@@ -24,9 +25,13 @@ namespace space
             void selectedObject(const ObjectId &id) { _selectedObject = id; }
             ObjectId selectedObject() const { return _selectedObject; }
 
+            PhotoAlbum &photoAlbum() { return _photoAlbum; }
+            const PhotoAlbum &photoAlbum() const { return _photoAlbum; }
+
         private:
             // Fields
             ObjectId _selectedObject;
+            PhotoAlbum _photoAlbum;
 
             // Methods
             void controlShip(sf::Time dt);

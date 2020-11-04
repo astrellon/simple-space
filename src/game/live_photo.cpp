@@ -45,6 +45,11 @@ namespace space
         _cameraSprite.setScale(sf::Vector2f(1, -1));
     }
 
+    sf::RenderTexture &LivePhoto::texture() const
+    {
+        return _camera->texture();
+    }
+
     void LivePhoto::update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform)
     {
         updateWorldTransform(parentTransform);
@@ -59,11 +64,20 @@ namespace space
     {
         if (_targetObject)
         {
-            _camera->preDraw();
-
-            session.drawAtObject(*_targetObject, _targetObject->transform().position, *_camera.get());
+            drawToInternalTexture(session);
             target.texture().draw(_cameraSprite, _worldTransform);
         }
     }
+
+    void LivePhoto::drawToInternalTexture(GameSession &session)
+    {
+        if (_targetObject)
+        {
+            _camera->preDraw();
+            session.drawAtObject(*_targetObject, _targetObject->transform().position, *_camera.get());
+        }
+    }
+
+
 
 } // space
