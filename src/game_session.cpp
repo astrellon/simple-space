@@ -84,7 +84,7 @@ namespace space
         auto parentObject = insideArea.partOfObject();
         auto rootObject = parentObject->rootObject();
 
-        CloneContext cloneContext(*this, true, photoArea);
+        CloneContext cloneContext(*this, true, photoArea, &insideArea);
         auto deepClone = rootObject->deepClone(newIdPrefix, cloneContext);
         auto newParentObjectId = newIdPrefix + parentObject->id;
 
@@ -239,9 +239,13 @@ namespace space
     {
         checkNextFrameState();
 
-        if (space::Keyboard::isKeyDown(sf::Keyboard::T))
+        if (Keyboard::isKeyPressed(sf::Keyboard::Escape))
         {
-            if (_playerController.controlling() == ControlShip)
+            if (_takingAPhoto)
+            {
+                _takingAPhoto = false;
+            }
+            else if (_playerController.controlling() == ControlShip)
             {
                 setPlayerControllingCharacter();
             }
@@ -255,86 +259,8 @@ namespace space
         for (auto &spaceObject : _spaceObjectsUpdateEveryFrame)
             spaceObject->update(*this, dt, sf::Transform::Identity);
 
-        auto &sceneRender = _engine.sceneRender();
-        _nextMouseOverObject = nullptr;
-
-        if (ImGui::IsAnyWindowHovered() || ImGui::IsAnyItemHovered())
-        {
-            _mouseOverObject = nullptr;
-            return;
+        handleMouse();
         }
-
-        auto mousePosition = sf::Mouse::getPosition(*_engine.window());
-        auto worldMousePosition = _engine.window()->mapPixelToCoords(mousePosition, sceneRender.camera().view());
-
-        auto rootWorld = _playerController.controllingObject()->rootObject();
-
-        if (Keyboard::isKeyPressed(sf::Keyboard::Escape))
-        {
-            _takingAPhoto = false;
-        }
-
-        if (_takingAPhoto)
-        {
-            if (Mouse::isMousePressed(sf::Mouse::Left))
-            {
-                auto livePhoto = createLivePhoto(*_playerController.controllingObject()->insideArea(), sf::IntRect(worldMousePosition.x, worldMousePosition.y, 256, 256));
-
-                _playerController.photoAlbum().addPhoto(livePhoto);
-                _takingAPhoto = false;
-                return;
-            }
-        }
-
-        if (rootWorld->type() == StarSystem::SpaceObjectType())
-        {
-            auto starSystem = dynamic_cast<StarSystem *>(rootWorld);
-            auto foundInPortal = false;
-            for (auto spacePortal : starSystem->area().spacePortals())
-            {
-                foundInPortal = checkMouseSpacePortal(worldMousePosition, spacePortal);
-                if (foundInPortal)
-                {
-                    break;
-                }
-            }
-
-            if (!foundInPortal)
-            {
-                starSystem->checkForMouse(*this, worldMousePosition);
-            }
-        }
-        else if (rootWorld->type() == PlanetSurface::SpaceObjectType())
-        {
-            auto planetSurface = dynamic_cast<PlanetSurface *>(rootWorld);
-            planetSurface->checkForMouse(*this, worldMousePosition);
-        }
-
-        if (_nextMouseOverObject != _mouseOverObject)
-        {
-            // Hover changed!
-            if (_mouseOverObject)
-            {
-                std::cout << "Left " << _mouseOverObject->id << " ";
-            }
-            if (_nextMouseOverObject)
-            {
-                std::cout << "over " << _nextMouseOverObject->id;
-            }
-            else
-            {
-                std::cout << "over nothing";
-            }
-
-            std::cout << std::endl;
-        }
-        _mouseOverObject = _nextMouseOverObject;
-
-        if (Mouse::isMousePressed(sf::Mouse::Left))
-        {
-            _playerController.selectedObject(_mouseOverObject ? _mouseOverObject->id : "");
-        }
-    }
 
     void GameSession::draw()
     {
@@ -646,5 +572,83 @@ namespace space
         }
 
         _renderStack.pop_back();
+    }
+
+    void GameSession::handleMouse()
+    {
+        auto &sceneRender = _engine.sceneRender();
+        _nextMouseOverObject = nullptr;
+
+        if (ImGui::IsAnyWindowHovered() || ImGui::IsAnyItemHovered())
+        {
+            _mouseOverObject = nullptr;
+            return;
+        }
+
+        auto mousePosition = sf::Mouse::getPosition(*_engine.window());
+        auto worldMousePosition = _engine.window()->mapPixelToCoords(mousePosition, sceneRender.camera().view());
+
+        auto rootWorld = _playerController.controllingObject()->rootObject();
+
+        if (_takingAPhoto)
+        {
+            if (Mouse::isMousePressed(sf::Mouse::Left))
+            {
+                auto livePhoto = createLivePhoto(*_playerController.controllingObject()->insideArea(), sf::IntRect(worldMousePosition.x, worldMousePosition.y, 256, 256));
+
+                _playerController.photoAlbum().addPhoto(livePhoto);
+                _takingAPhoto = false;
+                return;
+            }
+        }
+
+        if (rootWorld->type() == StarSystem::SpaceObjectType())
+        {
+            auto starSystem = dynamic_cast<StarSystem *>(rootWorld);
+            auto foundInPortal = false;
+            for (auto spacePortal : starSystem->area().spacePortals())
+            {
+                foundInPortal = checkMouseSpacePortal(worldMousePosition, spacePortal);
+                if (foundInPortal)
+                {
+                    break;
+                }
+            }
+
+            if (!foundInPortal)
+            {
+                starSystem->checkForMouse(*this, worldMousePosition);
+            }
+        }
+        else if (rootWorld->type() == PlanetSurface::SpaceObjectType())
+        {
+            auto planetSurface = dynamic_cast<PlanetSurface *>(rootWorld);
+            planetSurface->checkForMouse(*this, worldMousePosition);
+        }
+
+        if (_nextMouseOverObject != _mouseOverObject)
+        {
+            // Hover changed!
+            if (_mouseOverObject)
+            {
+                std::cout << "Left " << _mouseOverObject->id << " ";
+            }
+            if (_nextMouseOverObject)
+            {
+                std::cout << "over " << _nextMouseOverObject->id;
+            }
+            else
+            {
+                std::cout << "over nothing";
+            }
+
+            std::cout << std::endl;
+        }
+        _mouseOverObject = _nextMouseOverObject;
+
+        if (Mouse::isMousePressed(sf::Mouse::Left))
+        {
+            _playerController.selectedObject(_mouseOverObject ? _mouseOverObject->id : "");
+        }
     }
 } // namespace space

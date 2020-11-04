@@ -51,6 +51,13 @@ namespace space
             }
 
             template <typename T>
+            static inline bool contains(const std::vector<T> &list, T item)
+            {
+                auto find = std::find(list.begin(), list.end(), item);
+                return find != list.end();
+            }
+
+            template <typename T>
             static bool json_try_get(const json &j, const std::string &name, T &result)
             {
                 auto find = j.find(name);

@@ -327,7 +327,7 @@ namespace space
         auto partOfLivePhoto = false;
         Utils::json_try_get(j, "partOfLivePhoto", partOfLivePhoto);
 
-        auto starSystem = session.createObject<StarSystem>(definition->id, *definition, partOfLivePhoto);
+        auto starSystem = session.createObject<StarSystem>(session, definition->id, *definition, partOfLivePhoto);
         starSystem->init(session);
         auto instances = context.getAreaInstance(&starSystem->area());
         addFromJsonAreaInstances(j.at("area"), instances);

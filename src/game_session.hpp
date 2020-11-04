@@ -204,5 +204,7 @@ namespace space
             void drawSpacePortal(SpacePortal *spacePortal);
             bool checkMouseSpacePortal(sf::Vector2f mousePosition, SpacePortal *spacePortal);
 
+            void handleMouse();
+
     };
 } // town

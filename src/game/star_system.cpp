@@ -19,25 +19,28 @@
 
 namespace space
 {
-    StarSystem::StarSystem(const ObjectId &id, const StarSystemDefinition &definition, bool isPartOfLivePhoto) : SpaceObject(id), definition(definition), _area(AreaType::StarSystem, this), _isPartOfLivePhoto(isPartOfLivePhoto)
+    StarSystem::StarSystem(GameSession &session, const ObjectId &id, const StarSystemDefinition &definition, bool isPartOfLivePhoto) : SpaceObject(id), definition(definition), _area(AreaType::StarSystem, this), _isPartOfLivePhoto(isPartOfLivePhoto)
     {
         _area.main().sortEveryDraw = false;
+        _background = std::make_unique<StarBackground>(session.engine(), definition.starBackgroundOptions);
     }
 
     SpaceObject *StarSystem::deepClone(const ObjectId &newIdPrefix, const CloneContext &context)
     {
         auto result = cloneStarSystem(newIdPrefix + id, context);
 
-        _area.cloneInto(newIdPrefix, result->area(), context);
+        if (Utils::contains(context.showingAreas, &_area))
+        {
+            _area.cloneInto(newIdPrefix, result->area(), context);
+        }
 
         return result;
     }
 
     StarSystem *StarSystem::cloneStarSystem(const ObjectId &newId, const CloneContext &context)
     {
-        auto result = context.session.createObject<StarSystem>(newId, definition, context.isForLivePhoto);
+        auto result = context.session.createObject<StarSystem>(context.session, newId, definition, context.isForLivePhoto);
         result->transform(_transform);
-        result->init(context.session);
         return result;
     }
 
@@ -73,7 +76,6 @@ namespace space
     void StarSystem::init(GameSession &session)
     {
         createCelestialBody(session, definition.rootBody.get(), sf::Transform::Identity);
-        _background = std::make_unique<StarBackground>(session.engine(), definition.starBackgroundOptions);
     }
 
     void StarSystem::onPostLoad(GameSession &session, LoadingContext &context)

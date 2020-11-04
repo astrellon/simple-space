@@ -49,7 +49,10 @@ namespace space
     {
         auto result = cloneShip(newIdPrefix + id, context);
 
-        _area.cloneInto(newIdPrefix, result->area(), context);
+        if (Utils::contains(context.showingAreas, &_area))
+        {
+            _area.cloneInto(newIdPrefix, result->area(), context);
+        }
 
         return result;
     }

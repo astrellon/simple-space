@@ -26,7 +26,7 @@ namespace space
             const StarSystemDefinition &definition;
 
             // Constructor
-            StarSystem(const ObjectId &id, const StarSystemDefinition &definition, bool isPartOfLivePhoto = false);
+            StarSystem(GameSession &session, const ObjectId &id, const StarSystemDefinition &definition, bool isPartOfLivePhoto = false);
             virtual ~StarSystem() { }
 
             // Methods
