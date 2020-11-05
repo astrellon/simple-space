@@ -25,6 +25,8 @@
 #include "ui/ui_manager.hpp"
 #include "ui/ui_debug.hpp"
 
+#include "definitions/cursor.hpp"
+
 namespace space
 {
     Engine::Engine(sf::RenderWindow *window) :
@@ -105,6 +107,18 @@ namespace space
     {
         _currentSession = std::make_unique<GameSession>(*this);
         return _currentSession.get();
+    }
+
+    void Engine::changeCursor(const DefinitionId &cursorId)
+    {
+        if (!Mouse::cursor() || Mouse::cursor()->id != cursorId)
+        {
+            const Cursor *cursor;
+            if (_definitionManager->tryGet(cursorId, &cursor))
+            {
+                Mouse::cursor(cursor);
+            }
+        }
     }
 
     void Engine::initEffects()
@@ -205,8 +219,7 @@ namespace space
             style.PopupRounding = 0;
             style.ScrollbarRounding = 0;
 
-            auto &io = ImGui::GetIO();
-            io.MouseDrawCursor = true;
+            updateCursorState();
         }
     }
 
@@ -250,6 +263,7 @@ namespace space
         }
 
         Mouse::prevMousePosition(sf::Mouse::getPosition());
+        Mouse::update(*this, _deltaTime);
     }
 
     void Engine::draw()
@@ -275,6 +289,9 @@ namespace space
             _uiManager->draw(*this);
             ImGui::SFML::Render(_sceneRender->texture());
         }
+
+        _sceneRender->texture().setView(_window->getView());
+        Mouse::draw(*this, *_sceneRender);
 
         _sceneRender->texture().display();
 
@@ -303,6 +320,21 @@ namespace space
 
             DrawDebug::glDraw++;
             to.draw(sprite);
+        }
+    }
+
+    void Engine::updateCursorState()
+    {
+        if (_headlessMode)
+        {
+            return;
+        }
+
+        if (_initedImgui)
+        {
+            auto &io = ImGui::GetIO();
+            io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange;
+            io.MouseDrawCursor = false;
         }
     }
 }

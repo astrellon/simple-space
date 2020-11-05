@@ -1,0 +1,15 @@
+[
+    {
+        "type": "cursor",
+        "id": "CURSOR_DEFAULT",
+        "name": "Default",
+        "texturePath": "data/textures/cursors/defaultCursor.png"
+    },
+    {
+        "type": "cursor",
+        "id": "CURSOR_CAMERA",
+        "name": "Camera",
+        "texturePath": "data/textures/cursors/cameraCursor.png",
+        "textureOrigin": [64, 64]
+    }
+]

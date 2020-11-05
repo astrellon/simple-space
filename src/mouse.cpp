@@ -2,6 +2,11 @@
 
 #include <algorithm>
 
+#include "engine.hpp"
+#include "definitions/cursor.hpp"
+#include "imgui/imgui.h"
+#include "imgui/imgui-SFML.h"
+
 namespace space
 {
     sf::Vector2i Mouse::_PrevMousePosition;
@@ -10,6 +15,9 @@ namespace space
 
     Mouse::ButtonPositions Mouse::_ButtonUpPositions;
     Mouse::ButtonPositions Mouse::_ButtonDownPositions;
+
+    sf::Sprite Mouse::_CursorSprite;
+    const Cursor *Mouse::_Cursor = nullptr;
 
     bool Mouse::isMousePressed(sf::Mouse::Button button)
     {
@@ -80,5 +88,39 @@ namespace space
     sf::Vector2i Mouse::prevMousePosition()
     {
         return _PrevMousePosition;
+    }
+
+    void Mouse::cursor(const Cursor *cursor)
+    {
+        _Cursor = cursor;
+        if (cursor && cursor->texture)
+        {
+            _CursorSprite.setTexture(*cursor->texture, true);
+            _CursorSprite.setOrigin(cursor->textureOrigin);
+        }
+    }
+
+    void Mouse::update(Engine &engine, sf::Time dt)
+    {
+        if (_Cursor && _Cursor->texture)
+        {
+            auto cameraScale = engine.cameraScale();
+            engine.window()->setMouseCursorVisible(false);
+            auto mousePosition = sf::Mouse::getPosition(*engine.window());
+            _CursorSprite.setPosition(static_cast<sf::Vector2f>(static_cast<sf::Vector2i>(static_cast<sf::Vector2f>(mousePosition) / cameraScale)) * cameraScale);
+            _CursorSprite.setScale(sf::Vector2f(engine.cameraScale(), engine.cameraScale()));
+        }
+        else
+        {
+            engine.window()->setMouseCursorVisible(true);
+        }
+    }
+
+    void Mouse::draw(Engine &engine, RenderCamera &target)
+    {
+        if (_Cursor && _Cursor->texture)
+        {
+            target.texture().draw(_CursorSprite);
+        }
     }
 } // space

@@ -24,6 +24,7 @@
 #include "../../definitions/shader_definition.hpp"
 #include "../../definitions/grass_effect_definition.hpp"
 #include "../../definitions/compendium_definition.hpp"
+#include "../../definitions/cursor.hpp"
 
 using nlohmann::json;
 
@@ -72,6 +73,9 @@ namespace space
         else if (type == CompendiumDefinition::DefinitionType())
             j = toJson(dynamic_cast<const CompendiumDefinition &>(input));
 
+        else if (type == Cursor::DefinitionType())
+            j = toJson(dynamic_cast<const Cursor &>(input));
+
         else
             std::cout << "Error!" << std::endl;
 
@@ -119,6 +123,9 @@ namespace space
 
         if (type == CompendiumDefinition::DefinitionType())
             return fromJsonCompendiumDefinition(j);
+
+        if (type == Cursor::DefinitionType())
+            return fromJsonCursor(j);
 
         throw std::runtime_error("Oh no");
     }
@@ -561,6 +568,27 @@ namespace space
         j.at("species").get_to(result->species);
         j.at("description").get_to(result->description);
         //j.at("picturePath").get_to(result->picturePath);
+
+        return result;
+    }
+
+    json toJson(const Cursor &input)
+    {
+        return json {
+            {"id", input.id},
+            {"name", input.name},
+            {"texturePath", input.texturePath},
+            {"textureOrigin", toJson(input.textureOrigin)}
+        };
+    }
+    std::unique_ptr<Cursor> fromJsonCursor(const json &j)
+    {
+        auto id = j.at("id").get<DefinitionId>();
+        auto result = std::make_unique<Cursor>(id);
+
+        j.at("name").get_to(result->name);
+        j.at("texturePath").get_to(result->texturePath);
+        Utils::json_try_get(j, "textureOrigin", result->textureOrigin);
 
         return result;
     }

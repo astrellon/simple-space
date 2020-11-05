@@ -20,7 +20,7 @@
 #include "src/definitions/star_system_definition.hpp"
 #include "src/definitions/planet_surface_definition.hpp"
 #include "src/definitions/item_definition.hpp"
-#include "src/definitions/dialogue.hpp"
+#include "src/definitions/cursor.hpp"
 #include "src/serialisers/json/json_serialisers_definitions.hpp"
 #include "src/serialisers/json/json_serialisers_game.hpp"
 #include "src/serialisers/json/json.hpp"
@@ -38,6 +38,7 @@
 #include "src/debug/draw_debug.hpp"
 #include "src/controllers/npc_controller.hpp"
 #include "src/ui/ui_manager.hpp"
+#include "src/mouse.hpp"
 #include "earcut.hpp"
 #define TRACK_MEMORY 1
 
@@ -105,6 +106,8 @@ int main()
 
     engine.initEffects();
     engine.uiManager().initDefaultWindows();
+
+    engine.changeCursor("CURSOR_DEFAULT");
 
     std::ifstream startingGameFile("data/startingGame.json");
     nlohmann::json startingGameJson;

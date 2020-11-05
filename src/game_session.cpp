@@ -19,6 +19,7 @@
 #include "definitions/planet_definition.hpp"
 #include "definitions/star_system_definition.hpp"
 #include "definitions/planet_surface_definition.hpp"
+#include "definitions/cursor.hpp"
 #include "utils.hpp"
 #include "keyboard.hpp"
 #include "mouse.hpp"
@@ -84,7 +85,7 @@ namespace space
         auto parentObject = insideArea.partOfObject();
         auto rootObject = parentObject->rootObject();
 
-        CloneContext cloneContext(*this, true, photoArea, &insideArea);
+        CloneContext cloneContext(*this, true, photoArea, &insideArea, _engine.timeSinceStart());
         auto deepClone = rootObject->deepClone(newIdPrefix, cloneContext);
         auto newParentObjectId = newIdPrefix + parentObject->id;
 
@@ -260,7 +261,16 @@ namespace space
             spaceObject->update(*this, dt, sf::Transform::Identity);
 
         handleMouse();
+
+        if (_takingAPhoto)
+        {
+            _engine.changeCursor("CURSOR_CAMERA");
         }
+        else
+        {
+            _engine.changeCursor("CURSOR_DEFAULT");
+        }
+    }
 
     void GameSession::draw()
     {

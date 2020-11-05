@@ -25,6 +25,7 @@ namespace space
     class ShaderDefinition;
     class GrassEffectDefinition;
     class CompendiumDefinition;
+    class Cursor;
 
     json toJson(const BaseDefinition &input);
     std::unique_ptr<BaseDefinition> fromJsonBaseDefinition(const json &j);
@@ -72,6 +73,9 @@ namespace space
 
     json toJson(const CompendiumDefinition &input);
     std::unique_ptr<CompendiumDefinition> fromJsonCompendiumDefinition(const json &j);
+
+    json toJson(const Cursor &input);
+    std::unique_ptr<Cursor> fromJsonCursor(const json &j);
 
     json toJson(const CelestialBodyLocation &input);
     CelestialBodyLocation fromJsonCelestialBodyLocation(const json &j);

@@ -64,6 +64,8 @@ namespace space
 
             LimitedObjectPool<RenderCamera> &renderCameras() { return _renderCameras; }
 
+            void changeCursor(const DefinitionId &cursorId);
+
             void initEffects();
 
             void onResize(sf::Vector2f area);
@@ -101,5 +103,7 @@ namespace space
 
             // Methods
             void finalDraw(sf::RenderTexture &from, sf::RenderTarget &to);
+
+            void updateCursorState();
     };
 } // town

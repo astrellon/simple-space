@@ -1,12 +1,17 @@
 #pragma once
 
+#include <string>
 #include <vector>
 #include <map>
 
-#include <SFML/Window.hpp>
+#include <SFML/Graphics.hpp>
 
 namespace space
 {
+    class Engine;
+    class RenderCamera;
+    class Cursor;
+
     class Mouse
     {
         public:
@@ -27,6 +32,12 @@ namespace space
             static void prevMousePosition(sf::Vector2i position);
             static sf::Vector2i prevMousePosition();
 
+            static void cursor(const Cursor *cursor);
+            static const Cursor *cursor() { return _Cursor; }
+
+            static void update(Engine &engine, sf::Time dt);
+            static void draw(Engine &engine, RenderCamera &target);
+
             typedef std::vector<sf::Mouse::Button> ButtonList;
             typedef std::map<sf::Mouse::Button, sf::Vector2i> ButtonPositions;
 
@@ -37,6 +48,9 @@ namespace space
 
             static ButtonPositions _ButtonDownPositions;
             static ButtonPositions _ButtonUpPositions;
+
+            static sf::Sprite _CursorSprite;
+            static const Cursor *_Cursor;
 
     };
 } // space
