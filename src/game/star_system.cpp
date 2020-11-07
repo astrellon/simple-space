@@ -19,7 +19,7 @@
 
 namespace space
 {
-    StarSystem::StarSystem(GameSession &session, const ObjectId &id, const StarSystemDefinition &definition, bool isPartOfLivePhoto) : SpaceObject(id), definition(definition), _area(AreaType::StarSystem, this), _isPartOfLivePhoto(isPartOfLivePhoto)
+    StarSystem::StarSystem(GameSession &session, const ObjectId &id, const StarSystemDefinition &definition) : SpaceObject(id), definition(definition), _area(AreaType::StarSystem, this)
     {
         _area.main().sortEveryDraw = false;
         _background = std::make_unique<StarBackground>(session.engine(), definition.starBackgroundOptions);
@@ -39,8 +39,8 @@ namespace space
 
     StarSystem *StarSystem::cloneStarSystem(const ObjectId &newId, const CloneContext &context)
     {
-        auto result = context.session.createObject<StarSystem>(context.session, newId, definition, context.isForLivePhoto);
-        result->transform(_transform);
+        auto result = context.session.createObject<StarSystem>(context.session, newId, definition);
+        populateCloneFromThis(result, context);
         return result;
     }
 
@@ -80,6 +80,8 @@ namespace space
 
     void StarSystem::onPostLoad(GameSession &session, LoadingContext &context)
     {
+        SpaceObject::onPostLoad(session, context);
+
         _area.onPostLoad(session, context);
     }
 

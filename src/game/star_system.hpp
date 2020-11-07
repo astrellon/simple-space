@@ -26,7 +26,7 @@ namespace space
             const StarSystemDefinition &definition;
 
             // Constructor
-            StarSystem(GameSession &session, const ObjectId &id, const StarSystemDefinition &definition, bool isPartOfLivePhoto = false);
+            StarSystem(GameSession &session, const ObjectId &id, const StarSystemDefinition &definition);
             virtual ~StarSystem() { }
 
             // Methods
@@ -46,15 +46,12 @@ namespace space
             virtual void draw(GameSession &session, RenderCamera &target);
             virtual void onPostLoad(GameSession &session, LoadingContext &context);
             virtual bool checkForMouse(GameSession &session, sf::Vector2f mousePosition);
-            virtual bool doUpdateEveryFrame() const { return !_isPartOfLivePhoto; }
-
-            bool isPartOfLivePhoto() const { return _isPartOfLivePhoto; }
+            virtual bool doUpdateEveryFrame() const { return true; }
 
         private:
             // Fields
             Area _area;
             std::unique_ptr<StarBackground> _background;
-            bool _isPartOfLivePhoto;
 
             // Methods
             void createCelestialBody(GameSession &session, const CelestialBodyDefinition *bodyDefinition, const sf::Transform &parentTransform);

@@ -27,7 +27,7 @@ namespace space
     LivePhoto *LivePhoto::cloneLivePhoto(const ObjectId &newId, const CloneContext &context)
     {
         auto result = context.session.createObject<LivePhoto>(newId);
-        result->transform(_transform);
+        populateCloneFromThis(result, context);
         return result;
     }
 

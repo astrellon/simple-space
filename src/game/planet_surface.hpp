@@ -26,7 +26,7 @@ namespace space
             const PlanetSurfaceDefinition &definition;
 
             // Constructor
-            PlanetSurface(const ObjectId &id, const PlanetSurfaceDefinition &definition, bool isPartOfLivePhoto);
+            PlanetSurface(const ObjectId &id, const PlanetSurfaceDefinition &definition);
             virtual ~PlanetSurface() { }
 
             // Methods
@@ -44,12 +44,10 @@ namespace space
             virtual void draw(GameSession &session, RenderCamera &target);
             virtual void onPostLoad(GameSession &session, LoadingContext &context);
             virtual bool checkForMouse(GameSession &session, sf::Vector2f mousePosition);
-            virtual bool doUpdateEveryFrame() const { return !_isPartOfLivePhoto; }
+            virtual bool doUpdateEveryFrame() const { return true; }
 
             void partOfPlanet(Planet *planet) { _partOfPlanet = planet; }
             Planet *partOfPlanet() const { return _partOfPlanet; }
-
-            bool isPartOfLivePhoto() const { return _isPartOfLivePhoto; }
 
         private:
 
@@ -57,7 +55,6 @@ namespace space
             Area _area;
             Planet *_partOfPlanet;
             std::vector<std::unique_ptr<MapLayer>> _mapLayers;
-            bool _isPartOfLivePhoto;
 
             // Methods
             void createMapLayersFromDefinition(GameSession &session);

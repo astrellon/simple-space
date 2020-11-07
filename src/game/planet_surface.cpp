@@ -8,7 +8,7 @@
 
 namespace space
 {
-    PlanetSurface::PlanetSurface(const ObjectId &id, const PlanetSurfaceDefinition &definition, bool isPartOfLivePhoto) : SpaceObject(id), definition(definition), _partOfPlanet(nullptr), _area(AreaType::PlanetSurface, this), _isPartOfLivePhoto(isPartOfLivePhoto)
+    PlanetSurface::PlanetSurface(const ObjectId &id, const PlanetSurfaceDefinition &definition) : SpaceObject(id), definition(definition), _partOfPlanet(nullptr), _area(AreaType::PlanetSurface, this)
     {
     }
 
@@ -27,9 +27,10 @@ namespace space
     PlanetSurface *PlanetSurface::clonePlanetSurface(const ObjectId &newId, const CloneContext &context)
     {
         std::cout << "Clone definition: " << definition.name << std::endl;
-        auto result = context.session.createObject<PlanetSurface>(newId, definition, context.isForLivePhoto);
+        auto result = context.session.createObject<PlanetSurface>(newId, definition);
         result->createMapLayersFromDefinition(context.session);
-        result->transform(_transform);
+        populateCloneFromThis(result, context);
+        result->partOfPlanet(_partOfPlanet);
         return result;
     }
 
@@ -63,6 +64,7 @@ namespace space
 
     void PlanetSurface::onPostLoad(GameSession &session, LoadingContext &context)
     {
+        SpaceObject::onPostLoad(session, context);
         createMapLayersFromDefinition(session);
 
         _area.onPostLoad(session, context);

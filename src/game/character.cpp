@@ -30,7 +30,7 @@ namespace space
     {
         auto result = context.session.createObject<Character>(newId, definition);
         result->flipSprite(_flipSprite);
-        result->transform(_transform);
+        populateCloneFromThis(result, context);
         return result;
     }
 
@@ -59,6 +59,11 @@ namespace space
 
     void Character::prePhysics(GameSession &session, sf::Time dt, const sf::Transform &parentTransform)
     {
+        if (_partOfLivePhoto)
+        {
+            return;
+        }
+
         auto seconds = dt.asSeconds();
 
         if (_insideArea && _insideArea->type() == AreaType::PlanetSurface)
@@ -80,11 +85,10 @@ namespace space
 
     void Character::update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform)
     {
-        auto pos = _physicsBody->GetPosition();
-        auto rotation = _physicsBody->GetAngle();
-
-        _transform.position = sf::Vector2f(pos.x, pos.y);
-        _transform.rotation = Utils::radiansToDegrees(rotation);
+        if (!_partOfLivePhoto)
+        {
+            applyPhysicsToTransform();
+        }
 
         updateWorldTransform(parentTransform);
 
@@ -101,7 +105,7 @@ namespace space
         target.texture().draw(_sprite, _worldTransform);
         DrawDebug::glDraw++;
 
-        if (DrawDebug::showPolygons)
+        if (!_partOfLivePhoto && DrawDebug::showPolygons)
         {
             sf::RectangleShape shape;
             shape.setFillColor(sf::Color(100, 120, 255, 120));
@@ -119,6 +123,11 @@ namespace space
 
     void Character::addToPhysicsWorld(b2World *world)
     {
+        if (_partOfLivePhoto)
+        {
+            return;
+        }
+
         b2BodyDef bodyDef;
         bodyDef.type = b2_dynamicBody;
         bodyDef.angularDamping = 0.5f;
@@ -148,6 +157,11 @@ namespace space
     }
     void Character::removeFromPhysicsWorld(b2World *world)
     {
+        if (_partOfLivePhoto)
+        {
+            return;
+        }
+
         world->DestroyBody(_physicsBody);
         _physicsBody = nullptr;
     }
@@ -155,5 +169,14 @@ namespace space
     bool Character::isInSpace() const
     {
         return _insideArea && _insideArea->type() == AreaType::Ship;
+    }
+
+    void Character::applyPhysicsToTransform()
+    {
+        auto pos = _physicsBody->GetPosition();
+        auto rotation = _physicsBody->GetAngle();
+
+        _transform.position = sf::Vector2f(pos.x, pos.y);
+        _transform.rotation = Utils::radiansToDegrees(rotation);
     }
 } // namespace space

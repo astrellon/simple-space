@@ -4,10 +4,10 @@
 #include <memory>
 
 #include "space_object.hpp"
+#include "../render_camera.hpp"
 
 namespace space
 {
-    class RenderCamera;
     class GameSession;
     class Engine;
 

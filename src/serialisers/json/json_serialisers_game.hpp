@@ -34,6 +34,8 @@ namespace space
     class SpacePortal;
     class GrassEffect;
     class LoadingContext;
+    class LivePhoto;
+    class LivePhotoTarget;
 
     json toJson(const GameSession &input);
     std::unique_ptr<GameSession> fromJsonGameSession(Engine &engine, const json &j);
@@ -41,15 +43,16 @@ namespace space
     json toJsonBase(const SpaceObject &input);
     json toJson(const SpaceObject &input);
     bool addFromJsonSpaceObject(const json &j, GameSession &session, LoadingContext &context);
+    void applyBaseFromJson(const json &j, SpaceObject &input, LoadingContext &context);
 
     json toJson(const Character &input);
-    bool addFromJsonCharacter(const json &j, GameSession &session);
+    bool addFromJsonCharacter(const json &j, GameSession &session, LoadingContext &context);
 
     json toJson(const Ship &input);
     bool addFromJsonShip(const json &j, GameSession &session, LoadingContext &context);
 
     json toJson(const PlacedItem &input);
-    bool addFromJsonPlacedItem(const json &j, GameSession &session);
+    bool addFromJsonPlacedItem(const json &j, GameSession &session, LoadingContext &context);
 
     json toJson(const Area &input);
     bool addFromJsonAreaInstances(const json &j, AreaInstances *instances);
@@ -82,10 +85,16 @@ namespace space
     bool addFromJsonBirdController(const json &j, GameSession &session);
 
     json toJson(const SpacePortal &input);
-    bool addFromJsonSpacePortal(const json &j, GameSession &session);
+    bool addFromJsonSpacePortal(const json &j, GameSession &session, LoadingContext &context);
 
     json toJson(const GrassEffect &input);
-    bool addFromJsonGrassEffect(const json &j, GameSession &session);
+    bool addFromJsonGrassEffect(const json &j, GameSession &session, LoadingContext &context);
+
+    json toJson(const LivePhoto &input);
+    bool addFromJsonLivePhoto(const json &j, GameSession &session, LoadingContext &context);
+
+    json toJson(const LivePhotoTarget &input);
+    bool addFromJsonLivePhotoTarget(const json &j, GameSession &session, LoadingContext &context);
 
     json toJsonBase(const Item &item);
     json toJson(const Item &item);
@@ -99,5 +108,4 @@ namespace space
 
     json toJson(const Teleporter &item);
     bool addFromJsonTeleporter(const json &j, GameSession &session);
-
 }

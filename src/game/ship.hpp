@@ -77,5 +77,7 @@ namespace space
             // Methods
             void createMainCollider();
             void createExtraCollider(const Polygon &polygon);
+
+            void processInputs(sf::Time dt);
     };
 } //

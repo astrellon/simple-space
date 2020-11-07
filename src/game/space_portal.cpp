@@ -25,7 +25,7 @@ namespace space
     SpacePortal *SpacePortal::cloneSpacePortal(const ObjectId &newId, const CloneContext &context)
     {
         auto result = context.session.createObject<SpacePortal>(newId, definition);
-        result->transform(_transform);
+        populateCloneFromThis(result, context);
         return result;
     }
 

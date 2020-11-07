@@ -63,5 +63,6 @@ namespace space
             bool _flipSprite;
 
             // Methods
+            void applyPhysicsToTransform();
     };
 } // space

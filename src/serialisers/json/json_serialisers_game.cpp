@@ -20,6 +20,7 @@
 #include "../../game/items/placeable_item.hpp"
 #include "../../game/items/chair.hpp"
 #include "../../game/items/teleporter.hpp"
+#include "../../game/live_photo.hpp"
 #include "../../physics/polygon_collider.hpp"
 #include "../../effects/grass_effect.hpp"
 
@@ -71,11 +72,18 @@ namespace space
 
     json toJsonBase(const SpaceObject &input)
     {
-        return json {
+        json result {
             {"type", input.type()},
             {"id", input.id},
-            {"transform", toJson(input.transform())},
+            {"transform", toJson(input.transform())}
         };
+
+        if (input.partOfLivePhoto())
+        {
+            result["partOfLivePhotoId"] = input.partOfLivePhoto()->id;
+        }
+
+        return result;
     }
 
     json toJson(const SpaceObject &input)
@@ -101,13 +109,25 @@ namespace space
         else if (input.type() == GrassEffect::SpaceObjectType())
             return toJson(dynamic_cast<const GrassEffect &>(input));
 
+        else if (input.type() == StarSystem::SpaceObjectType())
+            return toJson(dynamic_cast<const StarSystem &>(input));
+
+        else if (input.type() == PlanetSurface::SpaceObjectType())
+            return toJson(dynamic_cast<const PlanetSurface &>(input));
+
+        else if (input.type() == LivePhoto::SpaceObjectType())
+            return toJson(dynamic_cast<const LivePhoto &>(input));
+
+        else if (input.type() == LivePhotoTarget::SpaceObjectType())
+            return toJson(dynamic_cast<const LivePhotoTarget &>(input));
+
         throw std::runtime_error("Unknown space object type");
     }
     bool addFromJsonSpaceObject(const json &j, GameSession &session, LoadingContext &context)
     {
         auto type = j.at("type").get<std::string>();
         if (type == Character::SpaceObjectType())
-            return addFromJsonCharacter(j, session);
+            return addFromJsonCharacter(j, session, context);
 
         if (type == Ship::SpaceObjectType())
             return addFromJsonShip(j, session, context);
@@ -117,10 +137,10 @@ namespace space
             return true;
 
         if (type == SpacePortal::SpaceObjectType())
-            return addFromJsonSpacePortal(j, session);
+            return addFromJsonSpacePortal(j, session, context);
 
         if (type == PlacedItem::SpaceObjectType())
-            return addFromJsonPlacedItem(j, session);
+            return addFromJsonPlacedItem(j, session, context);
 
         if (type == StarSystem::SpaceObjectType())
             return addFromJsonStarSystem(j, session, context);
@@ -129,9 +149,25 @@ namespace space
             return addFromJsonPlanetSurface(j, session, context);
 
         if (type == GrassEffect::SpaceObjectType())
-            return addFromJsonGrassEffect(j, session);
+            return addFromJsonGrassEffect(j, session, context);
+
+        if (type == LivePhoto::SpaceObjectType())
+            return addFromJsonLivePhoto(j, session, context);
+
+        if (type == LivePhotoTarget::SpaceObjectType())
+            return addFromJsonLivePhotoTarget(j, session, context);
 
         throw std::runtime_error("Unknown space object type");
+    }
+    void applyBaseFromJson(const json &j, SpaceObject &input, LoadingContext &context)
+    {
+        input.transform(fromJsonTransform(j.at("transform")));
+
+        ObjectId livePhotoId;
+        if (Utils::json_try_get(j, "partOfLivePhotoId", livePhotoId))
+        {
+            context.livePhotos[input.id] = livePhotoId;
+        }
     }
 
     json toJson(const Character &input)
@@ -140,7 +176,7 @@ namespace space
         result["definitionId"] = input.definition.id;
         return result;
     }
-    bool addFromJsonCharacter(const json &j, GameSession &session)
+    bool addFromJsonCharacter(const json &j, GameSession &session, LoadingContext &context)
     {
         auto id = j.at("id").get<ObjectId>();
         auto definitionId = j.at("definitionId").get<DefinitionId>();
@@ -153,7 +189,7 @@ namespace space
         }
 
         auto result = session.createObject<Character>(id, *definition);
-        result->transform(fromJsonTransform(j.at("transform")));
+        applyBaseFromJson(j, *result, context);
 
         return result;
     }
@@ -182,7 +218,8 @@ namespace space
         }
 
         auto result = session.createObject<Ship>(id, *definition);
-        result->transform(fromJsonTransform(j.at("transform")));
+        applyBaseFromJson(j, *result, context);
+
         sf::Vector2f prevPosition;
         if (!Utils::json_try_get(j, "prevPosition", prevPosition))
         {
@@ -206,14 +243,21 @@ namespace space
 
     json toJson(const PlacedItem &input)
     {
-        return json {
+        json result {
             {"type", input.type()},
             {"position", toJson(input.transform().position)},
             {"itemId", input.item->id}
         };
+
+        if (input.partOfLivePhoto())
+        {
+            result["partOfLivePhotoId"] = input.partOfLivePhoto()->id;
+        }
+
+        return result;
     }
 
-    bool addFromJsonPlacedItem(const json &j, GameSession &session)
+    bool addFromJsonPlacedItem(const json &j, GameSession &session, LoadingContext &context)
     {
         auto itemId = j.at("itemId").get<ItemId>();
         auto position = fromJsonVector2f(j.at("position"));
@@ -227,6 +271,12 @@ namespace space
         auto result = session.createObject<PlacedItem>(item);
         result->transform().position = position;
 
+        ObjectId livePhotoId;
+        if (Utils::json_try_get(j, "partOfLivePhotoId", livePhotoId))
+        {
+            context.livePhotos[result->id] = livePhotoId;
+        }
+
         return true;
     }
 
@@ -236,7 +286,7 @@ namespace space
         result["definitionId"] = input.definition.id;
         return result;
     }
-    bool addFromJsonSpacePortal(const json &j, GameSession &session)
+    bool addFromJsonSpacePortal(const json &j, GameSession &session, LoadingContext &context)
     {
         auto id = j.at("id").get<ObjectId>();
         auto definitionId = j.at("definitionId").get<DefinitionId>();
@@ -249,7 +299,7 @@ namespace space
         }
 
         auto result = session.createObject<SpacePortal>(id, *definition);
-        result->transform(fromJsonTransform(j.at("transform")));
+        applyBaseFromJson(j, *result, context);
 
         j.at("targetObjectId").get_to(result->targetObjectId);
 
@@ -258,18 +308,14 @@ namespace space
 
     json toJson(const GrassEffect &input)
     {
-        return json {
-            {"type", input.type()},
-            {"position", toJson(input.transform().position)},
-            {"definitionId", input.definition.id},
-            {"id", input.id}
-        };
+        auto result = toJsonBase(input);
+        result["definitionId"] = input.definition.id;
+        return result;
     }
-    bool addFromJsonGrassEffect(const json &j, GameSession &session)
+    bool addFromJsonGrassEffect(const json &j, GameSession &session, LoadingContext &context)
     {
         auto id = j.at("id").get<ObjectId>();
         auto definitionId = j.at("definitionId").get<DefinitionId>();
-        auto position = fromJsonVector2f(j.at("position"));
 
         const GrassEffectDefinition *definition;
         if (!session.engine().definitionManager().tryGet(definitionId, &definition))
@@ -279,7 +325,37 @@ namespace space
         }
 
         auto result = session.createObject<GrassEffect>(id, *definition);
-        result->transform().position = position;
+        applyBaseFromJson(j, *result, context);
+
+        return true;
+    }
+
+    json toJson(const LivePhoto &input)
+    {
+        auto result = toJsonBase(input);
+        result["targetId"] = input.targetObject()->id;
+        return result;
+    }
+    bool addFromJsonLivePhoto(const json &j, GameSession &session, LoadingContext &context)
+    {
+        auto id = j.at("id").get<ObjectId>();
+
+        auto result = session.createObject<LivePhoto>(id);
+        applyBaseFromJson(j, *result, context);
+
+        return true;
+    }
+
+    json toJson(const LivePhotoTarget &input)
+    {
+        return toJsonBase(input);
+    }
+    bool addFromJsonLivePhotoTarget(const json &j, GameSession &session, LoadingContext &context)
+    {
+        auto id = j.at("id").get<ObjectId>();
+
+        auto result = session.createObject<LivePhotoTarget>(id);
+        applyBaseFromJson(j, *result, context);
 
         return true;
     }
@@ -308,11 +384,17 @@ namespace space
 
     json toJson(const StarSystem &input)
     {
-        return json {
+        json result {
             {"definitionId", input.definition.id},
-            {"area", toJson(input.area())},
-            {"partOfLivePhoto", input.isPartOfLivePhoto()}
+            {"area", toJson(input.area())}
         };
+
+        if (input.partOfLivePhoto())
+        {
+            result["partOfLivePhotoId"] = input.partOfLivePhoto()->id;
+        }
+
+        return result;
     }
     bool addFromJsonStarSystem(const json &j, GameSession &session, LoadingContext &context)
     {
@@ -324,10 +406,13 @@ namespace space
             return false;
         }
 
-        auto partOfLivePhoto = false;
-        Utils::json_try_get(j, "partOfLivePhoto", partOfLivePhoto);
+        ObjectId livePhotoId;
+        if (Utils::json_try_get(j, "partOfLivePhotoId", livePhotoId))
+        {
+            context.livePhotos[definitionId] = livePhotoId;
+        }
 
-        auto starSystem = session.createObject<StarSystem>(session, definition->id, *definition, partOfLivePhoto);
+        auto starSystem = session.createObject<StarSystem>(session, definition->id, *definition);
         starSystem->init(session);
         auto instances = context.getAreaInstance(&starSystem->area());
         addFromJsonAreaInstances(j.at("area"), instances);
@@ -337,12 +422,18 @@ namespace space
 
     json toJson(const PlanetSurface &input)
     {
-        return json {
+        json result {
             {"planetId", input.partOfPlanet()->id},
             {"definitionId", input.definition.id},
-            {"area", toJson(input.area())},
-            {"partOfLivePhoto", input.isPartOfLivePhoto()}
+            {"area", toJson(input.area())}
         };
+
+        if (input.partOfLivePhoto())
+        {
+            result["partOfLivePhotoId"] = input.partOfLivePhoto()->id;
+        }
+
+        return result;
     }
     bool addFromJsonPlanetSurface(const json &j, GameSession &session, LoadingContext &context)
     {
@@ -362,10 +453,13 @@ namespace space
             return false;
         }
 
-        auto partOfLivePhoto = false;
-        Utils::json_try_get(j, "partOfLivePhoto", partOfLivePhoto);
+        ObjectId livePhotoId;
+        if (Utils::json_try_get(j, "partOfLivePhotoId", livePhotoId))
+        {
+            context.livePhotos[definitionId] = livePhotoId;
+        }
 
-        auto planetSurface = session.createObject<PlanetSurface>(definition->id, *definition, partOfLivePhoto);
+        auto planetSurface = session.createObject<PlanetSurface>(definition->id, *definition);
         planetSurface->partOfPlanet(planet);
 
         auto instances = context.getAreaInstance(&planetSurface->area());
@@ -607,10 +701,13 @@ namespace space
     bool addFromJsonItem(const json &j, GameSession &session)
     {
         auto type = j.at("type").get<std::string>();
+
         if (type == PlaceableItem::ItemType())
             return addFromJsonPlaceableItem(j, session);
+
         if (type == Chair::ItemType())
             return addFromJsonChair(j, session);
+
         if (type == Teleporter::ItemType())
             return addFromJsonTeleporter(j, session);
 

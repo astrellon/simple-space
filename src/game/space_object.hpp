@@ -19,6 +19,8 @@ namespace space
     class Area;
     class RenderCamera;
     class CompendiumDefinition;
+    class LivePhoto;
+    class CloneContext;
 
     class SpaceObject : private NonCopyable
     {
@@ -27,7 +29,7 @@ namespace space
             const ObjectId id;
 
             // Constructor
-            SpaceObject(const ObjectId &id) : id(id), _insideArea(nullptr), _interactable(this) { }
+            SpaceObject(const ObjectId &id) : id(id), _insideArea(nullptr), _interactable(this), _partOfLivePhoto(nullptr) { }
             virtual ~SpaceObject() { }
 
             // Methods
@@ -46,10 +48,13 @@ namespace space
             virtual void insideArea(Area *area) { _insideArea = area; }
             virtual Area *insideArea() const { return _insideArea; }
 
+            virtual void partOfLivePhoto(LivePhoto *livePhoto) { _partOfLivePhoto = livePhoto; }
+            virtual LivePhoto *partOfLivePhoto() const { return _partOfLivePhoto; }
+
             virtual void prePhysics(GameSession &session, sf::Time dt, const sf::Transform &parentTransform) { }
             virtual void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform) = 0;
             virtual void draw(GameSession &session, RenderCamera &target) = 0;
-            virtual void onPostLoad(GameSession &session, LoadingContext &context) { }
+            virtual void onPostLoad(GameSession &session, LoadingContext &context);
             virtual bool doesMouseHover(GameSession &session, sf::Vector2f mousePosition) const { return false; }
             virtual bool isGenerated() const { return false; }
             virtual bool doUpdateEveryFrame() const { return false; }
@@ -65,6 +70,7 @@ namespace space
             SpaceTransform _transform;
             sf::Transform _worldTransform;
             Area *_insideArea;
+            LivePhoto *_partOfLivePhoto;
             Interactable _interactable;
 
             // Methods
@@ -72,5 +78,7 @@ namespace space
             {
                 _worldTransform = parentTransform * _transform.getTransform();
             }
+
+            void populateCloneFromThis(SpaceObject *newClone, const CloneContext &context);
     };
 } // space

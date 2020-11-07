@@ -178,6 +178,8 @@ namespace space
 
     void PlacedItem::onPostLoad(GameSession &session, LoadingContext &context)
     {
+        SpaceObject::onPostLoad(session, context);
+
         if (item == nullptr)
         {
             if (session.tryGetItem(_itemId, &item))

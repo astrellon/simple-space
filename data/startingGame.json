@@ -142,7 +142,9 @@
             "type": "grass-effect",
             "id": "PLANET1_GRASS_1",
             "definitionId": "GRASS_1",
-            "position": [150, 150]
+            "transform": {
+                "position": [150, 150]
+            }
         },
         {
             "type": "placed-item",

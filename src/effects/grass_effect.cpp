@@ -21,7 +21,7 @@ namespace space
     GrassEffect *GrassEffect::cloneGrassEffect(const ObjectId &newId, const CloneContext &context)
     {
         auto result = context.session.createObject<GrassEffect>(newId, definition);
-        result->transform(_transform);
+        populateCloneFromThis(result, context);
         return result;
     }
 

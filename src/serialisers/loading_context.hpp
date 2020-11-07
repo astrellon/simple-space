@@ -15,6 +15,7 @@ namespace space
         public:
             // Fields
             std::map<Area *, std::unique_ptr<AreaInstances>> postLoadAreaInstances;
+            std::map<ObjectId, ObjectId> livePhotos;
 
             // Constructor
 
@@ -31,6 +32,18 @@ namespace space
                 }
 
                 return find->second.get();
+            }
+
+            bool tryGetLivePhotoId(const ObjectId &id, ObjectId &livePhotoId)
+            {
+                auto find = livePhotos.find(id);
+                if (find == livePhotos.end())
+                {
+                    return false;
+                }
+
+                *(&livePhotoId) = find->second;
+                return true;
             }
 
         private:

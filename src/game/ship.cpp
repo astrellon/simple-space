@@ -48,6 +48,8 @@ namespace space
     SpaceObject *Ship::deepClone(const ObjectId &newIdPrefix, const CloneContext &context)
     {
         auto result = cloneShip(newIdPrefix + id, context);
+        result->rotateInput = rotateInput;
+        result->moveInput = moveInput;
 
         if (Utils::contains(context.showingAreas, &_area))
         {
@@ -60,59 +62,16 @@ namespace space
     Ship *Ship::cloneShip(const ObjectId &newId, const CloneContext &context)
     {
         auto result = context.session.createObject<Ship>(newId, definition);
-        result->transform(_transform);
+        populateCloneFromThis(result, context);
         return result;
     }
 
     void Ship::update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform)
     {
-        auto seconds = dt.asSeconds();
-        _rotationSpeed += rotateInput * seconds * definition.turnRate;
-        if (_rotationSpeed > definition.maxRotation)
+        if (!_partOfLivePhoto)
         {
-            _rotationSpeed = definition.maxRotation;
+            processInputs(dt);
         }
-        if (_rotationSpeed < -definition.maxRotation)
-        {
-            _rotationSpeed = -definition.maxRotation;
-        }
-
-        _transform.rotation += _rotationSpeed * seconds;
-
-        _speed += Utils::transformDirection(moveInput, _transform.getTransform()) * seconds * definition.acceleration;
-        _speed = _speed.clampLength(0, definition.maxSpeed);
-        _prevPosition = _transform.position;
-        _transform.position += _speed * seconds;
-
-        if (moveInput == sf::Vector2f() && _speed != sf::Vector2f())
-        {
-            auto length = _speed.length();
-            auto prevSpeed = _speed;
-            auto prevSpeedDir = _speed / length;
-
-            _speed -= prevSpeedDir * definition.acceleration * seconds;
-
-            auto newSpeedDir = _speed.normalised();
-            auto dot = prevSpeedDir.dot(newSpeedDir);
-            if (std::abs(dot - 1) > 0.01)
-            {
-                _speed = sf::Vector2f();
-            }
-        }
-
-        if (rotateInput == 0.0f && _rotationSpeed != 0.0f)
-        {
-            auto prevSpeed = _rotationSpeed;
-            auto prevSign = _rotationSpeed > 0 ? 1 : -1;
-            _rotationSpeed -= prevSign * definition.turnRate * seconds;
-            auto newSign = _rotationSpeed > 0 ? 1 : -1;
-
-            if (prevSign != newSign)
-            {
-                _rotationSpeed = 0.0f;
-            }
-        }
-
         updateWorldTransform(parentTransform);
 
         _area.update(session, dt, _worldTransform);
@@ -200,5 +159,56 @@ namespace space
         auto &collider = _colliders.emplace_back(std::make_unique<PolygonCollider>(b2_staticBody));
 
         collider->setMainPolygon(polygon);
+    }
+
+    void Ship::processInputs(sf::Time dt)
+    {
+        auto seconds = dt.asSeconds();
+        _rotationSpeed += rotateInput * seconds * definition.turnRate;
+        if (_rotationSpeed > definition.maxRotation)
+        {
+            _rotationSpeed = definition.maxRotation;
+        }
+        if (_rotationSpeed < -definition.maxRotation)
+        {
+            _rotationSpeed = -definition.maxRotation;
+        }
+
+        _transform.rotation += _rotationSpeed * seconds;
+
+        _speed += Utils::transformDirection(moveInput, _transform.getTransform()) * seconds * definition.acceleration;
+        _speed = _speed.clampLength(0, definition.maxSpeed);
+        _prevPosition = _transform.position;
+        _transform.position += _speed * seconds;
+
+        if (moveInput == sf::Vector2f() && _speed != sf::Vector2f())
+        {
+            auto length = _speed.length();
+            auto prevSpeed = _speed;
+            auto prevSpeedDir = _speed / length;
+
+            _speed -= prevSpeedDir * definition.acceleration * seconds;
+
+            auto newSpeedDir = _speed.normalised();
+            auto dot = prevSpeedDir.dot(newSpeedDir);
+            if (std::abs(dot - 1) > 0.01)
+            {
+                _speed = sf::Vector2f();
+            }
+        }
+
+        if (rotateInput == 0.0f && _rotationSpeed != 0.0f)
+        {
+            auto prevSpeed = _rotationSpeed;
+            auto prevSign = _rotationSpeed > 0 ? 1 : -1;
+            _rotationSpeed -= prevSign * definition.turnRate * seconds;
+            auto newSign = _rotationSpeed > 0 ? 1 : -1;
+
+            if (prevSign != newSign)
+            {
+                _rotationSpeed = 0.0f;
+            }
+        }
+
     }
 }

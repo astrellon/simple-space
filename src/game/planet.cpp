@@ -26,7 +26,7 @@ namespace space
     Planet *Planet::clonePlanet(const ObjectId &newId, const CloneContext &context)
     {
         auto result = context.session.createObject<Planet>(newId, definition);
-        result->transform(_transform);
+        populateCloneFromThis(result, context);
         return result;
     }
 
@@ -97,6 +97,8 @@ namespace space
 
     void Planet::onPostLoad(GameSession &session, LoadingContext &context)
     {
+        SpaceObject::onPostLoad(session, context);
+
         for (auto &id : _onPostLoadPlanetSurfaceIds)
         {
             PlanetSurface *planetSurface;
