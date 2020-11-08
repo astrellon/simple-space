@@ -10,6 +10,6 @@
         "id": "CURSOR_CAMERA",
         "name": "Camera",
         "texturePath": "data/textures/cursors/cameraCursor.png",
-        "textureOrigin": [64, 64]
+        "textureOrigin": [128, 128]
     }
 ]

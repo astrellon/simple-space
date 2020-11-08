@@ -37,7 +37,7 @@ namespace space
         cameraId << "LivePhoto:" << id;
         _camera = std::make_unique<RenderCamera>(engine, cameraId.str());
 
-        _camera->onResize(size, cameraScale);
+        _camera->onResize(size * cameraScale, cameraScale);
         _camera->preDraw();
         _camera->camera().center(sf::Vector2f());
 
