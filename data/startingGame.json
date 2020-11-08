@@ -352,7 +352,7 @@
             "type": "space-portal",
             "targetObjectId": "SS_SPACE_PORTAL",
             "transform": {
-                "position": [ 400, 0 ]
+                "position": [ 300, 0 ]
             }
         },
         {

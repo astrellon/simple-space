@@ -161,15 +161,27 @@ namespace space
         std::uniform_real_distribution<float> posRange(0, area);
         std::uniform_real_distribution<float> colourRange(distanceScale * 100 + 20, distanceScale * 100 + 120);
 
+        auto starColourTexture = _parent.parent().options().starColours;
+        auto starColourTextureSize = starColourTexture ? starColourTexture->getSize() : sf::Vector2u(0, 0);
+        std::uniform_real_distribution<float> textureColourRange(0, starColourTextureSize.y);
+
         for (auto i = 0; i < numParticles; i++)
         {
             auto &vertex = _vertices[i];
             vertex.position = sf::Vector2f(posRange(rand), posRange(rand)) + positionOffset;
 
             sf::Color colour;
-            colour.r = static_cast<int>(colourRange(rand));
-            colour.g = static_cast<int>(colourRange(rand));
-            colour.b = static_cast<int>(colourRange(rand));
+            if (starColourTexture)
+            {
+                auto index = static_cast<int>(textureColourRange(rand));
+                colour = starColourTexture->getPixel(0, index);
+            }
+            else
+            {
+                colour.r = static_cast<int>(colourRange(rand));
+                colour.g = static_cast<int>(colourRange(rand));
+                colour.b = static_cast<int>(colourRange(rand));
+            }
             vertex.color = colour;
         }
     }

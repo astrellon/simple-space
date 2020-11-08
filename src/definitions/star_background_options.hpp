@@ -14,12 +14,14 @@ namespace space
         public:
             // Fields
             std::string shaderName;
+            std::string starColoursPath;
             sf::Color backgroundColour;
             int numLayers;
             int numParticles;
             float area;
 
             sf::Shader *shader;
+            const sf::Image *starColours;
 
             // Constructor
             StarBackgroundOptions();

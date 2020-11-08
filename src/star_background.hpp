@@ -34,6 +34,8 @@ namespace space
             sf::Shader *shader() const { return _options.shader; }
             Engine &engine() const { return _engine; }
 
+            const StarBackgroundOptions &options() const { return _options; }
+
         private:
             // Fields
             Engine &_engine;
@@ -63,6 +65,8 @@ namespace space
             int numParticles() const { return _parent.numParticles(); }
 
             float distanceScale() const { return _distanceScale; }
+
+            const StarBackground &parent() const { return _parent; }
 
         private:
             // Fields

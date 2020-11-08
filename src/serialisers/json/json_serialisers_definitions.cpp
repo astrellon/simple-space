@@ -657,6 +657,7 @@ namespace space
     {
         return json {
             {"shaderName", input.shaderName},
+            {"starColoursPath", input.starColoursPath},
             {"backgroundColour", Utils::toHexString(input.backgroundColour)},
             {"numLayers", input.numLayers},
             {"numParticles", input.numParticles},
@@ -672,6 +673,7 @@ namespace space
         Utils::json_try_get(j, "area", result.area);
         Utils::json_try_get(j, "numLayers", result.numLayers);
         Utils::json_try_get(j, "numParticles", result.numParticles);
+        Utils::json_try_get(j, "starColoursPath", result.starColoursPath);
 
         auto backgroundColourString = j.find("backgroundColour");
         if (backgroundColourString != j.end())
