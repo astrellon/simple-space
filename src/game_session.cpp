@@ -335,6 +335,26 @@ namespace space
         }
     }
 
+    void GameSession::addToUpdateEveryFrame(SpaceObject *spaceObject)
+    {
+        if (doesUpdateEveryFrame(spaceObject))
+        {
+            return;
+        }
+
+        _spaceObjectsUpdateEveryFrame.emplace_back(spaceObject);
+    }
+
+    void GameSession::removeFromUpdateEveryFrame(SpaceObject *spaceObject)
+    {
+        Utils::remove(_spaceObjectsUpdateEveryFrame, spaceObject);
+    }
+
+    bool GameSession::doesUpdateEveryFrame(SpaceObject *spaceObject) const
+    {
+        return Utils::contains(_spaceObjectsUpdateEveryFrame, spaceObject);
+    }
+
     void GameSession::createTransition(const Area *prevArea, const Area *area, TeleportClone &teleportClone)
     {
         auto windowSize = _engine.windowSize();
@@ -354,10 +374,7 @@ namespace space
             return;
         }
 
-        if (obj->doUpdateEveryFrame() && !obj->partOfLivePhoto())
-        {
-            Utils::remove(_spaceObjectsUpdateEveryFrame, obj);
-        }
+        Utils::remove(_spaceObjectsUpdateEveryFrame, obj);
 
         if (obj->insideArea())
         {

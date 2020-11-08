@@ -407,7 +407,8 @@ namespace space
         }
 
         ObjectId livePhotoId;
-        if (Utils::json_try_get(j, "partOfLivePhotoId", livePhotoId))
+        auto hasLivePhoto = Utils::json_try_get(j, "partOfLivePhotoId", livePhotoId);
+        if (hasLivePhoto)
         {
             context.livePhotos[definitionId] = livePhotoId;
         }
@@ -416,6 +417,11 @@ namespace space
         starSystem->init(session);
         auto instances = context.getAreaInstance(&starSystem->area());
         addFromJsonAreaInstances(j.at("area"), instances);
+
+        if (!hasLivePhoto)
+        {
+            session.addToUpdateEveryFrame(starSystem);
+        }
 
         return true;
     }
@@ -454,7 +460,8 @@ namespace space
         }
 
         ObjectId livePhotoId;
-        if (Utils::json_try_get(j, "partOfLivePhotoId", livePhotoId))
+        auto hasLivePhoto = Utils::json_try_get(j, "partOfLivePhotoId", livePhotoId);
+        if (hasLivePhoto)
         {
             context.livePhotos[definitionId] = livePhotoId;
         }
@@ -464,6 +471,11 @@ namespace space
 
         auto instances = context.getAreaInstance(&planetSurface->area());
         addFromJsonAreaInstances(j.at("area"), instances);
+
+        if (!hasLivePhoto)
+        {
+            session.addToUpdateEveryFrame(planetSurface);
+        }
 
         return true;
     }

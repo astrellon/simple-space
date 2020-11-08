@@ -57,7 +57,6 @@ namespace space
             virtual void onPostLoad(GameSession &session, LoadingContext &context);
             virtual bool doesMouseHover(GameSession &session, sf::Vector2f mousePosition) const { return false; }
             virtual bool isGenerated() const { return false; }
-            virtual bool doUpdateEveryFrame() const { return false; }
 
             virtual const CompendiumDefinition *compendiumDefinition() const { return nullptr; }
 

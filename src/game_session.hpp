@@ -62,11 +62,6 @@ namespace space
                 auto result = obj.get();
                 _spaceObjects.emplace_back(std::move(obj));
 
-                if (result->doUpdateEveryFrame())
-                {
-                    _spaceObjectsUpdateEveryFrame.emplace_back(result);
-                }
-
                 return result;
             }
 
@@ -173,6 +168,10 @@ namespace space
             ObjectId nextObjectId();
 
             void setNextMouseHover(SpaceObject *obj);
+
+            void addToUpdateEveryFrame(SpaceObject *spaceObject);
+            void removeFromUpdateEveryFrame(SpaceObject *spaceObject);
+            bool doesUpdateEveryFrame(SpaceObject *spaceObject) const;
 
         private:
             // Fields
