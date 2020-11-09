@@ -134,13 +134,13 @@ namespace space
         bodyDef.linearDamping = 0.5f;
 
         b2PolygonShape shape;
-        shape.SetAsBox(1, 1);
+        shape.SetAsBox(2, 2);
 
         b2FixtureDef fixtureDef;
 
         fixtureDef.restitution = 0;
         fixtureDef.friction = 0.9f;
-        fixtureDef.density = 5.0f;
+        fixtureDef.density = 0.5f;
         fixtureDef.shape = &shape;
 
         if (!isInSpace())

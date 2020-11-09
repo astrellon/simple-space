@@ -157,6 +157,11 @@
             "position": [150, 50]
         },
         {
+            "type": "placed-item",
+            "itemId": 4,
+            "position": [200, 200]
+        },
+        {
             "planetId": "STAR_SYSTEM_1:SS_PLANET_1",
             "definitionId": "PLANET_GRASSY_1",
             "area": {
@@ -171,39 +176,22 @@
             "type": "planet-surface"
         },
         {
-            "planetId": "SS_PLANET_1",
+            "planetId": "STAR_SYSTEM_1:SS_PLANET_1",
             "definitionId": "PLANET_GRASSY_1-2",
             "area": {
                 "objectIds": [
-                    "FRONK"
-                ],
-                "placedItems": [
-                    {
-                        "itemId": 11,
-                        "position": [ 120.0, 70.0 ],
-                        "type": "placed-item"
-                    },
-                    {
-                        "itemId": 12,
-                        "position": [ 30.0, 50.0 ],
-                        "type": "placed-item"
-                    }
+                    "FRONK",
+                    "ITEM_11",
+                    "ITEM_12"
                 ]
             },
             "type": "planet-surface"
         },
         {
-            "planetId": "SS_PLANET_2",
+            "planetId": "STAR_SYSTEM_1:SS_PLANET_2",
             "definitionId": "PLANET_SANDY_1",
             "area": {
-                "objectIds": [],
-                "placedItems": [
-                    {
-                        "itemId": 4,
-                        "position": [ 50.0, 50.0 ],
-                        "type": "placed-item"
-                    }
-                ]
+                "objectIds": ["ITEM_4"]
             },
             "type": "planet-surface"
         },
@@ -230,12 +218,32 @@
         {
             "type": "placed-item",
             "itemId": 0,
-            "position": [0, -10]
+            "position": [0, -70]
         },
         {
             "type": "placed-item",
             "itemId": 1,
-            "position": [0, 0]
+            "position": [0, 60]
+        },
+        {
+            "type": "placed-item",
+            "itemId": 5,
+            "position": [0, -70]
+        },
+        {
+            "type": "placed-item",
+            "itemId": 2,
+            "position": [0, 20]
+        },
+        {
+            "type": "placed-item",
+            "itemId": 11,
+            "position": [600, 480]
+        },
+        {
+            "type": "placed-item",
+            "itemId": 12,
+            "position": [200, 200]
         },
         {
             "definitionId": "SHIP_1",
@@ -264,18 +272,10 @@
             },
             "type": "ship",
             "area": {
-                "objectIds": [ "GREG" ],
-                "placedItems": [
-                    {
-                        "itemId": 5,
-                        "position": [ 0.0, -10.0 ],
-                        "type": "placed-item"
-                    },
-                    {
-                        "itemId": 2,
-                        "position": [ 0.0, 0.0 ],
-                        "type": "placed-item"
-                    }
+                "objectIds": [
+                    "GREG",
+                    "ITEM_5",
+                    "ITEM_2"
                 ]
             }
         },

@@ -6,7 +6,7 @@
         "texturePath": "data/items/chair.png",
         "physicsShape": {
             "type": "circle",
-            "radius": 2,
+            "radius": 16,
             "offset": [0, -0.5]
         },
         "canPickup": true
