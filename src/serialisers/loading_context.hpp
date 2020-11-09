@@ -10,12 +10,15 @@
 
 namespace space
 {
+    enum class LoadingType { LivePhotoTarget };
+
     class LoadingContext : private NonCopyable
     {
         public:
             // Fields
             std::map<Area *, std::unique_ptr<AreaInstances>> postLoadAreaInstances;
             std::map<ObjectId, ObjectId> livePhotos;
+            std::map<ObjectId, std::map<LoadingType, ObjectId>> postLoadObjectIds;
 
             // Constructor
 
@@ -43,6 +46,24 @@ namespace space
                 }
 
                 *(&livePhotoId) = find->second;
+                return true;
+            }
+
+            bool tryGetPostLoadObjectId(const ObjectId &id, LoadingType type, ObjectId &result)
+            {
+                auto findId = postLoadObjectIds.find(id);
+                if (findId == postLoadObjectIds.end())
+                {
+                    return false;
+                }
+
+                auto findType = findId->second.find(type);
+                if (findType == findId->second.end())
+                {
+                    return false;
+                }
+
+                *(&result) = findType->second;
                 return true;
             }
 

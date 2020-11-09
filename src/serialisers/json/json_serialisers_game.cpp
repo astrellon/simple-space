@@ -174,6 +174,7 @@ namespace space
     {
         auto result = toJsonBase(input);
         result["definitionId"] = input.definition.id;
+        result["sprite"] = toJson(input.sprite());
         return result;
     }
     bool addFromJsonCharacter(const json &j, GameSession &session, LoadingContext &context)
@@ -190,6 +191,12 @@ namespace space
 
         auto result = session.createObject<Character>(id, *definition);
         applyBaseFromJson(j, *result, context);
+
+        auto findSprite = j.find("sprite");
+        if (findSprite != j.end())
+        {
+            applyFromJsonAnimatedSprite(*findSprite, result->sprite());
+        }
 
         return result;
     }
@@ -343,6 +350,12 @@ namespace space
         auto result = session.createObject<LivePhoto>(id);
         applyBaseFromJson(j, *result, context);
 
+        ObjectId livePhotoTargetId;
+        if (Utils::json_try_get(j, "targetId", livePhotoTargetId))
+        {
+            context.livePhotos[id] = livePhotoTargetId;
+        }
+
         return true;
     }
 
@@ -431,7 +444,8 @@ namespace space
         json result {
             {"planetId", input.partOfPlanet()->id},
             {"definitionId", input.definition.id},
-            {"area", toJson(input.area())}
+            {"area", toJson(input.area())},
+            {"type", input.type()}
         };
 
         if (input.partOfLivePhoto())
@@ -790,5 +804,28 @@ namespace space
         session.createItem<Teleporter>(id, *definition);
 
         return true;
+    }
+
+    json toJson(const AnimatedSprite &sprite)
+    {
+        return json {
+            {"animatedTime", sprite.animationTime},
+            {"sequence", sprite.currentAnimation()}
+        };
+    }
+    void applyFromJsonAnimatedSprite(const json &j, AnimatedSprite &sprite)
+    {
+        std::string sequence;
+        if (Utils::json_try_get(j, "sequence", sequence))
+        {
+            sprite.sequence(sequence, true);
+        }
+
+        float animatedTime = 0;
+        if (Utils::json_try_get(j, "animatedTime", animatedTime))
+        {
+            sprite.animationTime = animatedTime;
+        }
+
     }
 } // namespace space

@@ -6,6 +6,7 @@
 #include "../engine.hpp"
 #include "../utils.hpp"
 #include "../render_camera.hpp"
+#include "../serialisers/loading_context.hpp"
 
 namespace space
 {
@@ -61,6 +62,25 @@ namespace space
         {
             drawToInternalTexture(session);
             target.texture().draw(_cameraSprite, _worldTransform);
+        }
+    }
+
+    void LivePhoto::onPostLoad(GameSession &session, LoadingContext &context)
+    {
+        SpaceObject::onPostLoad(session, context);
+
+        ObjectId liveTargetId;
+        if (context.tryGetPostLoadObjectId(id, LoadingType::LivePhotoTarget, liveTargetId))
+        {
+            SpaceObject *target;
+            if (session.tryGetSpaceObject(id, &target))
+            {
+                targetObject(target);
+            }
+            else
+            {
+                std::cout << "Failed to find target object for live photo in session: " << liveTargetId << std::endl;
+            }
         }
     }
 

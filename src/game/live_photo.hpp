@@ -51,6 +51,7 @@ namespace space
 
             virtual void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform);
             virtual void draw(GameSession &session, RenderCamera &target);
+            virtual void onPostLoad(GameSession &session, LoadingContext &context);
 
             void updateInternalTarget(GameSession &session, sf::Time dt);
             void drawToInternalTexture(GameSession &session);

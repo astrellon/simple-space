@@ -31,6 +31,10 @@ namespace space
         auto result = context.session.createObject<Character>(newId, definition);
         result->flipSprite(_flipSprite);
         populateCloneFromThis(result, context);
+
+        result->sprite().sequence(_sprite.currentAnimation(), true);
+        result->sprite().animationTime = _sprite.animationTime;
+
         return result;
     }
 
