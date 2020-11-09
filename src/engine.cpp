@@ -24,6 +24,7 @@
 
 #include "ui/ui_manager.hpp"
 #include "ui/ui_debug.hpp"
+#include "ui/ui_photo_album.hpp"
 
 #include "definitions/cursor.hpp"
 
@@ -259,7 +260,11 @@ namespace space
 
         if (Keyboard::isKeyDown(sf::Keyboard::Tilde))
         {
-            uiManager().uiDebug().show = !uiManager().uiDebug().show;
+            uiManager().uiDebug().toggleShow();
+        }
+        if (Keyboard::isKeyDown(sf::Keyboard::P))
+        {
+            uiManager().uiPhotoAlbum().toggleShow();
         }
 
         Mouse::prevMousePosition(sf::Mouse::getPosition());

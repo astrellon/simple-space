@@ -137,11 +137,6 @@ int main()
         engine.processEvents();
         engine.preUpdate();
 
-        if (space::Keyboard::isKeyDown(sf::Keyboard::P))
-        {
-            space::DrawDebug::showPolygons = !space::DrawDebug::showPolygons;
-        }
-
         engine.update();
         engine.draw();
 

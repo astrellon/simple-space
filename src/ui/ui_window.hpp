@@ -23,6 +23,7 @@ namespace space
 
             // Methods
             virtual void draw(Engine &engine);
+            virtual bool toggleShow() { return show = !show; }
 
         protected:
             // Methods
