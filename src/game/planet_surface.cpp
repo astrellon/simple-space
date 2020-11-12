@@ -76,6 +76,12 @@ namespace space
         return _area.checkForMouse(session, mousePosition);
     }
 
+    void PlanetSurface::loopOver(LoopObjectCallback callback)
+    {
+        SpaceObject::loopOver(callback);
+        _area.loopOver(callback);
+    }
+
     void PlanetSurface::createMapLayersFromDefinition(GameSession &session)
     {
         const auto &layers = definition.tmxMap->getLayers();

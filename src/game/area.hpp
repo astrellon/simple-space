@@ -85,6 +85,8 @@ namespace space
             DrawLayer &main() { return _main; }
             DrawLayer &foreground() { return _foreground; }
 
+            void loopOver(LoopObjectCallback callback);
+
         private:
             // Fields
             AreaType _type;

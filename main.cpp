@@ -126,6 +126,7 @@ int main()
     auto livePhoto = gameSession->createLivePhoto(planetSurface->area(), sf::IntRect(100 / 6, 10, 256, 256));
     //starSystem->area().addObject(livePhoto);
     gameSession->playerController().photoAlbum().addPhoto(livePhoto);
+    gameSession->playerController().compendium().processNewPhoto(livePhoto);
 
     while (window.isOpen())
     {

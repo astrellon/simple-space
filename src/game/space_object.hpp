@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <functional>
 
 #include <SFML/Graphics.hpp>
 
@@ -63,6 +64,8 @@ namespace space
             virtual DrawLayers::Type drawLayer() const { return DrawLayers::Main; }
 
             SpaceObject *rootObject();
+
+            virtual void loopOver(LoopObjectCallback callback);
 
         protected:
             // Fields

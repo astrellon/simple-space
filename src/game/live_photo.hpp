@@ -61,6 +61,8 @@ namespace space
             void targetObject(SpaceObject *obj) { _targetObject = obj; }
             SpaceObject *targetObject() const { return _targetObject; }
 
+            std::vector<SpaceObject *> getObjectsWithCompendium() const;
+
         private:
             // Fields
             SpaceObject *_targetObject;

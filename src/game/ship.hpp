@@ -58,6 +58,8 @@ namespace space
 
             virtual void drawInterior(GameSession &session, RenderCamera &target);
 
+            virtual void loopOver(LoopObjectCallback callback);
+
         private:
             // Fields
             Area _area;

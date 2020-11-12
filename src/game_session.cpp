@@ -625,6 +625,7 @@ namespace space
                 auto livePhoto = createLivePhoto(*_playerController.controllingObject()->insideArea(), sf::IntRect(worldMousePosition.x, worldMousePosition.y, 256, 256));
 
                 _playerController.photoAlbum().addPhoto(livePhoto);
+                _playerController.compendium().processNewPhoto(livePhoto);
                 _takingAPhoto = false;
                 return;
             }

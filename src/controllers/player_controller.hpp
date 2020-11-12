@@ -5,6 +5,7 @@
 #include "../types.hpp"
 #include "character_controller.hpp"
 #include "../photo_album.hpp"
+#include "../compendium.hpp"
 
 namespace space
 {
@@ -28,10 +29,14 @@ namespace space
             PhotoAlbum &photoAlbum() { return _photoAlbum; }
             const PhotoAlbum &photoAlbum() const { return _photoAlbum; }
 
+            Compendium &compendium() { return _compendium; }
+            const Compendium &compendium() const { return _compendium; }
+
         private:
             // Fields
             ObjectId _selectedObject;
             PhotoAlbum _photoAlbum;
+            Compendium _compendium;
 
             // Methods
             void controlShip(sf::Time dt);

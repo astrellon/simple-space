@@ -46,7 +46,7 @@ namespace space
             bool tryGetEntry(const DefinitionId &compendiumDefId, CompendiumEntry **result);
             bool tryGetEntry(const DefinitionId &compendiumDefId, const CompendiumEntry **result) const;
 
-            void processNewPhoto(LivePhoto &photo);
+            void processNewPhoto(LivePhoto *photo);
 
         private:
             // Fields

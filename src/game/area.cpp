@@ -266,4 +266,12 @@ namespace space
             }
         }
     }
+
+    void Area::loopOver(LoopObjectCallback callback)
+    {
+        for (auto obj : _objects)
+        {
+            callback(obj);
+        }
+    }
 } // space

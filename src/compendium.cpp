@@ -69,8 +69,14 @@ namespace space
         return false;
     }
 
-    void Compendium::processNewPhoto(LivePhoto &photo)
+    void Compendium::processNewPhoto(LivePhoto *photo)
     {
-
+        auto compendiumObjects = photo->getObjectsWithCompendium();
+        for (auto obj : compendiumObjects)
+        {
+            auto compDef = obj->compendiumDefinition();
+            auto &entry = unlockEntry(*compDef);
+            entry.addPhoto(photo);
+        }
     }
 } // space

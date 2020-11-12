@@ -133,6 +133,12 @@ namespace space
         _area.draw(session, target);
     }
 
+    void Ship::loopOver(LoopObjectCallback callback)
+    {
+        SpaceObject::loopOver(callback);
+        _area.loopOver(callback);
+    }
+
     void Ship::createMainCollider()
     {
         auto size = definition.interiorTexture->getSize();
@@ -209,6 +215,5 @@ namespace space
                 _rotationSpeed = 0.0f;
             }
         }
-
     }
 }

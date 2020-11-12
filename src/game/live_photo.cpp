@@ -105,6 +105,19 @@ namespace space
         }
     }
 
+    std::vector<SpaceObject *> LivePhoto::getObjectsWithCompendium() const
+    {
+        std::vector<SpaceObject *> result;
 
+        _targetObject->rootObject()->loopOver([&](SpaceObject *obj)
+        {
+            if (obj->compendiumDefinition())
+            {
+                result.push_back(obj);
+            }
+        });
+
+        return result;
+    }
 
 } // space

@@ -144,4 +144,5 @@ namespace space
 
         return distSquared < radiusSquared;
     }
+
 } // namespace space

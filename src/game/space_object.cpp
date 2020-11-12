@@ -32,4 +32,9 @@ namespace space
             session.tryGetSpaceObject<LivePhoto>(livePhotoId, &_partOfLivePhoto);
         }
     }
+
+    void SpaceObject::loopOver(LoopObjectCallback callback)
+    {
+        callback(this);
+    }
 } // namespace space

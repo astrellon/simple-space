@@ -48,6 +48,8 @@ namespace space
             void partOfPlanet(Planet *planet) { _partOfPlanet = planet; }
             Planet *partOfPlanet() const { return _partOfPlanet; }
 
+            virtual void loopOver(LoopObjectCallback callback);
+
         private:
 
             // Fields
