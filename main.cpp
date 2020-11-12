@@ -84,7 +84,7 @@ int main()
     settings.minorVersion = 0;
     settings.stencilBits = 1;
 
-    sf::RenderWindow window(sf::VideoMode(1920, 1080), "Space", sf::Style::Default, settings);
+    sf::RenderWindow window(sf::VideoMode(1920, 1080), "Space Doggo", sf::Style::Default, settings);
     window.setVerticalSyncEnabled(true);
     // window.setFramerateLimit(120);
 
