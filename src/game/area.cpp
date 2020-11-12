@@ -271,7 +271,7 @@ namespace space
     {
         for (auto obj : _objects)
         {
-            callback(obj);
+            obj->loopOver(callback);
         }
     }
 } // space

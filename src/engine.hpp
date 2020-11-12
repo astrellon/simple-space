@@ -76,6 +76,8 @@ namespace space
             void draw();
             void shutdown();
 
+            int frameCounter() const { return _frameCounter; }
+
         private:
             // Fields
             std::unique_ptr<ResourceManager> _resourceManager;
@@ -98,6 +100,7 @@ namespace space
             sf::Clock _timerSinceStart;
             sf::Time _deltaTime;
             sf::Time _timeSinceStartOnUpdate;
+            int _frameCounter;
 
             std::chrono::system_clock::time_point _frameStart;
 

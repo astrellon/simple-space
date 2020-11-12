@@ -9,6 +9,7 @@
 #include "../game/planet_surface.hpp"
 #include "../game/ship.hpp"
 #include "../utils.hpp"
+#include "../definitions/compendium_definition.hpp"
 
 namespace space
 {
@@ -61,6 +62,14 @@ namespace space
     {
         ImGui::Text("Id: %s", spaceObject.id.c_str());
         ImGui::Text("Type: %s", spaceObject.type().c_str());
+        if (spaceObject.compendiumDefinition())
+        {
+            ImGui::Text("CompendiumId: %s", spaceObject.compendiumDefinition()->id.c_str());
+        }
+        else
+        {
+            ImGui::Text("CompendiumId: None");
+        }
 
         auto insideArea = spaceObject.insideArea();
         if (insideArea)

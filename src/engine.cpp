@@ -32,7 +32,7 @@ namespace space
 {
     Engine::Engine(sf::RenderWindow *window) :
         _spriteScale(1.0f), _window(window), _deltaTime(sf::Time::Zero), _timeSinceStartOnUpdate(sf::Time::Zero),
-        enableBloom(true), _cameraScale(2.0f), _initedImgui(false), _sceneRender(nullptr), _sceneRenderTransition(nullptr), _headlessMode(window == nullptr)
+        enableBloom(true), _cameraScale(2.0f), _initedImgui(false), _sceneRender(nullptr), _sceneRenderTransition(nullptr), _headlessMode(window == nullptr), _frameCounter(0)
     {
         _resourceManager = std::make_unique<ResourceManager>();
         _definitionManager = std::make_unique<DefinitionManager>();
@@ -248,6 +248,8 @@ namespace space
 
     void Engine::update()
     {
+        _frameCounter++;
+
         if (_currentSession.get())
         {
             _currentSession->update(_deltaTime);

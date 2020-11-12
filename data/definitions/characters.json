@@ -51,6 +51,7 @@
     {
         "type": "character",
         "id": "PLAYER_CHAR",
+        "compendiumId": "COMP_DOG",
         "spriteSize": 32,
         "speed": 100,
         "name": "Player",
@@ -59,7 +60,7 @@
     {
         "type": "character",
         "id": "GREG_CHAR",
-        "compendiumId": "DOG_COMP",
+        "compendiumId": "COMP_DOG",
         "spriteSize": 32,
         "speed": 50,
         "name": "Greg",
@@ -68,7 +69,7 @@
     {
         "type": "character",
         "id": "FRED_CHAR",
-        "compendiumId": "DOG_COMP",
+        "compendiumId": "COMP_DOG",
         "spriteSize": 32,
         "speed": 50,
         "name": "Fred",
@@ -77,7 +78,7 @@
     {
         "type": "character",
         "id": "FRONK_CHAR",
-        "compendiumId": "DOG_COMP",
+        "compendiumId": "COMP_DOG",
         "spriteSize": 32,
         "speed": 50,
         "name": "Fronk",
@@ -86,7 +87,7 @@
     {
         "type": "character",
         "id": "TUMBO_CHAR",
-        "compendiumId": "DOG_COMP",
+        "compendiumId": "COMP_DOG",
         "spriteSize": 32,
         "speed": 50,
         "name": "Tumbo",

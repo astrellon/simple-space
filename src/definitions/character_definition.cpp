@@ -8,11 +8,17 @@ namespace space
 {
     void CharacterDefinition::onPostLoad(Engine &engine)
     {
-        engine.definitionManager().tryGet(animatedTextureId, &texture);
+        if (!engine.definitionManager().tryGet(animatedTextureId, &texture))
+        {
+            std::cout << "Failed to find animated texture id: " << animatedTextureId << " for char: " << id << std::endl;
+        }
 
         if (compendiumId.size() > 0)
         {
-            engine.definitionManager().tryGet(compendiumId, &compendiumDef);
+            if (!engine.definitionManager().tryGet(compendiumId, &compendiumDef))
+            {
+                std::cout << "Failed to find compendium id: " << compendiumId << " for char: " << id << std::endl;
+            }
         }
     }
 } // namespace space

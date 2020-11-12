@@ -7,6 +7,7 @@
 #include "../utils.hpp"
 #include "../render_camera.hpp"
 #include "../serialisers/loading_context.hpp"
+#include "../definitions/compendium_definition.hpp"
 
 namespace space
 {
@@ -20,7 +21,7 @@ namespace space
         return context.session.createObject<LivePhotoTarget>(newId);
     }
 
-    LivePhoto::LivePhoto(const ObjectId &id) : SpaceObject(id), _targetObject(nullptr)
+    LivePhoto::LivePhoto(const ObjectId &id) : SpaceObject(id), _targetObject(nullptr), _lastFrameUpdate(-1)
     {
 
     }
@@ -86,6 +87,14 @@ namespace space
 
     void LivePhoto::updateInternalTarget(GameSession &session, sf::Time dt)
     {
+        auto newFrameCounter = session.engine().frameCounter();
+        if (newFrameCounter <= _lastFrameUpdate)
+        {
+            return;
+        }
+
+        _lastFrameUpdate = newFrameCounter;
+
         if (_targetObject)
         {
             auto root = _targetObject->rootObject();
@@ -109,11 +118,19 @@ namespace space
     {
         std::vector<SpaceObject *> result;
 
+        std::cout << "Looping over live photo:" << std::endl;
+
         _targetObject->rootObject()->loopOver([&](SpaceObject *obj)
         {
+            std::cout << "- " << obj->id;
             if (obj->compendiumDefinition())
             {
+                std::cout << " comp: " << obj->compendiumDefinition()->id << std::endl;
                 result.push_back(obj);
+            }
+            else
+            {
+                std::cout << " no comp" << std::endl;
             }
         });
 

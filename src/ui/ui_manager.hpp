@@ -19,6 +19,7 @@ namespace space
     class UIObjects;
     class UIFrameBuffers;
     class UIPhotoAlbum;
+    class UICompendium;
 
     class UIManager
     {
@@ -56,6 +57,7 @@ namespace space
             UIObjects &uiObjects() { return *_uiObjects; }
             UIFrameBuffers &uiFrameBuffers() { return *_uiFrameBuffers; }
             UIPhotoAlbum &uiPhotoAlbum() { return *_uiPhotoAlbum; }
+            UICompendium &uiCompendium() { return *_uiCompendium; }
 
         private:
             // Fields
@@ -71,6 +73,7 @@ namespace space
             UIObjects *_uiObjects;
             UIFrameBuffers *_uiFrameBuffers;
             UIPhotoAlbum *_uiPhotoAlbum;
+            UICompendium *_uiCompendium;
 
             // Methods
     };

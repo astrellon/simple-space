@@ -16,6 +16,9 @@ namespace space
     class CompendiumEntry
     {
         public:
+            // Types
+            typedef std::vector<LivePhoto *> PhotoList;
+
             // Fields
             const CompendiumDefinition &definition;
 
@@ -26,9 +29,12 @@ namespace space
             void addPhoto(LivePhoto *photo);
             void removePhoto(const ObjectId &id);
 
+            PhotoList &photos() { return _linkedPhotos; }
+            const PhotoList &photos() const { return _linkedPhotos; }
+
         private:
             // Fields
-            std::vector<LivePhoto *> _linkedPhotos;
+            PhotoList _linkedPhotos;
 
             // Methods
     };
@@ -36,6 +42,8 @@ namespace space
     class Compendium : private NonCopyable
     {
         public:
+            // Types
+            typedef std::map<DefinitionId, CompendiumEntry> EntryMap;
             // Fields
 
             // Constructor
@@ -48,9 +56,12 @@ namespace space
 
             void processNewPhoto(LivePhoto *photo);
 
+            EntryMap &entries() { return _entries; }
+            const EntryMap &entries() const { return _entries; }
+
         private:
             // Fields
-            std::map<DefinitionId, CompendiumEntry> _entries;
+            EntryMap _entries;
 
             // Methods
     };

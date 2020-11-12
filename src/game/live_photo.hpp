@@ -68,6 +68,7 @@ namespace space
             SpaceObject *_targetObject;
             std::unique_ptr<RenderCamera> _camera;
             sf::Sprite _cameraSprite;
+            int _lastFrameUpdate;
 
             // Methods
     };
