@@ -108,6 +108,7 @@ namespace space
             engine.window()->setMouseCursorVisible(false);
             auto mousePosition = sf::Mouse::getPosition(*engine.window());
             _CursorSprite.setPosition(static_cast<sf::Vector2f>(static_cast<sf::Vector2i>(static_cast<sf::Vector2f>(mousePosition) / cameraScale)) * cameraScale);
+
             _CursorSprite.setScale(sf::Vector2f(engine.cameraScale(), engine.cameraScale()));
         }
         else
@@ -120,6 +121,8 @@ namespace space
     {
         if (_Cursor && _Cursor->texture)
         {
+            auto view = engine.window()->getView();
+            target.texture().setView(view);
             target.texture().draw(_CursorSprite);
         }
     }

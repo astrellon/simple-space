@@ -481,8 +481,6 @@ namespace space
             }
         }
 
-        std::cout << "Drawing space portal: " << spacePortal->id << " " << currentRenderContext.portalLevel() << std::endl;
-
         auto &renderTarget = *renderTargetEntry.value;
         auto diff = targetObject->transform().position - spacePortal->transform().position;
         auto &transitionCamera = renderTarget.camera();

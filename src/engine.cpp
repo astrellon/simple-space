@@ -208,6 +208,8 @@ namespace space
             renderCamera->onResize(area, _cameraScale);
         }
 
+        _window->setView(sf::View(area * 0.5f, area));
+
         if (!_headlessMode && !_initedImgui)
         {
             _initedImgui = true;
@@ -297,7 +299,6 @@ namespace space
             ImGui::SFML::Render(_sceneRender->texture());
         }
 
-        _sceneRender->texture().setView(_window->getView());
         Mouse::draw(*this, *_sceneRender);
 
         _sceneRender->texture().display();
