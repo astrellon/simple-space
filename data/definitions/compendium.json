@@ -3,14 +3,54 @@
         "id": "COMP_DOG",
         "type": "compendium",
         "name": "Dog",
-        "species": "Doggo",
         "description": "A doggo"
     },
     {
-        "id": "BIRD_COMP",
+        "id": "COMP_BIRD",
         "type": "compendium",
         "name": "Bird",
-        "species": "Birdo",
         "description":"A bird"
+    },
+    {
+        "id": "COMP_PLANET_EARTH_LIKE",
+        "type": "compendium",
+        "name": "Earth-Like Planet",
+        "description":"An Earth-Like Planet that has liquid water and vegetation."
+    },
+    {
+        "id": "COMP_MOON_ROCKY",
+        "type": "compendium",
+        "name": "Rocky Moon",
+        "description":"A medium sized rocky moon."
+    },
+    {
+        "id": "COMP_PLANET_DESERT",
+        "type": "compendium",
+        "name": "Desert Planet",
+        "description":"An Earth-Like Planet that has liquid water and vegetation."
+    },
+    {
+        "id": "COMP_PLANET_LAVA",
+        "type": "compendium",
+        "name": "Lava Planet",
+        "description":"A lava covered planet."
+    },
+    {
+        "id": "COMP_STAR_G",
+        "type": "compendium",
+        "name": "Star G-Type",
+        "description":"A white to yellow coloured star."
+    },
+    {
+        "id": "COMP_STAR_K",
+        "type": "compendium",
+        "name": "Star K-Type",
+        "description":"An orange to red coloured start."
+    },
+    {
+        "id": "COMP_STAR_F",
+        "type": "compendium",
+        "name": "Star F-Type",
+        "description":"A blue to white coloured star."
     }
 ]

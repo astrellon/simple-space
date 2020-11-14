@@ -21,6 +21,7 @@
 #include "../definitions/planet_surface_definition.hpp"
 #include "../definitions/space_portal_definition.hpp"
 #include "../definitions/star_system_definition.hpp"
+#include "../definitions/compendium_definition.hpp"
 
 #include "../serialisers/json/json_serialisers_definitions.hpp"
 
@@ -83,6 +84,14 @@ namespace space
             {
                 drawGrassEffect(static_cast<GrassEffectDefinition &>(*_selectedCopy));
             }
+            else if (type == CompendiumDefinition::DefinitionType())
+            {
+                drawCompendium(static_cast<CompendiumDefinition &>(*_selectedCopy));
+            }
+            else if (type == PlanetDefinition::DefinitionType())
+            {
+                drawPlanet(static_cast<PlanetDefinition &>(*_selectedCopy));
+            }
             ImGui::EndChild();
         }
 
@@ -122,6 +131,7 @@ namespace space
     void UIDefinitions::drawCharacter(CharacterDefinition &character)
     {
         ImGui::Text("Name: %s", character.name.c_str());
+        drawCompendiumLine(character.compendiumId, character.compendiumDef);
         ImGui::Text("Sprite Size: %u", character.spriteSize);
         ImGui::Text("Speed: %f", character.speed);
         ImGui::Text("Animated Texture Id: %s loaded %s", character.animatedTextureId.c_str(), character.texture ? "true" : "false");
@@ -167,6 +177,18 @@ namespace space
             enginePlacements << "[" << point.x << ", " << point.y << "] ";
         }
         ImGui::TextWrapped("%s", enginePlacements.str().c_str());
+    }
+
+    void UIDefinitions::drawPlanet(PlanetDefinition &planet)
+    {
+        ImGui::Text("Name: %s", planet.name.c_str());
+        drawCompendiumLine(planet.compendiumId, planet.compendiumDef);
+        drawColour("Glow Colour:", planet.glowColour);
+
+        ImGui::InputFloat("Rotation Rate: ", &planet.rotationRate);
+        ImGui::InputFloat("Size: ", &planet.size);
+        ImGui::InputFloat("Scale: ", &planet.scale);
+        ImGui::InputFloat("Oscillate Noise: ", &planet.oscillateNoise);
     }
 
     void UIDefinitions::drawAnimatedTexture(AnimatedTexture &animated)
@@ -218,6 +240,24 @@ namespace space
         colour.g = static_cast<sf::Uint8>(colourValues[1] * 255.0f);
         colour.b = static_cast<sf::Uint8>(colourValues[2] * 255.0f);
         colour.a = static_cast<sf::Uint8>(colourValues[3] * 255.0f);
+    }
+
+    void UIDefinitions::drawCompendium(CompendiumDefinition &compendium)
+    {
+        ImGui::Text("Name: %s", compendium.name.c_str());
+        ImGui::Text("Description: %s", compendium.description.c_str());
+    }
+
+    void UIDefinitions::drawCompendiumLine(const DefinitionId &id, const CompendiumDefinition *compendium)
+    {
+        if (id.size())
+        {
+            ImGui::Text("Compendium: %s, loaded: %s", id.c_str(), compendium ? "true" : "false");
+        }
+        else
+        {
+            ImGui::Text("Compendium: Not Set");
+        }
     }
 } // space
 

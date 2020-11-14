@@ -11,6 +11,7 @@ namespace space
 {
     class Engine;
     class PlanetSurfaceDefinition;
+    class CompendiumDefinition;
 
     class PlanetDefinition : public CelestialBodyDefinition
     {
@@ -26,12 +27,14 @@ namespace space
             float oscillateNoise;
 
             DefinitionIds planetSurfaceIds;
+            DefinitionId compendiumId;
 
             // Post Load Fields
             const sf::Texture *texture;
+            const CompendiumDefinition *compendiumDef;
 
             // Constructor
-            PlanetDefinition(DefinitionId id) : CelestialBodyDefinition(id), oscillateNoise(0.0f) { }
+            PlanetDefinition(DefinitionId id) : CelestialBodyDefinition(id), oscillateNoise(0.0f), compendiumDef(nullptr) { }
             virtual ~PlanetDefinition() { }
 
             // Methods

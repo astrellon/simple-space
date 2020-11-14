@@ -45,6 +45,8 @@ namespace space
             void removePlanetSurface(PlanetSurface *PlanetSurface);
             const PlanetSurfaceList &planetSurfaces() const { return _planetSurfaces; }
 
+            virtual const CompendiumDefinition *compendiumDefinition() const { return definition.compendiumDef; }
+
         private:
             // Fields
             std::vector<DefinitionId> _onPostLoadPlanetSurfaceIds;

@@ -10,6 +10,7 @@
         "rootBody": {
             "type": "planet",
             "id": "SS2_STAR_1",
+            "compendiumId": "COMP_STAR_K",
             "location": {
                 "distance": 0,
                 "influenceRadius": 4000,
@@ -26,6 +27,7 @@
                 {
                     "type": "planet",
                     "id": "SS2_PLANET_1",
+                    "compendiumId": "COMP_PLANET_EARTH_LIKE",
                     "location": {
                         "distance": 500,
                         "influenceRadius": 200,
@@ -42,6 +44,7 @@
                 {
                     "type": "planet",
                     "id": "SS2_PLANET_2",
+                    "compendiumId": "COMP_MOON_ROCKY",
                     "rotationRate": 0.08,
                     "location": {
                         "distance": 520,

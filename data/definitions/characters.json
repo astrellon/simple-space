@@ -42,7 +42,7 @@
     {
         "type": "character",
         "id": "BIRD_CHAR_DEF",
-        "compendiumId": "BIRD_COMP",
+        "compendiumId": "COMP_BIRD",
         "spriteSize": 24,
         "speed": 10,
         "name": "Birdy",

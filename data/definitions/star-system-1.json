@@ -15,6 +15,7 @@
                 "influenceRadius": 4000,
                 "angle": 0
             },
+            "compendiumId": "COMP_STAR_G",
             "rotationRate": 0.02,
             "size": 256,
             "name": "Star",
@@ -26,6 +27,7 @@
                 {
                     "type": "planet",
                     "id": "SS_PLANET_1",
+                    "compendiumId": "COMP_PLANET_EARTH_LIKE",
                     "location": {
                         "distance": 400,
                         "influenceRadius": 200,
@@ -42,6 +44,7 @@
                 {
                     "type": "planet",
                     "id": "SS_PLANET_2",
+                    "compendiumId": "COMP_PLANET_DESERT",
                     "rotationRate": 0.03,
                     "location": {
                         "distance": 400,

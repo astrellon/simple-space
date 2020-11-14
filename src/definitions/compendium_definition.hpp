@@ -13,11 +13,7 @@ namespace space
         public:
             // Fields
             std::string name;
-            std::string species;
             std::string description;
-            std::string picturePath;
-
-            const sf::Texture *picture;
 
             // Constructor
             CompendiumDefinition(DefinitionId id) : BaseDefinition(id) { }

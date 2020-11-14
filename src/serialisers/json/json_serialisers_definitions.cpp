@@ -276,6 +276,7 @@ namespace space
         return json
         {
             {"id", input.id},
+            {"compendiumId", input.compendiumId},
             {"location", toJson(input.location)},
             {"children", toJsonArray(input.children)},
             {"texturePath", input.texturePath},
@@ -309,6 +310,7 @@ namespace space
         j.at("scale").get_to(result->scale);
 
         Utils::json_try_get(j, "oscillateNoise", result->oscillateNoise);
+        Utils::json_try_get(j, "compendiumId", result->compendiumId);
 
         auto planetSurfaceIds = j.find("planetSurfaceIds");
         if (planetSurfaceIds != j.end())
@@ -553,10 +555,9 @@ namespace space
     {
         return json {
             {"id", input.id},
+            {"type", input.type()},
             {"name", input.name},
-            {"description", input.description},
-            {"species", input.species},
-            {"picturePath", input.picturePath}
+            {"description", input.description}
         };
     }
     std::unique_ptr<CompendiumDefinition> fromJsonCompendiumDefinition(const json &j)
@@ -565,9 +566,7 @@ namespace space
         auto result = std::make_unique<CompendiumDefinition>(id);
 
         j.at("name").get_to(result->name);
-        j.at("species").get_to(result->species);
         j.at("description").get_to(result->description);
-        //j.at("picturePath").get_to(result->picturePath);
 
         return result;
     }

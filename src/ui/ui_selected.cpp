@@ -59,7 +59,6 @@ namespace space
             ImGui::NewLine();
             ImGui::Text("Compendium:");
             ImGui::Text("Name: %s", compendiumDef->name.c_str());
-            ImGui::Text("Species: %s", compendiumDef->species.c_str());
             ImGui::Text("Description: %s", compendiumDef->description.c_str());
         }
     }

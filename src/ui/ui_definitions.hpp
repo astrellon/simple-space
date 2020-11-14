@@ -23,6 +23,7 @@ namespace space
     class PlanetSurfaceDefinition;
     class SpacePortalDefinition;
     class StarSystemDefinition;
+    class CompendiumDefinition;
 
     class UIDefinitions : public UIWindow
     {
@@ -59,8 +60,10 @@ namespace space
             void drawPlanetSurface(PlanetSurfaceDefinition &planetSurface);
             void drawSpacePortal(SpacePortalDefinition &spacePortal);
             void drawStarSystem(StarSystemDefinition &starSystem);
+            void drawCompendium(CompendiumDefinition &compendium);
 
             void drawColour(const char *label, sf::Color &colour);
+            void drawCompendiumLine(const DefinitionId &id, const CompendiumDefinition *compendium);
 
     };
 } // space

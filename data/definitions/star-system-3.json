@@ -10,6 +10,7 @@
         "rootBody": {
             "type": "planet",
             "id": "SS3_STAR_1",
+            "compendiumId": "COMP_STAR_F",
             "location": {
                 "distance": 0,
                 "influenceRadius": 4000,
@@ -26,6 +27,7 @@
                 {
                     "type": "planet",
                     "id": "SS3_PLANET_1",
+                    "compendiumId": "COMP_PLANET_LAVA",
                     "location": {
                         "distance": 500,
                         "influenceRadius": 200,
