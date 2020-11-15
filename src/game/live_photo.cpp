@@ -21,25 +21,26 @@ namespace space
         return context.session.createObject<LivePhotoTarget>(newId);
     }
 
-    LivePhoto::LivePhoto(const ObjectId &id) : SpaceObject(id), _targetObject(nullptr), _lastFrameUpdate(-1)
+    LivePhoto::LivePhoto(const ObjectId &id, const sf::Vector2u renderSize) : SpaceObject(id), photoSize(renderSize), _targetObject(nullptr), _lastFrameUpdate(-1)
     {
 
     }
 
     LivePhoto *LivePhoto::cloneLivePhoto(const ObjectId &newId, const CloneContext &context)
     {
-        auto result = context.session.createObject<LivePhoto>(newId);
+        auto result = context.session.createObject<LivePhoto>(newId, photoSize);
         populateCloneFromThis(result, context);
         return result;
     }
 
-    void LivePhoto::init(Engine &engine, sf::Vector2f size, float cameraScale)
+    void LivePhoto::init(Engine &engine)
     {
         std::stringstream cameraId;
         cameraId << "LivePhoto:" << id;
         _camera = std::make_unique<RenderCamera>(engine, cameraId.str());
 
-        _camera->onResize(size * cameraScale, cameraScale);
+        auto area = static_cast<sf::Vector2f>(photoSize) * engine.cameraScale();
+        _camera->onResize(area, engine.cameraScale());
         _camera->preDraw();
         _camera->camera().center(sf::Vector2f());
 
@@ -74,9 +75,13 @@ namespace space
         if (context.tryGetPostLoadObjectId(id, LoadingType::LivePhotoTarget, liveTargetId))
         {
             SpaceObject *target;
-            if (session.tryGetSpaceObject(id, &target))
+            if (session.tryGetSpaceObject(liveTargetId, &target))
             {
                 targetObject(target);
+
+                // For now assume to be in players album
+                session.playerController().photoAlbum().addPhoto(this);
+                session.playerController().compendium().processNewPhoto(this);
             }
             else
             {

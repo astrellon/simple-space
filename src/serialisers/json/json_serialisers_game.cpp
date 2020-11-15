@@ -251,6 +251,7 @@ namespace space
     json toJson(const PlacedItem &input)
     {
         json result {
+            {"id", input.id},
             {"type", input.type()},
             {"position", toJson(input.transform().position)},
             {"itemId", input.item->id}
@@ -266,6 +267,9 @@ namespace space
 
     bool addFromJsonPlacedItem(const json &j, GameSession &session, LoadingContext &context)
     {
+        ObjectId id;
+        auto hasId = Utils::json_try_get(j, "id", id);
+
         auto itemId = j.at("itemId").get<ItemId>();
         auto position = fromJsonVector2f(j.at("position"));
 
@@ -275,7 +279,15 @@ namespace space
             return false;
         }
 
-        auto result = session.createObject<PlacedItem>(item);
+        PlacedItem *result = nullptr;
+        if (hasId)
+        {
+            result = session.createObject<PlacedItem>(id, item);
+        }
+        else
+        {
+            result = session.createObject<PlacedItem>(item);
+        }
         result->transform().position = position;
 
         ObjectId livePhotoId;
@@ -341,20 +353,26 @@ namespace space
     {
         auto result = toJsonBase(input);
         result["targetId"] = input.targetObject()->id;
+        result["photoSize"] = toJson(input.photoSize);
         return result;
     }
     bool addFromJsonLivePhoto(const json &j, GameSession &session, LoadingContext &context)
     {
         auto id = j.at("id").get<ObjectId>();
 
-        auto result = session.createObject<LivePhoto>(id);
+        sf::Vector2u photoSize(256, 256);
+        Utils::json_try_get(j, "photoSize", photoSize);
+
+        auto result = session.createObject<LivePhoto>(id, photoSize);
         applyBaseFromJson(j, *result, context);
 
         ObjectId livePhotoTargetId;
         if (Utils::json_try_get(j, "targetId", livePhotoTargetId))
         {
-            context.livePhotos[id] = livePhotoTargetId;
+            context.postLoadObjectIds[id][LoadingType::LivePhotoTarget] = livePhotoTargetId;
         }
+
+        result->init(session.engine());
 
         return true;
     }
@@ -398,6 +416,7 @@ namespace space
     json toJson(const StarSystem &input)
     {
         json result {
+            {"id", input.id},
             {"definitionId", input.definition.id},
             {"area", toJson(input.area())}
         };
@@ -411,6 +430,7 @@ namespace space
     }
     bool addFromJsonStarSystem(const json &j, GameSession &session, LoadingContext &context)
     {
+        auto id = j.at("id").get<ObjectId>();
         auto definitionId = j.at("definitionId").get<DefinitionId>();
         const StarSystemDefinition *definition;
         if (!session.engine().definitionManager().tryGet<StarSystemDefinition>(definitionId, &definition))
@@ -426,7 +446,7 @@ namespace space
             context.livePhotos[definitionId] = livePhotoId;
         }
 
-        auto starSystem = session.createObject<StarSystem>(session, definition->id, *definition);
+        auto starSystem = session.createObject<StarSystem>(session, id, *definition);
         starSystem->init(session);
         auto instances = context.getAreaInstance(&starSystem->area());
         addFromJsonAreaInstances(j.at("area"), instances);
@@ -442,6 +462,7 @@ namespace space
     json toJson(const PlanetSurface &input)
     {
         json result {
+            {"id", input.id},
             {"planetId", input.partOfPlanet()->id},
             {"definitionId", input.definition.id},
             {"area", toJson(input.area())},
@@ -457,6 +478,7 @@ namespace space
     }
     bool addFromJsonPlanetSurface(const json &j, GameSession &session, LoadingContext &context)
     {
+        auto id = j.at("id").get<ObjectId>();
         auto definitionId = j.at("definitionId").get<DefinitionId>();
         const PlanetSurfaceDefinition *definition;
         if (!session.engine().definitionManager().tryGet<PlanetSurfaceDefinition>(definitionId, &definition))
@@ -480,7 +502,7 @@ namespace space
             context.livePhotos[definitionId] = livePhotoId;
         }
 
-        auto planetSurface = session.createObject<PlanetSurface>(definition->id, *definition);
+        auto planetSurface = session.createObject<PlanetSurface>(id, *definition);
         planetSurface->partOfPlanet(planet);
 
         auto instances = context.getAreaInstance(&planetSurface->area());

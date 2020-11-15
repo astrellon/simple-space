@@ -35,16 +35,17 @@ namespace space
     {
         public:
             // Fields
+            const sf::Vector2u photoSize;
 
             // Constructor
-            LivePhoto(const ObjectId &id);
+            LivePhoto(const ObjectId &id, const sf::Vector2u renderSize);
             ~LivePhoto() { }
 
             // Methods
             virtual SpaceObject *clone(const ObjectId &newId, const CloneContext &context) { return cloneLivePhoto(newId, context); }
             LivePhoto *cloneLivePhoto(const ObjectId &newId, const CloneContext &context);
 
-            void init(Engine &engine, sf::Vector2f size, float cameraScale);
+            void init(Engine &engine);
 
             static const std::string SpaceObjectType() { return "live-photo"; }
             virtual std::string type() const { return SpaceObjectType(); }

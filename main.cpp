@@ -117,17 +117,6 @@ int main()
     auto gameSession = gameSessionTemp.get();
     engine.currentSession(std::move(gameSessionTemp));
 
-    space::StarSystem *starSystem;
-    space::PlanetSurface *planetSurface;
-    gameSession->tryGetSpaceObject<space::PlanetSurface>("PLANET_GRASSY_1", &planetSurface);
-    gameSession->tryGetSpaceObject<space::StarSystem>("STAR_SYSTEM_1", &starSystem);
-
-    //auto livePhoto = gameSession->createLivePhoto(starSystem->area(), sf::IntRect(230, 0, 256, 256));
-    auto livePhoto = gameSession->createLivePhoto(planetSurface->area(), sf::IntRect(100 / 6, 10, 256, 256));
-    //starSystem->area().addObject(livePhoto);
-    gameSession->playerController().photoAlbum().addPhoto(livePhoto);
-    gameSession->playerController().compendium().processNewPhoto(livePhoto);
-
     while (window.isOpen())
     {
         space::DrawDebug::allocatedThisFrame = 0;

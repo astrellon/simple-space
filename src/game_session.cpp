@@ -85,7 +85,8 @@ namespace space
         auto parentObject = insideArea.partOfObject();
         auto rootObject = parentObject->rootObject();
 
-        auto result = createObject<LivePhoto>(newId);
+        auto photoSize = static_cast<sf::Vector2u>(photoArea.getSize());
+        auto result = createObject<LivePhoto>(newId, photoSize);
 
         CloneContext cloneContext(*this, result, photoArea, &insideArea, _engine.timeSinceStart());
         auto deepClone = rootObject->deepClone(newIdPrefix, cloneContext);
@@ -110,7 +111,7 @@ namespace space
         target->transform().position = sf::Vector2f(photoArea.left, photoArea.top);
 
         result->targetObject(target);
-        result->init(_engine, sf::Vector2f(photoArea.width, photoArea.height), _engine.cameraScale());
+        result->init(_engine);
 
         return result;
     }
