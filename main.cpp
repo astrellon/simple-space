@@ -44,6 +44,8 @@
 
 #include <tmxlite/Map.hpp>
 
+#include <X11/Xlib.h>
+
 #ifdef TRACK_MEMORY
 void doDelete(void *ptr)
 {
@@ -77,6 +79,13 @@ void *operator new(size_t size)
 }
 #endif
 
+int errorHandler(Display *display, XErrorEvent *event)
+{
+    std::cout << "Error creating X Window" << std::endl;
+
+    return 1;
+}
+
 int main()
 {
     sf::ContextSettings settings;
@@ -84,7 +93,14 @@ int main()
     settings.minorVersion = 0;
     settings.stencilBits = 1;
 
+    XSetErrorHandler(errorHandler);
+
     sf::RenderWindow window(sf::VideoMode(1920, 1080), "Space Doggo", sf::Style::Default, settings);
+    if (!window.setActive())
+    {
+        std::cout << "Failed starting window" << std::endl;
+        return 1;
+    }
     window.setVerticalSyncEnabled(true);
     // window.setFramerateLimit(120);
 

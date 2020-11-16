@@ -37,7 +37,7 @@ add_subdirectory("extern/SFML")
 add_subdirectory("extern/tmxlite/tmxlite")
 
 SET (SFML_LIBRARIES sfml-graphics sfml-audio sfml-window sfml-system)
-SET (BASE_LIBRARIES ${OPENGL_LIBRARIES} ${SFML_LIBRARIES} Box2D tmxlite)
+SET (BASE_LIBRARIES ${OPENGL_LIBRARIES} ${SFML_LIBRARIES} Box2D tmxlite X11)
 
 if( MAKE_TESTS )
     find_package(doctest REQUIRED)
