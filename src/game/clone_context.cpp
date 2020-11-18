@@ -5,8 +5,8 @@
 
 namespace space
 {
-    CloneContext::CloneContext(GameSession &session, LivePhoto *isForLivePhoto, sf::IntRect photoArea, Area *insideArea, sf::Time clonedTimeSinceStart) :
-            session(session), isForLivePhoto(isForLivePhoto), photoArea(photoArea), insideArea(insideArea), clonedTimeSinceStart(clonedTimeSinceStart)
+    CloneContext::CloneContext(GameSession &session, sf::IntRect photoArea, Area *insideArea, sf::Time clonedTimeSinceStart) :
+            session(session), photoArea(photoArea), insideArea(insideArea), clonedTimeSinceStart(clonedTimeSinceStart)
     {
         auto area = insideArea;
         while (area)

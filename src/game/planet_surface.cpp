@@ -69,6 +69,11 @@ namespace space
 
         _area.onPostLoad(session, context);
         //definition.walkableAreaInstances.applyToWalkableArea(*_walkableArea, _session);
+
+        if (!_partOfLivePhoto)
+        {
+            session.addToUpdateEveryFrame(this);
+        }
     }
 
     bool PlanetSurface::checkForMouse(GameSession &session, sf::Vector2f mousePosition)

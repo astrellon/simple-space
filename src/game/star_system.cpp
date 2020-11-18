@@ -83,6 +83,11 @@ namespace space
         SpaceObject::onPostLoad(session, context);
 
         _area.onPostLoad(session, context);
+
+        if (!_partOfLivePhoto)
+        {
+            session.addToUpdateEveryFrame(this);
+        }
     }
 
     void StarSystem::loopOver(LoopObjectCallback callback)

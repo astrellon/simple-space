@@ -88,7 +88,7 @@ namespace space
         auto photoSize = static_cast<sf::Vector2u>(photoArea.getSize());
         auto result = createObject<LivePhoto>(newId, photoSize);
 
-        CloneContext cloneContext(*this, result, photoArea, &insideArea, _engine.timeSinceStart());
+        CloneContext cloneContext(*this, photoArea, &insideArea, _engine.timeSinceStart());
         auto deepClone = rootObject->deepClone(newIdPrefix, cloneContext);
         auto newParentObjectId = newIdPrefix + parentObject->id;
 
@@ -317,7 +317,19 @@ namespace space
         for (auto i = 0; i < _spaceObjects.size(); i++)
         {
             auto &spaceObject = _spaceObjects[i];
-            spaceObject->onPostLoad(*this, context);
+            if (spaceObject->type() == LivePhoto::SpaceObjectType())
+            {
+                spaceObject->onPostLoad(*this, context);
+            }
+        }
+
+        for (auto i = 0; i < _spaceObjects.size(); i++)
+        {
+            auto &spaceObject = _spaceObjects[i];
+            if (spaceObject->type() != LivePhoto::SpaceObjectType())
+            {
+                spaceObject->onPostLoad(*this, context);
+            }
         }
     }
 

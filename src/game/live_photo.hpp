@@ -59,7 +59,7 @@ namespace space
 
             sf::RenderTexture &texture() const;
 
-            void targetObject(SpaceObject *obj) { _targetObject = obj; }
+            void targetObject(SpaceObject *obj);
             SpaceObject *targetObject() const { return _targetObject; }
 
             std::vector<SpaceObject *> getObjectsWithCompendium() const;
@@ -70,6 +70,7 @@ namespace space
             std::unique_ptr<RenderCamera> _camera;
             sf::Sprite _cameraSprite;
             int _lastFrameUpdate;
+            int _lastFrameDraw;
 
             // Methods
     };

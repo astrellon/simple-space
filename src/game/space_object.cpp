@@ -21,7 +21,6 @@ namespace space
     void SpaceObject::populateCloneFromThis(SpaceObject *newClone, const CloneContext &context)
     {
         newClone->transform(_transform);
-        newClone->partOfLivePhoto(context.isForLivePhoto);
     }
 
     void SpaceObject::onPostLoad(GameSession &session, LoadingContext &context)

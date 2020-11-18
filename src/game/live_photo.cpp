@@ -21,7 +21,7 @@ namespace space
         return context.session.createObject<LivePhotoTarget>(newId);
     }
 
-    LivePhoto::LivePhoto(const ObjectId &id, const sf::Vector2u renderSize) : SpaceObject(id), photoSize(renderSize), _targetObject(nullptr), _lastFrameUpdate(-1)
+    LivePhoto::LivePhoto(const ObjectId &id, const sf::Vector2u renderSize) : SpaceObject(id), photoSize(renderSize), _targetObject(nullptr), _lastFrameUpdate(-1), _lastFrameDraw(-1)
     {
 
     }
@@ -112,8 +112,15 @@ namespace space
 
     void LivePhoto::drawToInternalTexture(GameSession &session)
     {
+        auto newFrameCounter = session.engine().frameCounter();
+        if (newFrameCounter <= _lastFrameDraw)
+        {
+            return;
+        }
+
         if (_targetObject)
         {
+            _lastFrameDraw = newFrameCounter;
             _camera->preDraw();
             session.drawAtObject(*_targetObject, _targetObject->transform().position, *_camera.get());
         }
@@ -140,6 +147,15 @@ namespace space
         });
 
         return result;
+    }
+
+    void LivePhoto::targetObject(SpaceObject *target)
+    {
+        _targetObject = target;
+        target->rootObject()->loopOver([=](SpaceObject *obj)
+        {
+            obj->partOfLivePhoto(this);
+        });
     }
 
 } // space

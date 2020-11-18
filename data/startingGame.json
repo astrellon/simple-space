@@ -394,7 +394,6 @@
                 ]
             },
             "definitionId": "PLANET_GRASSY_1",
-            "partOfLivePhotoId": "LIVE_PHOTO_1",
             "planetId": "STAR_SYSTEM_1:SS_PLANET_1",
             "id": "LIVE_PHOTO_1:PLANET_GRASSY_1",
             "type": "planet-surface"
@@ -402,7 +401,6 @@
         {
             "definitionId": "FRED_CHAR",
             "id": "LIVE_PHOTO_1:FRED",
-            "partOfLivePhotoId": "LIVE_PHOTO_1",
             "sprite": {
                 "animatedTime": 0.0,
                 "sequence": "idle"
@@ -418,7 +416,6 @@
         {
             "definitionId": "BIRD_CHAR_DEF",
             "id": "LIVE_PHOTO_1:BIRD_CHAR",
-            "partOfLivePhotoId": "LIVE_PHOTO_1",
             "sprite": {
                 "animatedTime": 0.0,
                 "sequence": "idle"

@@ -37,6 +37,7 @@ namespace space
     class LivePhoto;
     class LivePhotoTarget;
     class AnimatedSprite;
+    class PhotoAlbum;
 
     json toJson(const GameSession &input);
     std::unique_ptr<GameSession> fromJsonGameSession(Engine &engine, const json &j);
@@ -109,6 +110,9 @@ namespace space
 
     json toJson(const Teleporter &item);
     bool addFromJsonTeleporter(const json &j, GameSession &session);
+
+    json toJson(const PhotoAlbum &input);
+    bool addFromJsonPhotoAlbum(const json &j, GameSession &session);
 
     json toJson(const AnimatedSprite &sprite);
     void applyFromJsonAnimatedSprite(const json &j, AnimatedSprite &sprite);

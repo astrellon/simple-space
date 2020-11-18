@@ -4,6 +4,7 @@
 #include "../../engine.hpp"
 #include "../../space_transform.hpp"
 #include "../../utils.hpp"
+#include "../../photo_album.hpp"
 
 #include "../../definitions/dialogue.hpp"
 #include "../../definition_manager.hpp"
@@ -77,11 +78,6 @@ namespace space
             {"id", input.id},
             {"transform", toJson(input.transform())}
         };
-
-        if (input.partOfLivePhoto())
-        {
-            result["partOfLivePhotoId"] = input.partOfLivePhoto()->id;
-        }
 
         return result;
     }
@@ -162,12 +158,6 @@ namespace space
     void applyBaseFromJson(const json &j, SpaceObject &input, LoadingContext &context)
     {
         input.transform(fromJsonTransform(j.at("transform")));
-
-        ObjectId livePhotoId;
-        if (Utils::json_try_get(j, "partOfLivePhotoId", livePhotoId))
-        {
-            context.livePhotos[input.id] = livePhotoId;
-        }
     }
 
     json toJson(const Character &input)
@@ -257,11 +247,6 @@ namespace space
             {"itemId", input.item->id}
         };
 
-        if (input.partOfLivePhoto())
-        {
-            result["partOfLivePhotoId"] = input.partOfLivePhoto()->id;
-        }
-
         return result;
     }
 
@@ -289,12 +274,6 @@ namespace space
             result = session.createObject<PlacedItem>(item);
         }
         result->transform().position = position;
-
-        ObjectId livePhotoId;
-        if (Utils::json_try_get(j, "partOfLivePhotoId", livePhotoId))
-        {
-            context.livePhotos[result->id] = livePhotoId;
-        }
 
         return true;
     }
@@ -421,11 +400,6 @@ namespace space
             {"area", toJson(input.area())}
         };
 
-        if (input.partOfLivePhoto())
-        {
-            result["partOfLivePhotoId"] = input.partOfLivePhoto()->id;
-        }
-
         return result;
     }
     bool addFromJsonStarSystem(const json &j, GameSession &session, LoadingContext &context)
@@ -439,22 +413,10 @@ namespace space
             return false;
         }
 
-        ObjectId livePhotoId;
-        auto hasLivePhoto = Utils::json_try_get(j, "partOfLivePhotoId", livePhotoId);
-        if (hasLivePhoto)
-        {
-            context.livePhotos[definitionId] = livePhotoId;
-        }
-
         auto starSystem = session.createObject<StarSystem>(session, id, *definition);
         starSystem->init(session);
         auto instances = context.getAreaInstance(&starSystem->area());
         addFromJsonAreaInstances(j.at("area"), instances);
-
-        if (!hasLivePhoto)
-        {
-            session.addToUpdateEveryFrame(starSystem);
-        }
 
         return true;
     }
@@ -468,11 +430,6 @@ namespace space
             {"area", toJson(input.area())},
             {"type", input.type()}
         };
-
-        if (input.partOfLivePhoto())
-        {
-            result["partOfLivePhotoId"] = input.partOfLivePhoto()->id;
-        }
 
         return result;
     }
@@ -495,23 +452,11 @@ namespace space
             return false;
         }
 
-        ObjectId livePhotoId;
-        auto hasLivePhoto = Utils::json_try_get(j, "partOfLivePhotoId", livePhotoId);
-        if (hasLivePhoto)
-        {
-            context.livePhotos[definitionId] = livePhotoId;
-        }
-
         auto planetSurface = session.createObject<PlanetSurface>(id, *definition);
         planetSurface->partOfPlanet(planet);
 
         auto instances = context.getAreaInstance(&planetSurface->area());
         addFromJsonAreaInstances(j.at("area"), instances);
-
-        if (!hasLivePhoto)
-        {
-            session.addToUpdateEveryFrame(planetSurface);
-        }
 
         return true;
     }
@@ -824,6 +769,27 @@ namespace space
         }
 
         session.createItem<Teleporter>(id, *definition);
+
+        return true;
+    }
+
+    json toJson(const PhotoAlbum &input)
+    {
+        json photoIdsJson;
+        for (auto photo : input.photos())
+            photoIdsJson.push_back(photo->id);
+
+        return json {
+            {"photoIds", photoIdsJson}
+        };
+    }
+    bool addFromJsonPhotoAlbum(const json &j, GameSession &session)
+    {
+        auto photoIds = j.at("photoIds");
+        for (auto photoId : photoIds)
+        {
+            //instances->addPostLoadObject(objectId);
+        }
 
         return true;
     }
