@@ -59,24 +59,25 @@ namespace space
 
         _spriteBounds = _sprite.getGlobalBounds();
 
-        _interactable.createInteraction<UseItemAction>(this);
+        createInteractable();
+        _interactable->createInteraction<UseItemAction>(this);
         if (item->placeableDefinition.canPickup)
         {
-            _interactable.createInteraction<PickupAction>(this);
+            _interactable->createInteraction<PickupAction>(this);
         }
 
         auto item = this->item;
 
-        _interactable.setOnPlayerEnters([item](GameSession &session)
+        _interactable->setOnPlayerEnters([item](GameSession &session)
         {
             item->onPlayerEnters(session);
         });
-        _interactable.setOnPlayerLeaves([item](GameSession &session)
+        _interactable->setOnPlayerLeaves([item](GameSession &session)
         {
             item->onPlayerLeaves(session);
         });
 
-        _interactable.name(item->definition.name);
+        _interactable->name(item->definition.name);
     }
 
     void PlacedItem::addPhysics(b2World &world)

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <memory>
 #include <functional>
 
 #include <SFML/Graphics.hpp>
@@ -30,7 +31,7 @@ namespace space
             const ObjectId id;
 
             // Constructor
-            SpaceObject(const ObjectId &id) : id(id), _insideArea(nullptr), _interactable(this), _partOfLivePhoto(nullptr) { }
+            SpaceObject(const ObjectId &id) : id(id), _insideArea(nullptr), _partOfLivePhoto(nullptr) { }
             virtual ~SpaceObject() { }
 
             // Methods
@@ -44,7 +45,7 @@ namespace space
             void transform(const SpaceTransform &&transform) { _transform = transform; }
             const sf::Transform &worldTransform() const { return _worldTransform; }
 
-            Interactable &interactable() { return _interactable; }
+            Interactable *interactable() { return _interactable.get(); }
 
             virtual void insideArea(Area *area) { _insideArea = area; }
             virtual Area *insideArea() const { return _insideArea; }
@@ -73,7 +74,7 @@ namespace space
             sf::Transform _worldTransform;
             Area *_insideArea;
             LivePhoto *_partOfLivePhoto;
-            Interactable _interactable;
+            std::unique_ptr<Interactable> _interactable;
 
             // Methods
             inline void updateWorldTransform(const sf::Transform &parentTransform)
@@ -82,5 +83,6 @@ namespace space
             }
 
             void populateCloneFromThis(SpaceObject *newClone, const CloneContext &context);
+            void createInteractable();
     };
 } // space

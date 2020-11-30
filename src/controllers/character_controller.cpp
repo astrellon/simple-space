@@ -51,7 +51,11 @@ namespace space
 
         for (auto obj : area.objects())
         {
-            auto interactable = &obj->interactable();
+            auto interactable = obj->interactable();
+            if (!interactable)
+            {
+                continue;
+            }
 
             auto find = _canInteractWith.find(interactable);
             auto dpos = interactable->parentObject()->transform().position - playerPos;

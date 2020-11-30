@@ -36,4 +36,12 @@ namespace space
     {
         callback(this);
     }
+
+    void SpaceObject::createInteractable()
+    {
+        if (!_interactable.get())
+        {
+            _interactable = std::make_unique<Interactable>(this);
+        }
+    }
 } // namespace space

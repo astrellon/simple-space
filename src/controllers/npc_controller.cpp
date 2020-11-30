@@ -24,11 +24,15 @@ namespace space
             return;
         }
 
-        if (_startDialogueAction)
+        auto interactable = _character->interactable();
+        if (interactable)
         {
-            _character->interactable().removeInteraction(_startDialogueAction);
-        }
+            if (_startDialogueAction)
+            {
+                interactable->removeInteraction(_startDialogueAction);
+            }
 
-        _startDialogueAction = _character->interactable().createInteraction<StartDialogueAction>(_character->definition.name, dialogue);
+            _startDialogueAction = interactable->createInteraction<StartDialogueAction>(_character->definition.name, dialogue);
+        }
     }
 } // namespace space

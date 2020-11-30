@@ -16,7 +16,8 @@ namespace space
     Character::Character(const ObjectId &id, const CharacterDefinition &definition) :
         SpaceObject(id), definition(definition), rotateInput(0), _physicsBody(nullptr), _sprite(*definition.texture)
     {
-        _interactable.name(definition.name);
+        createInteractable();
+        _interactable->name(definition.name);
         _sprite.sequence("idle", true);
 
         _spriteBounds = _sprite.getGlobalBounds();
