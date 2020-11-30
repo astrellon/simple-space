@@ -233,6 +233,22 @@ namespace space
                 return sf::Color(r, g, b, a);
             }
 
+            static inline sf::Vector2f radianVector(float radians, float distance)
+            {
+                auto x = std::cos(radians);
+                auto y = std::sin(radians);
+
+                return sf::Vector2f(x * distance, y * distance);
+            }
+
+            static inline sf::Vector2f degreeVector(float degrees, float distance)
+            {
+                auto x = std::cos(degreesToRadians(degrees));
+                auto y = std::sin(degreesToRadians(degrees));
+
+                return sf::Vector2f(x * distance, y * distance);
+            }
+
             static inline float perlin(float x)
             {
                 return _perlinNoise.noise1D_0_1(x);

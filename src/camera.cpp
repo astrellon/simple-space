@@ -129,7 +129,7 @@ namespace space
             }
         }
 
-        return 0.0f;
+        return _view.getRotation();
     }
 
     void Camera::cameraProps(const CameraProps &props)

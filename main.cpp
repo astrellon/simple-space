@@ -32,6 +32,7 @@
 #include "src/game/planet_surface.hpp"
 #include "src/game/items/chair.hpp"
 #include "src/game/items/teleporter.hpp"
+#include "src/game/particles_simple.hpp"
 #include "src/keyboard.hpp"
 #include "src/physics/polygon_collider.hpp"
 #include "src/effects/transition.hpp"
@@ -132,6 +133,13 @@ int main()
     auto gameSessionTemp = space::fromJsonGameSession(engine, startingGameJson);
     auto gameSession = gameSessionTemp.get();
     engine.currentSession(std::move(gameSessionTemp));
+
+    space::StarSystem *starSystem1;
+    gameSession->tryGetSpaceObject<space::StarSystem>("STAR_SYSTEM_1", &starSystem1);
+
+    auto particles = gameSession->createObject<space::ParticlesSimple>("PARTICLES_1", 10000);
+    particles->transform().position = sf::Vector2f(-150.0f, 0);
+    starSystem1->area().addObject(particles);
 
     while (window.isOpen())
     {

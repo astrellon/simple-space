@@ -7,8 +7,6 @@ namespace space
     void CelestialBody::setTransformFromLocation()
     {
         const auto &location = celestialBodyDefinition.location;
-        auto x = std::cos(Utils::degreesToRadians(location.angle)) * location.distance;
-        auto y = std::sin(Utils::degreesToRadians(location.angle)) * location.distance;
-        _transform.position = sf::Vector2f(x, y);
+        _transform.position = Utils::degreeVector(location.angle, location.distance);
     }
 } // namespace space
