@@ -182,6 +182,13 @@ namespace space
                 return sf::Vector2f(mat[12], mat[13]);
             }
 
+            static inline void setPosition(const sf::Vector2f position, sf::Transform &transform)
+            {
+                auto mat = transform.getMatrix();
+                mat[12] = position.x;
+                mat[13] = position.x;
+            }
+
             static sf::Color hsv(float hue, float saturation, float value);
 
             static inline sf::Vector2i floor(const sf::Vector2f & input)

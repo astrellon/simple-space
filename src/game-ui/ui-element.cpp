@@ -4,13 +4,16 @@
 
 namespace space
 {
-    void UIElement::update(Engine &engine, sf::Time dt, const sf::Transform &parentTransform)
+    void UIElement::update(Engine &engine, sf::Time dt)
     {
-        updateWorldTransform(parentTransform);
+        auto left = YGNodeLayoutGetLeft(_yogaNode);
+        auto top = YGNodeLayoutGetTop(_yogaNode);
+
+        Utils::setPosition(sf::Vector2f(left, top), _transform);
 
         for (auto child : _children)
         {
-            child->update(engine, dt, _worldTransform);
+            child->update(engine, dt);
         }
     }
 
@@ -23,6 +26,11 @@ namespace space
 
         _children.push_back(element);
         element->parent(this);
+        if (element->yogaNode() && _yogaNode)
+        {
+            auto endIndex = YGNodeGetChildCount(_yogaNode);
+            YGNodeInsertChild(_yogaNode, element->yogaNode(), endIndex);
+        }
     }
 
     void UIElement::removeChild(UIElement *element)
@@ -34,6 +42,11 @@ namespace space
 
         Utils::remove(_children, element);
         element->parent(nullptr);
+
+        if (element->yogaNode() && _yogaNode)
+        {
+            YGNodeRemoveChild(_yogaNode, element->yogaNode());
+        }
     }
 
     void UIElement::parent(UIElement *parent)

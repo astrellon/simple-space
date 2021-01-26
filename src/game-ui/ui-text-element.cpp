@@ -8,6 +8,6 @@ namespace space
     void UITextElement::draw(Engine &engine, RenderCamera &target)
     {
         _textElement.setCharacterSize(DrawDebug::fontSize);
-        target.texture().draw(_textElement, _worldTransform);
+        target.texture().draw(_textElement, _transform);
     }
 } // space

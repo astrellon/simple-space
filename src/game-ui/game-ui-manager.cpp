@@ -7,7 +7,7 @@
 
 namespace space
 {
-    GameUIManager::GameUIManager(): _rootElement(nullptr), _currentHover(nullptr)
+    GameUIManager::GameUIManager(): _rootElement(nullptr), _currentHover(nullptr), _body(YGNodeNew())
     {
 
     }
@@ -36,7 +36,12 @@ namespace space
             return;
         }
 
-        _rootElement->update(engine, dt, sf::Transform::Identity);
+        auto renderSize = engine.renderSize();
+        YGNodeStyleSetWidth(_body, renderSize.x);
+        YGNodeStyleSetHeight(_body, renderSize.y);
+        YGNodeCalculateLayout(_body, renderSize.x, renderSize.y, YGDirectionLTR);
+
+        _rootElement->update(engine, dt);
     }
 
     void GameUIManager::draw(Engine &engine, RenderCamera &target)
@@ -51,4 +56,20 @@ namespace space
 
         _rootElement->draw(engine, target);
     }
+
+    void GameUIManager::rootElement(UIElement *element)
+    {
+        if (_rootElement && _rootElement->yogaNode())
+        {
+            YGNodeRemoveChild(_body, _rootElement->yogaNode());
+        }
+
+        _rootElement = element;
+
+        if (element && element->yogaNode())
+        {
+            YGNodeInsertChild(_body, element->yogaNode(), 0);
+        }
+    }
+
 } // space

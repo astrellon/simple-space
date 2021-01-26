@@ -1,6 +1,8 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include <yoga/Yoga.h>
+
 #include <vector>
 #include <map>
 #include <functional>
@@ -18,11 +20,11 @@ namespace space
             // Fields
 
             // Constructor
-            UIElement() : _parent(nullptr) { }
+            UIElement() : _parent(nullptr), _yogaNode(YGNodeNew()) { }
             virtual ~UIElement() { }
 
             // Methods
-            virtual void update(Engine &engine, sf::Time dt, const sf::Transform &parentTransform);
+            virtual void update(Engine &engine, sf::Time dt);
             virtual void draw(Engine &engine, RenderCamera &target) = 0;
             virtual bool doesMouseHover(Engine &engine, sf::Vector2f mousePosition) const { return false; }
 
@@ -34,26 +36,16 @@ namespace space
             UIElement *parent() { return _parent; }
             void parent(UIElement *parent);
 
-            const SpaceTransform &transform() const { return _transform; }
-            SpaceTransform &transform() { return _transform; }
-            void transform(const SpaceTransform &transform) { _transform = transform; }
-            void transform(const SpaceTransform &&transform) { _transform = transform; }
-            const sf::Transform &worldTransform() const { return _worldTransform; }
-
             typedef std::function<bool (const sf::Event &)> EventHandler;
+
+            YGNodeRef yogaNode() { return _yogaNode; }
 
         protected:
             // Fields
+            YGNodeRef _yogaNode;
             std::vector<UIElement *> _children;
             UIElement *_parent;
-            SpaceTransform _transform;
-            sf::Transform _worldTransform;
+            sf::Transform _transform;
             std::map<std::string, std::vector<EventHandler>> _eventHandlers;
-
-            // Methods
-            inline void updateWorldTransform(const sf::Transform &parentTransform)
-            {
-                _worldTransform = parentTransform * _transform.getTransform();
-            }
     };
 } // space

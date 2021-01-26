@@ -4,6 +4,7 @@
 #include <memory>
 
 #include <SFML/Window.hpp>
+#include <yoga/Yoga.h>
 
 #include "../non_copyable.hpp"
 #include "ui-element.hpp"
@@ -43,13 +44,17 @@ namespace space
             void currentHover(UIElement *element) { _currentHover = element; }
 
             UIElement *rootElement() { return _rootElement; }
-            void rootElement(UIElement *element) { _rootElement = element; }
+            void rootElement(UIElement *element);
+
+            YGNodeRef bodyNode() { return _body; }
 
         private:
             // Fields
             std::vector<std::unique_ptr<UIElement>> _allElements;
             UIElement *_rootElement;
             UIElement *_currentHover;
+
+            YGNodeRef _body;
 
             // Methods
     };

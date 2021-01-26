@@ -183,6 +183,10 @@ int main()
 
     engine.gameUIManager().rootElement(textElement);
 
+    YGNodeStyleSetPadding(engine.gameUIManager().bodyNode(), YGEdgeLeft, 50);
+    YGNodeStyleSetPadding(engine.gameUIManager().bodyNode(), YGEdgeTop, 10);
+    // YGNodeStyleSetPadding(textElement->yogaNode(), YGEdgeLeft, 50);
+
     // auto particles = gameSession->createObject<space::ParticlesSimple>("PARTICLES_1", 10000);
     // particles->transform().position = sf::Vector2f(-150.0f, 0);
     // starSystem1->area().addObject(particles);
