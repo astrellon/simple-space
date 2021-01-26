@@ -19,6 +19,8 @@
 #include "game/items/placeable_item.hpp"
 #include "game/ship.hpp"
 
+#include "game-ui/game-ui-manager.hpp"
+
 #include "effects/overlay.hpp"
 #include "effects/bloom_effect.hpp"
 
@@ -37,6 +39,7 @@ namespace space
         _resourceManager = std::make_unique<ResourceManager>();
         _definitionManager = std::make_unique<DefinitionManager>();
         _uiManager = std::make_unique<UIManager>();
+        _gameUIManager = std::make_unique<GameUIManager>();
 
         _frameStart = std::chrono::high_resolution_clock::now();
 
@@ -155,6 +158,8 @@ namespace space
             ImGui::SFML::ProcessEvent(event);
         }
 
+        _gameUIManager->processEvent(*this, event);
+
         if (event.type == sf::Event::Closed)
         {
             _window->close();
@@ -271,6 +276,8 @@ namespace space
             uiManager().uiPhotoAlbum().toggleShow();
         }
 
+        gameUIManager().update(*this, _deltaTime);
+
         Mouse::prevMousePosition(sf::Mouse::getPosition());
         Mouse::update(*this, _deltaTime);
     }
@@ -298,6 +305,8 @@ namespace space
             _uiManager->draw(*this);
             ImGui::SFML::Render(_sceneRender->texture());
         }
+
+        gameUIManager().draw(*this, *_sceneRender);
 
         Mouse::draw(*this, *_sceneRender);
 

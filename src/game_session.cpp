@@ -394,15 +394,7 @@ namespace space
             obj->insideArea()->removeObject(obj);
         }
 
-        // Need to loop as the spaceObjects is a vector of unique_ptrs.
-        for (auto iter = _spaceObjects.begin(); iter != _spaceObjects.end(); ++iter)
-        {
-            if (iter->get() == obj)
-            {
-                _spaceObjects.erase(iter);
-                break;
-            }
-        }
+        Utils::remove(_spaceObjects, obj);
 
         // TODO Remove star systems and planet surfaces
     }

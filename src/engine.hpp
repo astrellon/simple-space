@@ -16,6 +16,7 @@ namespace space
     class UIManager;
     class Overlay;
     class BloomEffect;
+    class GameUIManager;
 
     class Engine : private NonCopyable
     {
@@ -31,10 +32,12 @@ namespace space
             const ResourceManager &resourceManager() const { return *_resourceManager.get(); }
             const DefinitionManager &definitionManager() const { return *_definitionManager.get(); }
             const UIManager &uiManager() const { return *_uiManager.get(); }
+            const GameUIManager &gameUIManager() const { return *_gameUIManager.get(); }
 
             ResourceManager &resourceManager() { return *_resourceManager.get(); }
             DefinitionManager &definitionManager() { return *_definitionManager.get(); }
             UIManager &uiManager() { return *_uiManager.get(); }
+            GameUIManager &gameUIManager() { return *_gameUIManager.get(); }
 
             Overlay &overlay() { return *_overlay; }
 
@@ -83,6 +86,7 @@ namespace space
             std::unique_ptr<ResourceManager> _resourceManager;
             std::unique_ptr<DefinitionManager> _definitionManager;
             std::unique_ptr<UIManager> _uiManager;
+            std::unique_ptr<GameUIManager> _gameUIManager;
 
             RenderCamera *_sceneRender;
             RenderCamera *_sceneRenderTransition;
