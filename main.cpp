@@ -2,6 +2,8 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 
+#include <yoga/Yoga.h>
+
 #include <iostream>
 #include <thread>
 #include <chrono>
@@ -39,6 +41,9 @@
 #include "src/debug/draw_debug.hpp"
 #include "src/controllers/npc_controller.hpp"
 #include "src/ui/ui_manager.hpp"
+#include "src/game-ui/game-ui-manager.hpp"
+#include "src/game-ui/ui-element.hpp"
+#include "src/game-ui/ui-text-element.hpp"
 #include "src/mouse.hpp"
 #include "earcut.hpp"
 #define TRACK_MEMORY 1
@@ -87,8 +92,34 @@ int errorHandler(Display *display, XErrorEvent *event)
     return 1;
 }
 
+void yogaTest()
+{
+    const YGConfigRef config = YGConfigNew();
+
+    const YGNodeRef root = YGNodeNewWithConfig(config);
+    YGNodeStyleSetWidth(root, 100);
+    YGNodeStyleSetHeight(root, 100);
+
+    const YGNodeRef root_child0 = YGNodeNewWithConfig(config);
+    YGNodeStyleSetFlexGrow(root_child0, 1);
+    YGNodeStyleSetFlexBasis(root_child0, 50);
+    YGNodeInsertChild(root, root_child0, 0);
+
+    const YGNodeRef root_child1 = YGNodeNewWithConfig(config);
+    YGNodeStyleSetFlexGrow(root_child1, 1);
+    YGNodeInsertChild(root, root_child1, 1);
+    YGNodeCalculateLayout(root, YGUndefined, YGUndefined, YGDirectionLTR);
+
+    std::cout << "1: " << (YGNodeLayoutGetLeft(root)) << std::endl;
+    std::cout << "2: " << (YGNodeLayoutGetTop(root)) << std::endl;
+    std::cout << "3: " << (YGNodeLayoutGetWidth(root)) << std::endl;
+    std::cout << "4: " << (YGNodeLayoutGetHeight(root)) << std::endl;
+}
+
 int main()
 {
+    yogaTest();
+
     sf::ContextSettings settings;
     settings.majorVersion = 3;
     settings.minorVersion = 0;
@@ -137,9 +168,24 @@ int main()
     space::StarSystem *starSystem1;
     gameSession->tryGetSpaceObject<space::StarSystem>("STAR_SYSTEM_1", &starSystem1);
 
-    auto particles = gameSession->createObject<space::ParticlesSimple>("PARTICLES_1", 10000);
-    particles->transform().position = sf::Vector2f(-150.0f, 0);
-    starSystem1->area().addObject(particles);
+    auto textElement = engine.gameUIManager().createElement<space::UITextElement>();
+    textElement->text("Hello there!");
+
+    const sf::Font *font;
+    if (resourceManager.font("data/fonts/PixelOperator.ttf", &font))
+    {
+        textElement->textElement().setFont(*font);
+    }
+    else
+    {
+        std::cout << "Couldn't find font :(\n";
+    }
+
+    engine.gameUIManager().rootElement(textElement);
+
+    // auto particles = gameSession->createObject<space::ParticlesSimple>("PARTICLES_1", 10000);
+    // particles->transform().position = sf::Vector2f(-150.0f, 0);
+    // starSystem1->area().addObject(particles);
 
     while (window.isOpen())
     {
