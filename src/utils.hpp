@@ -186,7 +186,7 @@ namespace space
             {
                 auto mat = transform.getMatrix();
                 mat[12] = position.x;
-                mat[13] = position.x;
+                mat[13] = position.y;
             }
 
             static sf::Color hsv(float hue, float saturation, float value);
