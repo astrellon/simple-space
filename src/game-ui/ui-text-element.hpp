@@ -15,13 +15,16 @@ namespace space
             // Constructor
 
             // Methods
-            virtual void draw(Engine &engine, RenderCamera &target);
-
             void text(const std::string &value) { _textElement.setString(value); }
             const std::string &text() const { return _textElement.getString(); }
 
             sf::Text &textElement() { return _textElement; }
             const sf::Text &textElement() const { return _textElement; }
+
+            virtual ElementType elementType() const { return ElementType::Text; }
+
+        protected:
+            virtual void drawSelf(Engine &engine, RenderCamera &target);
 
         private:
             // Fields

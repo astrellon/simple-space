@@ -5,7 +5,7 @@
 
 namespace space
 {
-    void UITextElement::draw(Engine &engine, RenderCamera &target)
+    void UITextElement::drawSelf(Engine &engine, RenderCamera &target)
     {
         _textElement.setCharacterSize(DrawDebug::fontSize);
         target.texture().draw(_textElement, _transform);

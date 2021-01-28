@@ -17,6 +17,12 @@ namespace space
         }
     }
 
+    void UIElement::draw(Engine &engine, RenderCamera &target)
+    {
+        drawSelf(engine, target);
+        drawChildren(engine, target);
+    }
+
     void UIElement::addChild(UIElement *element)
     {
         if (element == nullptr || Utils::contains(_children, element))
@@ -64,4 +70,11 @@ namespace space
         }
     }
 
+    void UIElement::drawChildren(Engine &engine, RenderCamera &target)
+    {
+        for (auto child : _children)
+        {
+            child->draw(engine, target);
+        }
+    }
 } // space

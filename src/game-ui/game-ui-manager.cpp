@@ -7,15 +7,21 @@
 
 namespace space
 {
-    GameUIManager::GameUIManager(): _rootElement(nullptr), _currentHover(nullptr), _body(YGNodeNew())
+    GameUIManager::GameUIManager(): _currentHover(nullptr)
     {
-
+        _bodyElement = createElement<UIRootElement>();
     }
 
     bool GameUIManager::removeElement(UIElement *element)
     {
         if (element == nullptr)
         {
+            return false;
+        }
+
+        if (element == _bodyElement)
+        {
+            std::cout << "Cannot remove body element" << std::endl;
             return false;
         }
 
@@ -31,45 +37,20 @@ namespace space
 
     void GameUIManager::update(Engine &engine, sf::Time dt)
     {
-        if (!_rootElement)
-        {
-            return;
-        }
-
         auto renderSize = engine.renderSize();
-        YGNodeStyleSetWidth(_body, renderSize.x);
-        YGNodeStyleSetHeight(_body, renderSize.y);
-        YGNodeCalculateLayout(_body, renderSize.x, renderSize.y, YGDirectionLTR);
+        auto bodyNode = _bodyElement->yogaNode();
+        YGNodeStyleSetWidth(bodyNode, renderSize.x);
+        YGNodeStyleSetHeight(bodyNode, renderSize.y);
+        YGNodeCalculateLayout(bodyNode, renderSize.x, renderSize.y, YGDirectionLTR);
 
-        _rootElement->update(engine, dt);
+        _bodyElement->update(engine, dt);
     }
 
     void GameUIManager::draw(Engine &engine, RenderCamera &target)
     {
-        if (!_rootElement)
-        {
-            return;
-        }
-
         auto view = engine.window()->getView();
         target.texture().setView(view);
 
-        _rootElement->draw(engine, target);
+        _bodyElement->draw(engine, target);
     }
-
-    void GameUIManager::rootElement(UIElement *element)
-    {
-        if (_rootElement && _rootElement->yogaNode())
-        {
-            YGNodeRemoveChild(_body, _rootElement->yogaNode());
-        }
-
-        _rootElement = element;
-
-        if (element && element->yogaNode())
-        {
-            YGNodeInsertChild(_body, element->yogaNode(), 0);
-        }
-    }
-
 } // space

@@ -181,10 +181,10 @@ int main()
         std::cout << "Couldn't find font :(\n";
     }
 
-    engine.gameUIManager().rootElement(textElement);
+    engine.gameUIManager().body()->addChild(textElement);
 
-    YGNodeStyleSetPadding(engine.gameUIManager().bodyNode(), YGEdgeLeft, 50);
-    YGNodeStyleSetPadding(engine.gameUIManager().bodyNode(), YGEdgeTop, 10);
+    // YGNodeStyleSetPadding(engine.gameUIManager().bodyNode(), YGEdgeLeft, 50);
+    // YGNodeStyleSetPadding(engine.gameUIManager().bodyNode(), YGEdgeTop, 10);
     // YGNodeStyleSetPadding(textElement->yogaNode(), YGEdgeLeft, 50);
 
     // auto particles = gameSession->createObject<space::ParticlesSimple>("PARTICLES_1", 10000);

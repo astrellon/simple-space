@@ -43,18 +43,15 @@ namespace space
             UIElement *currentHover() { return _currentHover; }
             void currentHover(UIElement *element) { _currentHover = element; }
 
-            UIElement *rootElement() { return _rootElement; }
-            void rootElement(UIElement *element);
-
-            YGNodeRef bodyNode() { return _body; }
+            UIElement *body() { return _bodyElement; }
 
         private:
             // Fields
             std::vector<std::unique_ptr<UIElement>> _allElements;
-            UIElement *_rootElement;
             UIElement *_currentHover;
+            UIRootElement *_bodyElement;
 
-            YGNodeRef _body;
+            //YGNodeRef _body;
 
             // Methods
     };
