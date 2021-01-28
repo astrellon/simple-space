@@ -20,6 +20,7 @@ namespace space
     class UIFrameBuffers;
     class UIPhotoAlbum;
     class UICompendium;
+    class UIElementWindow;
 
     class UIManager
     {
@@ -58,6 +59,7 @@ namespace space
             UIFrameBuffers &uiFrameBuffers() { return *_uiFrameBuffers; }
             UIPhotoAlbum &uiPhotoAlbum() { return *_uiPhotoAlbum; }
             UICompendium &uiCompendium() { return *_uiCompendium; }
+            UIElementWindow &uiElementWindow() { return *_uiElementWindow; }
 
         private:
             // Fields
@@ -74,6 +76,7 @@ namespace space
             UIFrameBuffers *_uiFrameBuffers;
             UIPhotoAlbum *_uiPhotoAlbum;
             UICompendium *_uiCompendium;
+            UIElementWindow *_uiElementWindow;
 
             // Methods
     };

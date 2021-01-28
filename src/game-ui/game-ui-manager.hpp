@@ -45,6 +45,8 @@ namespace space
 
             UIElement *body() { return _bodyElement; }
 
+            const std::vector<std::unique_ptr<UIElement>> &allElements() const { return _allElements; }
+
         private:
             // Fields
             std::vector<std::unique_ptr<UIElement>> _allElements;

@@ -12,10 +12,11 @@
 #include "ui_frame_buffers.hpp"
 #include "ui_photo_album.hpp"
 #include "ui_compendium.hpp"
+#include "ui-element-window.hpp"
 
 namespace space
 {
-    UIManager::UIManager() : _uiInteractables(nullptr), _uiInventory(nullptr), _uiTeleporter(nullptr), _uiDialogue(nullptr), _uiSelected(nullptr), _uiObjects(nullptr), _uiFrameBuffers(nullptr), _uiPhotoAlbum(nullptr), _uiCompendium(nullptr)
+    UIManager::UIManager() : _uiInteractables(nullptr), _uiInventory(nullptr), _uiTeleporter(nullptr), _uiDialogue(nullptr), _uiSelected(nullptr), _uiObjects(nullptr), _uiFrameBuffers(nullptr), _uiPhotoAlbum(nullptr), _uiCompendium(nullptr), _uiElementWindow(nullptr)
     {
 
     }
@@ -33,6 +34,7 @@ namespace space
         _uiFrameBuffers = createWindow<UIFrameBuffers>();
         _uiPhotoAlbum = createWindow<UIPhotoAlbum>();
         _uiCompendium = createWindow<UICompendium>();
+        _uiElementWindow = createWindow<UIElementWindow>();
     }
 
     void UIManager::draw(Engine &engine)
