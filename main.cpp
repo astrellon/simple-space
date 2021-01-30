@@ -183,7 +183,7 @@ int main()
 
     engine.gameUIManager().body()->addChild(textElement);
 
-    textElement->margin(50, 20);
+    textElement->margin(50, 20, 50, 20);
 
     // YGNodeStyleSetPadding(engine.gameUIManager().bodyNode(), YGEdgeLeft, 50);
     // YGNodeStyleSetPadding(engine.gameUIManager().bodyNode(), YGEdgeTop, 10);

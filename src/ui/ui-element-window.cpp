@@ -23,6 +23,86 @@ namespace space
         }
     }
 
+    bool ImGuiYGValue(const char *label, YGValue &input, bool includeAuto)
+    {
+        ImGui::Text("%s", label);
+        ImGui::SameLine();
+
+        ImGui::PushID(label);
+
+        auto unit = (int)input.unit;
+        auto changed = false;
+
+        changed |= ImGui::RadioButton("Unset", &unit, YGUnitUndefined);
+        ImGui::SameLine();
+
+        if (includeAuto)
+        {
+            changed |= ImGui::RadioButton("Auto", &unit, YGUnitAuto);
+            ImGui::SameLine();
+        }
+
+        changed |= ImGui::RadioButton("Percent", &unit, YGUnitPercent);
+        ImGui::SameLine();
+        changed |= ImGui::RadioButton("Point", &unit, YGUnitPoint);
+
+        input.unit = (YGUnit)unit;
+
+        if (unit == YGUnitPercent)
+        {
+            ImGui::SameLine();
+            changed |= ImGui::SliderFloat("", &input.value, 0, 100);
+        }
+        else if (unit == YGUnitPoint)
+        {
+            ImGui::SameLine();
+            changed |= ImGui::InputFloat("", &input.value, 1, 1);
+        }
+
+        if (changed && input.unit != YGUnitUndefined && isnan(input.value))
+        {
+            input.value = 0.0f;
+        }
+
+        ImGui::PopID();
+
+        return changed;
+    }
+
+    void ImGuiYGPadding(const char *label, YGEdge edge, UIElement &element)
+    {
+        auto padding = element.padding(edge);
+        if (ImGuiYGValue(label, padding, false))
+        {
+            element.padding(edge, padding);
+        }
+    }
+
+    void ImGuiYGPaddingAll(UIElement &element)
+    {
+        ImGuiYGPadding("Padding Top", YGEdgeTop, element);
+        ImGuiYGPadding("Padding Right", YGEdgeRight, element);
+        ImGuiYGPadding("Padding Bottom", YGEdgeBottom, element);
+        ImGuiYGPadding("Padding Left", YGEdgeLeft, element);
+    }
+
+    void ImGuiYGMargin(const char *label, YGEdge edge, UIElement &element)
+    {
+        auto margin = element.margin(edge);
+        if (ImGuiYGValue(label, margin, true))
+        {
+            element.margin(edge, margin);
+        }
+    }
+
+    void ImGuiYGMarginAll(UIElement &element)
+    {
+        ImGuiYGMargin("Margin Top", YGEdgeTop, element);
+        ImGuiYGMargin("Margin Right", YGEdgeRight, element);
+        ImGuiYGMargin("Margin Bottom", YGEdgeBottom, element);
+        ImGuiYGMargin("Margin Left", YGEdgeLeft, element);
+    }
+
     UIElementWindow::UIElementWindow() : UIWindow("UIElement"), _selectedElement(nullptr)
     {
 
@@ -66,5 +146,13 @@ namespace space
         ImGui::Text("Type: %s", elementTypeName(element.elementType()));
 
         ImGui::Text("Position TRBL: %f, %f, %f, %f", element.layoutTop(), element.layoutRight(), element.layoutBottom(), element.layoutLeft());
+
+        ImGuiYGPaddingAll(element);
+        ImGuiYGMarginAll(element);
+        //YGValue padding[4] = {element.padding(YGEdgeTop), element.padding(YGEdgeRight), element.padding(YGEdgeBottom), element.padding(YGEdgeLeft)};
+        // if (ImGui::InputFloat4("Padding TRBL:", padding))
+        // {
+        //     element.padding(padding[0], padding[1], padding[2], padding[3]);
+        // }
     }
 }

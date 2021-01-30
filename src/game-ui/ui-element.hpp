@@ -103,6 +103,12 @@ namespace space
             void padding(YGEdge edge, float padding) { YGNodeStyleSetPadding(_yogaNode, edge, padding); }
             void paddingPercent(YGEdge edge, float padding) { YGNodeStyleSetPaddingPercent(_yogaNode, edge, padding); }
             YGValue padding(YGEdge edge) const { return YGNodeStyleGetPadding(_yogaNode, edge); }
+            void padding(YGEdge edge, YGValue padding)
+            {
+                if (padding.unit == YGUnitAuto) return;
+                if (padding.unit == YGUnitPercent) paddingPercent(edge, padding.value);
+                else this->padding(edge, padding.value);
+            }
 
             // Margin
             void margin(YGEdge edge, float margin) { YGNodeStyleSetMargin(_yogaNode, edge, margin); }
@@ -121,6 +127,12 @@ namespace space
             void marginPercent(YGEdge edge, float margin) { YGNodeStyleSetMarginPercent(_yogaNode, edge, margin); }
             void marginAuto(YGEdge edge) { YGNodeStyleSetMarginAuto(_yogaNode, edge); }
             YGValue margin(YGEdge edge) const { return YGNodeStyleGetMargin(_yogaNode, edge); }
+            void margin(YGEdge edge, YGValue margin)
+            {
+                if (margin.unit == YGUnitAuto) marginAuto(edge);
+                if (margin.unit == YGUnitPercent) marginPercent(edge, margin.value);
+                else this->margin(edge, margin.value);
+            }
 
             // Border
             void border(YGEdge edge, float border) { YGNodeStyleSetBorder(_yogaNode, edge, border); }
