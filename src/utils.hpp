@@ -6,6 +6,7 @@
 #include <random>
 #include <sstream>
 #include <iomanip>
+#include <memory>
 
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
@@ -47,6 +48,21 @@ namespace space
                     list.erase(find);
                     return true;
                 }
+                return false;
+            }
+
+            template <typename T>
+            static inline bool remove(std::vector<std::unique_ptr<T>> &list, T *item)
+            {
+                for (auto iter = list.begin(); iter != list.end(); ++iter)
+                {
+                    if (iter->get() == item)
+                    {
+                        list.erase(iter);
+                        return true;
+                    }
+                }
+
                 return false;
             }
 
@@ -164,6 +180,13 @@ namespace space
             {
                 auto mat = transform.getMatrix();
                 return sf::Vector2f(mat[12], mat[13]);
+            }
+
+            static inline void setPosition(const sf::Vector2f position, sf::Transform &transform)
+            {
+                auto mat = transform.getMatrix();
+                mat[12] = position.x;
+                mat[13] = position.y;
             }
 
             static sf::Color hsv(float hue, float saturation, float value);

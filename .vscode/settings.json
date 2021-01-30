@@ -4,6 +4,7 @@
     "C_Cpp.default.includePath": [
         "${workspaceFolder}/extern/tmxlite/tmxlite/include",
         "${workspaceFolder}/extern/SFML/include",
+        "${workspaceFolder}/extern/yoga",
     ],
     "cmake.configureOnOpen": false,
     "files.associations": {

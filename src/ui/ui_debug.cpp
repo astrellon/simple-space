@@ -62,6 +62,11 @@ namespace space
         ImGui::Text("Average Frame: %.1fus %.1ffps", averageFrameDuration, 1000000.0f / averageFrameDuration);
         ImGui::PlotLines("Frame Times", DrawDebug::frameDurations.data(), DrawDebug::frameDurations.size());
 
+        ImGui::SliderInt("Font Size", &DrawDebug::fontSize, 4, 72);
+
+        ImGui::Text("Render Resolution: %u x %u", engine.renderSize().x, engine.renderSize().y);
+        ImGui::Text("Window Resolution: %u x %u", engine.windowSize().x, engine.windowSize().y);
+
         if (engine.currentSession() && ImGui::Button("Save"))
         {
             engine.currentSession()->saveGame();

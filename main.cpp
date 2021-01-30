@@ -2,6 +2,8 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 
+#include <yoga/Yoga.h>
+
 #include <iostream>
 #include <thread>
 #include <chrono>
@@ -39,6 +41,10 @@
 #include "src/debug/draw_debug.hpp"
 #include "src/controllers/npc_controller.hpp"
 #include "src/ui/ui_manager.hpp"
+#include "src/game-ui/game-ui-manager.hpp"
+#include "src/game-ui/ui-element.hpp"
+#include "src/game-ui/ui-text-element.hpp"
+#include "src/game-ui/ui-nine-slice-image-element.hpp"
 #include "src/mouse.hpp"
 #include "earcut.hpp"
 #define TRACK_MEMORY 1
@@ -137,9 +143,47 @@ int main()
     space::StarSystem *starSystem1;
     gameSession->tryGetSpaceObject<space::StarSystem>("STAR_SYSTEM_1", &starSystem1);
 
-    auto particles = gameSession->createObject<space::ParticlesSimple>("PARTICLES_1", 10000);
-    particles->transform().position = sf::Vector2f(-150.0f, 0);
-    starSystem1->area().addObject(particles);
+    auto textElement = engine.gameUIManager().createElement<space::UITextElement>();
+    textElement->text("Hello there!");
+
+    const sf::Font *font;
+    if (resourceManager.font("data/fonts/PixelOperator.ttf", &font))
+    {
+        textElement->textElement().setFont(*font);
+    }
+    else
+    {
+        std::cout << "Couldn't find font :(\n";
+    }
+
+    engine.gameUIManager().body()->addChild(textElement);
+
+    textElement->margin(50, 20, 50, 20);
+
+    auto nineSliceElement = engine.gameUIManager().createElement<space::UINineSliceImageElement>();
+    nineSliceElement->height(64);
+
+    const sf::Texture *testPanel;
+    if (resourceManager.texture("data/textures/testPanel.png", &testPanel))
+    {
+        auto &ns = nineSliceElement->nineSlice();
+        ns.texture(testPanel);
+        ns.border(8, 8, 8, 8);
+
+        engine.gameUIManager().body()->addChild(nineSliceElement);
+    }
+    else
+    {
+        std::cout << "Failed to find test panel :(\n";
+    }
+
+    // YGNodeStyleSetPadding(engine.gameUIManager().bodyNode(), YGEdgeLeft, 50);
+    // YGNodeStyleSetPadding(engine.gameUIManager().bodyNode(), YGEdgeTop, 10);
+    // YGNodeStyleSetPadding(textElement->yogaNode(), YGEdgeLeft, 50);
+
+    // auto particles = gameSession->createObject<space::ParticlesSimple>("PARTICLES_1", 10000);
+    // particles->transform().position = sf::Vector2f(-150.0f, 0);
+    // starSystem1->area().addObject(particles);
 
     while (window.isOpen())
     {
