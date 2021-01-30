@@ -16,7 +16,7 @@ namespace space
 
     enum class ElementType
     {
-        Unknown, Root, Text, Image
+        Unknown, Root, Text, Image, NineSliceImage
     };
 
     class UIElement

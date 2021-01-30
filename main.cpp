@@ -44,6 +44,7 @@
 #include "src/game-ui/game-ui-manager.hpp"
 #include "src/game-ui/ui-element.hpp"
 #include "src/game-ui/ui-text-element.hpp"
+#include "src/game-ui/ui-nine-slice-image-element.hpp"
 #include "src/mouse.hpp"
 #include "earcut.hpp"
 #define TRACK_MEMORY 1
@@ -92,34 +93,8 @@ int errorHandler(Display *display, XErrorEvent *event)
     return 1;
 }
 
-void yogaTest()
-{
-    const YGConfigRef config = YGConfigNew();
-
-    const YGNodeRef root = YGNodeNewWithConfig(config);
-    YGNodeStyleSetWidth(root, 100);
-    YGNodeStyleSetHeight(root, 100);
-
-    const YGNodeRef root_child0 = YGNodeNewWithConfig(config);
-    YGNodeStyleSetFlexGrow(root_child0, 1);
-    YGNodeStyleSetFlexBasis(root_child0, 50);
-    YGNodeInsertChild(root, root_child0, 0);
-
-    const YGNodeRef root_child1 = YGNodeNewWithConfig(config);
-    YGNodeStyleSetFlexGrow(root_child1, 1);
-    YGNodeInsertChild(root, root_child1, 1);
-    YGNodeCalculateLayout(root, YGUndefined, YGUndefined, YGDirectionLTR);
-
-    std::cout << "1: " << (YGNodeLayoutGetLeft(root)) << std::endl;
-    std::cout << "2: " << (YGNodeLayoutGetTop(root)) << std::endl;
-    std::cout << "3: " << (YGNodeLayoutGetWidth(root)) << std::endl;
-    std::cout << "4: " << (YGNodeLayoutGetHeight(root)) << std::endl;
-}
-
 int main()
 {
-    yogaTest();
-
     sf::ContextSettings settings;
     settings.majorVersion = 3;
     settings.minorVersion = 0;
@@ -184,6 +159,23 @@ int main()
     engine.gameUIManager().body()->addChild(textElement);
 
     textElement->margin(50, 20, 50, 20);
+
+    auto nineSliceElement = engine.gameUIManager().createElement<space::UINineSliceImageElement>();
+    nineSliceElement->height(64);
+
+    const sf::Texture *testPanel;
+    if (resourceManager.texture("data/textures/testPanel.png", &testPanel))
+    {
+        auto &ns = nineSliceElement->nineSlice();
+        ns.texture(testPanel);
+        ns.border(8, 8, 8, 8);
+
+        engine.gameUIManager().body()->addChild(nineSliceElement);
+    }
+    else
+    {
+        std::cout << "Failed to find test panel :(\n";
+    }
 
     // YGNodeStyleSetPadding(engine.gameUIManager().bodyNode(), YGEdgeLeft, 50);
     // YGNodeStyleSetPadding(engine.gameUIManager().bodyNode(), YGEdgeTop, 10);

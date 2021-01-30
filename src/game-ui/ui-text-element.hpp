@@ -24,6 +24,7 @@ namespace space
             virtual ElementType elementType() const { return ElementType::Text; }
 
         protected:
+            // Methods
             virtual void drawSelf(Engine &engine, RenderCamera &target);
 
         private:

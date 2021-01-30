@@ -20,6 +20,7 @@ namespace space
             case ElementType::Image: return "Image";
             case ElementType::Root: return "Root";
             case ElementType::Text: return "Text";
+            case ElementType::NineSliceImage: return "NineSliceImage";
         }
     }
 
