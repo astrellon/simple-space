@@ -17,7 +17,7 @@ namespace space
     size_t DrawDebug::locksUsed = 0;
     std::array<float, 1000> DrawDebug::frameDurations;
     size_t DrawDebug::frameDurationIndex = 0;
-    int DrawDebug::fontSize = 32;
+    int DrawDebug::fontSize = 16;
 
     void DrawDebug::addFrameDuration(size_t frameDuration)
     {

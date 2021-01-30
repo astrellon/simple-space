@@ -39,8 +39,6 @@ namespace space
     {
         auto renderSize = engine.renderSize();
         auto bodyNode = _bodyElement->yogaNode();
-        YGNodeStyleSetWidth(bodyNode, renderSize.x);
-        YGNodeStyleSetHeight(bodyNode, renderSize.y);
         YGNodeCalculateLayout(bodyNode, renderSize.x, renderSize.y, YGDirectionLTR);
 
         _bodyElement->update(engine, dt);
@@ -48,7 +46,8 @@ namespace space
 
     void GameUIManager::draw(Engine &engine, RenderCamera &target)
     {
-        auto view = engine.window()->getView();
+        auto size = static_cast<sf::Vector2f>(engine.renderSize());
+        sf::View view(size * 0.5f, size);
         target.texture().setView(view);
 
         _bodyElement->draw(engine, target);

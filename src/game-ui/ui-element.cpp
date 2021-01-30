@@ -9,7 +9,7 @@ namespace space
         auto left = YGNodeLayoutGetLeft(_yogaNode);
         auto top = YGNodeLayoutGetTop(_yogaNode);
 
-        Utils::setPosition(sf::Vector2f(left, top), _transform);
+        Utils::setPosition(sf::Vector2f(std::round(left), std::round(top)), _transform);
 
         for (auto child : _children)
         {
