@@ -7,7 +7,7 @@
 
 namespace space
 {
-    GameUIManager::GameUIManager(): _currentHover(nullptr)
+    GameUIManager::GameUIManager(): _currentHover(nullptr), _defaultFont(nullptr)
     {
         _bodyElement = createElement<UIRootElement>();
     }
@@ -41,7 +41,7 @@ namespace space
         auto bodyNode = _bodyElement->yogaNode();
         YGNodeCalculateLayout(bodyNode, renderSize.x, renderSize.y, YGDirectionLTR);
 
-        _bodyElement->update(engine, dt);
+        _bodyElement->update(engine, dt, sf::Vector2f());
     }
 
     void GameUIManager::draw(Engine &engine, RenderCamera &target)

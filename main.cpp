@@ -45,6 +45,7 @@
 #include "src/game-ui/ui-element.hpp"
 #include "src/game-ui/ui-text-element.hpp"
 #include "src/game-ui/ui-nine-slice-image-element.hpp"
+#include "src/game-ui/game-ui-window.hpp"
 #include "src/mouse.hpp"
 #include "earcut.hpp"
 #define TRACK_MEMORY 1
@@ -143,39 +144,44 @@ int main()
     space::StarSystem *starSystem1;
     gameSession->tryGetSpaceObject<space::StarSystem>("STAR_SYSTEM_1", &starSystem1);
 
+    engine.gameUIManager().defaultFont(resourceManager.font("data/fonts/PixelOperator.ttf"));
+    engine.gameUIManager().defaultBackPanel(space::NineSlice(resourceManager.texture("data/textures/testPanel3.png"), 30, 8, 8, 8));
+
+    auto gameWin = engine.gameUIManager().createElement<space::GameUIWindow>();
+    gameWin->width(256);
+    gameWin->height(256);
+
     auto textElement = engine.gameUIManager().createElement<space::UITextElement>();
     textElement->text("Hello there!");
 
-    const sf::Font *font;
-    if (resourceManager.font("data/fonts/PixelOperator.ttf", &font))
-    {
-        textElement->textElement().setFont(*font);
-    }
-    else
-    {
-        std::cout << "Couldn't find font :(\n";
-    }
+    gameWin->bodyContainer()->addChild(textElement);
+    engine.gameUIManager().body()->addChild(gameWin);
 
-    engine.gameUIManager().body()->addChild(textElement);
+    // auto textElement = engine.gameUIManager().createElement<space::UITextElement>();
+    // textElement->text("Hello there!");
+    // textElement->margin(1, 5, 5, 8);
 
-    textElement->margin(50, 20, 50, 20);
+    // auto nineSliceElement = engine.gameUIManager().createElement<space::UINineSliceImageElement>();
+    // nineSliceElement->height(256);
+    // nineSliceElement->width(256);
+    // nineSliceElement->setTexture(resourceManager.texture("data/textures/testPanel3.png"), 30, 8, 8, 8);
+    // engine.gameUIManager().body()->addChild(nineSliceElement);
 
-    auto nineSliceElement = engine.gameUIManager().createElement<space::UINineSliceImageElement>();
-    nineSliceElement->height(64);
+    // nineSliceElement->addChild(textElement);
 
-    const sf::Texture *testPanel;
-    if (resourceManager.texture("data/textures/testPanel.png", &testPanel))
-    {
-        auto &ns = nineSliceElement->nineSlice();
-        ns.texture(testPanel);
-        ns.border(8, 8, 8, 8);
+    // const sf::Texture *testPanel;
+    // if (resourceManager.texture("data/textures/testPanel.png", &testPanel))
+    // {
+    //     auto &ns = nineSliceElement->nineSlice();
+    //     ns.texture(testPanel);
+    //     ns.border(8, 8, 8, 8);
 
-        engine.gameUIManager().body()->addChild(nineSliceElement);
-    }
-    else
-    {
-        std::cout << "Failed to find test panel :(\n";
-    }
+    //     engine.gameUIManager().body()->addChild(nineSliceElement);
+    // }
+    // else
+    // {
+    //     std::cout << "Failed to find test panel :(\n";
+    // }
 
     // YGNodeStyleSetPadding(engine.gameUIManager().bodyNode(), YGEdgeLeft, 50);
     // YGNodeStyleSetPadding(engine.gameUIManager().bodyNode(), YGEdgeTop, 10);

@@ -29,6 +29,13 @@ namespace space
         return true;
     }
 
+    const sf::Font *ResourceManager::font(const std::string &filename)
+    {
+        const sf::Font *result = nullptr;
+        font(filename, &result);
+        return result;
+    }
+
     const sf::Font *ResourceManager::preloadFont(const std::string &filename)
     {
         auto font = std::make_unique<sf::Font>();
@@ -108,6 +115,12 @@ namespace space
 
         *result = preloadTexture(filename);
         return *result != nullptr;
+    }
+    const sf::Texture *ResourceManager::texture(const std::string &filename)
+    {
+        const sf::Texture *result = nullptr;
+        texture(filename, &result);
+        return result;
     }
 
     sf::Texture *ResourceManager::preloadTexture(const std::string &filename)

@@ -27,6 +27,8 @@ namespace space
             const FontMap &fonts() const { return _fonts; }
 
             bool font(const std::string &filename, const sf::Font **result);
+            const sf::Font *font(const std::string &filename);
+
             const sf::Font *preloadFont(const std::string &filename);
             void preloadFonts(const std::string &folder);
 
@@ -40,6 +42,8 @@ namespace space
 
             bool texture(const std::string &filename, const sf::Texture **result);
             bool texture(const std::string &filename, sf::Texture **result);
+            const sf::Texture *texture(const std::string &filename);
+
             sf::Texture *preloadTexture(const std::string &filename);
             void preloadTextures(const std::string &folder);
 

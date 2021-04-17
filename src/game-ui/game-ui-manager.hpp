@@ -8,6 +8,7 @@
 
 #include "../non_copyable.hpp"
 #include "ui-element.hpp"
+#include "../nine_slice.hpp"
 
 namespace space
 {
@@ -30,6 +31,7 @@ namespace space
                 auto obj = std::make_unique<T>(std::forward<TArgs>(args)...);
                 auto result = obj.get();
                 _allElements.emplace_back(std::move(obj));
+                result->init(*this);
 
                 return result;
             }
@@ -43,6 +45,12 @@ namespace space
             UIElement *currentHover() { return _currentHover; }
             void currentHover(UIElement *element) { _currentHover = element; }
 
+            void defaultFont(const sf::Font *font) { _defaultFont = font; }
+            const sf::Font *defaultFont() const { return _defaultFont; }
+
+            NineSlice defaultBackPanel() { return _defaultBackPanel; }
+            void defaultBackPanel(const NineSlice &value) { _defaultBackPanel = value; }
+
             UIElement *body() { return _bodyElement; }
 
             const std::vector<std::unique_ptr<UIElement>> &allElements() const { return _allElements; }
@@ -52,6 +60,9 @@ namespace space
             std::vector<std::unique_ptr<UIElement>> _allElements;
             UIElement *_currentHover;
             UIRootElement *_bodyElement;
+
+            const sf::Font *_defaultFont;
+            NineSlice _defaultBackPanel;
 
             //YGNodeRef _body;
 

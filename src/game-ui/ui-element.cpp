@@ -4,16 +4,18 @@
 
 namespace space
 {
-    void UIElement::update(Engine &engine, sf::Time dt)
+    void UIElement::update(Engine &engine, sf::Time dt, sf::Vector2f parentOffset)
     {
         auto left = YGNodeLayoutGetLeft(_yogaNode);
         auto top = YGNodeLayoutGetTop(_yogaNode);
 
-        Utils::setPosition(sf::Vector2f(std::round(left), std::round(top)), _transform);
+        sf::Vector2f offset(std::round(left) + parentOffset.x, std::round(top) + parentOffset.y);
+
+        Utils::setPosition(offset, _transform);
 
         for (auto child : _children)
         {
-            child->update(engine, dt);
+            child->update(engine, dt, offset);
         }
     }
 
