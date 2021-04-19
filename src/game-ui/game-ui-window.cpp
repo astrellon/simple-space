@@ -35,7 +35,7 @@ namespace space
         _bodyContainer->heightPercent(100);
         _bodyContainer->flexGrow(1.0f);
         _bodyContainer->flexShrink(1.0f);
-        _bodyContainer->margin(8, 8, 8, 8);
+        _bodyContainer->padding(8, 8, 8, 8);
         addChild(_bodyContainer);
     }
 } // space

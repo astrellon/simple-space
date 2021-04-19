@@ -103,6 +103,13 @@ namespace space
 
             // Padding
             void padding(YGEdge edge, float padding) { YGNodeStyleSetPadding(_yogaNode, edge, padding); }
+            void padding(float top, float right, float bottom, float left)
+            {
+                YGNodeStyleSetPadding(_yogaNode, YGEdgeTop, top);
+                YGNodeStyleSetPadding(_yogaNode, YGEdgeRight, right);
+                YGNodeStyleSetPadding(_yogaNode, YGEdgeBottom, bottom);
+                YGNodeStyleSetPadding(_yogaNode, YGEdgeLeft, left);
+            }
             void paddingPercent(YGEdge edge, float padding) { YGNodeStyleSetPaddingPercent(_yogaNode, edge, padding); }
             YGValue padding(YGEdge edge) const { return YGNodeStyleGetPadding(_yogaNode, edge); }
             void padding(YGEdge edge, YGValue padding)
@@ -188,6 +195,7 @@ namespace space
             // Methods
             virtual void drawChildren(Engine &engine, RenderCamera &target);
             virtual void drawSelf(Engine &engine, RenderCamera &target) { }
+            virtual void drawOutline(Engine &engine, RenderCamera &target);
     };
 
     class UIRootElement : public UIElement

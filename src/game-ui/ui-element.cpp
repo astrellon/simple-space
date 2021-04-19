@@ -1,6 +1,10 @@
 #include "ui-element.hpp"
 
+#include <SFML/Graphics.hpp>
+
 #include "../utils.hpp"
+#include "../debug/draw_debug.hpp"
+#include "../render_camera.hpp"
 
 namespace space
 {
@@ -23,6 +27,11 @@ namespace space
     {
         drawSelf(engine, target);
         drawChildren(engine, target);
+
+        if (DrawDebug::highlightElement == this)
+        {
+            drawOutline(engine, target);
+        }
     }
 
     void UIElement::addChild(UIElement *element)
@@ -78,5 +87,20 @@ namespace space
         {
             child->draw(engine, target);
         }
+    }
+
+    void UIElement::drawOutline(Engine &engine, RenderCamera &target)
+    {
+        sf::RectangleShape shape;
+
+        auto width = YGNodeLayoutGetWidth(_yogaNode);
+        auto height = YGNodeLayoutGetHeight(_yogaNode);
+        shape.setSize(sf::Vector2f(width, height));
+        shape.setPosition(Utils::getPosition(_transform));
+        shape.setFillColor(sf::Color(79, 164, 184, 100));
+        shape.setOutlineColor(sf::Color(146, 232, 192, 100));
+        shape.setOutlineThickness(1.0f);
+
+        target.texture().draw(shape);
     }
 } // space

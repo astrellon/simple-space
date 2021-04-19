@@ -9,6 +9,7 @@ namespace space
     bool DrawDebug::hideEverything = false;
     bool DrawDebug::hideBackground = false;
     bool DrawDebug::showPortalShapes = false;
+    UIElement *DrawDebug::highlightElement = nullptr;
 
     size_t DrawDebug::totalMemoryAllocated = 0;
     size_t DrawDebug::allocatedThisFrame = 0;
