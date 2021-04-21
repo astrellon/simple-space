@@ -12,6 +12,11 @@ namespace space
 
     }
 
+    NineSlice::NineSlice(const sf::Texture *texture, int top, int right, int bottom, int left) : _dirty(true), _texture(texture), _border(empty), _vertexArray(sf::TrianglesStrip, 24)
+    {
+        border(top, right, bottom, left);
+    }
+
     void NineSlice::draw(sf::RenderTarget& target, sf::RenderStates states) const
     {
         if (_dirty)

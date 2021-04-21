@@ -5,6 +5,8 @@
 
 namespace space
 {
+    class UIElement;
+
     class DrawDebug
     {
         public:
@@ -16,6 +18,8 @@ namespace space
             static bool hideEverything;
             static bool hideBackground;
             static bool showPortalShapes;
+            static bool showUIElementOutlines;
+            static UIElement *highlightElement;
 
             static size_t totalMemoryAllocated;
             static size_t allocatedThisFrame;

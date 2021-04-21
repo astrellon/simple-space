@@ -17,6 +17,7 @@ namespace space
 
             // Constructor
             NineSlice();
+            NineSlice(const sf::Texture *texture, int top, int right, int bottom, int left);
 
             // Methods
             inline void texture(const sf::Texture *texture) { _texture = texture; _dirty = true; }

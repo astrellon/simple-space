@@ -8,6 +8,7 @@
 #include "../game-ui/game-ui-manager.hpp"
 #include "../game-ui/ui-element.hpp"
 #include "../utils.hpp"
+#include "../debug/draw_debug.hpp"
 
 namespace space
 {
@@ -17,6 +18,7 @@ namespace space
         {
             default:
             case ElementType::Unknown: return "Unknown";
+            case ElementType::General: return "General";
             case ElementType::Image: return "Image";
             case ElementType::Root: return "Root";
             case ElementType::Text: return "Text";
@@ -126,6 +128,7 @@ namespace space
             if (ImGui::IsItemClicked())
             {
                 _selectedElement = element.get();
+                DrawDebug::highlightElement = element.get();
             }
         }
 

@@ -1,19 +1,25 @@
 #include "ui-element.hpp"
 
+#include <SFML/Graphics.hpp>
+
 #include "../utils.hpp"
+#include "../debug/draw_debug.hpp"
+#include "../render_camera.hpp"
 
 namespace space
 {
-    void UIElement::update(Engine &engine, sf::Time dt)
+    void UIElement::update(Engine &engine, sf::Time dt, sf::Vector2f parentOffset)
     {
         auto left = YGNodeLayoutGetLeft(_yogaNode);
         auto top = YGNodeLayoutGetTop(_yogaNode);
 
-        Utils::setPosition(sf::Vector2f(std::round(left), std::round(top)), _transform);
+        sf::Vector2f offset(std::round(left) + parentOffset.x, std::round(top) + parentOffset.y);
+
+        Utils::setPosition(offset, _transform);
 
         for (auto child : _children)
         {
-            child->update(engine, dt);
+            child->update(engine, dt, offset);
         }
     }
 
@@ -21,6 +27,11 @@ namespace space
     {
         drawSelf(engine, target);
         drawChildren(engine, target);
+
+        if (DrawDebug::highlightElement == this)
+        {
+            drawOutline(engine, target);
+        }
     }
 
     void UIElement::addChild(UIElement *element)
@@ -76,5 +87,20 @@ namespace space
         {
             child->draw(engine, target);
         }
+    }
+
+    void UIElement::drawOutline(Engine &engine, RenderCamera &target)
+    {
+        sf::RectangleShape shape;
+
+        auto width = YGNodeLayoutGetWidth(_yogaNode);
+        auto height = YGNodeLayoutGetHeight(_yogaNode);
+        shape.setSize(sf::Vector2f(width, height));
+        shape.setPosition(Utils::getPosition(_transform));
+        shape.setFillColor(sf::Color(79, 164, 184, 100));
+        shape.setOutlineColor(sf::Color(146, 232, 192, 100));
+        shape.setOutlineThickness(1.0f);
+
+        target.texture().draw(shape);
     }
 } // space

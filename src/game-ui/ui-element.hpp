@@ -13,10 +13,11 @@ namespace space
 {
     class Engine;
     class RenderCamera;
+    class GameUIManager;
 
     enum class ElementType
     {
-        Unknown, Root, Text, Image, NineSliceImage
+        Unknown, Root, General, Text, Image, NineSliceImage
     };
 
     class UIElement
@@ -32,7 +33,8 @@ namespace space
             virtual ~UIElement() { }
 
             // Methods
-            virtual void update(Engine &engine, sf::Time dt);
+            virtual void init(GameUIManager &uiManager) { }
+            virtual void update(Engine &engine, sf::Time dt, sf::Vector2f parentOffset);
             virtual void draw(Engine &engine, RenderCamera &target);
             virtual bool doesMouseHover(Engine &engine, sf::Vector2f mousePosition) const { return false; }
 
@@ -46,7 +48,7 @@ namespace space
 
             YGNodeRef yogaNode() { return _yogaNode; }
 
-            virtual ElementType elementType() const = 0;
+            virtual ElementType elementType() const { return ElementType::General; }
 
             // Flex Direction
             void flexDirection(YGFlexDirection direction) { YGNodeStyleSetFlexDirection(_yogaNode, direction); }
@@ -101,6 +103,13 @@ namespace space
 
             // Padding
             void padding(YGEdge edge, float padding) { YGNodeStyleSetPadding(_yogaNode, edge, padding); }
+            void padding(float top, float right, float bottom, float left)
+            {
+                YGNodeStyleSetPadding(_yogaNode, YGEdgeTop, top);
+                YGNodeStyleSetPadding(_yogaNode, YGEdgeRight, right);
+                YGNodeStyleSetPadding(_yogaNode, YGEdgeBottom, bottom);
+                YGNodeStyleSetPadding(_yogaNode, YGEdgeLeft, left);
+            }
             void paddingPercent(YGEdge edge, float padding) { YGNodeStyleSetPaddingPercent(_yogaNode, edge, padding); }
             YGValue padding(YGEdge edge) const { return YGNodeStyleGetPadding(_yogaNode, edge); }
             void padding(YGEdge edge, YGValue padding)
@@ -186,6 +195,7 @@ namespace space
             // Methods
             virtual void drawChildren(Engine &engine, RenderCamera &target);
             virtual void drawSelf(Engine &engine, RenderCamera &target) { }
+            virtual void drawOutline(Engine &engine, RenderCamera &target);
     };
 
     class UIRootElement : public UIElement
