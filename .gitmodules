@@ -4,3 +4,6 @@
 [submodule "extern/SFML"]
 	path = extern/SFML
 	url = https://github.com/astrellon/SFML
+[submodule "extern/Observe"]
+	path = extern/Observe
+	url = https://github.com/TheLartians/Observe

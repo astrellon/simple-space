@@ -37,9 +37,10 @@ endif()
 add_subdirectory("extern/SFML")
 add_subdirectory("extern/tmxlite/tmxlite")
 add_subdirectory("extern/yoga")
+add_subdirectory("extern/Observe")
 
 SET (SFML_LIBRARIES sfml-graphics sfml-audio sfml-window sfml-system)
-SET (BASE_LIBRARIES ${OPENGL_LIBRARIES} ${SFML_LIBRARIES} Box2D tmxlite X11 yoga)
+SET (BASE_LIBRARIES ${OPENGL_LIBRARIES} ${SFML_LIBRARIES} Box2D tmxlite X11 yoga Observe)
 
 if( MAKE_TESTS )
     find_package(doctest REQUIRED)

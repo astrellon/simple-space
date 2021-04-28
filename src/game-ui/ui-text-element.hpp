@@ -20,7 +20,7 @@ namespace space
             virtual void init(GameUIManager &uiManager);
 
             void text(const std::string &value) { _textElement.setString(value); }
-            const std::string &text() const { return _textElement.getString(); }
+            std::string text() const { return _textElement.getString(); }
 
             void font(const sf::Font *font) { if (font) { _textElement.setFont(*font); } }
             void font(const sf::Font &font) { _textElement.setFont(font); }

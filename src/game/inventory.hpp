@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <observe/event.h>
 
 namespace space
 {
@@ -9,7 +10,11 @@ namespace space
     class Inventory
     {
         public:
+            typedef observe::Event<Item *> ItemHandler;
+
             // Fields
+            ItemHandler onAddItem;
+            ItemHandler onRemoveItem;
 
             // Constructor
 

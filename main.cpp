@@ -45,7 +45,7 @@
 #include "src/game-ui/ui-element.hpp"
 #include "src/game-ui/ui-text-element.hpp"
 #include "src/game-ui/ui-nine-slice-image-element.hpp"
-#include "src/game-ui/game-ui-window.hpp"
+#include "src/game-ui/game-ui-inventory.hpp"
 #include "src/mouse.hpp"
 #include "earcut.hpp"
 #define TRACK_MEMORY 1
@@ -144,48 +144,15 @@ int main()
     space::StarSystem *starSystem1;
     gameSession->tryGetSpaceObject<space::StarSystem>("STAR_SYSTEM_1", &starSystem1);
 
-    engine.gameUIManager().defaultFont(resourceManager.font("data/fonts/PixelOperator.ttf"));
-    engine.gameUIManager().defaultBackPanel(space::NineSlice(resourceManager.texture("data/textures/testPanel3.png"), 30, 8, 8, 8));
+    auto &gameUIManager = engine.gameUIManager();
 
-    auto gameWin = engine.gameUIManager().createElement<space::GameUIWindow>();
-    gameWin->width(256);
-    gameWin->height(256);
+    gameUIManager.defaultFont(resourceManager.font("data/fonts/PixelOperator.ttf"));
+    gameUIManager.defaultBackPanel(space::NineSlice(resourceManager.texture("data/textures/testPanel3.png"), 30, 8, 8, 8));
 
-    auto textElement = engine.gameUIManager().createElement<space::UITextElement>();
-    textElement->text("Hello there!");
+    auto inventoryWindow = gameUIManager.createElement<space::GameUIInventory>();
+    engine.gameUIManager().body()->addChild(inventoryWindow);
 
-    gameWin->bodyContainer()->addChild(textElement);
-    engine.gameUIManager().body()->addChild(gameWin);
-
-    // auto textElement = engine.gameUIManager().createElement<space::UITextElement>();
-    // textElement->text("Hello there!");
-    // textElement->margin(1, 5, 5, 8);
-
-    // auto nineSliceElement = engine.gameUIManager().createElement<space::UINineSliceImageElement>();
-    // nineSliceElement->height(256);
-    // nineSliceElement->width(256);
-    // nineSliceElement->setTexture(resourceManager.texture("data/textures/testPanel3.png"), 30, 8, 8, 8);
-    // engine.gameUIManager().body()->addChild(nineSliceElement);
-
-    // nineSliceElement->addChild(textElement);
-
-    // const sf::Texture *testPanel;
-    // if (resourceManager.texture("data/textures/testPanel.png", &testPanel))
-    // {
-    //     auto &ns = nineSliceElement->nineSlice();
-    //     ns.texture(testPanel);
-    //     ns.border(8, 8, 8, 8);
-
-    //     engine.gameUIManager().body()->addChild(nineSliceElement);
-    // }
-    // else
-    // {
-    //     std::cout << "Failed to find test panel :(\n";
-    // }
-
-    // YGNodeStyleSetPadding(engine.gameUIManager().bodyNode(), YGEdgeLeft, 50);
-    // YGNodeStyleSetPadding(engine.gameUIManager().bodyNode(), YGEdgeTop, 10);
-    // YGNodeStyleSetPadding(textElement->yogaNode(), YGEdgeLeft, 50);
+    inventoryWindow->inventory(&gameSession->playerController().inventory());
 
     // auto particles = gameSession->createObject<space::ParticlesSimple>("PARTICLES_1", 10000);
     // particles->transform().position = sf::Vector2f(-150.0f, 0);
