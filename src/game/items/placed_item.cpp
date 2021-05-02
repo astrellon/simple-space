@@ -109,7 +109,7 @@ namespace space
 
         _collider = world.CreateBody(&bodyDef);
         _collider->CreateFixture(&fixtureDef);
-        _collider->SetUserData(this);
+        _collider->GetUserData().pointer = (uintptr_t)this;
     }
     void PlacedItem::removePhysics(b2World &world)
     {

@@ -158,7 +158,7 @@ namespace space
         _physicsBody->CreateFixture(&fixtureDef);
         _physicsBody->SetTransform(b2Vec2(_transform.position.x, _transform.position.y), Utils::degreesToRadians(_transform.rotation));
 
-        _physicsBody->SetUserData(this);
+        _physicsBody->GetUserData().pointer = (uintptr_t)this;
     }
     void Character::removeFromPhysicsWorld(b2World *world)
     {

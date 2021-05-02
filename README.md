@@ -18,7 +18,12 @@ I've been keeping a video devlog series that chronicles the changes over time an
 
 Ubuntu
 ```sh
-sudo apt install g++ build-essential cmake libudev-dev libxrandr-dev libopenal-dev libvorbis-dev libfreetype-dev libglew-dev libbox2d-dev doctest-dev
+sudo apt install clang build-essential cmake libudev-dev libxrandr-dev libopenal-dev libvorbis-dev libfreetype-dev libglew-dev libbox2d-dev doctest-dev
+```
+
+Fedora
+```sh
+sudo dnf install clang libXrandr-devel cmake libvorbis-devel glew-devel doctest-devel Box2D-devel systemd-devel openal-soft-devel freetype-devel
 ```
 
 You will also need to pull the git submodules.
