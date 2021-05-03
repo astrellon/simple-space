@@ -1,13 +1,14 @@
-#include "game-ui-inventory.hpp"
+#include "game-ui-inventory-window.hpp"
 
 #include "./game-ui-manager.hpp"
 #include "./ui-text-element.hpp"
+#include "./ui-button.hpp"
 
 #include "../game/inventory.hpp"
 
 namespace space
 {
-    void GameUIInventory::init(GameUIManager &uiManager)
+    void GameUIInventoryWindow::init(GameUIManager &uiManager)
     {
         GameUIWindow::init(uiManager);
 
@@ -16,13 +17,16 @@ namespace space
 
         header()->text("Inventory");
 
-        auto textElement = uiManager.createElement<space::UITextElement>();
+        auto textElement = uiManager.createElement<UITextElement>();
         textElement->text("Hello there!");
 
         bodyContainer()->addChild(textElement);
+
+        auto button = uiManager.createElement<UIButton>();
+        bodyContainer()->addChild(button);
     }
 
-    void GameUIInventory::inventory(Inventory *inventory)
+    void GameUIInventoryWindow::inventory(Inventory *inventory)
     {
         _removeOnAddItem.reset();
         _removeOnRemoveItem.reset();

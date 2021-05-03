@@ -34,6 +34,15 @@ namespace space
         }
     }
 
+    bool UIElement::doesMouseHover(Engine &engine, sf::Vector2f mousePosition) const
+    {
+        auto worldPos = Utils::getPosition(_transform);
+        auto local = mousePosition - worldPos;
+        auto size = getSize();
+        sf::FloatRect bounds(sf::Vector2f(), size);
+        return bounds.contains(local);
+    }
+
     void UIElement::addChild(UIElement *element)
     {
         if (element == nullptr || Utils::contains(_children, element))
@@ -93,9 +102,8 @@ namespace space
     {
         sf::RectangleShape shape;
 
-        auto width = YGNodeLayoutGetWidth(_yogaNode);
-        auto height = YGNodeLayoutGetHeight(_yogaNode);
-        shape.setSize(sf::Vector2f(width, height));
+        auto size = getSize();
+        shape.setSize(size);
         shape.setPosition(Utils::getPosition(_transform));
         shape.setFillColor(sf::Color(79, 164, 184, 100));
         shape.setOutlineColor(sf::Color(146, 232, 192, 100));

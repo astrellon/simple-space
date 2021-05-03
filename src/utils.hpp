@@ -20,6 +20,8 @@
 #include "physics/polygon.hpp"
 #include "types.hpp"
 
+#include "game-ui/ui-element-type.hpp"
+
 using nlohmann::json;
 
 namespace space
@@ -337,6 +339,22 @@ namespace space
 
                 return -1;
             }
+
+            static const char *elementTypeName(ElementType input)
+            {
+                switch (input)
+                {
+                    default:
+                    case ElementType::Unknown: return "Unknown";
+                    case ElementType::General: return "General";
+                    case ElementType::Image: return "Image";
+                    case ElementType::Root: return "Root";
+                    case ElementType::Text: return "Text";
+                    case ElementType::Button: return "Button";
+                    case ElementType::NineSliceImage: return "NineSliceImage";
+                }
+            }
+
 
         private:
             Utils();

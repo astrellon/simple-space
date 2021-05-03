@@ -42,6 +42,9 @@ namespace space
             void update(Engine &engine, sf::Time dt);
             void draw(Engine &engine, RenderCamera &target);
 
+            void checkForMouse(Engine &engine, sf::Vector2f worldMousePosition);
+            std::vector<UIElement *> findElementUnderMouse(Engine &engine, sf::Vector2f worldMousePosition) const;
+
             UIElement *currentHover() { return _currentHover; }
             void currentHover(UIElement *element) { _currentHover = element; }
 
@@ -63,8 +66,6 @@ namespace space
 
             const sf::Font *_defaultFont;
             NineSlice _defaultBackPanel;
-
-            //YGNodeRef _body;
 
             // Methods
     };

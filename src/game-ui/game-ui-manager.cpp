@@ -1,5 +1,9 @@
 #include "game-ui-manager.hpp"
 
+#include <stack>
+#include <vector>
+#include <algorithm>
+
 #include "ui-element.hpp"
 
 #include "../utils.hpp"
@@ -32,7 +36,46 @@ namespace space
 
     void GameUIManager::processEvent(Engine &engine, const sf::Event &event)
     {
+        if (event.type == sf::Event::MouseMoved)
+        {
+            auto &sceneRender = engine.sceneRender();
+            auto mousePosition = sf::Mouse::getPosition(*engine.window());
+            auto worldMousePosition = engine.window()->mapPixelToCoords(mousePosition, sceneRender.camera().view());
 
+            auto overPath = findElementUnderMouse(engine, worldMousePosition);
+
+            std::cout << "Mouse Moved: ";
+            for (auto over : overPath)
+            {
+                std::cout << Utils::elementTypeName(over->elementType()) << " | ";
+            }
+            std::cout << std::endl;
+        }
+    }
+
+    std::vector<UIElement *> GameUIManager::findElementUnderMouse(Engine &engine, sf::Vector2f worldMousePosition) const
+    {
+        std::stack<UIElement *> stack;
+        stack.push(_bodyElement);
+
+        std::vector<UIElement *> overPath;
+
+        while (!stack.empty())
+        {
+            auto current = stack.top();
+            stack.pop();
+
+            if (current->doesMouseHover(engine, worldMousePosition))
+            {
+                overPath.push_back(current);
+                for (auto child : current->children())
+                {
+                    stack.push(child);
+                }
+            }
+        }
+
+        return overPath;
     }
 
     void GameUIManager::update(Engine &engine, sf::Time dt)
@@ -52,4 +95,6 @@ namespace space
 
         _bodyElement->draw(engine, target);
     }
+
+            void checkForMouse(Engine &engine, sf::Vector2f worldMousePosition);
 } // space

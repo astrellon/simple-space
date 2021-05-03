@@ -10,6 +10,9 @@ namespace space
     void UITextElement::init(GameUIManager &uiManager)
     {
         font(uiManager.defaultFont());
+
+        widthAuto();
+        height(24);
     }
 
     void UITextElement::drawSelf(Engine &engine, RenderCamera &target)

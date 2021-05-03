@@ -45,7 +45,7 @@
 #include "src/game-ui/ui-element.hpp"
 #include "src/game-ui/ui-text-element.hpp"
 #include "src/game-ui/ui-nine-slice-image-element.hpp"
-#include "src/game-ui/game-ui-inventory.hpp"
+#include "src/game-ui/game-ui-inventory-window.hpp"
 #include "src/mouse.hpp"
 #include "earcut.hpp"
 #define TRACK_MEMORY 1
@@ -149,7 +149,7 @@ int main()
     gameUIManager.defaultFont(resourceManager.font("data/fonts/PixelOperator.ttf"));
     gameUIManager.defaultBackPanel(space::NineSlice(resourceManager.texture("data/textures/testPanel3.png"), 30, 8, 8, 8));
 
-    auto inventoryWindow = gameUIManager.createElement<space::GameUIInventory>();
+    auto inventoryWindow = gameUIManager.createElement<space::GameUIInventoryWindow>();
     engine.gameUIManager().body()->addChild(inventoryWindow);
 
     inventoryWindow->inventory(&gameSession->playerController().inventory());

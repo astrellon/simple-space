@@ -7,13 +7,13 @@ namespace space
 {
     class Inventory;
 
-    class GameUIInventory : public GameUIWindow
+    class GameUIInventoryWindow : public GameUIWindow
     {
         public:
             // Fields
 
             // Constructor
-            GameUIInventory() : GameUIWindow() { }
+            GameUIInventoryWindow() : GameUIWindow() { }
 
             // Methods
             virtual void init(GameUIManager &uiManager);

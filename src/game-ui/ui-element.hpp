@@ -8,17 +8,13 @@
 #include <functional>
 
 #include "../space_transform.hpp"
+#include "./ui-element-type.hpp"
 
 namespace space
 {
     class Engine;
     class RenderCamera;
     class GameUIManager;
-
-    enum class ElementType
-    {
-        Unknown, Root, General, Text, Image, NineSliceImage
-    };
 
     class UIElement
     {
@@ -36,7 +32,7 @@ namespace space
             virtual void init(GameUIManager &uiManager) { }
             virtual void update(Engine &engine, sf::Time dt, sf::Vector2f parentOffset);
             virtual void draw(Engine &engine, RenderCamera &target);
-            virtual bool doesMouseHover(Engine &engine, sf::Vector2f mousePosition) const { return false; }
+            virtual bool doesMouseHover(Engine &engine, sf::Vector2f mousePosition) const;
 
             const std::vector<UIElement *> &children() const { return _children; }
 
@@ -49,6 +45,14 @@ namespace space
             YGNodeRef yogaNode() { return _yogaNode; }
 
             virtual ElementType elementType() const { return ElementType::General; }
+
+            virtual sf::Vector2f getSize() const
+            {
+                auto width = YGNodeLayoutGetWidth(_yogaNode);
+                auto height = YGNodeLayoutGetHeight(_yogaNode);
+
+                return sf::Vector2f(width, height);
+            }
 
             // Flex Direction
             void flexDirection(YGFlexDirection direction) { YGNodeStyleSetFlexDirection(_yogaNode, direction); }

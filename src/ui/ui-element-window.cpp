@@ -12,20 +12,6 @@
 
 namespace space
 {
-    const char *elementTypeName(ElementType input)
-    {
-        switch (input)
-        {
-            default:
-            case ElementType::Unknown: return "Unknown";
-            case ElementType::General: return "General";
-            case ElementType::Image: return "Image";
-            case ElementType::Root: return "Root";
-            case ElementType::Text: return "Text";
-            case ElementType::NineSliceImage: return "NineSliceImage";
-        }
-    }
-
     bool ImGuiYGValue(const char *label, YGValue &input, bool includeAuto)
     {
         ImGui::Text("%s", label);
@@ -123,7 +109,7 @@ namespace space
         auto node_flags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
         for (auto &element : allElements)
         {
-            auto elementTypeStr = elementTypeName(element->elementType());
+            auto elementTypeStr = Utils::elementTypeName(element->elementType());
             ImGui::TreeNodeEx((void *)element.get(), node_flags, "%s", elementTypeStr);
             if (ImGui::IsItemClicked())
             {
@@ -147,7 +133,7 @@ namespace space
 
     void UIElementWindow::drawElement(UIElement &element)
     {
-        ImGui::Text("Type: %s", elementTypeName(element.elementType()));
+        ImGui::Text("Type: %s", Utils::elementTypeName(element.elementType()));
 
         ImGui::Text("Position TRBL: %f, %f, %f, %f", element.layoutTop(), element.layoutRight(), element.layoutBottom(), element.layoutLeft());
 
