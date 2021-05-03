@@ -42,8 +42,8 @@ namespace space
             void update(Engine &engine, sf::Time dt);
             void draw(Engine &engine, RenderCamera &target);
 
-            void checkForMouse(Engine &engine, sf::Vector2f worldMousePosition);
-            std::vector<UIElement *> findElementUnderMouse(Engine &engine, sf::Vector2f worldMousePosition) const;
+            void checkForMouse(Engine &engine, sf::Vector2f mousePosition);
+            std::vector<UIElement *> findElementUnderMouse(Engine &engine, sf::Vector2f mousePosition) const;
 
             UIElement *currentHover() { return _currentHover; }
             void currentHover(UIElement *element) { _currentHover = element; }

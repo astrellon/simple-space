@@ -38,11 +38,10 @@ namespace space
     {
         if (event.type == sf::Event::MouseMoved)
         {
-            auto &sceneRender = engine.sceneRender();
-            auto mousePosition = sf::Mouse::getPosition(*engine.window());
-            auto worldMousePosition = engine.window()->mapPixelToCoords(mousePosition, sceneRender.camera().view());
+            auto mousePosition = static_cast<sf::Vector2f>(sf::Mouse::getPosition(*engine.window()));
+            mousePosition /= engine.cameraScale();
 
-            auto overPath = findElementUnderMouse(engine, worldMousePosition);
+            auto overPath = findElementUnderMouse(engine, mousePosition);
 
             std::cout << "Mouse Moved: ";
             for (auto over : overPath)
@@ -53,7 +52,7 @@ namespace space
         }
     }
 
-    std::vector<UIElement *> GameUIManager::findElementUnderMouse(Engine &engine, sf::Vector2f worldMousePosition) const
+    std::vector<UIElement *> GameUIManager::findElementUnderMouse(Engine &engine, sf::Vector2f mousePosition) const
     {
         std::stack<UIElement *> stack;
         stack.push(_bodyElement);
@@ -65,12 +64,13 @@ namespace space
             auto current = stack.top();
             stack.pop();
 
-            if (current->doesMouseHover(engine, worldMousePosition))
+            if (current->doesMouseHover(engine, mousePosition))
             {
                 overPath.push_back(current);
-                for (auto child : current->children())
+                auto &children = current->children();
+                for (auto iter = children.rbegin(); iter != children.rend(); ++iter)
                 {
-                    stack.push(child);
+                    stack.push(*iter);
                 }
             }
         }
