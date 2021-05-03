@@ -7,3 +7,7 @@
 [submodule "extern/Observe"]
 	path = extern/Observe
 	url = https://github.com/TheLartians/Observe
+[submodule "extern/box2d"]
+	path = extern/box2d
+	url = https://github.com/astrellon/box2d
+	branch = for-space-doggo
