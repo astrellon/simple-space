@@ -19,7 +19,7 @@ namespace space
         _text = uiManager.createElement<UITextElement>();
         _dropButton = uiManager.createElement<UIButton>();
 
-        _text->width(100);
+        _text->flexGrow(1);
         _text->height(24);
 
         _dropButton->text("Drop");

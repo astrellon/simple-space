@@ -15,18 +15,11 @@ namespace space
         GameUIWindow::init(uiManager);
         _uiManager = &uiManager;
 
-        width(256);
-        height(256);
+        margin(16, 0, 0, 16);
+        width(200);
+        height(200);
 
         header()->text("Inventory");
-
-        auto textElement = uiManager.createElement<UITextElement>();
-        textElement->text("Hello there!");
-
-        bodyContainer()->addChild(textElement);
-
-        auto button = uiManager.createElement<UIButton>();
-        bodyContainer()->addChild(button);
     }
 
     void GameUIInventoryWindow::inventory(Inventory *inventory)
