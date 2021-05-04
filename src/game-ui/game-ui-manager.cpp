@@ -11,7 +11,7 @@
 
 namespace space
 {
-    GameUIManager::GameUIManager(): _currentHover(nullptr), _defaultFont(nullptr)
+    GameUIManager::GameUIManager(): _defaultFont(nullptr)
     {
         _bodyElement = createElement<UIRootElement>();
     }
@@ -36,28 +36,22 @@ namespace space
 
     void GameUIManager::processEvent(Engine &engine, const sf::Event &event)
     {
-        if (event.type == sf::Event::MouseMoved)
+        for (int i = _currentHoverPath.size() - 1; i >= 0; --i)
         {
-            auto mousePosition = static_cast<sf::Vector2f>(sf::Mouse::getPosition(*engine.window()));
-            mousePosition /= engine.cameraScale();
-
-            auto overPath = findElementUnderMouse(engine, mousePosition);
-
-            std::cout << "Mouse Moved: ";
-            for (auto over : overPath)
+            auto result = _currentHoverPath[i]->trigger(event);
+            if (result == UIEventResult::Captured)
             {
-                std::cout << Utils::elementTypeName(over->elementType()) << " | ";
+                break;
             }
-            std::cout << std::endl;
         }
     }
 
-    std::vector<UIElement *> GameUIManager::findElementUnderMouse(Engine &engine, sf::Vector2f mousePosition) const
+    void GameUIManager::updateUnderMouse(Engine &engine, sf::Vector2f mousePosition)
     {
         std::stack<UIElement *> stack;
         stack.push(_bodyElement);
 
-        std::vector<UIElement *> overPath;
+        _currentHoverPath.clear();
 
         while (!stack.empty())
         {
@@ -66,7 +60,7 @@ namespace space
 
             if (current->doesMouseHover(engine, mousePosition))
             {
-                overPath.push_back(current);
+                _currentHoverPath.push_back(current);
                 auto &children = current->children();
                 for (auto iter = children.rbegin(); iter != children.rend(); ++iter)
                 {
@@ -74,8 +68,6 @@ namespace space
                 }
             }
         }
-
-        return overPath;
     }
 
     void GameUIManager::update(Engine &engine, sf::Time dt)
@@ -85,6 +77,10 @@ namespace space
         YGNodeCalculateLayout(bodyNode, renderSize.x, renderSize.y, YGDirectionLTR);
 
         _bodyElement->update(engine, dt, sf::Vector2f());
+
+        auto mousePosition = static_cast<sf::Vector2f>(sf::Mouse::getPosition(*engine.window()));
+        mousePosition /= engine.cameraScale();
+        updateUnderMouse(engine, mousePosition);
     }
 
     void GameUIManager::draw(Engine &engine, RenderCamera &target)

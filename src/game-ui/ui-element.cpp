@@ -1,5 +1,6 @@
 #include "ui-element.hpp"
 
+#include <algorithm>
 #include <SFML/Graphics.hpp>
 
 #include "../utils.hpp"
@@ -8,6 +9,8 @@
 
 namespace space
 {
+    int UIElement::_nextHandlerId = 0;
+
     void UIElement::update(Engine &engine, sf::Time dt, sf::Vector2f parentOffset)
     {
         auto left = YGNodeLayoutGetLeft(_yogaNode);
@@ -88,6 +91,49 @@ namespace space
         {
             _parent->addChild(this);
         }
+    }
+
+    UIElement::RemoveEventHandler UIElement::on(sf::Event::EventType type, UIElement::EventHandler handler)
+    {
+        auto &list = _eventHandlers[type];
+        auto id = nextHandlerId();
+        list.emplace_back(id, handler);
+
+        return [&list, id]() mutable
+        {
+            for (auto iter = list.begin(); iter != list.end(); ++iter)
+            {
+                if (iter->first == id)
+                {
+                    list.erase(iter);
+                    std::cout << "Removed event listener!" << std::endl;
+                    return;
+                }
+            }
+
+            std::cout << "Unable to find event listener to remove." << std::endl;
+        };
+    }
+
+    UIEventResult UIElement::trigger(const sf::Event &event)
+    {
+        auto find = _eventHandlers.find(event.type);
+        if (find == _eventHandlers.end())
+        {
+            return UIEventResult::NotFound;
+        }
+
+        auto list = find->second;
+        for (auto handler : list)
+        {
+            auto result = handler.second(event);
+            if (result == UIEventResult::Captured)
+            {
+                return result;
+            }
+        }
+
+        return UIEventResult::Triggered;
     }
 
     void UIElement::drawChildren(Engine &engine, RenderCamera &target)

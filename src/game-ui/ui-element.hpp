@@ -9,6 +9,7 @@
 
 #include "../space_transform.hpp"
 #include "./ui-element-type.hpp"
+#include "./ui-event-result.hpp"
 
 namespace space
 {
@@ -20,7 +21,9 @@ namespace space
     {
         public:
             // Types
-            typedef std::function<bool (const sf::Event &)> EventHandler;
+            typedef std::function<UIEventResult (const sf::Event &)> EventHandler;
+            typedef std::pair<int, EventHandler> EventHandlerPair;
+            typedef std::function<void ()> RemoveEventHandler;
 
             // Fields
 
@@ -29,6 +32,8 @@ namespace space
             virtual ~UIElement() { }
 
             // Methods
+            static int nextHandlerId() { return ++_nextHandlerId; }
+
             virtual void init(GameUIManager &uiManager) { }
             virtual void update(Engine &engine, sf::Time dt, sf::Vector2f parentOffset);
             virtual void draw(Engine &engine, RenderCamera &target);
@@ -41,6 +46,9 @@ namespace space
 
             UIElement *parent() { return _parent; }
             void parent(UIElement *parent);
+
+            RemoveEventHandler on(sf::Event::EventType type, EventHandler handler);
+            UIEventResult trigger(const sf::Event &event);
 
             YGNodeRef yogaNode() { return _yogaNode; }
 
@@ -194,12 +202,17 @@ namespace space
             std::vector<UIElement *> _children;
             UIElement *_parent;
             sf::Transform _transform;
-            std::map<std::string, std::vector<EventHandler>> _eventHandlers;
+            std::map<sf::Event::EventType, std::vector<EventHandlerPair>> _eventHandlers;
 
             // Methods
             virtual void drawChildren(Engine &engine, RenderCamera &target);
             virtual void drawSelf(Engine &engine, RenderCamera &target) { }
             virtual void drawOutline(Engine &engine, RenderCamera &target);
+
+        private:
+            // Fields
+            static int _nextHandlerId;
+
     };
 
     class UIRootElement : public UIElement

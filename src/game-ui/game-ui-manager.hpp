@@ -43,10 +43,9 @@ namespace space
             void draw(Engine &engine, RenderCamera &target);
 
             void checkForMouse(Engine &engine, sf::Vector2f mousePosition);
-            std::vector<UIElement *> findElementUnderMouse(Engine &engine, sf::Vector2f mousePosition) const;
+            void updateUnderMouse(Engine &engine, sf::Vector2f mousePosition);
 
-            UIElement *currentHover() { return _currentHover; }
-            void currentHover(UIElement *element) { _currentHover = element; }
+            const std::vector<UIElement *> &currentHoverPath() const { return _currentHoverPath; }
 
             void defaultFont(const sf::Font *font) { _defaultFont = font; }
             const sf::Font *defaultFont() const { return _defaultFont; }
@@ -61,7 +60,7 @@ namespace space
         private:
             // Fields
             std::vector<std::unique_ptr<UIElement>> _allElements;
-            UIElement *_currentHover;
+            std::vector<UIElement *> _currentHoverPath;
             UIRootElement *_bodyElement;
 
             const sf::Font *_defaultFont;
