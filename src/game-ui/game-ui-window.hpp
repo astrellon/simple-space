@@ -23,6 +23,8 @@ namespace space
             UITextElement *header() { return _header; }
             UIElement *bodyContainer() { return _bodyContainer; }
 
+            virtual const char*elementType() const { return "GameUIWindow"; }
+
         private:
             // Fields
             UINineSliceImageElement *_backPanel;

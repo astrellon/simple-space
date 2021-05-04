@@ -23,6 +23,9 @@ namespace space
             inline void texture(const sf::Texture *texture) { _texture = texture; _dirty = true; }
             inline const sf::Texture *texture() const { return _texture; }
 
+            void colour(const sf::Color &colour);
+            const sf::Color &colour() const;
+
             void border(int top, int right, int bottom, int left)
             {
                 _border[BORDER_TOP] = top;

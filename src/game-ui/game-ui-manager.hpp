@@ -22,7 +22,7 @@ namespace space
             // Fields
 
             // Constructor
-            GameUIManager();
+            GameUIManager(Engine &engine);
 
             // Methods
             template <typename T, typename... TArgs>
@@ -37,13 +37,15 @@ namespace space
             }
             bool removeElement(UIElement *element);
 
-            void processEvent(Engine &engine, const sf::Event &event);
+            inline Engine &engine() { return _engine; }
 
-            void update(Engine &engine, sf::Time dt);
-            void draw(Engine &engine, RenderCamera &target);
+            void processEvent(const sf::Event &event);
 
-            void checkForMouse(Engine &engine, sf::Vector2f mousePosition);
-            void updateUnderMouse(Engine &engine, sf::Vector2f mousePosition);
+            void update(sf::Time dt);
+            void draw(RenderCamera &target);
+
+            void checkForMouse(sf::Vector2f mousePosition);
+            void updateUnderMouse(sf::Vector2f mousePosition);
 
             const std::vector<UIElement *> &currentHoverPath() const { return _currentHoverPath; }
 
@@ -53,12 +55,16 @@ namespace space
             NineSlice defaultBackPanel() { return _defaultBackPanel; }
             void defaultBackPanel(const NineSlice &value) { _defaultBackPanel = value; }
 
+            NineSlice defaultButton() { return _defaultButton; }
+            void defaultButton(const NineSlice &value) { _defaultButton = value; }
+
             UIElement *body() { return _bodyElement; }
 
             const std::vector<std::unique_ptr<UIElement>> &allElements() const { return _allElements; }
 
         private:
             // Fields
+            Engine &_engine;
             std::vector<std::unique_ptr<UIElement>> _allElements;
             std::vector<UIElement *> _currentHoverPath;
             std::vector<UIElement *> _previousHoverPath;
@@ -66,6 +72,7 @@ namespace space
 
             const sf::Font *_defaultFont;
             NineSlice _defaultBackPanel;
+            NineSlice _defaultButton;
 
             // Methods
     };

@@ -109,7 +109,7 @@ namespace space
         auto node_flags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
         for (auto &element : allElements)
         {
-            auto elementTypeStr = Utils::elementTypeName(element->elementType());
+            auto elementTypeStr = element->elementType();
             ImGui::TreeNodeEx((void *)element.get(), node_flags, "%s", elementTypeStr);
             if (ImGui::IsItemClicked())
             {
@@ -133,7 +133,7 @@ namespace space
 
     void UIElementWindow::drawElement(UIElement &element)
     {
-        ImGui::Text("Type: %s", Utils::elementTypeName(element.elementType()));
+        ImGui::Text("Type: %s", element.elementType());
 
         ImGui::Text("Position TRBL: %f, %f, %f, %f", element.layoutTop(), element.layoutRight(), element.layoutBottom(), element.layoutLeft());
 

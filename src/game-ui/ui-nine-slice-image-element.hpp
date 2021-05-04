@@ -13,7 +13,7 @@ namespace space
             // Constructor
 
             // Methods
-            virtual ElementType elementType() const { return ElementType::NineSliceImage; }
+            virtual const char *elementType() const { return "NineSlice"; }
 
             void nineSlice(const NineSlice &value) { _nineSlice = value; }
             NineSlice &nineSlice() { return _nineSlice; }

@@ -2,6 +2,7 @@
 
 #include "./game-ui-manager.hpp"
 #include "./ui-text-element.hpp"
+#include "./ui-nine-slice-image-element.hpp"
 
 #include "../render_camera.hpp"
 
@@ -9,35 +10,42 @@ namespace space
 {
     void UIButton::init(GameUIManager &uiManager)
     {
+        _backPanel = uiManager.createElement<UINineSliceImageElement>();
+        _backPanel->nineSlice(uiManager.defaultButton());
+        _backPanel->positionType(YGPositionTypeAbsolute);
+        _backPanel->widthPercent(100);
+        _backPanel->heightPercent(100);
+        addChild(_backPanel);
+
         _textElement = uiManager.createElement<UITextElement>();
         _textElement->text("Button");
-
+        _textElement->margin(YGEdgeLeft, 8);
         addChild(_textElement);
 
-        _backPanel.setFillColor(sf::Color::Blue);
-        _backPanel.setOutlineColor(sf::Color::White);
-        _backPanel.setOutlineThickness(1.0f);
         width(80);
         height(24);
 
         alignContent(YGAlignCenter);
 
-        _removeHandlers.push_back(on(sf::Event::EventType::MouseEntered, [this](const sf::Event &event)
+        on(sf::Event::EventType::MouseEntered, [this](const sf::Event &event)
         {
-            this->_backPanel.setFillColor(sf::Color::Green);
+            this->_backPanel->nineSlice().colour(sf::Color(255, 255, 255, 200));
             return UIEventResult::Triggered;
-        }));
+        });
 
-        _removeHandlers.push_back(on(sf::Event::EventType::MouseLeft, [this](const sf::Event &event)
+        on(sf::Event::EventType::MouseLeft, [this](const sf::Event &event)
         {
-            this->_backPanel.setFillColor(sf::Color::Blue);
+            this->_backPanel->nineSlice().colour(sf::Color::White);
             return UIEventResult::Triggered;
-        }));
+        });
     }
 
-    void UIButton::drawSelf(Engine &engine, RenderCamera &target)
+    void UIButton::text(const std::string &text)
     {
-        _backPanel.setSize(getSize());
-        target.texture().draw(_backPanel, _transform);
+        _textElement->text(text);
+    }
+    std::string UIButton::text() const
+    {
+        return _textElement->text();
     }
 } // space

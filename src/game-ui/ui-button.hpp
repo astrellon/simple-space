@@ -8,6 +8,7 @@
 namespace space
 {
     class UITextElement;
+    class UINineSliceImageElement;
 
     class UIButton : public UIElement
     {
@@ -22,15 +23,15 @@ namespace space
             UITextElement *textElement() { return _textElement; }
             const UITextElement *textElement() const { return _textElement; }
 
-            virtual ElementType elementType() const { return ElementType::Button; }
+            virtual const char*elementType() const { return "Button"; }
 
-        protected:
-            // Methods
-            virtual void drawSelf(Engine &engine, RenderCamera &target);
+            void text(const std::string &text);
+            std::string text() const;
 
         private:
             // Fields
             UITextElement *_textElement;
-            sf::RectangleShape _backPanel;
+            //sf::RectangleShape _backPanel;
+            UINineSliceImageElement *_backPanel;
     };
 } // space

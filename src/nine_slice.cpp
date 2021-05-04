@@ -17,6 +17,21 @@ namespace space
         border(top, right, bottom, left);
     }
 
+    void NineSlice::colour(const sf::Color &colour)
+    {
+        auto size = _vertexArray.getVertexCount();
+        for (auto i = 0; i < size; i++)
+        {
+            auto &vertex = _vertexArray[i];
+            vertex.color = colour;
+        }
+    }
+
+    const sf::Color &NineSlice::colour() const
+    {
+        return _vertexArray[0].color;
+    }
+
     void NineSlice::draw(sf::RenderTarget& target, sf::RenderStates states) const
     {
         if (_dirty)

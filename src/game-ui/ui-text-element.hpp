@@ -29,7 +29,7 @@ namespace space
             sf::Text &textElement() { return _textElement; }
             const sf::Text &textElement() const { return _textElement; }
 
-            virtual ElementType elementType() const { return ElementType::Text; }
+            virtual const char *elementType() const { return "Text"; }
 
         protected:
             // Methods

@@ -11,7 +11,7 @@
 
 namespace space
 {
-    GameUIManager::GameUIManager(): _defaultFont(nullptr)
+    GameUIManager::GameUIManager(Engine &engine): _engine(engine), _defaultFont(nullptr)
     {
         _bodyElement = createElement<UIRootElement>();
     }
@@ -34,7 +34,7 @@ namespace space
         return Utils::remove(_allElements, element);
     }
 
-    void GameUIManager::processEvent(Engine &engine, const sf::Event &event)
+    void GameUIManager::processEvent(const sf::Event &event)
     {
         for (int i = _currentHoverPath.size() - 1; i >= 0; --i)
         {
@@ -47,7 +47,7 @@ namespace space
 
     }
 
-    void GameUIManager::updateUnderMouse(Engine &engine, sf::Vector2f mousePosition)
+    void GameUIManager::updateUnderMouse(sf::Vector2f mousePosition)
     {
         std::stack<UIElement *> stack;
         stack.push(_bodyElement);
@@ -60,7 +60,7 @@ namespace space
             auto current = stack.top();
             stack.pop();
 
-            if (current->doesMouseHover(engine, mousePosition))
+            if (current->doesMouseHover(_engine, mousePosition))
             {
                 _currentHoverPath.push_back(current);
                 auto &children = current->children();
@@ -94,27 +94,25 @@ namespace space
         }
     }
 
-    void GameUIManager::update(Engine &engine, sf::Time dt)
+    void GameUIManager::update(sf::Time dt)
     {
-        auto renderSize = engine.renderSize();
+        auto renderSize = _engine.renderSize();
         auto bodyNode = _bodyElement->yogaNode();
         YGNodeCalculateLayout(bodyNode, renderSize.x, renderSize.y, YGDirectionLTR);
 
-        _bodyElement->update(engine, dt, sf::Vector2f());
+        _bodyElement->update(_engine, dt, sf::Vector2f());
 
-        auto mousePosition = static_cast<sf::Vector2f>(sf::Mouse::getPosition(*engine.window()));
-        mousePosition /= engine.cameraScale();
-        updateUnderMouse(engine, mousePosition);
+        auto mousePosition = static_cast<sf::Vector2f>(sf::Mouse::getPosition(*_engine.window()));
+        mousePosition /= _engine.cameraScale();
+        updateUnderMouse(mousePosition);
     }
 
-    void GameUIManager::draw(Engine &engine, RenderCamera &target)
+    void GameUIManager::draw(RenderCamera &target)
     {
-        auto size = static_cast<sf::Vector2f>(engine.renderSize());
+        auto size = static_cast<sf::Vector2f>(_engine.renderSize());
         sf::View view(size * 0.5f, size);
         target.texture().setView(view);
 
-        _bodyElement->draw(engine, target);
+        _bodyElement->draw(_engine, target);
     }
-
-            void checkForMouse(Engine &engine, sf::Vector2f worldMousePosition);
 } // space

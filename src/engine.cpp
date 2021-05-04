@@ -39,7 +39,7 @@ namespace space
         _resourceManager = std::make_unique<ResourceManager>();
         _definitionManager = std::make_unique<DefinitionManager>();
         _uiManager = std::make_unique<UIManager>();
-        _gameUIManager = std::make_unique<GameUIManager>();
+        _gameUIManager = std::make_unique<GameUIManager>(*this);
 
         _frameStart = std::chrono::high_resolution_clock::now();
 
@@ -158,7 +158,7 @@ namespace space
             ImGui::SFML::ProcessEvent(event);
         }
 
-        _gameUIManager->processEvent(*this, event);
+        _gameUIManager->processEvent(event);
 
         if (event.type == sf::Event::Closed)
         {
@@ -276,7 +276,7 @@ namespace space
             uiManager().uiPhotoAlbum().toggleShow();
         }
 
-        gameUIManager().update(*this, _deltaTime);
+        gameUIManager().update(_deltaTime);
 
         Mouse::prevMousePosition(sf::Mouse::getPosition());
         Mouse::update(*this, _deltaTime);
@@ -306,7 +306,7 @@ namespace space
             ImGui::SFML::Render(_sceneRender->texture());
         }
 
-        gameUIManager().draw(*this, *_sceneRender);
+        gameUIManager().draw(*_sceneRender);
 
         Mouse::draw(*this, *_sceneRender);
 

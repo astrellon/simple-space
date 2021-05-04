@@ -8,7 +8,6 @@
 #include <functional>
 
 #include "../space_transform.hpp"
-#include "./ui-element-type.hpp"
 #include "./ui-event-result.hpp"
 
 namespace space
@@ -52,7 +51,7 @@ namespace space
 
             YGNodeRef yogaNode() { return _yogaNode; }
 
-            virtual ElementType elementType() const { return ElementType::General; }
+            virtual const char *elementType() const { return "Element"; }
 
             virtual sf::Vector2f getSize() const
             {
@@ -224,7 +223,7 @@ namespace space
             // Constructor
 
             // Methods
-            virtual ElementType elementType() const { return ElementType::Root; }
+            virtual const char *elementType() const { return "Root"; }
     };
 
 } // space

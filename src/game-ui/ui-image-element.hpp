@@ -13,7 +13,7 @@ namespace space
             // Constructor
 
             // Methods
-            virtual ElementType elementType() const { return ElementType::Image; }
+            virtual const char *elementType() const { return "Image"; }
 
         private:
             // Fields

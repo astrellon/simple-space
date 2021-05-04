@@ -5,7 +5,9 @@
 
 namespace space
 {
+    class Item;
     class Inventory;
+    class GameUIInventoryItem;
 
     class GameUIInventoryWindow : public GameUIWindow
     {
@@ -21,12 +23,19 @@ namespace space
             void inventory(Inventory *inventory);
             Inventory *inventory() { return _inventory; }
 
+            virtual const char*elementType() const { return "GameUIInventory"; }
+
         private:
             // Fields
             Inventory *_inventory;
             observe::Observer _removeOnAddItem;
             observe::Observer _removeOnRemoveItem;
+            GameUIManager *_uiManager;
+
+            std::vector<GameUIInventoryItem *> _itemUIs;
 
             // Methods
+            void addItem(Item *item);
+            void removeItem(Item *item);
     };
 } // space

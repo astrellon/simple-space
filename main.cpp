@@ -148,6 +148,7 @@ int main()
 
     gameUIManager.defaultFont(resourceManager.font("data/fonts/PixelOperator.ttf"));
     gameUIManager.defaultBackPanel(space::NineSlice(resourceManager.texture("data/textures/testPanel3.png"), 30, 8, 8, 8));
+    gameUIManager.defaultButton(space::NineSlice(resourceManager.texture("data/textures/testButton.png"), 8, 8, 8, 8));
 
     auto inventoryWindow = gameUIManager.createElement<space::GameUIInventoryWindow>();
     engine.gameUIManager().body()->addChild(inventoryWindow);

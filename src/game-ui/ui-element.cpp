@@ -107,7 +107,7 @@ namespace space
         auto id = nextHandlerId();
         list.emplace_back(id, handler);
 
-        return [&list, id]() mutable
+        auto result = [&list, id]() mutable
         {
             for (auto iter = list.begin(); iter != list.end(); ++iter)
             {
@@ -121,6 +121,10 @@ namespace space
 
             std::cout << "Unable to find event listener to remove." << std::endl;
         };
+
+        _removeHandlers.push_back(result);
+
+        return result;
     }
 
     UIEventResult UIElement::trigger(const sf::Event &event)
