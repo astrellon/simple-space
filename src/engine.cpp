@@ -248,8 +248,6 @@ namespace space
             ImGui::SFML::Update(_cameraScale, *_window, _sceneRender->texture(), _deltaTime);
         }
 
-        //ImGui::IsMouseHoveringRect()
-
         DrawDebug::glDraw = 0;
     }
 
@@ -276,10 +274,10 @@ namespace space
             uiManager().uiPhotoAlbum().toggleShow();
         }
 
-        gameUIManager().update(_deltaTime);
-
         Mouse::prevMousePosition(sf::Mouse::getPosition());
         Mouse::update(*this, _deltaTime);
+
+        gameUIManager().update(_deltaTime);
     }
 
     void Engine::draw()
@@ -300,13 +298,13 @@ namespace space
             _currentSession->draw();
         }
 
+        gameUIManager().draw(*_sceneRender);
+
         if (_initedImgui)
         {
             _uiManager->draw(*this);
             ImGui::SFML::Render(_sceneRender->texture());
         }
-
-        gameUIManager().draw(*_sceneRender);
 
         Mouse::draw(*this, *_sceneRender);
 
