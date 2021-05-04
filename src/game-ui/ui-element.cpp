@@ -11,6 +11,14 @@ namespace space
 {
     int UIElement::_nextHandlerId = 0;
 
+    UIElement::~UIElement()
+    {
+        for (auto remove : _removeHandlers)
+        {
+            remove();
+        }
+    }
+
     void UIElement::update(Engine &engine, sf::Time dt, sf::Vector2f parentOffset)
     {
         auto left = YGNodeLayoutGetLeft(_yogaNode);

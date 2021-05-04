@@ -44,6 +44,7 @@ namespace space
                 break;
             }
         }
+
     }
 
     void GameUIManager::updateUnderMouse(Engine &engine, sf::Vector2f mousePosition)
@@ -51,6 +52,7 @@ namespace space
         std::stack<UIElement *> stack;
         stack.push(_bodyElement);
 
+        _previousHoverPath = _currentHoverPath;
         _currentHoverPath.clear();
 
         while (!stack.empty())
@@ -66,6 +68,28 @@ namespace space
                 {
                     stack.push(*iter);
                 }
+            }
+        }
+
+        sf::Event enteredEvent;
+        enteredEvent.type = sf::Event::EventType::MouseEntered;
+
+        for (auto element : _currentHoverPath)
+        {
+            if (!Utils::contains(_previousHoverPath, element))
+            {
+                element->trigger(enteredEvent);
+            }
+        }
+
+        sf::Event leaveEvent;
+        leaveEvent.type = sf::Event::EventType::MouseLeft;
+
+        for (auto element : _previousHoverPath)
+        {
+            if (!Utils::contains(_currentHoverPath, element))
+            {
+                element->trigger(leaveEvent);
             }
         }
     }

@@ -29,7 +29,7 @@ namespace space
 
             // Constructor
             UIElement() : _parent(nullptr), _yogaNode(YGNodeNew()) { }
-            virtual ~UIElement() { }
+            virtual ~UIElement();
 
             // Methods
             static int nextHandlerId() { return ++_nextHandlerId; }
@@ -203,6 +203,7 @@ namespace space
             UIElement *_parent;
             sf::Transform _transform;
             std::map<sf::Event::EventType, std::vector<EventHandlerPair>> _eventHandlers;
+            std::vector<RemoveEventHandler> _removeHandlers;
 
             // Methods
             virtual void drawChildren(Engine &engine, RenderCamera &target);

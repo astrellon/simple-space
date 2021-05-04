@@ -21,6 +21,18 @@ namespace space
         height(24);
 
         alignContent(YGAlignCenter);
+
+        _removeHandlers.push_back(on(sf::Event::EventType::MouseEntered, [this](const sf::Event &event)
+        {
+            this->_backPanel.setFillColor(sf::Color::Green);
+            return UIEventResult::Triggered;
+        }));
+
+        _removeHandlers.push_back(on(sf::Event::EventType::MouseLeft, [this](const sf::Event &event)
+        {
+            this->_backPanel.setFillColor(sf::Color::Blue);
+            return UIEventResult::Triggered;
+        }));
     }
 
     void UIButton::drawSelf(Engine &engine, RenderCamera &target)

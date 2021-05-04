@@ -61,6 +61,7 @@ namespace space
             // Fields
             std::vector<std::unique_ptr<UIElement>> _allElements;
             std::vector<UIElement *> _currentHoverPath;
+            std::vector<UIElement *> _previousHoverPath;
             UIRootElement *_bodyElement;
 
             const sf::Font *_defaultFont;
