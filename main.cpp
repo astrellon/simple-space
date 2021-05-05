@@ -152,7 +152,6 @@ int main()
 
     auto inventoryWindow = gameUIManager.createElement<space::GameUIInventoryWindow>();
     engine.gameUIManager().body()->addChild(inventoryWindow);
-
     inventoryWindow->inventory(&gameSession->playerController().inventory());
 
     // auto particles = gameSession->createObject<space::ParticlesSimple>("PARTICLES_1", 10000);
