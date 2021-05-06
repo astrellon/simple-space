@@ -10,8 +10,6 @@
 #include "./ui-button.hpp"
 #include "./game-ui-manager.hpp"
 
-
-
 namespace space
 {
     void GameUIInventoryItem::init(GameUIManager &uiManager)

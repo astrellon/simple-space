@@ -49,7 +49,7 @@ namespace space
 
         auto &session = *engine.currentSession();
         auto &player = session.playerController();
-        for (auto canInteractWith : player.canInteractWithInRange())
+        for (auto canInteractWith : player.canInteractWithInRange().interactables())
         {
             ImGui::Text("%s", canInteractWith->name().c_str());
 

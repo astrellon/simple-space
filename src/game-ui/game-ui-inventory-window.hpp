@@ -15,13 +15,13 @@ namespace space
             // Fields
 
             // Constructor
-            GameUIInventoryWindow() : GameUIWindow() { }
+            GameUIInventoryWindow() : GameUIWindow(), _inventory(nullptr) { }
 
             // Methods
             virtual void init(GameUIManager &uiManager);
 
             void inventory(Inventory *inventory);
-            Inventory *inventory() { return _inventory; }
+            Inventory *inventory() const { return _inventory; }
 
             virtual const char*elementType() const { return "GameUIInventory"; }
 

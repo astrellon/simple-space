@@ -5,6 +5,8 @@
         "${workspaceFolder}/extern/tmxlite/tmxlite/include",
         "${workspaceFolder}/extern/SFML/include",
         "${workspaceFolder}/extern/yoga",
+        "${workspaceFolder}/extern/Observe/include",
+        "${workspaceFolder}/extern/box2d/include"
     ],
     "cmake.configureOnOpen": false,
     "files.associations": {

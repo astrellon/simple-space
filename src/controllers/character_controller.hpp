@@ -9,6 +9,7 @@
 #include "../game/inventory.hpp"
 #include "../game/items/placed_item.hpp"
 #include "../game/items/teleporter.hpp"
+#include "../game/interactions/interactable_list.hpp"
 
 namespace space
 {
@@ -31,7 +32,7 @@ namespace space
     {
         public:
             typedef std::map<Interactable *, float> InteractableMap;
-            typedef std::vector<Interactable *> InteractableList;
+            //typedef std::vector<Interactable *> InteractableList;
             typedef std::vector<PlacedItemPair<Teleporter>> TeleporterList;
             // Fields
 
