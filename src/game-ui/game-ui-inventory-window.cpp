@@ -15,9 +15,10 @@ namespace space
         GameUIWindow::init(uiManager);
         _uiManager = &uiManager;
 
-        margin(16, 0, 0, 16);
         width(200);
-        height(200);
+        heightAuto();
+        flexShrink(1.0f);
+        margin(16, 16, 16, 16);
 
         header()->text("Inventory");
     }

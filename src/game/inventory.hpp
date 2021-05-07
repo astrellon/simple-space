@@ -22,7 +22,7 @@ namespace space
             void addItem(Item *item);
             void removeItem(Item *item);
 
-            const std::vector<Item *> items() const { return _items; }
+            const std::vector<Item *> &items() const { return _items; }
 
         private:
             // Fields

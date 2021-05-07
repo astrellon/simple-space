@@ -10,8 +10,6 @@
 #include "./ui-button.hpp"
 #include "./game-ui-manager.hpp"
 
-
-
 namespace space
 {
     void GameUIInventoryItem::init(GameUIManager &uiManager)
@@ -19,8 +17,9 @@ namespace space
         _text = uiManager.createElement<UITextElement>();
         _dropButton = uiManager.createElement<UIButton>();
 
-        _text->flexGrow(1);
+        _text->widthPercent(100);
         _text->height(24);
+        _text->flexShrink(1.0f);
 
         _dropButton->text("Drop");
         _dropButton->width(50);

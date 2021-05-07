@@ -46,8 +46,8 @@
 #include "src/game-ui/ui-text-element.hpp"
 #include "src/game-ui/ui-nine-slice-image-element.hpp"
 #include "src/game-ui/game-ui-inventory-window.hpp"
+#include "src/game-ui/game-ui-interactables-window.hpp"
 #include "src/mouse.hpp"
-#include "earcut.hpp"
 #define TRACK_MEMORY 1
 
 #include <tmxlite/Map.hpp>
@@ -152,8 +152,11 @@ int main()
 
     auto inventoryWindow = gameUIManager.createElement<space::GameUIInventoryWindow>();
     engine.gameUIManager().body()->addChild(inventoryWindow);
-
     inventoryWindow->inventory(&gameSession->playerController().inventory());
+
+    auto interactableWindow = gameUIManager.createElement<space::GameUIInteractablesWindow>();
+    engine.gameUIManager().body()->addChild(interactableWindow);
+    interactableWindow->interactables(&gameSession->playerController().canInteractWithInRange());
 
     // auto particles = gameSession->createObject<space::ParticlesSimple>("PARTICLES_1", 10000);
     // particles->transform().position = sf::Vector2f(-150.0f, 0);

@@ -47,7 +47,8 @@ namespace space
         auto playerPos = _character->transform().position;
         auto rangeSquared = _interactRangeObjects * _interactRangeObjects;
         auto outOfRange = rangeSquared + 1.0f;
-        _canInteractWithInRange.clear();
+        //_canInteractWithInRange.clear();
+        std::vector<Interactable *> interactablesToRemove = _canInteractWithInRange.interactables();
 
         for (auto obj : area.objects())
         {
@@ -78,10 +79,16 @@ namespace space
 
             if (distance <= rangeSquared)
             {
-                _canInteractWithInRange.push_back(interactable);
+                _canInteractWithInRange.addInteractable(interactable);
+                Utils::remove(interactablesToRemove, interactable);
             }
 
             _canInteractWith[interactable] = distance;
+        }
+
+        for (auto interactable : interactablesToRemove)
+        {
+            _canInteractWithInRange.removeInteractable(interactable);
         }
     }
 
