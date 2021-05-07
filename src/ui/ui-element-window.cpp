@@ -7,8 +7,11 @@
 #include "../engine.hpp"
 #include "../game-ui/game-ui-manager.hpp"
 #include "../game-ui/ui-element.hpp"
+#include "../game-ui/ui-text-element.hpp"
 #include "../utils.hpp"
 #include "../debug/draw_debug.hpp"
+
+
 
 namespace space
 {
@@ -139,10 +142,11 @@ namespace space
 
         ImGuiYGPaddingAll(element);
         ImGuiYGMarginAll(element);
-        //YGValue padding[4] = {element.padding(YGEdgeTop), element.padding(YGEdgeRight), element.padding(YGEdgeBottom), element.padding(YGEdgeLeft)};
-        // if (ImGui::InputFloat4("Padding TRBL:", padding))
-        // {
-        //     element.padding(padding[0], padding[1], padding[2], padding[3]);
-        // }
+
+        if (element.elementType() == "Text")
+        {
+            auto textElement = dynamic_cast<UITextElement &>(element);
+            ImGui::Text("Text [%u]: %s", textElement.text().size(), textElement.text().c_str());
+        }
     }
 }
