@@ -17,7 +17,7 @@ namespace space
     UIInteractables::UIInteractables() : UIPanel("Interactables")
     {
         size = ImVec2(200, 160);
-        position.x = 20;
+        position.x = 200;
         show = true;
     }
 

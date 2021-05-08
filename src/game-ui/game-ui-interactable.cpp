@@ -15,9 +15,10 @@ namespace space
         _uiManager = &uiManager;
 
         _text->widthPercent(100);
-        _text->height(24);
         _text->flexShrink(1.0f);
         addChild(_text);
+
+        flexDirection(YGFlexDirectionRow);
     }
 
     void GameUIInteractable::interactable(Interactable *interactable)
@@ -25,6 +26,7 @@ namespace space
         auto uiManager = _uiManager;
 
         _interactable = interactable;
+        _text->text(interactable->name());
         for (auto &action : interactable->interactions())
         {
             auto actionPtr = action.get();
@@ -32,6 +34,7 @@ namespace space
             button->width(60);
             button->height(24);
             button->text(action->label());
+            addChild(button);
 
             button->on(sf::Event::EventType::MouseButtonPressed, [actionPtr, uiManager] (const sf::Event &e)
             {
