@@ -52,8 +52,11 @@ namespace space
             void defaultFont(const sf::Font *font) { _defaultFont = font; }
             const sf::Font *defaultFont() const { return _defaultFont; }
 
-            NineSlice defaultBackPanel() { return _defaultBackPanel; }
-            void defaultBackPanel(const NineSlice &value) { _defaultBackPanel = value; }
+            NineSlice defaultWindowBackPanel() { return _defaultWindowBackPanel; }
+            void defaultWindowBackPanel(const NineSlice &value) { _defaultWindowBackPanel = value; }
+
+            NineSlice defaultPanelBackPanel() { return _defaultPanelBackPanel; }
+            void defaultPanelBackPanel(const NineSlice &value) { _defaultPanelBackPanel = value; }
 
             NineSlice defaultButton() { return _defaultButton; }
             void defaultButton(const NineSlice &value) { _defaultButton = value; }
@@ -71,7 +74,8 @@ namespace space
             UIRootElement *_bodyElement;
 
             const sf::Font *_defaultFont;
-            NineSlice _defaultBackPanel;
+            NineSlice _defaultWindowBackPanel;
+            NineSlice _defaultPanelBackPanel;
             NineSlice _defaultButton;
 
             // Methods

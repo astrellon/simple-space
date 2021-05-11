@@ -19,7 +19,7 @@ namespace space
 
         flexDirection(YGFlexDirectionColumn);
 
-        _backPanel->nineSlice(uiManager.defaultBackPanel());
+        _backPanel->nineSlice(uiManager.defaultWindowBackPanel());
         _backPanel->positionType(YGPositionTypeAbsolute);
         _backPanel->widthPercent(100);
         _backPanel->heightPercent(100);

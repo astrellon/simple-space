@@ -47,6 +47,7 @@
 #include "src/game-ui/ui-nine-slice-image-element.hpp"
 #include "src/game-ui/game-ui-inventory-window.hpp"
 #include "src/game-ui/game-ui-interactables-window.hpp"
+#include "src/game-ui/game-ui-interactables-panel.hpp"
 #include "src/mouse.hpp"
 #define TRACK_MEMORY 1
 
@@ -147,16 +148,17 @@ int main()
     auto &gameUIManager = engine.gameUIManager();
 
     gameUIManager.defaultFont(resourceManager.font("data/fonts/PixelOperator.ttf"));
-    gameUIManager.defaultBackPanel(space::NineSlice(resourceManager.texture("data/textures/testPanel3.png"), 30, 8, 8, 8));
+    gameUIManager.defaultWindowBackPanel(space::NineSlice(resourceManager.texture("data/textures/testPanel3.png"), 30, 8, 8, 8));
+    gameUIManager.defaultPanelBackPanel(space::NineSlice(resourceManager.texture("data/textures/testPanel4.png"), 8, 8, 8, 8));
     gameUIManager.defaultButton(space::NineSlice(resourceManager.texture("data/textures/testButton.png"), 8, 8, 8, 8));
 
     auto inventoryWindow = gameUIManager.createElement<space::GameUIInventoryWindow>();
     engine.gameUIManager().body()->addChild(inventoryWindow);
     inventoryWindow->inventory(&gameSession->playerController().inventory());
 
-    auto interactableWindow = gameUIManager.createElement<space::GameUIInteractablesWindow>();
-    engine.gameUIManager().body()->addChild(interactableWindow);
-    interactableWindow->interactables(&gameSession->playerController().canInteractWithInRange());
+    auto interactablePanel = gameUIManager.createElement<space::GameUIInteractablesPanel>();
+    engine.gameUIManager().body()->addChild(interactablePanel);
+    interactablePanel->interactables(&gameSession->playerController().canInteractWithInRange());
 
     // auto particles = gameSession->createObject<space::ParticlesSimple>("PARTICLES_1", 10000);
     // particles->transform().position = sf::Vector2f(-150.0f, 0);

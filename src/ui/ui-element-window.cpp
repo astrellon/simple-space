@@ -146,7 +146,7 @@ namespace space
         if (element.elementType() == "Text")
         {
             auto textElement = dynamic_cast<UITextElement &>(element);
-            ImGui::Text("Text [%u]: %s", textElement.text().size(), textElement.text().c_str());
+            ImGui::Text("Text [%u]: %s", (uint)textElement.text().size(), textElement.text().c_str());
         }
     }
 }
