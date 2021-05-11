@@ -8,6 +8,7 @@
 
 #include "../game/interactions/interactable.hpp"
 #include "../game/interactions/interactable_list.hpp"
+#include "../engine.hpp"
 
 namespace space
 {
@@ -35,7 +36,15 @@ namespace space
         width(200);
         heightAuto();
         flexShrink(1.0f);
-        margin(16, 16, 16, 16);
+        positionType(YGPositionTypeAbsolute);
+    }
+
+    void GameUIInteractablesPanel::update(Engine &engine, sf::Time dt, sf::Vector2f parentOffset)
+    {
+        auto screenSize = engine.renderSize();
+        margin(screenSize.y / 2 - 32, 0, 0, screenSize.x / 2 + 32);
+
+        UIElement::update(engine, dt, parentOffset);
     }
 
     void GameUIInteractablesPanel::interactables(const InteractableList *interactables)
