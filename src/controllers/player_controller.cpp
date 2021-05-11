@@ -22,29 +22,6 @@ namespace space
             return;
         }
 
-        // if (_character && _character->insideArea())
-        // {
-        //     auto area = _character->insideArea();
-        //     auto planetSurface = area->partOfPlanetSurface();
-        //     if (planetSurface != nullptr && planetSurface->type() != nullptr)
-        //     {
-        //         auto onPlanet = area->partOfPlanetSurface()->partOfPlanet();
-        //         // checkForTeleportableShips(onPlanet->transform().position, *onPlanet->starSystem());
-        //         // checkForTeleportablePlanets(onPlanet->transform().position, *onPlanet->starSystem());
-        //     }
-        //     else if (area->partOfShip() != nullptr)
-        //     {
-        //         auto insideShip = area->partOfShip();
-        //         checkForTeleportableShips(insideShip->transform().position, *insideShip->starSystem());
-        //         checkForTeleportablePlanets(insideShip->transform().position, *insideShip->starSystem());
-        //     }
-        // }
-        // else
-        // {
-        //     clearPlanetsInTeleportRange();
-        //     clearShipsInTeleportRange();
-        // }
-
         _teleportersInRange.clear();
 
         if (_controlling == ControlShip)

@@ -32,7 +32,6 @@ namespace space
     {
         public:
             typedef std::map<Interactable *, float> InteractableMap;
-            //typedef std::vector<Interactable *> InteractableList;
             typedef std::vector<PlacedItemPair<Teleporter>> TeleporterList;
             // Fields
 
