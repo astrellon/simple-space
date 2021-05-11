@@ -20,6 +20,7 @@ namespace space
 
             // Methods
             virtual void init(GameUIManager &uiManager);
+            virtual void draw(Engine &engine, RenderCamera &target);
             virtual void update(Engine &engine, sf::Time dt, sf::Vector2f parentOffset);
 
             void interactables(const InteractableList *interactables);

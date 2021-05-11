@@ -50,10 +50,11 @@ namespace space
         //_canInteractWithInRange.clear();
         std::vector<Interactable *> interactablesToRemove = _canInteractWithInRange.interactables();
 
+        auto thisInteractable = _character ? _character->interactable() : nullptr;
         for (auto obj : area.objects())
         {
             auto interactable = obj->interactable();
-            if (!interactable)
+            if (!interactable || interactable == thisInteractable)
             {
                 continue;
             }

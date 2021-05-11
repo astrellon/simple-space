@@ -39,6 +39,16 @@ namespace space
         positionType(YGPositionTypeAbsolute);
     }
 
+    void GameUIInteractablesPanel::draw(Engine &engine, RenderCamera &target)
+    {
+        if (_interactables->interactables().size() == 0)
+        {
+            return;
+        }
+
+        UIElement::draw(engine, target);
+    }
+
     void GameUIInteractablesPanel::update(Engine &engine, sf::Time dt, sf::Vector2f parentOffset)
     {
         auto screenSize = engine.renderSize();
