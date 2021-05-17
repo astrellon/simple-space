@@ -1,0 +1,53 @@
+#include "game-ui-teleporter.hpp"
+
+#include "../game/items/teleporter.hpp"
+#include "../engine.hpp"
+#include "../game_session.hpp"
+#include "../game/character.hpp"
+
+#include "./ui-text-element.hpp"
+#include "./ui-button.hpp"
+#include "./game-ui-manager.hpp"
+
+namespace space
+{
+    void GameUITeleporter::init(GameUIManager &uiManager)
+    {
+        _text = uiManager.createElement<UITextElement>();
+        _uiManager = &uiManager;
+
+        _text->widthPercent(100);
+        _text->flexShrink(1.0f);
+        addChild(_text);
+
+        _actionButton = uiManager.createElement<UIButton>();
+        _actionButton->width(50);
+        _actionButton->text("Go");
+        addChild(_actionButton);
+
+        flexDirection(YGFlexDirectionRow);
+
+        _actionButton->on(sf::Event::EventType::MouseButtonPressed, [this, &uiManager] (const sf::Event &e)
+        {
+            if (this->_teleporter.item == nullptr)
+            {
+                return UIEventResult::Triggered;
+            }
+
+            auto session = uiManager.engine().currentSession();
+            auto character = session->playerController().controllingCharacter();
+            auto placed = this->_teleporter.placed;
+            session->moveSpaceObject(static_cast<SpaceObject *>(character), placed->transform().position, placed->insideArea(), true);
+
+            return UIEventResult::Triggered;
+        });
+    }
+
+    void GameUITeleporter::teleporter(PlacedItemPair<Teleporter> teleporter)
+    {
+        auto uiManager = _uiManager;
+
+        _teleporter = teleporter;
+        _text->text(teleporter.item->name());
+    }
+} // space

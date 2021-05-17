@@ -48,6 +48,7 @@
 #include "src/game-ui/game-ui-inventory-window.hpp"
 #include "src/game-ui/game-ui-interactables-window.hpp"
 #include "src/game-ui/game-ui-interactables-panel.hpp"
+#include "src/game-ui/game-ui-teleporters-panel.hpp"
 #include "src/mouse.hpp"
 #define TRACK_MEMORY 1
 
@@ -159,6 +160,10 @@ int main()
     auto interactablePanel = gameUIManager.createElement<space::GameUIInteractablesPanel>();
     engine.gameUIManager().body()->addChild(interactablePanel);
     interactablePanel->interactables(&gameSession->playerController().canInteractWithInRange());
+
+    auto teleporterPanel = gameUIManager.createElement<space::GameUITeleportersPanel>();
+    engine.gameUIManager().body()->addChild(teleporterPanel);
+    teleporterPanel->teleporters(&gameSession->playerController().teleportersInRange());
 
     // auto particles = gameSession->createObject<space::ParticlesSimple>("PARTICLES_1", 10000);
     // particles->transform().position = sf::Vector2f(-150.0f, 0);
