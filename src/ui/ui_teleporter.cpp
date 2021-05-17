@@ -51,8 +51,10 @@ namespace space
         auto character = _characterController->controllingCharacter();
         auto &teleporters = _characterController->teleportersInRange();
 
-        for (auto &teleporter : teleporters)
+        for (auto &pair : teleporters.teleporters())
         {
+            auto teleporter = pair.teleporter;
+
             std::stringstream ss;
             ss << teleporter.item->name() << "##" << teleporter.item->id;
 

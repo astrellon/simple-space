@@ -31,6 +31,8 @@ namespace space
     class PlacedItemPair;
     class Teleporter;
 
+    class TeleporterList;
+
     enum class AreaType
     {
         StarSystem, Ship, PlanetSurface
@@ -68,8 +70,7 @@ namespace space
 
             PlacedItem *addPlaceable(GameSession &session, PlaceableItem *item, sf::Vector2f position);
 
-            std::vector<PlacedItemPair<Teleporter>> findTeleporters() const;
-            void addTeleporters(std::vector<PlacedItemPair<Teleporter>> &result) const;
+            void addTeleporters(TeleporterList &result) const;
 
             void getObjectsNearby(float radius, const sf::Vector2f &position, FindObjectCallback callback) const;
             void getObjectsNearby(float radius, const sf::Vector2f &position, std::vector<SpaceObject *> &result) const;

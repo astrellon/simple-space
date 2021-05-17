@@ -12,10 +12,10 @@ namespace space
     {
         // Fields
         PlacedItemPair<Teleporter> teleporter;
-        int mark;
+        uint mark;
 
         // Constructor
-        TeleporterListPair(PlacedItemPair<Teleporter> teleporter, int mark);
+        TeleporterListPair(PlacedItemPair<Teleporter> teleporter, uint mark);
     };
 
     class TeleporterList
@@ -28,6 +28,7 @@ namespace space
             TeleporterHandlerHandler onRemoveTeleporter;
 
             // Constructor
+            TeleporterList() : _marker(0) { }
 
             // Methods
             void addTeleporter(PlacedItemPair<Teleporter> teleporter);
@@ -42,7 +43,7 @@ namespace space
         private:
             // Fields
             std::vector<TeleporterListPair> _teleporters;
-            int _marker;
+            uint _marker;
 
             // Methods
             std::vector<TeleporterListPair>::iterator findTeleporter(const PlacedItemPair<Teleporter> &teleporter);

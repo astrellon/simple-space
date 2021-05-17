@@ -9,6 +9,7 @@
 #include "items/placeable_item.hpp"
 #include "items/teleporter.hpp"
 #include "items/placed_item.hpp"
+#include "teleporter_list.hpp"
 
 #include "../game_session.hpp"
 #include "../physics/polygon_collider.hpp"
@@ -204,15 +205,7 @@ namespace space
         return placedItem;
     }
 
-    std::vector<PlacedItemPair<Teleporter>> Area::findTeleporters() const
-    {
-        std::vector<PlacedItemPair<Teleporter>> result;
-        addTeleporters(result);
-
-        return result;
-    }
-
-    void Area::addTeleporters(std::vector<PlacedItemPair<Teleporter>> &result) const
+    void Area::addTeleporters(TeleporterList &result) const
     {
         for (auto obj : _objects)
         {
@@ -228,7 +221,7 @@ namespace space
             }
 
             auto teleporter = dynamic_cast<Teleporter *>(placedItem->item);
-            result.push_back(PlacedItemPair<Teleporter>(placedItem, teleporter));
+            result.addTeleporter(PlacedItemPair<Teleporter>(placedItem, teleporter));
         }
     }
 

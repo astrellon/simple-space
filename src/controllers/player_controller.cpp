@@ -22,7 +22,7 @@ namespace space
             return;
         }
 
-        _teleportersInRange.clear();
+        // _teleportersInRange.clear();
 
         if (_controlling == ControlShip)
         {
@@ -30,7 +30,9 @@ namespace space
 
             if (_ship)
             {
+                _teleportersInRange.updateMark();
                 checkForInTeleportRange(_ship->transform().position, *_ship->insideArea());
+                _teleportersInRange.removeOldMarked();
             }
         }
         else if (_controlling == ControlCharacter)
@@ -38,6 +40,8 @@ namespace space
             if (_character && _character->insideArea())
             {
                 updateAnimations(dt);
+
+                _teleportersInRange.updateMark();
 
                 auto insideArea = _character->insideArea();
                 checkForInteractables(_character->transform().position, *insideArea);
@@ -53,6 +57,8 @@ namespace space
                 {
                     checkForInTeleportRange(ship->transform().position, *ship->insideArea());
                 }
+
+                _teleportersInRange.removeOldMarked();
             }
             else
             {
