@@ -16,6 +16,10 @@ namespace space
     class RenderCamera;
     class UITextElement;
 
+    class GameUIInventoryWindow;
+    class GameUIInteractablesPanel;
+    class GameUITeleportersPanel;
+
     class GameUIManager : private NonCopyable
     {
         public:
@@ -65,6 +69,12 @@ namespace space
 
             const std::vector<std::unique_ptr<UIElement>> &allElements() const { return _allElements; }
 
+            void initDefaultWindows();
+
+            GameUIInteractablesPanel &interactablesPanel() { return *_interactablesPanel; }
+            GameUITeleportersPanel &teleportersPanel() { return *_teleportersPanel; }
+            GameUIInventoryWindow &inventoryWindow() { return *_inventoryWindow; }
+
         private:
             // Fields
             Engine &_engine;
@@ -77,6 +87,10 @@ namespace space
             NineSlice _defaultWindowBackPanel;
             NineSlice _defaultPanelBackPanel;
             NineSlice _defaultButton;
+
+            GameUIInteractablesPanel *_interactablesPanel;
+            GameUITeleportersPanel *_teleportersPanel;
+            GameUIInventoryWindow *_inventoryWindow;
 
             // Methods
     };

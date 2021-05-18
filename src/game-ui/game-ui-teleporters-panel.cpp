@@ -41,7 +41,7 @@ namespace space
 
     void GameUITeleportersPanel::draw(Engine &engine, RenderCamera &target)
     {
-        if (_teleporters->teleporters().size() == 0)
+        if (_teleporters == nullptr || _teleporters->teleporters().size() == 0)
         {
             return;
         }

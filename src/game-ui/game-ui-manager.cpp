@@ -3,15 +3,24 @@
 #include <stack>
 #include <vector>
 #include <algorithm>
+#include <SFML/Window.hpp>
 
 #include "ui-element.hpp"
 
 #include "../utils.hpp"
 #include "../engine.hpp"
+#include "../keyboard.hpp"
+#include "../game_session.hpp"
+#include "../controllers/player_controller.hpp"
+
+#include "./game-ui-interactables-panel.hpp"
+#include "./game-ui-teleporters-panel.hpp"
+#include "./game-ui-inventory-window.hpp"
 
 namespace space
 {
-    GameUIManager::GameUIManager(Engine &engine): _engine(engine), _defaultFont(nullptr)
+    GameUIManager::GameUIManager(Engine &engine): _engine(engine), _defaultFont(nullptr),
+        _interactablesPanel(nullptr), _inventoryWindow(nullptr), _teleportersPanel(nullptr)
     {
         _bodyElement = createElement<UIRootElement>();
     }
@@ -96,6 +105,19 @@ namespace space
 
     void GameUIManager::update(sf::Time dt)
     {
+        if (Keyboard::isKeyPressed(sf::Keyboard::I))
+        {
+            if (_engine.currentSession())
+            {
+                auto &inv = _engine.currentSession()->playerController().inventory();
+                _inventoryWindow->inventory(&inv);
+            }
+            else
+            {
+                _inventoryWindow->inventory(nullptr);
+            }
+        }
+
         auto renderSize = _engine.renderSize();
         auto bodyNode = _bodyElement->yogaNode();
         YGNodeCalculateLayout(bodyNode, renderSize.x, renderSize.y, YGDirectionLTR);
@@ -114,5 +136,17 @@ namespace space
         target.texture().setView(view);
 
         _bodyElement->draw(_engine, target);
+    }
+
+    void GameUIManager::initDefaultWindows()
+    {
+        _inventoryWindow = createElement<GameUIInventoryWindow>();
+        body()->addChild(_inventoryWindow);
+
+        _interactablesPanel = createElement<GameUIInteractablesPanel>();
+        body()->addChild(_interactablesPanel);
+
+        _teleportersPanel = createElement<GameUITeleportersPanel>();
+        body()->addChild(_teleportersPanel);
     }
 } // space

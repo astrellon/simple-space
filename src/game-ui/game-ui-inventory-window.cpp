@@ -23,6 +23,16 @@ namespace space
         header()->text("Inventory");
     }
 
+    void GameUIInventoryWindow::draw(Engine &engine, RenderCamera &target)
+    {
+        if (_inventory == nullptr)
+        {
+            return;
+        }
+
+        UIElement::draw(engine, target);
+    }
+
     void GameUIInventoryWindow::inventory(Inventory *inventory)
     {
         _removeOnAddItem.reset();

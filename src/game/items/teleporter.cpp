@@ -10,6 +10,8 @@
 #include "../../engine.hpp"
 #include "../../ui/ui_manager.hpp"
 #include "../../ui/ui_teleporter.hpp"
+#include "../../game-ui/game-ui-manager.hpp"
+#include "../../game-ui/game-ui-teleporters-panel.hpp"
 
 namespace space
 {
@@ -21,8 +23,7 @@ namespace space
             return;
         }
 
-        auto &teleporter = session.engine().uiManager().uiTeleporter();
-        teleporter.controller(&session.playerController());
+        session.engine().gameUIManager().teleportersPanel().teleporters(&session.playerController().teleportersInRange());
     }
 
     void Teleporter::onPlaced(PlacedItem &placedItem)
@@ -42,6 +43,6 @@ namespace space
     {
         PlaceableItem::onPlayerLeaves(session);
 
-        session.engine().uiManager().uiTeleporter().controller(nullptr);
+        session.engine().gameUIManager().teleportersPanel().teleporters(nullptr);
     }
 } // namespace space

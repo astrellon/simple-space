@@ -19,6 +19,7 @@ namespace space
 
             // Methods
             virtual void init(GameUIManager &uiManager);
+            virtual void draw(Engine &engine, RenderCamera &target);
 
             void inventory(Inventory *inventory);
             Inventory *inventory() const { return _inventory; }

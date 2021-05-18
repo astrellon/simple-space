@@ -153,17 +153,7 @@ int main()
     gameUIManager.defaultPanelBackPanel(space::NineSlice(resourceManager.texture("data/textures/testPanel4.png"), 8, 8, 8, 8));
     gameUIManager.defaultButton(space::NineSlice(resourceManager.texture("data/textures/testButton.png"), 8, 8, 8, 8));
 
-    auto inventoryWindow = gameUIManager.createElement<space::GameUIInventoryWindow>();
-    engine.gameUIManager().body()->addChild(inventoryWindow);
-    inventoryWindow->inventory(&gameSession->playerController().inventory());
-
-    auto interactablePanel = gameUIManager.createElement<space::GameUIInteractablesPanel>();
-    engine.gameUIManager().body()->addChild(interactablePanel);
-    interactablePanel->interactables(&gameSession->playerController().canInteractWithInRange());
-
-    auto teleporterPanel = gameUIManager.createElement<space::GameUITeleportersPanel>();
-    engine.gameUIManager().body()->addChild(teleporterPanel);
-    teleporterPanel->teleporters(&gameSession->playerController().teleportersInRange());
+    gameUIManager.initDefaultWindows();
 
     // auto particles = gameSession->createObject<space::ParticlesSimple>("PARTICLES_1", 10000);
     // particles->transform().position = sf::Vector2f(-150.0f, 0);

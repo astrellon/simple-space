@@ -9,6 +9,8 @@
 #include "../game/interactions/interactable.hpp"
 #include "../game/interactions/interactable_list.hpp"
 #include "../engine.hpp"
+#include "../game_session.hpp"
+#include "../controllers/player_controller.hpp"
 
 namespace space
 {
@@ -41,7 +43,7 @@ namespace space
 
     void GameUIInteractablesPanel::draw(Engine &engine, RenderCamera &target)
     {
-        if (_interactables->interactables().size() == 0)
+        if (_interactables == nullptr || _interactables->interactables().size() == 0)
         {
             return;
         }
@@ -51,6 +53,16 @@ namespace space
 
     void GameUIInteractablesPanel::update(Engine &engine, sf::Time dt, sf::Vector2f parentOffset)
     {
+            if (engine.currentSession())
+            {
+                auto &player = engine.currentSession()->playerController();
+                _interactables = &player.canInteractWithInRange();
+            }
+            else
+            {
+                _interactables = nullptr;
+            }
+
         auto screenSize = engine.renderSize();
         margin(screenSize.y / 2 - 32, 0, 0, screenSize.x / 2 + 32);
 

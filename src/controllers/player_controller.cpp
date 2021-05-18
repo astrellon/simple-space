@@ -22,18 +22,10 @@ namespace space
             return;
         }
 
-        // _teleportersInRange.clear();
-
         if (_controlling == ControlShip)
         {
             controlShip(dt);
-
-            if (_ship)
-            {
-                _teleportersInRange.updateMark();
-                checkForInTeleportRange(_ship->transform().position, *_ship->insideArea());
-                _teleportersInRange.removeOldMarked();
-            }
+            _teleportersInRange.clear();
         }
         else if (_controlling == ControlCharacter)
         {
