@@ -53,23 +53,6 @@ namespace space
 
     void GameUIInteractablesPanel::update(Engine &engine, sf::Time dt, sf::Vector2f parentOffset)
     {
-        if (engine.currentSession())
-        {
-            auto &player = engine.currentSession()->playerController();
-            if (player.controlling() == ControllingValue::ControlCharacter)
-            {
-                interactables(&player.canInteractWithInRange());
-            }
-            else
-            {
-                interactables(nullptr);
-            }
-        }
-        else
-        {
-            interactables(nullptr);
-        }
-
         auto screenSize = engine.renderSize();
         margin(screenSize.y / 2 - 32, 0, 0, screenSize.x / 2 + 32);
 

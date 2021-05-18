@@ -45,6 +45,7 @@ namespace space
 
             void processEvent(const sf::Event &event);
 
+            void preUpdate(sf::Time dt);
             void update(sf::Time dt);
             void draw(RenderCamera &target);
 

@@ -277,6 +277,7 @@ namespace space
         Mouse::prevMousePosition(sf::Mouse::getPosition());
         Mouse::update(*this, _deltaTime);
 
+        gameUIManager().preUpdate(_deltaTime);
         gameUIManager().update(_deltaTime);
     }
 

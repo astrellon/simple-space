@@ -103,6 +103,26 @@ namespace space
         }
     }
 
+    void GameUIManager::preUpdate(sf::Time dt)
+    {
+        auto session = _engine.currentSession();
+        if (session)
+        {
+            if (session->playerController().controlling() == ControllingValue::ControlCharacter)
+            {
+                _interactablesPanel->interactables(&session->playerController().canInteractWithInRange());
+            }
+            else
+            {
+                _interactablesPanel->interactables(nullptr);
+            }
+        }
+        else
+        {
+            _interactablesPanel->interactables(nullptr);
+        }
+    }
+
     void GameUIManager::update(sf::Time dt)
     {
         if (Keyboard::isKeyUp(sf::Keyboard::I))

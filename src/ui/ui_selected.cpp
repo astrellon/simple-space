@@ -19,12 +19,13 @@ namespace space
 
     bool UISelected::isOpen(Engine &engine)
     {
-        if (!engine.currentSession())
-        {
-            return false;
-        }
+        return false;
+        // if (!engine.currentSession())
+        // {
+        //     return false;
+        // }
 
-        return show && engine.currentSession()->playerController().selectedObject().size() > 0;
+        // return show && engine.currentSession()->playerController().selectedObject().size() > 0;
     }
 
     void UISelected::checkPosition(Engine &engine)
