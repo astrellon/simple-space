@@ -23,13 +23,14 @@ namespace space
 
     bool UIInteractables::isOpen(Engine &engine)
     {
-        if (!engine.currentSession())
-        {
-            return false;
-        }
+        // if (!engine.currentSession())
+        // {
+        //     return false;
+        // }
 
-        auto &player = engine.currentSession()->playerController();
-        return show && player.controlling() != ControlShip && !engine.currentSession()->dialogueManager().isInDialogue();
+        // auto &player = engine.currentSession()->playerController();
+        // return show && player.controlling() != ControlShip && !engine.currentSession()->dialogueManager().isInDialogue();
+        return false;
     }
 
     void UIInteractables::checkPosition(Engine &engine)

@@ -105,9 +105,9 @@ namespace space
 
     void GameUIManager::update(sf::Time dt)
     {
-        if (Keyboard::isKeyPressed(sf::Keyboard::I))
+        if (Keyboard::isKeyUp(sf::Keyboard::I))
         {
-            if (_engine.currentSession())
+            if (_engine.currentSession() && _inventoryWindow->inventory() == nullptr)
             {
                 auto &inv = _engine.currentSession()->playerController().inventory();
                 _inventoryWindow->inventory(&inv);

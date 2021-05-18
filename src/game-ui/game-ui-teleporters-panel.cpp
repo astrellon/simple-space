@@ -59,6 +59,18 @@ namespace space
 
     void GameUITeleportersPanel::teleporters(const TeleporterList *teleporters)
     {
+        if (teleporters == _teleporters)
+        {
+            return;
+        }
+
+        for (auto teleportUI : _teleporterUIs)
+        {
+            _bodyContainer->removeChild(teleportUI);
+            _uiManager->removeElement(teleportUI);
+        }
+        _teleporterUIs.clear();
+
         _removeOnAddTeleporter.reset();
         _removeOnRemoveTeleporter.reset();
 
@@ -71,12 +83,12 @@ namespace space
                 addTeleporter(teleporter.teleporter);
             }
 
-            teleporters->onAddTeleporter.connect([this](PlacedItemPair<Teleporter> teleporter)
+            _removeOnAddTeleporter = teleporters->onAddTeleporter.createObserver([this](PlacedItemPair<Teleporter> teleporter)
             {
                 std::cout << "Added teleporter" << std::endl;
                 this->addTeleporter(teleporter);
             });
-            teleporters->onRemoveTeleporter.connect([this](PlacedItemPair<Teleporter> teleporter)
+            _removeOnRemoveTeleporter = teleporters->onRemoveTeleporter.createObserver([this](PlacedItemPair<Teleporter> teleporter)
             {
                 std::cout << "Removed teleporter" << std::endl;
                 this->removeTeleporter(teleporter);

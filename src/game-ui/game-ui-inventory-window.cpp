@@ -35,6 +35,18 @@ namespace space
 
     void GameUIInventoryWindow::inventory(Inventory *inventory)
     {
+        if (inventory == _inventory)
+        {
+            return;
+        }
+
+        for (auto itemUI : _itemUIs)
+        {
+            bodyContainer()->removeChild(itemUI);
+            _uiManager->removeElement(itemUI);
+        }
+        _itemUIs.clear();
+
         _removeOnAddItem.reset();
         _removeOnRemoveItem.reset();
 
@@ -47,12 +59,12 @@ namespace space
                 addItem(item);
             }
 
-            inventory->onAddItem.connect([this](Item *item)
+            _removeOnAddItem = inventory->onAddItem.createObserver([this](Item *item)
             {
                 std::cout << "Added item" << std::endl;
                 this->addItem(item);
             });
-            inventory->onRemoveItem.connect([this](Item *item)
+            _removeOnRemoveItem = inventory->onRemoveItem.createObserver([this](Item *item)
             {
                 std::cout << "Removed item" << std::endl;
                 this->removeItem(item);

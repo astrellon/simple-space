@@ -53,15 +53,22 @@ namespace space
 
     void GameUIInteractablesPanel::update(Engine &engine, sf::Time dt, sf::Vector2f parentOffset)
     {
-            if (engine.currentSession())
+        if (engine.currentSession())
+        {
+            auto &player = engine.currentSession()->playerController();
+            if (player.controlling() == ControllingValue::ControlCharacter)
             {
-                auto &player = engine.currentSession()->playerController();
-                _interactables = &player.canInteractWithInRange();
+                interactables(&player.canInteractWithInRange());
             }
             else
             {
-                _interactables = nullptr;
+                interactables(nullptr);
             }
+        }
+        else
+        {
+            interactables(nullptr);
+        }
 
         auto screenSize = engine.renderSize();
         margin(screenSize.y / 2 - 32, 0, 0, screenSize.x / 2 + 32);
@@ -71,6 +78,18 @@ namespace space
 
     void GameUIInteractablesPanel::interactables(const InteractableList *interactables)
     {
+        if (interactables == _interactables)
+        {
+            return;
+        }
+
+        for (auto interactableUI : _interactableUIs)
+        {
+            _bodyContainer->removeChild(interactableUI);
+            _uiManager->removeElement(interactableUI);
+        }
+        _interactableUIs.clear();
+
         _removeOnAddInteractable.reset();
         _removeOnRemoveInteractable.reset();
 
@@ -83,12 +102,12 @@ namespace space
                 addInteractable(interactable);
             }
 
-            interactables->onAddInteractable.connect([this](Interactable *interactable)
+            _removeOnAddInteractable = interactables->onAddInteractable.createObserver([this](Interactable *interactable)
             {
                 std::cout << "Added interactable" << std::endl;
                 this->addInteractable(interactable);
             });
-            interactables->onRemoveInteractable.connect([this](Interactable *interactable)
+            _removeOnRemoveInteractable = interactables->onRemoveInteractable.createObserver([this](Interactable *interactable)
             {
                 std::cout << "Removed interactable" << std::endl;
                 this->removeInteractable(interactable);

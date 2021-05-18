@@ -46,7 +46,6 @@
 #include "src/game-ui/ui-text-element.hpp"
 #include "src/game-ui/ui-nine-slice-image-element.hpp"
 #include "src/game-ui/game-ui-inventory-window.hpp"
-#include "src/game-ui/game-ui-interactables-window.hpp"
 #include "src/game-ui/game-ui-interactables-panel.hpp"
 #include "src/game-ui/game-ui-teleporters-panel.hpp"
 #include "src/mouse.hpp"
