@@ -41,13 +41,7 @@
 #include "src/debug/draw_debug.hpp"
 #include "src/controllers/npc_controller.hpp"
 #include "src/ui/ui_manager.hpp"
-#include "src/game-ui/game-ui-manager.hpp"
-#include "src/game-ui/ui-element.hpp"
-#include "src/game-ui/ui-text-element.hpp"
-#include "src/game-ui/ui-nine-slice-image-element.hpp"
-#include "src/game-ui/game-ui-inventory-window.hpp"
-#include "src/game-ui/game-ui-interactables-panel.hpp"
-#include "src/game-ui/game-ui-teleporters-panel.hpp"
+#include "src/game-ui/game_ui_manager.hpp"
 #include "src/mouse.hpp"
 #define TRACK_MEMORY 1
 

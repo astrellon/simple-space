@@ -1,8 +1,8 @@
-#include "game-ui-window.hpp"
+#include "game_ui_window.hpp"
 
-#include "game-ui-manager.hpp"
-#include "ui-nine-slice-image-element.hpp"
-#include "ui-text-element.hpp"
+#include "game_ui_manager.hpp"
+#include "ui_nine_slice_image_element.hpp"
+#include "ui_text_element.hpp"
 
 namespace space
 {

@@ -5,9 +5,9 @@
 #include <yoga/Yoga.h>
 
 #include "../engine.hpp"
-#include "../game-ui/game-ui-manager.hpp"
-#include "../game-ui/ui-element.hpp"
-#include "../game-ui/ui-text-element.hpp"
+#include "../game-ui/game_ui_manager.hpp"
+#include "../game-ui/ui_element.hpp"
+#include "../game-ui/ui_text_element.hpp"
 #include "../utils.hpp"
 #include "../debug/draw_debug.hpp"
 

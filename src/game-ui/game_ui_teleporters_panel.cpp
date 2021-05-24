@@ -1,10 +1,10 @@
-#include "game-ui-teleporters-panel.hpp"
+#include "game_ui_teleporters_panel.hpp"
 
-#include "./game-ui-manager.hpp"
-#include "./ui-text-element.hpp"
-#include "./ui-button.hpp"
-#include "./game-ui-teleporter.hpp"
-#include "./ui-panel.hpp"
+#include "./game_ui_manager.hpp"
+#include "./ui_text_element.hpp"
+#include "./ui_button.hpp"
+#include "./game_ui_teleporter.hpp"
+#include "./ui_panel.hpp"
 
 #include "../game/items/teleporter.hpp"
 #include "../game/teleporter_list.hpp"

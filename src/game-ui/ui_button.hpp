@@ -3,7 +3,7 @@
 #include <string>
 #include <SFML/Graphics.hpp>
 
-#include "ui-element.hpp"
+#include "ui_element.hpp"
 
 namespace space
 {

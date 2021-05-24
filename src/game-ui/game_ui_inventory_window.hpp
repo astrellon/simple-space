@@ -1,6 +1,6 @@
 #pragma once
 
-#include "./game-ui-window.hpp"
+#include "./game_ui_window.hpp"
 #include <observe/observer.h>
 
 namespace space

@@ -7,7 +7,7 @@
 #include <yoga/Yoga.h>
 
 #include "../non_copyable.hpp"
-#include "ui-element.hpp"
+#include "ui_element.hpp"
 #include "../nine_slice.hpp"
 
 namespace space

@@ -19,7 +19,7 @@
 #include "game/items/placeable_item.hpp"
 #include "game/ship.hpp"
 
-#include "game-ui/game-ui-manager.hpp"
+#include "game-ui/game_ui_manager.hpp"
 
 #include "effects/overlay.hpp"
 #include "effects/bloom_effect.hpp"

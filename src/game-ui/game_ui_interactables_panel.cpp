@@ -1,10 +1,10 @@
-#include "game-ui-interactables-panel.hpp"
+#include "game_ui_interactables_panel.hpp"
 
-#include "./game-ui-manager.hpp"
-#include "./ui-text-element.hpp"
-#include "./ui-button.hpp"
-#include "./game-ui-interactable.hpp"
-#include "./ui-panel.hpp"
+#include "./game_ui_manager.hpp"
+#include "./ui_text_element.hpp"
+#include "./ui_button.hpp"
+#include "./game_ui_interactable.hpp"
+#include "./ui_panel.hpp"
 
 #include "../game/interactions/interactable.hpp"
 #include "../game/interactions/interactable_list.hpp"

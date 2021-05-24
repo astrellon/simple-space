@@ -2,7 +2,7 @@
 
 #include <observe/observer.h>
 
-#include "./game-ui-window.hpp"
+#include "./game_ui_window.hpp"
 #include "../game/items/placed_item.hpp"
 
 namespace space

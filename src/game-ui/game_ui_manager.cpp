@@ -1,11 +1,11 @@
-#include "game-ui-manager.hpp"
+#include "game_ui_manager.hpp"
 
 #include <stack>
 #include <vector>
 #include <algorithm>
 #include <SFML/Window.hpp>
 
-#include "ui-element.hpp"
+#include "ui_element.hpp"
 
 #include "../utils.hpp"
 #include "../engine.hpp"
@@ -13,10 +13,10 @@
 #include "../game_session.hpp"
 #include "../controllers/player_controller.hpp"
 
-#include "./game-ui-interactables-panel.hpp"
-#include "./game-ui-teleporters-panel.hpp"
-#include "./game-ui-inventory-window.hpp"
-#include "./game-ui-dialogue.hpp"
+#include "./game_ui_interactables_panel.hpp"
+#include "./game_ui_teleporters_panel.hpp"
+#include "./game_ui_inventory_window.hpp"
+#include "./game_ui_dialogue.hpp"
 
 namespace space
 {

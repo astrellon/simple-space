@@ -9,8 +9,8 @@
 #include "../../game_session.hpp"
 #include "../../engine.hpp"
 #include "../../ui/ui_manager.hpp"
-#include "../../game-ui/game-ui-manager.hpp"
-#include "../../game-ui/game-ui-teleporters-panel.hpp"
+#include "../../game-ui/game_ui_manager.hpp"
+#include "../../game-ui/game_ui_teleporters_panel.hpp"
 
 namespace space
 {

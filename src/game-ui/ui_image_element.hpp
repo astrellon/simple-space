@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ui-element.hpp"
+#include "ui_element.hpp"
 #include "../animated_sprite.hpp"
 
 namespace space

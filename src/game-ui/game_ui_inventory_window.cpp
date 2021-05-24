@@ -1,9 +1,9 @@
-#include "game-ui-inventory-window.hpp"
+#include "game_ui_inventory_window.hpp"
 
-#include "./game-ui-manager.hpp"
-#include "./ui-text-element.hpp"
-#include "./ui-button.hpp"
-#include "./game-ui-inventory-item.hpp"
+#include "./game_ui_manager.hpp"
+#include "./ui_text_element.hpp"
+#include "./ui_button.hpp"
+#include "./game_ui_inventory_item.hpp"
 
 #include "../game/items/item.hpp"
 #include "../game/inventory.hpp"
