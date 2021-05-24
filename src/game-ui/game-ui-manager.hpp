@@ -19,6 +19,7 @@ namespace space
     class GameUIInventoryWindow;
     class GameUIInteractablesPanel;
     class GameUITeleportersPanel;
+    class GameUIDialogue;
 
     class GameUIManager : private NonCopyable
     {
@@ -75,6 +76,7 @@ namespace space
             GameUIInteractablesPanel &interactablesPanel() { return *_interactablesPanel; }
             GameUITeleportersPanel &teleportersPanel() { return *_teleportersPanel; }
             GameUIInventoryWindow &inventoryWindow() { return *_inventoryWindow; }
+            GameUIDialogue &dialogue() { return *_dialogue; }
 
         private:
             // Fields
@@ -92,6 +94,7 @@ namespace space
             GameUIInteractablesPanel *_interactablesPanel;
             GameUITeleportersPanel *_teleportersPanel;
             GameUIInventoryWindow *_inventoryWindow;
+            GameUIDialogue *_dialogue;
 
             // Methods
     };

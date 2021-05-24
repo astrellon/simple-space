@@ -10,7 +10,7 @@ namespace space
     class Teleporter;
     class TeleporterList;
     class GameUITeleporter;
-    class UINineSliceImageElement;
+    class UIPanel;
 
     class GameUITeleportersPanel : public UIElement
     {
@@ -36,9 +36,7 @@ namespace space
             observe::Observer _removeOnAddTeleporter;
             observe::Observer _removeOnRemoveTeleporter;
             GameUIManager *_uiManager;
-
-            UINineSliceImageElement *_backPanel;
-            UIElement *_bodyContainer;
+            UIPanel *_panel;
 
             std::vector<GameUITeleporter *> _teleporterUIs;
 

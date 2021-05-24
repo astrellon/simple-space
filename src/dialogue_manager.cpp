@@ -31,10 +31,14 @@ namespace space
         {
             _inDialogue = false;
             _currentLine = "";
+
+            onNextDialogue.emit();
             return false;
         }
 
         _currentLine = _current->text[_nextPage++];
+
+        onNextDialogue.emit();
         return true;
     }
 } // namespace space

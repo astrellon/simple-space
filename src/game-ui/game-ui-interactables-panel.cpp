@@ -4,7 +4,7 @@
 #include "./ui-text-element.hpp"
 #include "./ui-button.hpp"
 #include "./game-ui-interactable.hpp"
-#include "./ui-nine-slice-image-element.hpp"
+#include "./ui-panel.hpp"
 
 #include "../game/interactions/interactable.hpp"
 #include "../game/interactions/interactable_list.hpp"
@@ -19,21 +19,8 @@ namespace space
         UIElement::init(uiManager);
         _uiManager = &uiManager;
 
-        _backPanel = uiManager.createElement<UINineSliceImageElement>();
-        _bodyContainer = uiManager.createElement<UIElement>();
-
-        _backPanel->nineSlice(uiManager.defaultPanelBackPanel());
-        _backPanel->positionType(YGPositionTypeAbsolute);
-        _backPanel->widthPercent(100);
-        _backPanel->heightPercent(100);
-        addChild(_backPanel);
-
-        _bodyContainer->widthPercent(100);
-        _bodyContainer->heightPercent(100);
-        _bodyContainer->flexGrow(1.0f);
-        _bodyContainer->flexShrink(1.0f);
-        _bodyContainer->padding(8, 8, 8, 8);
-        addChild(_bodyContainer);
+        _panel = uiManager.createElement<UIPanel>();
+        addChild(_panel);
 
         width(200);
         heightAuto();
@@ -68,7 +55,7 @@ namespace space
 
         for (auto interactableUI : _interactableUIs)
         {
-            _bodyContainer->removeChild(interactableUI);
+            _panel->bodyContainer()->removeChild(interactableUI);
             _uiManager->removeElement(interactableUI);
         }
         _interactableUIs.clear();
@@ -103,7 +90,7 @@ namespace space
         auto interactableUI = _uiManager->createElement<GameUIInteractable>();
         interactableUI->interactable(interactable);
 
-        _bodyContainer->addChild(interactableUI);
+        _panel->bodyContainer()->addChild(interactableUI);
         _interactableUIs.push_back(interactableUI);
     }
 
@@ -115,7 +102,7 @@ namespace space
             if (interactableUI->interactable() == interactable)
             {
                 _interactableUIs.erase(iter);
-                _bodyContainer->removeChild(interactableUI);
+                _panel->bodyContainer()->removeChild(interactableUI);
                 _uiManager->removeElement(interactableUI);
                 break;
             }

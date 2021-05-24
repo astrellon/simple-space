@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <observe/event.h>
 
 namespace space
 {
@@ -9,7 +10,10 @@ namespace space
     class DialogueManager
     {
         public:
+            typedef observe::Event<> NextDialogueHandler;
+
             // Fields
+            NextDialogueHandler onNextDialogue;
 
             // Constructor
             DialogueManager();

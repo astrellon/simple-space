@@ -16,11 +16,13 @@
 #include "./game-ui-interactables-panel.hpp"
 #include "./game-ui-teleporters-panel.hpp"
 #include "./game-ui-inventory-window.hpp"
+#include "./game-ui-dialogue.hpp"
 
 namespace space
 {
     GameUIManager::GameUIManager(Engine &engine): _engine(engine), _defaultFont(nullptr),
-        _interactablesPanel(nullptr), _inventoryWindow(nullptr), _teleportersPanel(nullptr)
+        _interactablesPanel(nullptr), _inventoryWindow(nullptr), _teleportersPanel(nullptr),
+        _dialogue(nullptr)
     {
         _bodyElement = createElement<UIRootElement>();
     }
@@ -168,5 +170,8 @@ namespace space
 
         _teleportersPanel = createElement<GameUITeleportersPanel>();
         body()->addChild(_teleportersPanel);
+
+        _dialogue = createElement<GameUIDialogue>();
+        body()->addChild(_dialogue);
     }
 } // space

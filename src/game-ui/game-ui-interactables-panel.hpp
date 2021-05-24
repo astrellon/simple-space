@@ -8,7 +8,7 @@ namespace space
     class Interactable;
     class InteractableList;
     class GameUIInteractable;
-    class UINineSliceImageElement;
+    class UIPanel;
 
     class GameUIInteractablesPanel : public UIElement
     {
@@ -35,8 +35,7 @@ namespace space
             observe::Observer _removeOnRemoveInteractable;
             GameUIManager *_uiManager;
 
-            UINineSliceImageElement *_backPanel;
-            UIElement *_bodyContainer;
+            UIPanel *_panel;
 
             std::vector<GameUIInteractable *> _interactableUIs;
 

@@ -180,6 +180,16 @@ namespace space
             void maxHeightPercent(float maxHeight) { YGNodeStyleSetMaxHeightPercent(_yogaNode, maxHeight); }
             YGValue maxHeight() const { return YGNodeStyleGetMaxHeight(_yogaNode); }
 
+            // Min Width
+            void minWidth(float minWidth) { YGNodeStyleSetMinWidth(_yogaNode, minWidth); }
+            void minWidthPercent(float minWidth) { YGNodeStyleSetMinWidthPercent(_yogaNode, minWidth); }
+            YGValue minWidth() const { return YGNodeStyleGetMinWidth(_yogaNode); }
+
+            // Min Height
+            void minHeight(float minHeight) { YGNodeStyleSetMinHeight(_yogaNode, minHeight); }
+            void minHeightPercent(float minHeight) { YGNodeStyleSetMinHeightPercent(_yogaNode, minHeight); }
+            YGValue minHeight() const { return YGNodeStyleGetMinHeight(_yogaNode); }
+
             // Aspect Ratio
             void aspectRatio(float aspectRatio) { YGNodeStyleSetAspectRatio(_yogaNode, aspectRatio); }
             float aspectRatio() const { return YGNodeStyleGetAspectRatio(_yogaNode); }

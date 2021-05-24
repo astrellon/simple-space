@@ -9,10 +9,6 @@ namespace space
 {
     class Engine;
 
-    class UIInteractables;
-    class UIInventory;
-    class UITeleporter;
-    class UIDialogue;
     class UIDebug;
     class UIDefinitions;
     class UISelected;
@@ -48,10 +44,6 @@ namespace space
 
             WindowList &windows() { return _uiWindows; }
 
-            UIInteractables &uiInteractables() { return *_uiInteractables; }
-            UIInventory &uiInventory() { return *_uiInventory; }
-            UITeleporter &uiTeleporter() { return *_uiTeleporter; }
-            UIDialogue &uiDialogue() { return *_uiDialogue; }
             UIDebug &uiDebug() { return *_uiDebug; }
             UIDefinitions &uiDefinitions() { return *_uiDefinitions; }
             UISelected &uiSelected() { return *_uiSelected; }
@@ -65,10 +57,6 @@ namespace space
             // Fields
             WindowList _uiWindows;
 
-            UIInteractables *_uiInteractables;
-            UIInventory *_uiInventory;
-            UITeleporter *_uiTeleporter;
-            UIDialogue *_uiDialogue;
             UIDebug *_uiDebug;
             UIDefinitions *_uiDefinitions;
             UISelected *_uiSelected;

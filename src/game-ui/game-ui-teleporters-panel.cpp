@@ -4,7 +4,7 @@
 #include "./ui-text-element.hpp"
 #include "./ui-button.hpp"
 #include "./game-ui-teleporter.hpp"
-#include "./ui-nine-slice-image-element.hpp"
+#include "./ui-panel.hpp"
 
 #include "../game/items/teleporter.hpp"
 #include "../game/teleporter_list.hpp"
@@ -17,21 +17,8 @@ namespace space
         UIElement::init(uiManager);
         _uiManager = &uiManager;
 
-        _backPanel = uiManager.createElement<UINineSliceImageElement>();
-        _bodyContainer = uiManager.createElement<UIElement>();
-
-        _backPanel->nineSlice(uiManager.defaultPanelBackPanel());
-        _backPanel->positionType(YGPositionTypeAbsolute);
-        _backPanel->widthPercent(100);
-        _backPanel->heightPercent(100);
-        addChild(_backPanel);
-
-        _bodyContainer->widthPercent(100);
-        _bodyContainer->heightPercent(100);
-        _bodyContainer->flexGrow(1.0f);
-        _bodyContainer->flexShrink(1.0f);
-        _bodyContainer->padding(8, 8, 8, 8);
-        addChild(_bodyContainer);
+        _panel = uiManager.createElement<UIPanel>();
+        addChild(_panel);
 
         width(200);
         heightAuto();
@@ -66,7 +53,7 @@ namespace space
 
         for (auto teleportUI : _teleporterUIs)
         {
-            _bodyContainer->removeChild(teleportUI);
+            _panel->bodyContainer()->removeChild(teleportUI);
             _uiManager->removeElement(teleportUI);
         }
         _teleporterUIs.clear();
@@ -101,7 +88,7 @@ namespace space
         auto teleporterUI = _uiManager->createElement<GameUITeleporter>();
         teleporterUI->teleporter(teleporter);
 
-        _bodyContainer->addChild(teleporterUI);
+        _panel->bodyContainer()->addChild(teleporterUI);
         _teleporterUIs.push_back(teleporterUI);
     }
 
@@ -113,7 +100,7 @@ namespace space
             if (teleporterUI->teleporter().item == teleporter.item)
             {
                 _teleporterUIs.erase(iter);
-                _bodyContainer->removeChild(teleporterUI);
+                _panel->bodyContainer()->removeChild(teleporterUI);
                 _uiManager->removeElement(teleporterUI);
                 break;
             }

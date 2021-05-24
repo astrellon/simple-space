@@ -9,7 +9,6 @@
 #include "../../game_session.hpp"
 #include "../../engine.hpp"
 #include "../../ui/ui_manager.hpp"
-#include "../../ui/ui_teleporter.hpp"
 #include "../../game-ui/game-ui-manager.hpp"
 #include "../../game-ui/game-ui-teleporters-panel.hpp"
 
