@@ -19,7 +19,7 @@ using kainjow::mustache::mustache;
 
 namespace space
 {
-    GameUIDialogue::GameUIDialogue() : _textDisplayIndex(0), _contentText(nullptr), _nameText(nullptr), _uiManager(nullptr)
+    GameUIDialogue::GameUIDialogue() : _textDisplayIndex(0), _contentText(nullptr), _nameText(nullptr), _uiManager(nullptr), _dialogueBlipCooldown(0.0f), _dialogueBlip(std::make_unique<sf::Sound>())
     {
 
     }
@@ -97,6 +97,7 @@ namespace space
 
         UIElement::update(engine, dt, parentOffset);
 
+        _dialogueBlipCooldown -= dt.asSeconds();
         if (_textDisplayIndex < _text.size())
         {
             _textDisplay[_textDisplayIndex] = _text[_textDisplayIndex];
@@ -105,23 +106,22 @@ namespace space
 
             _contentText->text(_textDisplay.data());
 
-            auto dialogueAudio = manager.dialogueAudio();
-            if (dialogueAudio)
+            if (_dialogueBlipCooldown < 0.0f)
             {
-                auto blip = dialogueAudio->randomSoundBuffer();
-                if (blip)
+                auto dialogueAudio = manager.dialogueAudio();
+                if (dialogueAudio)
                 {
-                    sf::Sound *talkBlip = new sf::Sound(*blip);
-                    talkBlip->play();
+                    auto blip = dialogueAudio->randomSoundBuffer();
+                    if (blip)
+                    {
+                        _dialogueBlip->stop();
+                        _dialogueBlip->setBuffer(*blip);
+                        _dialogueBlip->play();
+
+                        _dialogueBlipCooldown = blip->getDuration().asSeconds();
+                    }
                 }
             }
-            // const sf::SoundBuffer *talkBlipBuffer;
-            // if (engine.resourceManager().getRandomSound("data/sounds/electronicTalking", &talkBlipBuffer))
-            // {
-            //     // std::cout << "Playing blip sound\n";
-            //     sf::Sound *talkBlip = new sf::Sound(*talkBlipBuffer);
-            //     talkBlip->play();
-            // }
         }
     }
 

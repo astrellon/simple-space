@@ -2,6 +2,9 @@
 
 #include <string>
 #include <vector>
+#include <memory>
+
+#include <SFML/Audio.hpp>
 
 #include "./ui_element.hpp"
 #include <observe/observer.h>
@@ -42,6 +45,9 @@ namespace space
             UITextElement *_nameText;
             UIButton *_nextButton;
             UIPanel *_panel;
+            std::unique_ptr<sf::Sound> _dialogueBlip;
+
+            float _dialogueBlipCooldown;
 
             observe::Observer _removeDialogueHandler;
 

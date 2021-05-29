@@ -3,11 +3,22 @@
         "type": "dialogue-audio",
         "id": "ELECTRONIC_TALKING",
         "sounds": [
-            "data/sounds/electronicTalking/blip1.wav",
-            "data/sounds/electronicTalking/blip2.wav",
-            "data/sounds/electronicTalking/blip3.wav",
-            "data/sounds/electronicTalking/blip4.wav",
-            "data/sounds/electronicTalking/blip5.wav"
+            { "filepath": "data/sounds/electronicTalking/blip1.wav" },
+            { "filepath": "data/sounds/electronicTalking/blip2.wav" },
+            { "filepath": "data/sounds/electronicTalking/blip3.wav" },
+            { "filepath": "data/sounds/electronicTalking/blip4.wav" },
+            { "filepath": "data/sounds/electronicTalking/blip5.wav" }
+        ]
+    },
+    {
+        "type": "dialogue-audio",
+        "id": "DOG_BARKING_1",
+        "sounds": [
+            { "filepath": "data/sounds/dogBark1/bark1.wav" },
+            { "filepath": "data/sounds/dogBark1/bark2.wav" },
+            { "filepath": "data/sounds/dogBark1/bark3.wav" },
+            { "filepath": "data/sounds/dogBark1/bark4.wav" },
+            { "filepath": "data/sounds/dogBark1/bark5.wav" }
         ]
     }
 ]

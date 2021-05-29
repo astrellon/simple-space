@@ -96,6 +96,6 @@
         "speed": 50,
         "name": "Tumbo",
         "animatedTextureId": "DOG_SPRITE",
-        "dialogueAudioId": "ELECTRONIC_TALKING"
+        "dialogueAudioId": "DOG_BARKING_1"
     }
 ]

@@ -128,6 +128,9 @@ namespace space
         if (type == CompendiumDefinition::DefinitionType())
             return fromJsonCompendiumDefinition(j);
 
+        if (type == DialogueAudio::DefinitionType())
+            return fromJsonDialogueAudio(j);
+
         if (type == Cursor::DefinitionType())
             return fromJsonCursor(j);
 
