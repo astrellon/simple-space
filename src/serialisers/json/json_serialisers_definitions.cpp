@@ -214,7 +214,8 @@ namespace space
             {"name", input.name},
             {"spriteSize", input.spriteSize},
             {"speed", input.speed},
-            {"compendiumId", input.compendiumId}
+            {"compendiumId", input.compendiumId},
+            {"dialogueAudioId", input.dialogueAudioId}
         };
     }
 
@@ -227,7 +228,9 @@ namespace space
         j.at("spriteSize").get_to(input->spriteSize);
         j.at("speed").get_to(input->speed);
 
+        // Optional
         Utils::json_try_get(j, "compendiumId", input->compendiumId);
+        Utils::json_try_get(j, "dialogueAudioId", input->dialogueAudioId);
 
         return input;
     }

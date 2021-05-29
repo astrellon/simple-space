@@ -55,7 +55,8 @@
         "spriteSize": 32,
         "speed": 100,
         "name": "Player",
-        "animatedTextureId": "DOG_SPRITE"
+        "animatedTextureId": "DOG_SPRITE",
+        "dialogueAudioId": "ELECTRONIC_TALKING"
     },
     {
         "type": "character",
@@ -64,7 +65,8 @@
         "spriteSize": 32,
         "speed": 50,
         "name": "Greg",
-        "animatedTextureId": "DOG_SPRITE"
+        "animatedTextureId": "DOG_SPRITE",
+        "dialogueAudioId": "ELECTRONIC_TALKING"
     },
     {
         "type": "character",
@@ -73,7 +75,8 @@
         "spriteSize": 32,
         "speed": 50,
         "name": "Fred",
-        "animatedTextureId": "DOG_SPRITE"
+        "animatedTextureId": "DOG_SPRITE",
+        "dialogueAudioId": "ELECTRONIC_TALKING"
     },
     {
         "type": "character",
@@ -82,7 +85,8 @@
         "spriteSize": 32,
         "speed": 50,
         "name": "Fronk",
-        "animatedTextureId": "DOG_SPRITE"
+        "animatedTextureId": "DOG_SPRITE",
+        "dialogueAudioId": "ELECTRONIC_TALKING"
     },
     {
         "type": "character",
@@ -91,6 +95,7 @@
         "spriteSize": 32,
         "speed": 50,
         "name": "Tumbo",
-        "animatedTextureId": "DOG_SPRITE"
+        "animatedTextureId": "DOG_SPRITE",
+        "dialogueAudioId": "ELECTRONIC_TALKING"
     }
 ]

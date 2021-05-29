@@ -4,17 +4,18 @@
 
 namespace space
 {
-    DialogueManager::DialogueManager() : _current(nullptr), _inDialogue(false), _nextPage(0), _currentLine("")
+    DialogueManager::DialogueManager() : _current(nullptr), _inDialogue(false), _nextPage(0), _currentLine(""), _dialogueAudio(nullptr)
     {
 
     }
 
-    void DialogueManager::startDialogue(const std::string &personTalking, const Dialogue *dialogue)
+    void DialogueManager::startDialogue(const std::string &personTalking, const Dialogue *dialogue, const DialogueAudio *dialogueAudio)
     {
         _personTalking = personTalking;
         _inDialogue = dialogue != nullptr;
         _current = dialogue;
         _nextPage = 0;
+        _dialogueAudio = dialogueAudio;
         nextLine();
     }
 

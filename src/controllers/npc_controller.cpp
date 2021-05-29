@@ -32,7 +32,7 @@ namespace space
                 interactable->removeInteraction(_startDialogueAction);
             }
 
-            _startDialogueAction = interactable->createInteraction<StartDialogueAction>(_character->definition.name, dialogue);
+            _startDialogueAction = interactable->createInteraction<StartDialogueAction>(_character->definition.name, dialogue, _character->definition.dialogueAudio);
         }
     }
 } // namespace space

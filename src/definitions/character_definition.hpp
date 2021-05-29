@@ -12,22 +12,26 @@ namespace space
     class Engine;
     class AnimatedTexture;
     class CompendiumDefinition;
+    class DialogueAudio;
 
     class CharacterDefinition : public BaseDefinition
     {
         public:
             // Fields
-            std::string animatedTextureId;
+            DefinitionId animatedTextureId;
+            DefinitionId dialogueAudioId;
+            DefinitionId compendiumId;
+
             std::string name;
             uint spriteSize;
             float speed;
-            DefinitionId compendiumId;
 
             const AnimatedTexture *texture;
             const CompendiumDefinition *compendiumDef;
+            DialogueAudio *dialogueAudio;
 
             // Constructor
-            CharacterDefinition(const DefinitionId &id) : BaseDefinition(id), texture(nullptr), compendiumDef(nullptr) { }
+            CharacterDefinition(const DefinitionId &id) : BaseDefinition(id), texture(nullptr), compendiumDef(nullptr), dialogueAudio(nullptr) { }
             virtual ~CharacterDefinition() { }
 
             // Methods

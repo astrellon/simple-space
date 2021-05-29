@@ -6,6 +6,7 @@ namespace space
 {
     class GameSession;
     class Dialogue;
+    class DialogueAudio;
 
     class StartDialogueAction : public Interaction
     {
@@ -13,7 +14,7 @@ namespace space
             // Fields
 
             // Constructor
-            StartDialogueAction(const std::string &personTalking, const Dialogue *dialogue);
+            StartDialogueAction(const std::string &personTalking, const Dialogue *dialogue, const DialogueAudio *dialogueAudio);
 
             // Methods
             virtual std::string label() const { return "Talk"; }
@@ -22,5 +23,6 @@ namespace space
         private:
             std::string _personTalking;
             const Dialogue *_dialogue;
+            const DialogueAudio *_dialogueAudio;
     };
 } // space

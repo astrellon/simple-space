@@ -6,6 +6,7 @@
 namespace space
 {
     class Dialogue;
+    class DialogueAudio;
 
     class DialogueManager
     {
@@ -19,10 +20,11 @@ namespace space
             DialogueManager();
 
             // Methods
-            void startDialogue(const std::string &personTalking, const Dialogue *dialogue);
+            void startDialogue(const std::string &personTalking, const Dialogue *dialogue, const DialogueAudio *dialogueAudio);
             bool tryGetNextLine(std::string *result);
             bool nextLine();
             const std::string &personTalkingName() const { return _personTalking; }
+            const DialogueAudio *dialogueAudio() const { return _dialogueAudio; }
 
             bool isInDialogue() const { return _inDialogue; }
             const std::string &currentLine() const { return _currentLine; }
@@ -31,6 +33,7 @@ namespace space
             // Fields
             std::string _personTalking;
             const Dialogue *_current;
+            const DialogueAudio *_dialogueAudio;
             bool _inDialogue;
             int _nextPage;
             std::string _currentLine;

@@ -1,0 +1,13 @@
+[
+    {
+        "type": "dialogue-audio",
+        "id": "ELECTRONIC_TALKING",
+        "sounds": [
+            "data/sounds/electronicTalking/blip1.wav",
+            "data/sounds/electronicTalking/blip2.wav",
+            "data/sounds/electronicTalking/blip3.wav",
+            "data/sounds/electronicTalking/blip4.wav",
+            "data/sounds/electronicTalking/blip5.wav"
+        ]
+    }
+]

@@ -11,6 +11,8 @@
 #include "../engine.hpp"
 #include "../game_session.hpp"
 
+#include "../definitions/dialogue_audio.hpp"
+
 #include "../mustache.hpp"
 
 using kainjow::mustache::mustache;
@@ -103,13 +105,23 @@ namespace space
 
             _contentText->text(_textDisplay.data());
 
-            const sf::SoundBuffer *talkBlipBuffer;
-            if (engine.resourceManager().getRandomSound("data/sounds/electronicTalking", &talkBlipBuffer))
+            auto dialogueAudio = manager.dialogueAudio();
+            if (dialogueAudio)
             {
-                // std::cout << "Playing blip sound\n";
-                sf::Sound *talkBlip = new sf::Sound(*talkBlipBuffer);
-                talkBlip->play();
+                auto blip = dialogueAudio->randomSoundBuffer();
+                if (blip)
+                {
+                    sf::Sound *talkBlip = new sf::Sound(*blip);
+                    talkBlip->play();
+                }
             }
+            // const sf::SoundBuffer *talkBlipBuffer;
+            // if (engine.resourceManager().getRandomSound("data/sounds/electronicTalking", &talkBlipBuffer))
+            // {
+            //     // std::cout << "Playing blip sound\n";
+            //     sf::Sound *talkBlip = new sf::Sound(*talkBlipBuffer);
+            //     talkBlip->play();
+            // }
         }
     }
 
