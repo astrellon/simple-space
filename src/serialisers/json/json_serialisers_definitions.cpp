@@ -24,6 +24,7 @@
 #include "../../definitions/shader_definition.hpp"
 #include "../../definitions/grass_effect_definition.hpp"
 #include "../../definitions/compendium_definition.hpp"
+#include "../../definitions/dialogue_audio.hpp"
 #include "../../definitions/cursor.hpp"
 
 using nlohmann::json;
@@ -74,6 +75,9 @@ namespace space
             j = toJson(dynamic_cast<const CompendiumDefinition &>(input));
 
         else if (type == Cursor::DefinitionType())
+            j = toJson(dynamic_cast<const Cursor &>(input));
+
+        else if (type == DialogueAudio::DefinitionType())
             j = toJson(dynamic_cast<const Cursor &>(input));
 
         else
@@ -590,6 +594,42 @@ namespace space
         Utils::json_try_get(j, "textureOrigin", result->textureOrigin);
 
         return result;
+    }
+
+    json toJson(const DialogueAudio &input)
+    {
+        return json {
+            {"id", input.id},
+            {"sounds", toJsonArray(input.sounds())}
+        };
+    }
+    std::unique_ptr<DialogueAudio> fromJsonDialogueAudio(const json &j)
+    {
+        auto id = j.at("id").get<DefinitionId>();
+        DialogueAudio::SoundList sounds;
+
+        auto soundsJson = j.find("sounds");
+        for (auto &soundJson : *soundsJson)
+        {
+            sounds.push_back(fromJsonAudioReference(soundJson));
+        }
+
+        return std::make_unique<DialogueAudio>(id, sounds);
+    }
+
+    json toJson(const AudioReference &input)
+    {
+        return json {
+            { "filepath", input.audioPath() }
+        };
+    }
+
+    AudioReference fromJsonAudioReference(const json &j)
+    {
+        std::string filepath;
+        j.at("filepath").get_to(filepath);
+
+        return AudioReference(filepath, nullptr);
     }
 
     json toJson(const AnimationSequence &input)

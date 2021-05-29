@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 
 #include <tmxlite/Map.hpp>
 
@@ -18,6 +19,7 @@ namespace space
             typedef std::map<std::string, std::unique_ptr<sf::Texture>> TextureMap;
             typedef std::map<std::string, std::unique_ptr<sf::Image>> ImageMap;
             typedef std::map<std::string, std::unique_ptr<sf::Font>> FontMap;
+            typedef std::map<std::string, std::unique_ptr<sf::SoundBuffer>> SoundBufferMap;
             typedef std::map<std::string, std::unique_ptr<std::string>> TextMap;
             typedef std::map<std::string, std::unique_ptr<tmx::Map>> TmxMap;
 
@@ -31,6 +33,17 @@ namespace space
 
             const sf::Font *preloadFont(const std::string &filename);
             void preloadFonts(const std::string &folder);
+
+            // SoundBuffers
+            const SoundBufferMap &soundBuffers() const { return _soundBuffers; }
+
+            bool soundBuffer(const std::string &filename, const sf::SoundBuffer **result);
+            const sf::SoundBuffer *soundBuffer(const std::string &filename);
+
+            const sf::SoundBuffer *preloadSoundBuffer(const std::string &filename);
+            void preloadSoundBuffers(const std::string &folder);
+
+            bool getRandomSound(const std::string &baseFilename, const sf::SoundBuffer **result);
 
             // Texts
             const TextMap &texts() const { return _texts; }
@@ -65,6 +78,7 @@ namespace space
             TextureMap _textures;
             ImageMap _images;
             FontMap _fonts;
+            SoundBufferMap _soundBuffers;
             TextMap _texts;
             TmxMap _maps;
     };

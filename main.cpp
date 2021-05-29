@@ -117,6 +117,7 @@ int main()
     resourceManager.preloadTextures("data/textures");
     resourceManager.preloadFonts("data/fonts");
     resourceManager.preloadMaps("data/maps");
+    resourceManager.preloadSoundBuffers("data/sounds");
 
     auto &definitionManager = engine.definitionManager();
     definitionManager.loadFolder("data/definitions");

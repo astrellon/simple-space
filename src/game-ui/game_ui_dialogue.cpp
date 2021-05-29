@@ -1,5 +1,7 @@
 #include "game_ui_dialogue.hpp"
 
+#include <SFML/Audio.hpp>
+
 #include "./game_ui_manager.hpp"
 #include "./ui_text_element.hpp"
 #include "./ui_panel.hpp"
@@ -100,6 +102,14 @@ namespace space
             _textDisplay[_textDisplayIndex] = '\0';
 
             _contentText->text(_textDisplay.data());
+
+            const sf::SoundBuffer *talkBlipBuffer;
+            if (engine.resourceManager().getRandomSound("data/sounds/electronicTalking", &talkBlipBuffer))
+            {
+                // std::cout << "Playing blip sound\n";
+                sf::Sound *talkBlip = new sf::Sound(*talkBlipBuffer);
+                talkBlip->play();
+            }
         }
     }
 

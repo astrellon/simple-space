@@ -41,7 +41,7 @@ add_subdirectory("extern/Observe")
 add_subdirectory("extern/box2d")
 
 SET (SFML_LIBRARIES sfml-graphics sfml-audio sfml-window sfml-system)
-SET (BASE_LIBRARIES vorbis vorbisenc vorbisfile ${OPENGL_LIBRARIES} ${SFML_LIBRARIES} box2d tmxlite X11 yoga Observe)
+SET (BASE_LIBRARIES vorbis vorbisenc vorbisfile ${OPENGL_LIBRARIES} ${SFML_LIBRARIES} box2d tmxlite X11 yoga Observe vorbis)
 
 if( MAKE_TESTS )
     find_package(doctest REQUIRED)

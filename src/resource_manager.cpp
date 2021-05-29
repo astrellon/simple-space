@@ -66,6 +66,87 @@ namespace space
         }
     }
 
+    // SoundBuffers
+    bool ResourceManager::soundBuffer(const std::string &filename, const sf::SoundBuffer **result)
+    {
+        auto find = _soundBuffers.find(filename);
+        if (find != _soundBuffers.end())
+        {
+            *result = find->second.get();
+            return true;
+        }
+
+        auto loadSoundBuffer = preloadSoundBuffer(filename);
+        if (loadSoundBuffer == nullptr)
+        {
+            *result = nullptr;
+            return false;
+        }
+
+        *result = loadSoundBuffer;
+        return true;
+    }
+
+    const sf::SoundBuffer *ResourceManager::soundBuffer(const std::string &filename)
+    {
+        const sf::SoundBuffer *result = nullptr;
+        soundBuffer(filename, &result);
+        return result;
+    }
+
+    const sf::SoundBuffer *ResourceManager::preloadSoundBuffer(const std::string &filename)
+    {
+        auto soundBuffer = std::make_unique<sf::SoundBuffer>();
+        if (!soundBuffer->loadFromFile(filename))
+        {
+            return nullptr;
+        }
+
+        auto result = soundBuffer.get();
+        soundBuffer.swap(_soundBuffers[filename]);
+        return result;
+    }
+
+    void ResourceManager::preloadSoundBuffers(const std::string &folder)
+    {
+        for (const auto& dirEntry : std::filesystem::recursive_directory_iterator(folder))
+        {
+            if (dirEntry.is_directory())
+            {
+                continue;
+            }
+
+            const auto &filename = dirEntry.path().string();
+
+            std::cout << "Loading sound buffer: " << filename << std::endl;
+
+            preloadSoundBuffer(filename);
+        }
+    }
+
+    bool ResourceManager::getRandomSound(const std::string &baseFilename, const sf::SoundBuffer **result)
+    {
+        std::vector<sf::SoundBuffer *> potentialSoundBuffers;
+
+        for (auto &iter : _soundBuffers)
+        {
+            if (iter.first.find(baseFilename) == 0)
+            {
+                potentialSoundBuffers.push_back(iter.second.get());
+            }
+        }
+
+        if (potentialSoundBuffers.size() == 0)
+        {
+            *result = nullptr;
+            return false;
+        }
+
+        auto randomIndex = Utils::randi(0, potentialSoundBuffers.size());
+        *result = potentialSoundBuffers[randomIndex];
+        return true;
+    }
+
     // Texts
     bool ResourceManager::text(const std::string &filename, const std::string **result)
     {

@@ -33,7 +33,7 @@ namespace space
 
             static const std::string DefinitionType() { return "animated-texture"; }
             std::string type() const { return DefinitionType(); }
-            void onPostLoad(Engine &engine);
+            virtual void onPostLoad(Engine &engine);
 
         private:
             // Fields

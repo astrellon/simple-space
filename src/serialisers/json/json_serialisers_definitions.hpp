@@ -25,6 +25,8 @@ namespace space
     class ShaderDefinition;
     class GrassEffectDefinition;
     class CompendiumDefinition;
+    class DialogueAudio;
+    class AudioReference;
     class Cursor;
 
     json toJson(const BaseDefinition &input);
@@ -74,8 +76,14 @@ namespace space
     json toJson(const CompendiumDefinition &input);
     std::unique_ptr<CompendiumDefinition> fromJsonCompendiumDefinition(const json &j);
 
+    json toJson(const DialogueAudio &input);
+    std::unique_ptr<DialogueAudio> fromJsonDialogueAudio(const json &j);
+
     json toJson(const Cursor &input);
     std::unique_ptr<Cursor> fromJsonCursor(const json &j);
+
+    json toJson(const AudioReference &input);
+    AudioReference fromJsonAudioReference(const json &j);
 
     json toJson(const CelestialBodyLocation &input);
     CelestialBodyLocation fromJsonCelestialBodyLocation(const json &j);
