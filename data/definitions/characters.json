@@ -66,7 +66,7 @@
         "speed": 50,
         "name": "Greg",
         "animatedTextureId": "DOG_SPRITE",
-        "dialogueAudioId": "ELECTRONIC_TALKING"
+        "dialogueAudioId": "DOG_BARKING_1"
     },
     {
         "type": "character",
@@ -96,6 +96,6 @@
         "speed": 50,
         "name": "Tumbo",
         "animatedTextureId": "DOG_SPRITE",
-        "dialogueAudioId": "DOG_BARKING_1"
+        "dialogueAudioId": "DOG_BARKING_2"
     }
 ]

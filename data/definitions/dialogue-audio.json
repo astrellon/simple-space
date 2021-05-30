@@ -20,5 +20,16 @@
             { "filepath": "data/sounds/dogBark1/bark4.wav" },
             { "filepath": "data/sounds/dogBark1/bark5.wav" }
         ]
+    },
+    {
+        "type": "dialogue-audio",
+        "id": "DOG_BARKING_2",
+        "sounds": [
+            { "filepath": "data/sounds/dogBark2/bark1.wav" },
+            { "filepath": "data/sounds/dogBark2/bark2.wav" },
+            { "filepath": "data/sounds/dogBark2/bark3.wav" },
+            { "filepath": "data/sounds/dogBark2/bark4.wav" },
+            { "filepath": "data/sounds/dogBark2/bark5.wav" }
+        ]
     }
 ]
