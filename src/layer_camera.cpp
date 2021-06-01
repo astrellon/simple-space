@@ -37,7 +37,8 @@ namespace space
         _size = size;
         _scale = scale;
 
-        auto layerScale = scale > 1.0f ? 2.0f : 1.0f;
-        _view.setSize(size / layerScale);
+        // auto layerScale = scale > 1.0f ? 2.0f : 1.0f;
+        // _view.setSize(size / layerScale);
+        _view.setSize(size);
     }
 } // namespace space

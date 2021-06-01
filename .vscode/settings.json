@@ -6,7 +6,8 @@
         "${workspaceFolder}/extern/SFML/include",
         "${workspaceFolder}/extern/yoga",
         "${workspaceFolder}/extern/Observe/include",
-        "${workspaceFolder}/extern/box2d/include"
+        "${workspaceFolder}/extern/box2d/include",
+        "${workspaceFolder}/extern/glm"
     ],
     "cmake.configureOnOpen": false,
     "files.associations": {

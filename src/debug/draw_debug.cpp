@@ -19,6 +19,7 @@ namespace space
     std::array<float, 1000> DrawDebug::frameDurations;
     size_t DrawDebug::frameDurationIndex = 0;
     int DrawDebug::fontSize = 16;
+    float DrawDebug::fov = 0.9f;
 
     void DrawDebug::addFrameDuration(size_t frameDuration)
     {

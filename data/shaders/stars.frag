@@ -4,7 +4,7 @@
 
 out vec4 FragColor;
 
-in vec2 position;
+in vec3 position;
 in vec4 colour;
 
 uniform float timeSinceStart;

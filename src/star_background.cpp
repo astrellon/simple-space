@@ -4,6 +4,12 @@
 #include <algorithm>
 
 #include <SFML/OpenGL.hpp>
+#include <glm/vec3.hpp> // glm::vec3
+#include <glm/vec4.hpp> // glm::vec4
+#include <glm/mat4x4.hpp> // glm::mat4
+#include <glm/ext/matrix_transform.hpp> // glm::translate, glm::rotate, glm::scale
+#include <glm/ext/matrix_clip_space.hpp> // glm::perspective
+#include <glm/ext/scalar_constants.hpp> // glm::pi
 
 #include "engine.hpp"
 #include "utils.hpp"
@@ -15,10 +21,7 @@ namespace space
     StarBackground::StarBackground(Engine &engine, const StarBackgroundOptions &options) :
         _engine(engine), _options(options), _backgroundColour(options.backgroundColour)
     {
-        for (auto i = 0; i < options.numLayers; i++)
-        {
-            _layers.emplace_back(std::make_unique<StarBackgroundLayer>(*this, 0.9f - (7 - i) * 0.1f));
-        }
+        _layers.emplace_back(std::make_unique<StarBackgroundLayer>(*this, 1.0f));
 
         _backgroundColour.init(engine.definitionManager());
     }
@@ -49,7 +52,7 @@ namespace space
 
     // StarBackgroundLayer
     StarBackgroundLayer::StarBackgroundLayer(StarBackground &parent, float distanceScale) :
-          _parent(parent), _distanceScale(distanceScale), _camera(distanceScale)
+          _parent(parent), _distanceScale(distanceScale), _camera(1.0f)
     {
 
     }
@@ -106,7 +109,7 @@ namespace space
                 continue;
             }
 
-            chunk->draw(renderCamera.texture(), states);
+            chunk->draw(renderCamera, states);
         }
     }
 
@@ -139,9 +142,8 @@ namespace space
 
     // Chunks
     StarBackgroundChunk::StarBackgroundChunk(StarBackgroundLayer &parent) :
-        _parent(parent), _vertices(sf::Points, parent.numParticles()), _active(false)
+        _parent(parent), _vertexBuffer(sf::Points), _active(false)
     {
-
     }
 
     void StarBackgroundChunk::position(sf::Vector2i position)
@@ -149,26 +151,29 @@ namespace space
         _position = position;
 
         auto area = _parent.area();
-        auto distanceScale = _parent.distanceScale();
+        auto distanceScale = 1.0f;
         auto numParticles = _parent.numParticles();
         auto seed = (position.x + (position.y << 16)) + distanceScale * 255;
 
         auto rand = Utils::randWithSeed(seed);
 
-        auto positionOffset = sf::Vector2f(position) * area;
+        auto positionOffset = sf::Vector3f(position.x, position.y, 0) * area;
 
         std::uniform_real_distribution<float> bigStarRange(0, 100);
         std::uniform_real_distribution<float> posRange(0, area);
+        std::uniform_real_distribution<float> depthRange(-100, -20);
         std::uniform_real_distribution<float> colourRange(distanceScale * 100 + 20, distanceScale * 100 + 120);
 
         auto starColourTexture = _parent.parent().options().starColours;
         auto starColourTextureSize = starColourTexture ? starColourTexture->getSize() : sf::Vector2u(0, 0);
         std::uniform_real_distribution<float> textureColourRange(0, starColourTextureSize.y);
 
+        _verticies.reserve(numParticles);
+
         for (auto i = 0; i < numParticles; i++)
         {
-            auto &vertex = _vertices[i];
-            vertex.position = sf::Vector2f(posRange(rand), posRange(rand)) + positionOffset;
+            auto &vertex = _verticies[i];
+            vertex.position = sf::Vector3f(posRange(rand), posRange(rand), depthRange(rand)) + positionOffset;
 
             sf::Color colour;
             if (starColourTexture)
@@ -184,11 +189,28 @@ namespace space
             }
             vertex.color = colour;
         }
+
+        _vertexBuffer.create(numParticles);
+        _vertexBuffer.update(_verticies.data(), numParticles, 0);
     }
 
-    void StarBackgroundChunk::draw(sf::RenderTarget &target, sf::RenderStates &states)
+    void StarBackgroundChunk::draw(RenderCamera &camera, sf::RenderStates &states)
     {
-        target.draw(_vertices, states);
+        glMatrixMode(GL_PROJECTION);
+
+        auto cameraView = camera.camera().view();
+        auto aspect = cameraView.getSize().x / cameraView.getSize().y;
+        glm::mat4 Projection = glm::perspective(glm::pi<float>() * DrawDebug::fov, aspect, 0.1f, 200.f);
+        glLoadMatrixf(&Projection[0][0]);
+
+        auto trans = cameraView.getInverseTransform();
+        auto center = Utils::getPosition(trans);
+        glRotatef(cameraView.getRotation(), 0, 0, 1.0f);
+        glTranslatef(-center.x, center.y, 0);
+
+        glMatrixMode(GL_MODELVIEW);
+;
+        camera.texture().draw(_vertexBuffer, states);
         DrawDebug::glDraw++;
     }
 } // namespace space

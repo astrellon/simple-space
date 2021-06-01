@@ -91,7 +91,7 @@ namespace space
             void position(sf::Vector2i position);
             sf::Vector2i position() const { return _position; }
 
-            void draw(sf::RenderTarget &target, sf::RenderStates &states);
+            void draw(RenderCamera &camera, sf::RenderStates &states);
 
             void active(bool active) { _active = active; }
             bool isActive() const { return _active; }
@@ -99,7 +99,8 @@ namespace space
         private:
             // Fields
             StarBackgroundLayer &_parent;
-            sf::VertexArray _vertices;
+            sf::Vertex3dBuffer _vertexBuffer;
+            std::vector<sf::Vertex3d> _verticies;
             sf::Vector2i _position;
             bool _active;
 

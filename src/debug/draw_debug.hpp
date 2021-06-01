@@ -28,6 +28,7 @@ namespace space
             static size_t locksUsed;
             static std::array<float, 1000> frameDurations;
             static int fontSize;
+            static float fov;
 
             // Constructor
 

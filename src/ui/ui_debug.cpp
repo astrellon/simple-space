@@ -66,6 +66,7 @@ namespace space
 
         ImGui::Text("Render Resolution: %u x %u", engine.renderSize().x, engine.renderSize().y);
         ImGui::Text("Window Resolution: %u x %u", engine.windowSize().x, engine.windowSize().y);
+        ImGui::SliderFloat("FOV", &DrawDebug::fov, -1, 6);
 
         if (engine.currentSession() && ImGui::Button("Save"))
         {
