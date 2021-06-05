@@ -50,49 +50,49 @@ namespace space
 
     void Planet::draw(GameSession &session, RenderCamera &target)
     {
-        if (_shader == nullptr)
-        {
-            ShaderDefinition *shaderDef;
-            if (!session.engine().definitionManager().tryGet("EFFECT_PLANET", &shaderDef))
-            {
-                std::cout << "Unable to find shader for planet" << std::endl;
-            }
-            else
-            {
-                _shader = &shaderDef->shader;
-            }
-        }
+        // if (_shader == nullptr)
+        // {
+        //     ShaderDefinition *shaderDef;
+        //     if (!session.engine().definitionManager().tryGet("EFFECT_PLANET", &shaderDef))
+        //     {
+        //         std::cout << "Unable to find shader for planet" << std::endl;
+        //     }
+        //     else
+        //     {
+        //         _shader = &shaderDef->shader;
+        //     }
+        // }
 
-        sf::Sprite sprite(*definition.texture);
-        sprite.setScale(definition.size / 2, definition.size / 2);
-        sprite.setTextureRect(sf::IntRect(0, 0, 2, 2));
+        // sf::Sprite sprite(*definition.texture);
+        // sprite.setScale(definition.size / 2, definition.size / 2);
+        // sprite.setTextureRect(sf::IntRect(0, 0, 2, 2));
 
-        sf::RenderStates renderState;
-        renderState.shader = _shader;
-        renderState.blendMode = sf::BlendMode(sf::BlendMode::One, sf::BlendMode::SrcAlpha);
+        // sf::RenderStates renderState;
+        // renderState.shader = _shader;
+        // renderState.blendMode = sf::BlendMode(sf::BlendMode::One, sf::BlendMode::SrcAlpha);
 
-        _shader->setUniform("timeSinceStart", session.engine().timeSinceStart().asSeconds());
-        _shader->setUniform("offset", 0.0f);
-        _shader->setUniform("scale", definition.scale);
-        _shader->setUniform("oscillateNoise", definition.oscillateNoise);
+        // _shader->setUniform("timeSinceStart", session.engine().timeSinceStart().asSeconds());
+        // _shader->setUniform("offset", 0.0f);
+        // _shader->setUniform("scale", definition.scale);
+        // _shader->setUniform("oscillateNoise", definition.oscillateNoise);
 
-        sf::Glsl::Vec4 colour(definition.glowColour);
-        _shader->setUniform("glowColour", colour);
-        _shader->setUniform("rotationRate", definition.rotationRate);
+        // sf::Glsl::Vec4 colour(definition.glowColour);
+        // _shader->setUniform("glowColour", colour);
+        // _shader->setUniform("rotationRate", definition.rotationRate);
 
-        _renderTexture->clear();
-        _renderTexture->draw(sprite, renderState);
-        DrawDebug::glDraw++;
-        _renderTexture->display();
+        // _renderTexture->clear();
+        // _renderTexture->draw(sprite, renderState);
+        // DrawDebug::glDraw++;
+        // _renderTexture->display();
 
-        sf::Sprite sphereSprite(_renderTexture->getTexture());
-        sphereSprite.setOrigin(definition.size / 2.0, definition.size / 2.0);
+        // sf::Sprite sphereSprite(_renderTexture->getTexture());
+        // sphereSprite.setOrigin(definition.size / 2.0, definition.size / 2.0);
 
-        sf::RenderStates states;
-        states.transform = _worldTransform;
+        // sf::RenderStates states;
+        // states.transform = _worldTransform;
 
-        target.texture().draw(sphereSprite, states);
-        DrawDebug::glDraw++;
+        // target.texture().draw(sphereSprite, states);
+        // DrawDebug::glDraw++;
     }
 
     void Planet::onPostLoad(GameSession &session, LoadingContext &context)

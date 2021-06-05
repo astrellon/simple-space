@@ -29,6 +29,8 @@ namespace space
             static std::array<float, 1000> frameDurations;
             static int fontSize;
             static float fov;
+            static float drawClose;
+            static float drawFar;
 
             // Constructor
 

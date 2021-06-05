@@ -16,7 +16,6 @@ namespace space
             std::string shaderName;
             std::string starColoursPath;
             sf::Color backgroundColour;
-            int numLayers;
             int numParticles;
             float area;
 

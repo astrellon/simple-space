@@ -8,7 +8,6 @@ in vec3 position;
 in vec4 colour;
 
 uniform float timeSinceStart;
-uniform float distanceScale;
 
 const vec4 twinkleColour = vec4(0.3, 0.3, 0.3, 0.2);
 
@@ -16,5 +15,5 @@ void main()
 {
     float twinkleFactor = mod(timeSinceStart + dot(position, position), 5) - 2.5;
     float twinkleMultiplier = pow(E, -(twinkleFactor * twinkleFactor / 0.1));
-    FragColor = colour + (twinkleColour * twinkleMultiplier * (distanceScale + 0.3));
+    FragColor = colour + (twinkleColour * twinkleMultiplier * 1.3);
 }

@@ -29,7 +29,6 @@ namespace space
 
             float area() const { return _options.area; }
             int numParticles() const { return _options.numParticles; }
-            int numLayers() const { return _options.numLayers; }
             sf::Color backgroundColour() const { return _options.backgroundColour; }
             sf::Shader *shader() const { return _options.shader; }
             Engine &engine() const { return _engine; }
@@ -52,7 +51,7 @@ namespace space
             // Fields
 
             // Constructor
-            StarBackgroundLayer(StarBackground &parent, float distanceScale);
+            StarBackgroundLayer(StarBackground &parent);
 
             // Methods
             void update(sf::Time dt);
@@ -64,15 +63,12 @@ namespace space
             float area() const { return _parent.area(); }
             int numParticles() const { return _parent.numParticles(); }
 
-            float distanceScale() const { return _distanceScale; }
-
             const StarBackground &parent() const { return _parent; }
 
         private:
             // Fields
             StarBackground &_parent;
             LayerCamera _camera;
-            float _distanceScale;
             std::vector<std::unique_ptr<StarBackgroundChunk>> _chunks;
 
             // Methods

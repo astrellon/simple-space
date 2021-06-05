@@ -4,8 +4,7 @@
 
 namespace space
 {
-    LayerCamera::LayerCamera(float distanceScale) :
-        _distanceScale(distanceScale), _scale(1.0f)
+    LayerCamera::LayerCamera() : _scale(1.0f)
     {
 
     }
@@ -16,7 +15,7 @@ namespace space
 
     void LayerCamera::preDraw(const Camera &camera)
     {
-        _view.setCenter(camera.center() * _distanceScale);
+        _view.setCenter(camera.center());
         if (camera.size() != _size || camera.scale() != _scale)
         {
             size(camera.size(), camera.scale());
@@ -37,8 +36,6 @@ namespace space
         _size = size;
         _scale = scale;
 
-        // auto layerScale = scale > 1.0f ? 2.0f : 1.0f;
-        // _view.setSize(size / layerScale);
         _view.setSize(size);
     }
 } // namespace space
