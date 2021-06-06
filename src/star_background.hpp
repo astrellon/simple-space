@@ -4,7 +4,6 @@
 
 #include <SFML/Graphics.hpp>
 
-#include "layer_camera.hpp"
 #include "definitions/star_background_options.hpp"
 #include "effects/overlay.hpp"
 
@@ -12,7 +11,6 @@ namespace space
 {
     class Engine;
     class StarBackgroundChunk;
-    class StarBackgroundLayer;
     class RenderCamera;
 
     class StarBackground
@@ -24,7 +22,6 @@ namespace space
             StarBackground(Engine &engine, const StarBackgroundOptions &options);
 
             // Methods
-            void update(sf::Time dt);
             void draw(RenderCamera &renderCamera);
 
             float area() const { return _options.area; }
@@ -39,39 +36,11 @@ namespace space
             // Fields
             Engine &_engine;
             const StarBackgroundOptions &_options;
-            std::vector<std::unique_ptr<StarBackgroundLayer>> _layers;
+            std::vector<std::unique_ptr<StarBackgroundChunk>> _chunks;
             Overlay _backgroundColour;
 
             // Methods
-    };
-
-    class StarBackgroundLayer
-    {
-        public:
-            // Fields
-
-            // Constructor
-            StarBackgroundLayer(StarBackground &parent);
-
-            // Methods
-            void update(sf::Time dt);
-            void draw(RenderCamera &renderCamera);
-
-            void cameraCenter(sf::Vector2f center);
-            LayerCamera &camera() { return _camera; }
-
-            float area() const { return _parent.area(); }
-            int numParticles() const { return _parent.numParticles(); }
-
-            const StarBackground &parent() const { return _parent; }
-
-        private:
-            // Fields
-            StarBackground &_parent;
-            LayerCamera _camera;
-            std::vector<std::unique_ptr<StarBackgroundChunk>> _chunks;
-
-            // Methods
+            void updateChunksFromCamera(RenderCamera &renderCamera);
             StarBackgroundChunk *getChunk(sf::Vector2i pos);
     };
 
@@ -81,7 +50,7 @@ namespace space
             // Fields
 
             // Constructor
-            StarBackgroundChunk(StarBackgroundLayer &parent);
+            StarBackgroundChunk(StarBackground &parent);
 
             // Methods
             void position(sf::Vector2i position);
@@ -94,7 +63,7 @@ namespace space
 
         private:
             // Fields
-            StarBackgroundLayer &_parent;
+            StarBackground &_parent;
             sf::Vertex3dBuffer _vertexBuffer;
             std::vector<sf::Vertex3d> _verticies;
             sf::Vector2i _position;

@@ -48,7 +48,6 @@ namespace space
     {
         updateWorldTransform(parentTransform);
 
-        _background->update(dt);
         _area.update(session, dt, _worldTransform);
     }
 
