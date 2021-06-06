@@ -5,7 +5,7 @@
         "name": "Star System 3",
         "starBackgroundOptions": {
             "backgroundColour": "0x1A1F32FF",
-            "starColoursPath": "data/starColours.png"
+            "starColoursPath": "data/starColours2.png"
         },
         "rootBody": {
             "type": "planet",

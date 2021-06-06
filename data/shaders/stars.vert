@@ -9,6 +9,6 @@ void main()
 {
     position = gl_Vertex.xyz;
     colour = gl_Color;
-    gl_PointSize = pointSize;
+    gl_PointSize = pointSize > 0 ? (500 - position.z) / 500 : 1;
     gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
 }
