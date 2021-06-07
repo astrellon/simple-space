@@ -3,6 +3,8 @@
 #include "../game/character.hpp"
 #include "../game/interactions/start_dialogue_action.hpp"
 
+#include "./actions/npc_action.hpp"
+
 namespace space
 {
     NpcController::NpcController(GameSession &session) : CharacterController(session), _dialogue(nullptr), _startDialogueAction(nullptr)
@@ -12,7 +14,21 @@ namespace space
 
     void NpcController::update(sf::Time dt)
     {
+        _needs.update(dt);
 
+        if (_highLevelActions.size() > 0)
+        {
+            while (_highLevelActions.front()->isComplete())
+            {
+                _highLevelActions.pop();
+            }
+        }
+
+        if (_highLevelActions.size() > 0)
+        {
+            auto action = _highLevelActions.front();
+            action->update(dt);
+        }
     }
 
     void NpcController::dialogue(const Dialogue *dialogue)

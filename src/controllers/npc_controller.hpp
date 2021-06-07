@@ -1,13 +1,17 @@
 #pragma once
 
+#include <queue>
+
 #include <SFML/System.hpp>
 
 #include "character_controller.hpp"
+#include "npc_needs.hpp"
 
 namespace space
 {
     class Dialogue;
     class Interaction;
+    class NPCAction;
 
     class NpcController : public CharacterController
     {
@@ -28,6 +32,9 @@ namespace space
 
         private:
             // Fields
+            NPCNeeds _needs;
+            std::queue<NPCAction *> _highLevelActions;
+
             const Dialogue *_dialogue;
             Interaction *_startDialogueAction;
     };

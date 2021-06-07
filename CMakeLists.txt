@@ -19,6 +19,7 @@ file(GLOB src_files
     "src/ui/*.cpp"
     "src/game-ui/*.cpp"
     "src/controllers/*.cpp"
+    "src/controllers/actions/*.cpp"
 )
 
 SET (CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG -DTRACK_MEMORY")
