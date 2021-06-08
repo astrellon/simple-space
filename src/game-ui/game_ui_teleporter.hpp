@@ -18,7 +18,7 @@ namespace space
             // Fields
 
             // Constructor
-            GameUITeleporter() : _text(nullptr), _actionButton(nullptr), _teleporter(nullptr, nullptr) { }
+            GameUITeleporter() : _uiManager(nullptr), _text(nullptr), _actionButton(nullptr), _teleporter(nullptr, nullptr) { }
 
             // Methods
             virtual void init(GameUIManager &uiManager);
