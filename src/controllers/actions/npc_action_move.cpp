@@ -33,4 +33,13 @@ namespace space
     {
         return _toDestination >= 0 && _toDestination < 10.0f;
     }
+
+    void NpcActionMove::onComplete()
+    {
+        auto character = controller()->controllingCharacter();
+        if (character)
+        {
+            character->moveInput = sf::Vector2f();
+        }
+    }
 } // space

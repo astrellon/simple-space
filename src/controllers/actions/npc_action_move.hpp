@@ -21,6 +21,8 @@ namespace space
             virtual void update(sf::Time dt);
             virtual bool isComplete() const;
 
+            virtual void onComplete();
+
         private:
             // Fields
             sf::Vector2f _destination;

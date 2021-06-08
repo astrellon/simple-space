@@ -314,7 +314,7 @@
             "id": "BIRD_CHAR",
             "type": "character",
             "transform": {
-                "position": [80, 80]
+                "position": [80, 280]
             }
         },
         {
@@ -322,7 +322,7 @@
             "id": "BIRD_CHAR_2",
             "type": "character",
             "transform": {
-                "position": [120, 90]
+                "position": [120, 290]
             }
         },
         {
@@ -330,7 +330,7 @@
             "id": "BIRD_CHAR_3",
             "type": "character",
             "transform": {
-                "position": [200, 50]
+                "position": [200, 250]
             }
         },
         {
@@ -338,7 +338,7 @@
             "id": "BIRD_CHAR_4",
             "type": "character",
             "transform": {
-                "position": [50, 180]
+                "position": [50, 380]
             }
         },
         {

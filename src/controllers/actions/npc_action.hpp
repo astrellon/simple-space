@@ -24,6 +24,8 @@ namespace space
             virtual void update(sf::Time dt) = 0;
             virtual bool isComplete() const = 0;
 
+            virtual void onComplete() { }
+
             inline NpcController *controller() const { return _controller; }
 
         private:

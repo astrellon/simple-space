@@ -20,6 +20,7 @@ namespace space
         {
             while (_highLevelActions.size() > 0 && _highLevelActions.front()->isComplete())
             {
+                _highLevelActions.front()->onComplete();
                 _highLevelActions.pop();
             }
         }
@@ -27,7 +28,6 @@ namespace space
         if (_highLevelActions.size() > 0)
         {
             auto &action = _highLevelActions.front();
-            // std::cout << "Executing action: " << action->type() << std::endl;
             action->update(dt);
         }
     }
