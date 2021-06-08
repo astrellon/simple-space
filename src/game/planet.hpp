@@ -35,12 +35,10 @@ namespace space
 
             virtual void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform);
             virtual void draw(GameSession &session, RenderCamera &target);
-            virtual void onPostLoad(GameSession &session, LoadingContext &context);
             virtual bool doesMouseHover(GameSession &session, sf::Vector2f mousePosition) const;
             virtual bool isGenerated() const { return true; }
             virtual DrawLayers::Type drawLayer() const { return DrawLayers::Background; }
 
-            void addPostLoadPlanetSurfaceId(const DefinitionId &id) { _onPostLoadPlanetSurfaceIds.push_back(id); }
             void addPlanetSurface(PlanetSurface *planetSurface);
             void removePlanetSurface(PlanetSurface *PlanetSurface);
             const PlanetSurfaceList &planetSurfaces() const { return _planetSurfaces; }
@@ -49,7 +47,6 @@ namespace space
 
         private:
             // Fields
-            std::vector<DefinitionId> _onPostLoadPlanetSurfaceIds;
             std::unique_ptr<sf::RenderTexture> _renderTexture;
             sf::Shader *_shader;
             PlanetSurfaceList _planetSurfaces;

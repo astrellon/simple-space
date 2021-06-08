@@ -14,7 +14,7 @@
 namespace space
 {
     Planet::Planet(const ObjectId &id, const PlanetDefinition &definition)
-        : CelestialBody(id, definition), definition(definition), _shader(nullptr)
+        : CelestialBody(id, definition), definition(definition), _shader(nullptr), _initedSurfaces(false)
     {
         _renderTexture = std::make_unique<sf::RenderTexture>();
         _renderTexture->create(definition.size, definition.size);
@@ -93,25 +93,6 @@ namespace space
 
         target.texture().draw(sphereSprite, states);
         DrawDebug::glDraw++;
-    }
-
-    void Planet::onPostLoad(GameSession &session, LoadingContext &context)
-    {
-        SpaceObject::onPostLoad(session, context);
-
-        for (auto &id : _onPostLoadPlanetSurfaceIds)
-        {
-            PlanetSurface *planetSurface;
-            if (!session.tryGetSpaceObject<PlanetSurface>(id, &planetSurface))
-            {
-                std::cout << "Unable to find planet surface: " << id << std::endl;
-                continue;
-            }
-
-            addPlanetSurface(planetSurface);
-        }
-
-        _onPostLoadPlanetSurfaceIds.clear();
     }
 
     void Planet::addPlanetSurface(PlanetSurface *planetSurface)

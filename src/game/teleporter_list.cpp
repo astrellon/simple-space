@@ -15,7 +15,6 @@ namespace space
         auto find = findTeleporter(teleporter);
         if (find == _teleporters.end())
         {
-            std::cout << "New teleporter: " << teleporter.item->name() << std::endl;
             _teleporters.emplace_back(teleporter, _marker);
             onAddTeleporter.emit(teleporter);
         }
