@@ -1,12 +1,12 @@
 #pragma once
 
-#include "character_controller.hpp"
+#include "npc_controller.hpp"
 
 namespace space
 {
     class GameSession;
 
-    class BirdController : public CharacterController
+    class BirdController : public NpcController
     {
         public:
             // Fields

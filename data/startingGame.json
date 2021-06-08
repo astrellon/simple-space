@@ -95,6 +95,18 @@
         {
             "type": "bird",
             "controllingCharacter": "BIRD_CHAR"
+        },
+        {
+            "type": "bird",
+            "controllingCharacter": "BIRD_CHAR_2"
+        },
+        {
+            "type": "bird",
+            "controllingCharacter": "BIRD_CHAR_3"
+        },
+        {
+            "type": "bird",
+            "controllingCharacter": "BIRD_CHAR_4"
         }
     ],
     "playerController": {
@@ -172,6 +184,9 @@
                 "objectIds": [
                     "FRED",
                     "BIRD_CHAR",
+                    "BIRD_CHAR_2",
+                    "BIRD_CHAR_3",
+                    "BIRD_CHAR_4",
                     "ITEM_10",
                     "ITEM_3",
                     "PLANET1_GRASS_1"
@@ -300,6 +315,30 @@
             "type": "character",
             "transform": {
                 "position": [80, 80]
+            }
+        },
+        {
+            "definitionId": "BIRD_CHAR_DEF",
+            "id": "BIRD_CHAR_2",
+            "type": "character",
+            "transform": {
+                "position": [120, 90]
+            }
+        },
+        {
+            "definitionId": "BIRD_CHAR_DEF",
+            "id": "BIRD_CHAR_3",
+            "type": "character",
+            "transform": {
+                "position": [200, 50]
+            }
+        },
+        {
+            "definitionId": "BIRD_CHAR_DEF",
+            "id": "BIRD_CHAR_4",
+            "type": "character",
+            "transform": {
+                "position": [50, 180]
             }
         },
         {

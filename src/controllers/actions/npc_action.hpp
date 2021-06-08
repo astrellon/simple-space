@@ -1,28 +1,34 @@
 #pragma once
 
+#include <string>
+
 #include <SFML/System.hpp>
+
+#include "../../non_copyable.hpp"
 
 namespace space
 {
-    class NPCController;
+    class NpcController;
 
-    class NPCAction
+    class NpcAction : private NonCopyable
     {
         public:
             // Fields
 
             // Constructor
-            NPCAction (NPCController *controller);
-            virtual ~NPCAction();
+            NpcAction (NpcController *controller);
+            virtual ~NpcAction();
 
             // Methods
+            virtual std::string type() const = 0;
             virtual void update(sf::Time dt) = 0;
-
             virtual bool isComplete() const = 0;
+
+            inline NpcController *controller() const { return _controller; }
 
         private:
             // Fields
-            NPCController *_controller;
+            NpcController *_controller;
 
             // Methods
     };

@@ -44,7 +44,7 @@
         "id": "BIRD_CHAR_DEF",
         "compendiumId": "COMP_BIRD",
         "spriteSize": 24,
-        "speed": 10,
+        "speed": 30,
         "name": "Birdy",
         "animatedTextureId": "BIRD_SPRITE"
     },

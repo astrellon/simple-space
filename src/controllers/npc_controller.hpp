@@ -1,17 +1,18 @@
 #pragma once
 
 #include <queue>
+#include <memory>
 
 #include <SFML/System.hpp>
 
 #include "character_controller.hpp"
 #include "npc_needs.hpp"
+#include "actions/npc_action.hpp"
 
 namespace space
 {
     class Dialogue;
     class Interaction;
-    class NPCAction;
 
     class NpcController : public CharacterController
     {
@@ -30,10 +31,10 @@ namespace space
             void dialogue(const Dialogue *dialogue);
             const Dialogue *dialogue() const { return _dialogue; }
 
-        private:
+        protected:
             // Fields
             NPCNeeds _needs;
-            std::queue<NPCAction *> _highLevelActions;
+            std::queue<std::unique_ptr<NpcAction>> _highLevelActions;
 
             const Dialogue *_dialogue;
             Interaction *_startDialogueAction;

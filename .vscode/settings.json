@@ -95,6 +95,8 @@
         "semaphore": "cpp",
         "shared_mutex": "cpp",
         "stop_token": "cpp",
-        "ranges": "cpp"
+        "ranges": "cpp",
+        "unordered_set": "cpp",
+        "future": "cpp"
     }
 }

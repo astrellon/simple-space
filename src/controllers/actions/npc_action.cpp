@@ -2,12 +2,12 @@
 
 namespace space
 {
-    NPCAction::NPCAction(NPCController *controller) : _controller(controller)
+    NpcAction::NpcAction(NpcController *controller) : _controller(controller)
     {
 
     }
 
-    NPCAction::~NPCAction()
+    NpcAction::~NpcAction()
     {
 
     }
