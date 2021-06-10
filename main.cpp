@@ -115,14 +115,18 @@ int main()
     window.setVerticalSyncEnabled(true);
     // window.setFramerateLimit(120);
 
+    auto afterCreateWindow = std::chrono::high_resolution_clock::now();
+
     glewInit();
+
+    auto afterGlew = std::chrono::high_resolution_clock::now();
 
     space::Engine engine(&window);
     engine.spriteScale(4.0f);
 
     space::ResourceManager &resourceManager = engine.resourceManager();
 
-    auto beforeTextures = std::chrono::high_resolution_clock::now();
+    auto afterCreateEngine = std::chrono::high_resolution_clock::now();
     resourceManager.preloadTextures("data/textures");
     auto afterTextures = std::chrono::high_resolution_clock::now();
     resourceManager.preloadFonts("data/fonts");
@@ -138,7 +142,10 @@ int main()
     definitionManager.onPostLoad(engine);
     auto afterDefinitions = std::chrono::high_resolution_clock::now();
 
-    printTimeDifference("Textures", beforeTextures, afterTextures);
+    printTimeDifference("Window", startTime, afterCreateWindow);
+    printTimeDifference("GLEW", afterCreateWindow, afterGlew);
+    printTimeDifference("Engine", afterGlew, afterCreateEngine);
+    printTimeDifference("Textures", afterCreateEngine, afterTextures);
     printTimeDifference("Fonts", afterTextures, afterFonts);
     printTimeDifference("Maps", afterFonts, afterMaps);
     printTimeDifference("Sounds", afterMaps, afterSounds);
