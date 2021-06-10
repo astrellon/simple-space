@@ -89,8 +89,16 @@ int errorHandler(Display *display, XErrorEvent *event)
     return 1;
 }
 
+void printTimeDifference(const char *prefix, std::chrono::system_clock::time_point time1, std::chrono::system_clock::time_point time2)
+{
+    auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(time2 - time1);
+    std::cout << "Time taken for: " << prefix << " " << diff.count() << "ms" << std::endl;
+}
+
 int main()
 {
+    auto startTime = std::chrono::high_resolution_clock::now();
+
     sf::ContextSettings settings;
     settings.majorVersion = 3;
     settings.minorVersion = 0;
@@ -114,15 +122,27 @@ int main()
 
     space::ResourceManager &resourceManager = engine.resourceManager();
 
+    auto beforeTextures = std::chrono::high_resolution_clock::now();
     resourceManager.preloadTextures("data/textures");
+    auto afterTextures = std::chrono::high_resolution_clock::now();
     resourceManager.preloadFonts("data/fonts");
+    auto afterFonts = std::chrono::high_resolution_clock::now();
     resourceManager.preloadMaps("data/maps");
+    auto afterMaps = std::chrono::high_resolution_clock::now();
     resourceManager.preloadSoundBuffers("data/sounds");
+    auto afterSounds = std::chrono::high_resolution_clock::now();
 
     auto &definitionManager = engine.definitionManager();
     definitionManager.loadFolder("data/definitions");
 
     definitionManager.onPostLoad(engine);
+    auto afterDefinitions = std::chrono::high_resolution_clock::now();
+
+    printTimeDifference("Textures", beforeTextures, afterTextures);
+    printTimeDifference("Fonts", afterTextures, afterFonts);
+    printTimeDifference("Maps", afterFonts, afterMaps);
+    printTimeDifference("Sounds", afterMaps, afterSounds);
+    printTimeDifference("Definitions", afterSounds, afterDefinitions);
 
     engine.initEffects();
     engine.uiManager().initDefaultWindows();
@@ -152,6 +172,10 @@ int main()
     // auto particles = gameSession->createObject<space::ParticlesSimple>("PARTICLES_1", 10000);
     // particles->transform().position = sf::Vector2f(-150.0f, 0);
     // starSystem1->area().addObject(particles);
+
+    auto endTime = std::chrono::high_resolution_clock::now();
+
+    printTimeDifference("Overall startup", startTime, endTime);
 
     while (window.isOpen())
     {
