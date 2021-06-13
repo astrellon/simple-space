@@ -8,6 +8,6 @@ namespace space
     class SpaceObject;
 
     typedef std::string ObjectId;
-    typedef std::function<void(SpaceObject *)> LoopObjectCallback;
+    typedef std::function<bool (SpaceObject *)> LoopObjectCallback;
 
 } // namespace space

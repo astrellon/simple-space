@@ -31,6 +31,7 @@ namespace space
     class PlanetSurface;
     class Chair;
     class Teleporter;
+    class FoodItem;
     class SpacePortal;
     class GrassEffect;
     class LoadingContext;
@@ -110,6 +111,9 @@ namespace space
 
     json toJson(const Teleporter &item);
     bool addFromJsonTeleporter(const json &j, GameSession &session);
+
+    json toJson(const FoodItem &item);
+    bool addFromJsonFoodItem(const json &j, GameSession &session);
 
     json toJson(const PhotoAlbum &input);
     bool addFromJsonPhotoAlbum(const json &j, GameSession &session);

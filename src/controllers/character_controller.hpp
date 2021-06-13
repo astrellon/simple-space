@@ -43,6 +43,8 @@ namespace space
 
             virtual void update(sf::Time dt) = 0;
 
+            inline GameSession &session() { return _session; }
+
             Inventory &inventory() { return *_inventory.get(); }
             const Inventory &inventory() const { return *_inventory.get(); }
             void inventory(std::unique_ptr<Inventory> inventory) { _inventory = std::move(inventory); }

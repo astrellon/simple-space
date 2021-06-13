@@ -47,7 +47,7 @@ namespace space
             virtual void onPostLoad(GameSession &session, LoadingContext &context);
             virtual bool checkForMouse(GameSession &session, sf::Vector2f mousePosition);
 
-            virtual void loopOver(LoopObjectCallback callback);
+            virtual bool loopOver(LoopObjectCallback callback);
 
         private:
             // Fields

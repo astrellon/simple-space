@@ -89,10 +89,18 @@ namespace space
         }
     }
 
-    void StarSystem::loopOver(LoopObjectCallback callback)
+    bool StarSystem::loopOver(LoopObjectCallback callback)
     {
-        SpaceObject::loopOver(callback);
-        _area.loopOver(callback);
+        if (!SpaceObject::loopOver(callback))
+        {
+            return false;
+        }
+        if (!_area.loopOver(callback))
+        {
+            return false;
+        }
+
+        return true;
     }
 
     void StarSystem::createCelestialBody(GameSession &session, const CelestialBodyDefinition *bodyDefinition, const sf::Transform &parentTransform)

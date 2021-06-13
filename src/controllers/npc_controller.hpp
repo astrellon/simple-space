@@ -26,6 +26,8 @@ namespace space
             static const std::string ControllerType() { return "npc"; }
             virtual std::string type() const { return ControllerType(); }
 
+            NpcNeeds &needs() { return _needs; }
+
             virtual void update(sf::Time dt);
 
             void dialogue(const Dialogue *dialogue);
@@ -33,7 +35,7 @@ namespace space
 
         protected:
             // Fields
-            NPCNeeds _needs;
+            NpcNeeds _needs;
             std::queue<std::unique_ptr<NpcAction>> _highLevelActions;
 
             const Dialogue *_dialogue;

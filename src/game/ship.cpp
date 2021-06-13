@@ -133,10 +133,17 @@ namespace space
         _area.draw(session, target);
     }
 
-    void Ship::loopOver(LoopObjectCallback callback)
+    bool Ship::loopOver(LoopObjectCallback callback)
     {
-        SpaceObject::loopOver(callback);
-        _area.loopOver(callback);
+        if (!SpaceObject::loopOver(callback))
+        {
+            return false;
+        }
+        if (!_area.loopOver(callback))
+        {
+            return false;
+        }
+        return true;
     }
 
     void Ship::createMainCollider()

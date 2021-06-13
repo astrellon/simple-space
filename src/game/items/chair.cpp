@@ -7,23 +7,23 @@
 
 namespace space
 {
-    void Chair::execute(CharacterController *controller, GameSession &session, const sf::Vector2f &position, Area &parentArea)
+    void Chair::execute(CharacterController &controller, PlacedItem &placed)
     {
-        auto ship = parentArea.partOfShip();
+        auto ship = placed.insideArea()->partOfShip();
         if (ship == nullptr)
         {
             std::cout << "Using chair outside of ship" << std::endl;
             return;
         }
 
-        if (controller->isPlayer())
+        if (controller.isPlayer())
         {
-            session.setPlayerControllingShip(ship);
+            controller.session().setPlayerControllingShip(ship);
         }
         else
         {
-            controller->controllingShip(ship);
-            controller->controlling(ControlShip);
+            controller.controllingShip(ship);
+            controller.controlling(ControlShip);
         }
     }
 } // namespace space

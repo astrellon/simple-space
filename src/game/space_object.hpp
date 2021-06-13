@@ -66,7 +66,7 @@ namespace space
 
             SpaceObject *rootObject();
 
-            virtual void loopOver(LoopObjectCallback callback);
+            virtual bool loopOver(LoopObjectCallback callback);
 
         protected:
             // Fields

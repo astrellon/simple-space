@@ -86,7 +86,7 @@ namespace space
             DrawLayer &main() { return _main; }
             DrawLayer &foreground() { return _foreground; }
 
-            void loopOver(LoopObjectCallback callback);
+            bool loopOver(LoopObjectCallback callback);
 
         private:
             // Fields

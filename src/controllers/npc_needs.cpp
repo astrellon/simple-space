@@ -2,13 +2,13 @@
 
 namespace space
 {
-    NPCNeeds::NPCNeeds(float hunger, float energy, float fun, float social) :
+    NpcNeeds::NpcNeeds(float hunger, float energy, float fun, float social) :
         _hunger(hunger), _energy(energy), _fun(fun), _social(social)
     {
 
     }
 
-    void NPCNeeds::update(sf::Time dt)
+    void NpcNeeds::update(sf::Time dt)
     {
         auto seconds = dt.asSeconds();
         auto newHunger = _hunger - seconds / (60.0f * 5.0f);

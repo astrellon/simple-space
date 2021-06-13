@@ -24,7 +24,7 @@ namespace space
             static const std::string ItemType() { return "placeable-item"; }
             virtual std::string type() const { return ItemType(); }
 
-            virtual void execute(CharacterController *controller, GameSession &session, const sf::Vector2f &position, Area &parentArea) { }
+            virtual void execute(CharacterController &controller, PlacedItem &placed) { }
             virtual void onPlaced(PlacedItem &area) { }
 
             virtual void onCharacterEnters(CharacterController *controller, GameSession &session) {}

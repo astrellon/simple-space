@@ -4,22 +4,19 @@
 
 namespace space
 {
-    class Area;
-    class CharacterController;
-
-    class Chair : public PlaceableItem
+    class FoodItem : public PlaceableItem
     {
         public:
             // Fields
 
             // Constructor
-            Chair(ItemId id, const PlaceableItemDefinition &definition) : PlaceableItem(id, definition) { }
-            virtual ~Chair() { }
+            FoodItem(ItemId id, const PlaceableItemDefinition &definition) : PlaceableItem(id, definition) { }
+            virtual ~FoodItem() { }
 
             // Methods
             virtual void execute(CharacterController &controller, PlacedItem &placed);
 
-            static const std::string ItemType() { return "chair"; }
+            static const std::string ItemType() { return "food"; }
             virtual std::string type() const { return ItemType(); }
     };
 } // space

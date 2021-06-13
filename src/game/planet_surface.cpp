@@ -81,10 +81,17 @@ namespace space
         return _area.checkForMouse(session, mousePosition);
     }
 
-    void PlanetSurface::loopOver(LoopObjectCallback callback)
+    bool PlanetSurface::loopOver(LoopObjectCallback callback)
     {
-        SpaceObject::loopOver(callback);
-        _area.loopOver(callback);
+        if (!SpaceObject::loopOver(callback))
+        {
+            return false;
+        }
+        if (!_area.loopOver(callback))
+        {
+            return false;
+        }
+        return true;
     }
 
     void PlanetSurface::createMapLayersFromDefinition(GameSession &session)

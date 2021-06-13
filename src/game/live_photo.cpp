@@ -144,6 +144,8 @@ namespace space
             {
                 std::cout << " no comp" << std::endl;
             }
+
+            return true;
         });
 
         return result;
@@ -155,6 +157,7 @@ namespace space
         target->rootObject()->loopOver([=](SpaceObject *obj)
         {
             obj->partOfLivePhoto(this);
+            return true;
         });
     }
 

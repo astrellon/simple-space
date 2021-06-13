@@ -14,17 +14,20 @@
 
 namespace space
 {
-    void Teleporter::execute(CharacterController *controller, GameSession &session, const sf::Vector2f &position, Area &parentArea)
+    void Teleporter::execute(CharacterController &controller, PlacedItem &placed)
     {
-        if (!parentArea.partOfShip() && !parentArea.partOfPlanetSurface())
+        auto parentArea = placed.insideArea();
+        if (!parentArea->partOfShip() && !parentArea->partOfPlanetSurface())
         {
             std::cout << "Using teleporter outside of ship or planet" << std::endl;
             return;
         }
 
-        if (controller->isPlayer())
+        if (controller.isPlayer())
         {
-            session.engine().gameUIManager().teleportersPanel().teleporters(&controller->teleportersInRange());
+            auto &session = controller.session();
+            auto &teleporterPanel = session.engine().gameUIManager().teleportersPanel();
+            teleporterPanel.teleporters(&controller.teleportersInRange());
         }
     }
 

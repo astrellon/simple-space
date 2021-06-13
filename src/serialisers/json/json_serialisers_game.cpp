@@ -21,6 +21,7 @@
 #include "../../game/items/placeable_item.hpp"
 #include "../../game/items/chair.hpp"
 #include "../../game/items/teleporter.hpp"
+#include "../../game/items/food_item.hpp"
 #include "../../game/live_photo.hpp"
 #include "../../physics/polygon_collider.hpp"
 #include "../../effects/grass_effect.hpp"
@@ -683,10 +684,15 @@ namespace space
     {
         if (item.type() == PlaceableItem::ItemType())
             return toJson(dynamic_cast<const PlaceableItem &>(item));
+
         if (item.type() == Chair::ItemType())
             return toJson(dynamic_cast<const Chair &>(item));
+
         if (item.type() == Teleporter::ItemType())
             return toJson(dynamic_cast<const Teleporter &>(item));
+
+        if (item.type() == FoodItem::ItemType())
+            return toJson(dynamic_cast<const FoodItem &>(item));
 
         throw std::runtime_error("Unknown item type");
     }
@@ -703,6 +709,9 @@ namespace space
 
         if (type == Teleporter::ItemType())
             return addFromJsonTeleporter(j, session);
+
+        if (type == FoodItem::ItemType())
+            return addFromJsonFoodItem(j, session);
 
         throw std::runtime_error("Unknown item type");
     }
@@ -769,6 +778,28 @@ namespace space
         }
 
         session.createItem<Teleporter>(id, *definition);
+
+        return true;
+    }
+
+    json toJson(const FoodItem &item)
+    {
+        return toJsonBase(item);
+    }
+
+    bool addFromJsonFoodItem(const json &j, GameSession &session)
+    {
+        auto id = j.at("id").get<ItemId>();
+        auto definitionId = j.at("definitionId").get<DefinitionId>();
+
+        const PlaceableItemDefinition *definition;
+        if (!session.engine().definitionManager().tryGet(definitionId, &definition))
+        {
+            std::cout << "Unable to find placeable item definition " << definitionId << " for food item " << id << std::endl;
+            return false;
+        }
+
+        session.createItem<FoodItem>(id, *definition);
 
         return true;
     }

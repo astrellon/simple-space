@@ -30,6 +30,12 @@
             "type": "circle",
             "radius": 2
         }
+    },
+    {
+        "type": "placeable-item",
+        "id": "FOOD_APPLE",
+        "name": "Apple",
+        "texturePath": "data/items/apple.png",
+        "canPickup": true
     }
-
 ]

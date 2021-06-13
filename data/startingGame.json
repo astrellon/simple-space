@@ -41,6 +41,11 @@
             "type": "teleporter"
         },
         {
+            "definitionId": "FOOD_APPLE",
+            "id": 13,
+            "type": "food"
+        },
+        {
             "definitionId": "TELEPORTER_1",
             "id": 20,
             "type": "teleporter"
@@ -189,6 +194,7 @@
                     "BIRD_CHAR_4",
                     "ITEM_10",
                     "ITEM_3",
+                    "ITEM_13",
                     "PLANET1_GRASS_1"
                 ]
             },
@@ -265,6 +271,11 @@
             "type": "placed-item",
             "itemId": 12,
             "position": [200, 200]
+        },
+        {
+            "type": "placed-item",
+            "itemId": 13,
+            "position": [400, 200]
         },
         {
             "definitionId": "SHIP_1",

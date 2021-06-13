@@ -26,5 +26,6 @@ namespace space
             float _timeToNextAction;
 
             // Methods
+            void chooseNextAction();
     };
 } // space

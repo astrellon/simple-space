@@ -4,12 +4,13 @@
 #include "../game/character.hpp"
 
 #include "./actions/npc_action_move.hpp"
+#include "./actions/npc_action_find_food.hpp"
 
 namespace space
 {
     BirdController::BirdController(GameSession &session) : NpcController(session), _timeToBlink(0.0f), _timeToNextAction(0.0f)
     {
-
+        _needs.hunger(Utils::randf(0.21f, 0.26f));
     }
 
     void BirdController::update(sf::Time dt)
@@ -21,20 +22,13 @@ namespace space
 
         NpcController::update(dt);
 
+        std::cout << "Hunger: " << _needs.hunger() << std::endl;
+
         if (_highLevelActions.size() == 0)
         {
             if (_timeToNextAction <= 0.0f)
             {
-                sf::Vector2f newPos;
-                do
-                {
-                    auto pos = _character->transform().position;
-                    pos.x = Utils::randf(pos.x - 50, pos.x + 50);
-                    pos.y = Utils::randf(pos.y - 50, pos.y + 50);
-                    newPos = pos;
-                } while (newPos.x < 50 || newPos.y < 50);
-
-                _highLevelActions.push(std::make_unique<NpcActionMove>(this, newPos));
+                chooseNextAction();
                 _timeToNextAction = Utils::randf(2, 4);
             }
             else
@@ -59,6 +53,27 @@ namespace space
             auto &sprite = _character->sprite();
             sprite.sequence("blink", true);
             sprite.sequence("idle", false);
+        }
+    }
+
+    void BirdController::chooseNextAction()
+    {
+        if (_needs.hunger() < 0.2f)
+        {
+            _highLevelActions.push(std::make_unique<NpcActionFindFood>(this));
+        }
+        else
+        {
+            sf::Vector2f newPos;
+            do
+            {
+                auto pos = _character->transform().position;
+                pos.x = Utils::randf(pos.x - 50, pos.x + 50);
+                pos.y = Utils::randf(pos.y - 50, pos.y + 50);
+                newPos = pos;
+            } while (newPos.x < 50 || newPos.y < 50);
+
+            _highLevelActions.push(std::make_unique<NpcActionMove>(this, newPos));
         }
     }
 } // space

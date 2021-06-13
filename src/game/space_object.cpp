@@ -32,9 +32,9 @@ namespace space
         }
     }
 
-    void SpaceObject::loopOver(LoopObjectCallback callback)
+    bool SpaceObject::loopOver(LoopObjectCallback callback)
     {
-        callback(this);
+        return callback(this);
     }
 
     void SpaceObject::createInteractable()
