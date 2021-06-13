@@ -68,13 +68,13 @@ namespace space
 
         auto item = this->item;
 
-        _interactable->setOnPlayerEnters([item](GameSession &session)
+        _interactable->setOnCharacterEnters([item](CharacterController *controller, GameSession &session)
         {
-            item->onPlayerEnters(session);
+            item->onCharacterEnters(controller, session);
         });
-        _interactable->setOnPlayerLeaves([item](GameSession &session)
+        _interactable->setOnCharacterLeaves([item](CharacterController *controller, GameSession &session)
         {
-            item->onPlayerLeaves(session);
+            item->onCharacterLeaves(controller, session);
         });
 
         _interactable->name(item->definition.name);

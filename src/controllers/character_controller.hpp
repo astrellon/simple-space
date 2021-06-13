@@ -76,6 +76,8 @@ namespace space
             void checkForInTeleportRange(sf::Vector2f position, const Area &area);
             const TeleporterList &teleportersInRange() const { return _teleportersInRange;}
 
+            virtual bool isPlayer() const { return false; }
+
             void dropItem(PlaceableItem *placeableItem);
 
             void interactWithClosest();

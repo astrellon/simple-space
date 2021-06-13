@@ -5,6 +5,7 @@
 namespace space
 {
     class Area;
+    class CharacterController;
 
     class Chair : public PlaceableItem
     {
@@ -16,7 +17,7 @@ namespace space
             virtual ~Chair() { }
 
             // Methods
-            virtual void execute(GameSession &session, const sf::Vector2f &position, Area &parentArea);
+            virtual void execute(CharacterController *controller, GameSession &session, const sf::Vector2f &position, Area &parentArea);
 
             static const std::string ItemType() { return "chair"; }
             virtual std::string type() const { return ItemType(); }

@@ -7,7 +7,7 @@
 
 namespace space
 {
-    void Chair::execute(GameSession &session, const sf::Vector2f &position, Area &parentArea)
+    void Chair::execute(CharacterController *controller, GameSession &session, const sf::Vector2f &position, Area &parentArea)
     {
         auto ship = parentArea.partOfShip();
         if (ship == nullptr)
@@ -16,6 +16,14 @@ namespace space
             return;
         }
 
-        session.setPlayerControllingShip(ship);
+        if (controller->isPlayer())
+        {
+            session.setPlayerControllingShip(ship);
+        }
+        else
+        {
+            controller->controllingShip(ship);
+            controller->controlling(ControlShip);
+        }
     }
 } // namespace space

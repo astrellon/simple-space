@@ -71,11 +71,11 @@ namespace space
 
             if (prevDist > rangeSquared && distance <= rangeSquared)
             {
-                interactable->onPlayerEnters(_session);
+                interactable->onCharacterEnters(this, _session);
             }
             else if (prevDist <= rangeSquared && distance > rangeSquared)
             {
-                interactable->onPlayerLeaves(_session);
+                interactable->onCharacterLeaves(this, _session);
             }
 
             if (distance <= rangeSquared)

@@ -1,5 +1,7 @@
 #include "interactable.hpp"
 
+#include "../../controllers/character_controller.hpp"
+
 namespace space
 {
     Interactable::Interactable(SpaceObject *parentObject) :
@@ -22,21 +24,29 @@ namespace space
         return false;
     }
 
-    void Interactable::onPlayerEnters(GameSession &session)
+    void Interactable::onCharacterEnters(CharacterController *controller, GameSession &session)
     {
-        _playerInRange = true;
-        if (_onPlayerEnters)
+        if (controller->isPlayer())
         {
-            _onPlayerEnters(session);
+            _playerInRange = true;
+        }
+
+        if (_onCharacterEnters)
+        {
+            _onCharacterEnters(controller, session);
         }
     }
 
-    void Interactable::onPlayerLeaves(GameSession &session)
+    void Interactable::onCharacterLeaves(CharacterController *controller, GameSession &session)
     {
-        _playerInRange = false;
-        if (_onPlayerLeaves)
+        if (controller->isPlayer())
         {
-            _onPlayerLeaves(session);
+            _playerInRange = false;
+        }
+
+        if (_onCharacterLeaves)
+        {
+            _onCharacterLeaves(controller, session);
         }
     }
 } // namespace space

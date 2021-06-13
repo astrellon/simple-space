@@ -32,6 +32,8 @@ namespace space
             Compendium &compendium() { return _compendium; }
             const Compendium &compendium() const { return _compendium; }
 
+            virtual bool isPlayer() const { return true; }
+
         private:
             // Fields
             ObjectId _selectedObject;

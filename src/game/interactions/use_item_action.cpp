@@ -3,6 +3,7 @@
 #include "../items/placeable_item.hpp"
 #include "../items/placed_item.hpp"
 #include "../../space_transform.hpp"
+#include "../../game_session.hpp"
 
 namespace space
 {
@@ -13,6 +14,6 @@ namespace space
 
     void UseItemAction::execute(GameSession &session)
     {
-        _placedItem->item->execute(session, _placedItem->transform().position, *_placedItem->insideArea());
+        _placedItem->item->execute(&session.playerController(), session, _placedItem->transform().position, *_placedItem->insideArea());
     }
 } // namespace space

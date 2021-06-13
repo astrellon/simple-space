@@ -14,7 +14,7 @@
 
 namespace space
 {
-    void Teleporter::execute(GameSession &session, const sf::Vector2f &position, Area &parentArea)
+    void Teleporter::execute(CharacterController *controller, GameSession &session, const sf::Vector2f &position, Area &parentArea)
     {
         if (!parentArea.partOfShip() && !parentArea.partOfPlanetSurface())
         {
@@ -22,7 +22,10 @@ namespace space
             return;
         }
 
-        session.engine().gameUIManager().teleportersPanel().teleporters(&session.playerController().teleportersInRange());
+        if (controller->isPlayer())
+        {
+            session.engine().gameUIManager().teleportersPanel().teleporters(&controller->teleportersInRange());
+        }
     }
 
     void Teleporter::onPlaced(PlacedItem &placedItem)
@@ -38,10 +41,13 @@ namespace space
         }
     }
 
-    void Teleporter::onPlayerLeaves(GameSession &session)
+    void Teleporter::onCharacterLeaves(CharacterController *controller, GameSession &session)
     {
-        PlaceableItem::onPlayerLeaves(session);
+        PlaceableItem::onCharacterLeaves(controller, session);
 
-        session.engine().gameUIManager().teleportersPanel().teleporters(nullptr);
+        if (controller->isPlayer())
+        {
+            session.engine().gameUIManager().teleportersPanel().teleporters(nullptr);
+        }
     }
 } // namespace space

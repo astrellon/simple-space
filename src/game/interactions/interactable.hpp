@@ -10,12 +10,13 @@
 namespace space
 {
     class SpaceObject;
+    class CharacterController;
 
     class Interactable : private NonCopyable
     {
         public:
             typedef std::vector<std::unique_ptr<Interaction>> InteractionList;
-            typedef std::function<void(GameSession &)> InteractCallback;
+            typedef std::function<void(CharacterController *controller, GameSession &)> InteractCallback;
 
             // Fields
 
@@ -35,11 +36,11 @@ namespace space
 
             bool removeInteraction(Interaction *interaction);
 
-            void onPlayerEnters(GameSession &session);
-            void onPlayerLeaves(GameSession &session);
+            void onCharacterEnters(CharacterController *controller, GameSession &session);
+            void onCharacterLeaves(CharacterController *controller, GameSession &session);
 
-            void setOnPlayerEnters(InteractCallback callback) { _onPlayerEnters = callback; }
-            void setOnPlayerLeaves(InteractCallback callback) { _onPlayerLeaves = callback; }
+            void setOnCharacterEnters(InteractCallback callback) { _onCharacterEnters = callback; }
+            void setOnCharacterLeaves(InteractCallback callback) { _onCharacterLeaves = callback; }
 
             void name(const std::string &name) { _name = name; }
             const std::string &name() const { return _name; }
@@ -53,8 +54,8 @@ namespace space
             // Fields
             InteractionList _interactions;
             SpaceObject *_parentObject;
-            InteractCallback _onPlayerEnters;
-            InteractCallback _onPlayerLeaves;
+            InteractCallback _onCharacterEnters;
+            InteractCallback _onCharacterLeaves;
             std::string _name;
             bool _playerInRange;
     };

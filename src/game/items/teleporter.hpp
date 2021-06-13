@@ -8,6 +8,7 @@ namespace space
 {
     class Area;
     class PlacedItem;
+    class CharacterController;
 
     class Teleporter : public PlaceableItem
     {
@@ -19,9 +20,9 @@ namespace space
             virtual ~Teleporter() { }
 
             // Methods
-            virtual void execute(GameSession &session, const sf::Vector2f &position, Area &parentArea);
+            virtual void execute(CharacterController *controller, GameSession &session, const sf::Vector2f &position, Area &parentArea);
             virtual void onPlaced(PlacedItem &placedItem);
-            virtual void onPlayerLeaves(GameSession &session);
+            virtual void onCharacterLeaves(CharacterController *controller, GameSession &session);
 
             const std::string &name() const { return _name; }
             void name(const std::string &name) { _name = name; }
