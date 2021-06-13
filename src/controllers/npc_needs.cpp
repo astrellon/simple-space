@@ -11,7 +11,7 @@ namespace space
     void NpcNeeds::update(sf::Time dt)
     {
         auto seconds = dt.asSeconds();
-        auto newHunger = _hunger - seconds / (60.0f * 5.0f);
+        auto newHunger = _hunger - seconds / (60.0f * 1.0f);
         auto newEnergy = _energy - seconds / (60.0f * 10.0f);
         auto newFun = _fun - seconds / (60.0f * 3.0f);
         auto newSocial = _social - seconds / (60.0f * 13.0f);

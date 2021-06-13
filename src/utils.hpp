@@ -321,7 +321,7 @@ namespace space
             static int checkIfInsidePolygon(const sf::Vector2f &point, const Polygon &polygon, const mapbox::detail::Earcut<T> &earcut)
             {
                 auto triangleIndex = 0;
-                for (auto i = 0; i < earcut.indices.size(); i += 3)
+                for (auto i = 0u; i < earcut.indices.size(); i += 3)
                 {
                     auto &p1 = polygon[earcut.indices[i    ]];
                     auto &p2 = polygon[earcut.indices[i + 1]];
@@ -336,47 +336,6 @@ namespace space
                 }
 
                 return -1;
-            }
-
-            // Matrix will receive the calculated perspective matrix.
-            // You would have to upload to your shader
-            // or use glLoadMatrixf if you aren't using shaders.
-            static void glhPerspectivef2(float *matrix, float fovyInDegrees, float aspectRatio,
-                                float znear, float zfar)
-            {
-                float ymax, xmax;
-                float temp, temp2, temp3, temp4;
-                ymax = znear * tanf(fovyInDegrees * M_PI / 360.0);
-                // ymin = -ymax;
-                // xmin = -ymax * aspectRatio;
-                xmax = ymax * aspectRatio;
-                glhFrustumf2(matrix, -xmax, xmax, -ymax, ymax, znear, zfar);
-            }
-
-            static void glhFrustumf2(float *matrix, float left, float right, float bottom, float top,
-                  float znear, float zfar)
-            {
-                float temp, temp2, temp3, temp4;
-                temp = 2.0 * znear;
-                temp2 = right - left;
-                temp3 = top - bottom;
-                temp4 = zfar - znear;
-                matrix[0] = temp / temp2;
-                matrix[1] = 0.0;
-                matrix[2] = 0.0;
-                matrix[3] = 0.0;
-                matrix[4] = 0.0;
-                matrix[5] = temp / temp3;
-                matrix[6] = 0.0;
-                matrix[7] = 0.0;
-                matrix[8] = (right + left) / temp2;
-                matrix[9] = (top + bottom) / temp3;
-                matrix[10] = (-zfar - znear) / temp4;
-                matrix[11] = -1.0;
-                matrix[12] = 0.0;
-                matrix[13] = 0.0;
-                matrix[14] = (-temp * zfar) / temp4;
-                matrix[15] = 0.0;
             }
 
         private:

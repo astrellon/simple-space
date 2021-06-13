@@ -8,7 +8,7 @@
 
 namespace space
 {
-    PlanetSurface::PlanetSurface(const ObjectId &id, const PlanetSurfaceDefinition &definition) : SpaceObject(id), definition(definition), _partOfPlanet(nullptr), _area(AreaType::PlanetSurface, this)
+    PlanetSurface::PlanetSurface(const ObjectId &id, const PlanetSurfaceDefinition &definition) : SpaceObject(id), definition(definition), _area(AreaType::PlanetSurface, this), _partOfPlanet(nullptr)
     {
     }
 
@@ -97,7 +97,7 @@ namespace space
     void PlanetSurface::createMapLayersFromDefinition(GameSession &session)
     {
         const auto &layers = definition.tmxMap->getLayers();
-        for (auto i = 0; i < layers.size(); i++)
+        for (auto i = 0u; i < layers.size(); i++)
         {
             _mapLayers.emplace_back(std::make_unique<MapLayer>(*definition.tmxMap, session.engine().resourceManager(), i));
         }

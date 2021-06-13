@@ -18,7 +18,6 @@ namespace space
     {
         calcViewLines();
 
-        auto size = view.getSize();
         auto dir1 = (point1 - viewPoint).normalised();
         auto dir2 = (point2 - viewPoint).normalised();
 
@@ -27,7 +26,7 @@ namespace space
         sf::Vector2f endPoint1, endPoint2;
         CircularIndex index(_viewLines.size());
 
-        auto checkCounter = 0;
+        auto checkCounter = 0u;
         // Find intersecting ray for point1
         while (!Utils::tryGetIntersection(point1, dir1, _viewLines[index].point1, _viewLines[index].point2, &endPoint1))
         {
@@ -42,7 +41,7 @@ namespace space
         }
 
         // Find intersecting ray for point2
-        checkCounter = 0;
+        checkCounter = 0u;
         auto origIndex = index;
         while (!Utils::tryGetIntersection(point2, dir2, _viewLines[index].point1, _viewLines[index].point2, &endPoint2))
         {
@@ -71,7 +70,7 @@ namespace space
         }
 
         // Check if we need to fill in full screen edges
-        for (walkIndex; walkIndex != index; ++walkIndex)
+        for (; walkIndex != index; ++walkIndex)
         {
             result.push_back(_viewLines[walkIndex].point2);
         }

@@ -19,7 +19,15 @@ using kainjow::mustache::mustache;
 
 namespace space
 {
-    GameUIDialogue::GameUIDialogue() : _textDisplayIndex(0), _contentText(nullptr), _nameText(nullptr), _uiManager(nullptr), _dialogueBlipCooldown(0.0f), _dialogueBlip(std::make_unique<sf::Sound>())
+    GameUIDialogue::GameUIDialogue() :
+        _uiManager(nullptr),
+        _textDisplayIndex(0),
+        _contentText(nullptr),
+        _nameText(nullptr),
+        _nextButton(nullptr),
+        _panel(nullptr),
+        _dialogueBlip(std::make_unique<sf::Sound>()),
+        _dialogueBlipCooldown(0.0f)
     {
 
     }

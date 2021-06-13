@@ -5,7 +5,11 @@
 
 namespace space
 {
-    AnimatedSprite::AnimatedSprite(const AnimatedTexture &texture) : _texture(texture), animationSpeed(1.0f), animationTime(0.0f), _sprite(*texture.texture())
+    AnimatedSprite::AnimatedSprite(const AnimatedTexture &texture) :
+        animationSpeed(1.0f),
+        animationTime(0.0f),
+        _texture(texture),
+        _sprite(*texture.texture())
     {
         auto size = texture.spriteSize();
         _sprite.setOrigin(sf::Vector2f(size.x * 0.5f, size.y * 0.5f));

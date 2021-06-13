@@ -164,7 +164,7 @@ namespace space
         if (asPolygon)
         {
             sf::VertexArray polygonDraw(sf::Triangles);
-            for (auto i = 0; i < _earcut.indices.size(); i++)
+            for (auto i = 0u; i < _earcut.indices.size(); i++)
             {
                 auto index = _earcut.indices[i];
                 auto &point = _shadowShape[0][index];
@@ -210,7 +210,7 @@ namespace space
 
     void SpacePortal::cleanupNearbyObjects()
     {
-        for (auto i = 0; i < _nearbyObjects.size(); i++)
+        for (auto i = 0u; i < _nearbyObjects.size(); i++)
         {
             auto &nearbyObj = _nearbyObjects[i];
             if (nearbyObj.framesOutsideOfRadius > 4)

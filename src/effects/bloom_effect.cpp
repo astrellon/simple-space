@@ -5,9 +5,17 @@
 
 namespace space
 {
-    BloomEffect::BloomEffect()
-        : _brightnessTexture(), _firstPassTextures(), _secondPassTextures(), _hasAllShaders(false), _brightness(nullptr), _downSample(nullptr), _blur(nullptr), _add(nullptr)
+    BloomEffect::BloomEffect() :
+        _brightness(nullptr),
+        _downSample(nullptr),
+        _blur(nullptr),
+        _add(nullptr),
+        _hasAllShaders(false),
+        _brightnessTexture(),
+        _firstPassTextures(),
+        _secondPassTextures()
     {
+
     }
 
     bool BloomEffect::init(DefinitionManager &definitionManager)

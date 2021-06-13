@@ -21,8 +21,6 @@ namespace space
 
     void PostEffect::applyShader(const sf::Shader &shader, sf::RenderTarget &output)
     {
-        auto outputSize = static_cast<sf::Vector2f>(output.getSize());
-
         sf::RenderStates states;
         states.shader = &shader;
         states.blendMode = sf::BlendNone;

@@ -83,6 +83,7 @@ namespace space
                 PlacedItem *destination;
                 if (!controller()->session().tryGetSpaceObject(_destinationId, &destination))
                 {
+                    std::cout << "Food gone!" << std::endl;
                     _stage = Stage::Done;
                     break;
                 }
@@ -99,6 +100,11 @@ namespace space
                 {
                     _stage = Stage::Done;
                 }
+                break;
+            }
+
+            case Stage::Done:
+            {
                 break;
             }
         }

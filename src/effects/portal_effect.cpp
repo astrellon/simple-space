@@ -16,7 +16,7 @@ namespace space
     {
         _particles.resize(numParticles);
 
-        for (auto i = 0; i < numParticles; i++)
+        for (auto i = 0u; i < numParticles; i++)
         {
             auto &particle = _particles[i];
             auto &vertex = _vertices[i];
@@ -49,7 +49,7 @@ namespace space
         }
 
         auto seconds = dt.asSeconds();
-        for (auto i = 0; i < _particles.size(); i++)
+        for (auto i = 0u; i < _particles.size(); i++)
         {
             auto &particle = _particles[i];
             auto &vertex = _vertices[i];

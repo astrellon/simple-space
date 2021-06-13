@@ -22,7 +22,7 @@ namespace space
 
         NpcController::update(dt);
 
-        std::cout << "Hunger: " << _needs.hunger() << std::endl;
+        // std::cout << "Hunger: " << _needs.hunger() << std::endl;
 
         if (_highLevelActions.size() == 0)
         {

@@ -14,9 +14,17 @@
 
 namespace space
 {
-    CharacterController::CharacterController(GameSession &session) : _session(session), _controlling(ControlNone), _inventory(std::make_unique<Inventory>()),
-    _interactRangeObjects(0), _interactRangeShips(0),
-    _character(nullptr), _ship(nullptr), _teleportClone(nullptr), _timeToNextIdle(0.0f), _dizzy(0.0f)
+    CharacterController::CharacterController(GameSession &session) :
+        _session(session),
+        _ship(nullptr),
+        _character(nullptr),
+        _teleportClone(nullptr),
+        _controlling(ControlNone),
+        _inventory(std::make_unique<Inventory>()),
+        _interactRangeObjects(0),
+        _interactRangeShips(0),
+        _timeToNextIdle(0.0f),
+        _dizzy(0.0f)
     {
         interactRangeObjects(100.0f);
         interactRangeShips(150.0f);

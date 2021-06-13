@@ -27,7 +27,7 @@ namespace space
             // Fields
 
             // Constructor
-            UIElement() : _parent(nullptr), _yogaNode(YGNodeNew()) { }
+            UIElement() : _yogaNode(YGNodeNew()), _parent(nullptr) { }
             virtual ~UIElement();
 
             // Methods

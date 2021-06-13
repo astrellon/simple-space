@@ -6,7 +6,10 @@
 
 namespace space
 {
-    Overlay::Overlay(sf::Color colour) : _shader(nullptr), _vertices(sf::Triangles, 6), _colour(colour)
+    Overlay::Overlay(sf::Color colour) :
+        _vertices(sf::Triangles, 6),
+        _shader(nullptr),
+        _colour(colour)
     {
         _vertices[0] = sf::Vertex(sf::Vector2f(-1, 1), _colour, sf::Vector2f(0, 1));
         _vertices[1] = sf::Vertex(sf::Vector2f(1, 1), _colour, sf::Vector2f(1, 1));

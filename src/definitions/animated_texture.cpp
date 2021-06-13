@@ -8,7 +8,10 @@
 namespace space
 {
     // Animated Texture
-    AnimatedTexture::AnimatedTexture(const DefinitionId &id, const std::string &texturePath, sf::Vector2<ushort> spriteSize) : BaseDefinition(id), _texturePath(texturePath), _spriteSize(spriteSize)
+    AnimatedTexture::AnimatedTexture(const DefinitionId &id, const std::string &texturePath, sf::Vector2<ushort> spriteSize) :
+        BaseDefinition(id),
+        _texturePath(texturePath),
+        _spriteSize(spriteSize)
     {
 
     }
@@ -72,16 +75,19 @@ namespace space
 
     }
 
-    AnimationSequence::AnimationSequence(uint startIndex, uint endIndex, float frameTiming)
-        : frameTiming(frameTiming), totalTime((endIndex - startIndex + 1) * frameTiming)
+    AnimationSequence::AnimationSequence(uint startIndex, uint endIndex, float frameTiming) :
+        frameTiming(frameTiming),
+        totalTime((endIndex - startIndex + 1) * frameTiming)
     {
         _frames.reserve(endIndex - startIndex + 1);
         for (auto i = startIndex; i <= endIndex; ++i)
             _frames.push_back(i);
     }
 
-    AnimationSequence::AnimationSequence(const std::vector<uint> &frames, float frameTiming)
-        : _frames(frames), frameTiming(frameTiming), totalTime(frames.size() * frameTiming)
+    AnimationSequence::AnimationSequence(const std::vector<uint> &frames, float frameTiming) :
+        frameTiming(frameTiming),
+        totalTime(frames.size() * frameTiming),
+        _frames(frames)
     {
 
     }
@@ -100,13 +106,13 @@ namespace space
 
     bool AnimationSequence::areFramesSequential() const
     {
-        if (_frames.size() < 2)
+        if (_frames.size() < 2u)
         {
             return false;
         }
 
         auto f = _frames[0];
-        for (auto i = 1; i < _frames.size(); ++i)
+        for (auto i = 1u; i < _frames.size(); ++i)
         {
             auto f2 = _frames[i];
             if (f2 - f != 1)

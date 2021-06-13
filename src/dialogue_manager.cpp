@@ -4,7 +4,12 @@
 
 namespace space
 {
-    DialogueManager::DialogueManager() : _current(nullptr), _inDialogue(false), _nextPage(0), _currentLine(""), _dialogueAudio(nullptr)
+    DialogueManager::DialogueManager() :
+        _current(nullptr),
+        _dialogueAudio(nullptr),
+        _inDialogue(false),
+        _nextPage(0),
+        _currentLine("")
     {
 
     }
@@ -28,7 +33,7 @@ namespace space
 
     bool DialogueManager::nextLine()
     {
-        if (!_inDialogue || _current == nullptr || _nextPage >= _current->text.size())
+        if (!_inDialogue || _current == nullptr || static_cast<std::size_t>(_nextPage) >= _current->text.size())
         {
             _inDialogue = false;
             _currentLine = "";

@@ -6,7 +6,10 @@
 
 namespace space
 {
-    TextureOverlay::TextureOverlay() : _shader(nullptr), _vertices(sf::Triangles, 6), _texture(nullptr)
+    TextureOverlay::TextureOverlay() :
+        _vertices(sf::Triangles, 6),
+        _texture(nullptr),
+        _shader(nullptr)
     {
         _vertices[0] = sf::Vertex(sf::Vector2f(-1, 1), sf::Vector2f(0, 1));
         _vertices[1] = sf::Vertex(sf::Vector2f(1, 1), sf::Vector2f(1, 1));

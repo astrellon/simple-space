@@ -25,7 +25,7 @@ namespace space
             CameraProps cameraProps;
 
             // Constructor
-            TransitionData() : ship(nullptr), starSystem(nullptr), planetSurface(nullptr), rotation(0.0f) { }
+            TransitionData() : starSystem(nullptr), ship(nullptr), planetSurface(nullptr), rotation(0.0f) { }
 
             // Methods
     };
@@ -44,7 +44,10 @@ namespace space
 
             // Constructor
             Transition(const sf::Time &startTime, const sf::Time &duration, SpaceObject &fromObject, SpaceObject &toObject) :
-                startTime(startTime), duration(duration), fromObject(fromObject), toObject(toObject)
+                fromObject(fromObject),
+                toObject(toObject),
+                startTime(startTime),
+                duration(duration)
             {
 
             }
