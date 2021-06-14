@@ -24,12 +24,15 @@ namespace space
         _dropButton->width(50);
         _dropButton->on(sf::Event::EventType::MouseButtonPressed, [&](const sf::Event &e)
         {
-            std::cout << "Drop item!" << std::endl;
-            auto placeableItem = dynamic_cast<PlaceableItem *>(this->_item);
-            if (placeableItem != nullptr)
+            uiManager.engine().currentSession()->nextFrameState().addAction([&]()
             {
-                uiManager.engine().currentSession()->playerController().dropItem(placeableItem);
-            }
+                std::cout << "Drop item!" << std::endl;
+                auto placeableItem = dynamic_cast<PlaceableItem *>(this->_item);
+                if (placeableItem != nullptr)
+                {
+                    uiManager.engine().currentSession()->playerController().dropItem(placeableItem);
+                }
+            });
             return UIEventResult::Triggered;
         });
 

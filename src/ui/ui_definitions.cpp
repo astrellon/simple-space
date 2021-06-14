@@ -114,7 +114,7 @@ namespace space
 
     void UIDefinitions::drawDialogue(Dialogue &dialogue)
     {
-        for (auto i = 0; i < dialogue.text.size(); i++)
+        for (auto i = 0u; i < dialogue.text.size(); i++)
         {
             ImGui::Text("Line %i", i + 1);
             ImGui::Text("%s", dialogue.text[i].c_str());
@@ -158,7 +158,7 @@ namespace space
         ImGui::TextWrapped("Interior Polygon: %s", interiorPolygon.str().c_str());
 
         ImGui::Text("Extra Polygons:");
-        for (auto i = 0; i < ship.extraInteriorPolygons.size(); i++)
+        for (auto i = 0u; i < ship.extraInteriorPolygons.size(); i++)
         {
             auto &polygon = ship.extraInteriorPolygons[i];
 

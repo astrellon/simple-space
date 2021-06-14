@@ -50,10 +50,7 @@ namespace space
         }
 
         auto targetSpacePortal = dynamic_cast<SpacePortal *>(targetObject);
-
         _sprite.sequence("active", false);
-        auto seconds = dt.asSeconds();
-
         auto pos = Utils::getPosition(_worldTransform);
 
         _insideArea->getObjectsNearby(definition.pullRadius, pos, [&](SpaceObject *obj)
@@ -175,7 +172,7 @@ namespace space
         else
         {
             sf::VertexArray polygonDraw(sf::Triangles);
-            for (auto i = 0; i < _earcut.indices.size(); i += 3)
+            for (auto i = 0u; i < _earcut.indices.size(); i += 3)
             {
                 sf::VertexArray polygonDraw(sf::Triangles, 3);
 
@@ -184,7 +181,7 @@ namespace space
                     auto index = _earcut.indices[i + j];
                     auto &point = _shadowShape[0][index];
 
-                    auto isOverIndex = (i / 3) == _mouseOverTriangleIndex;
+                    auto isOverIndex = (i / 3) == static_cast<uint>(_mouseOverTriangleIndex);
                     polygonDraw[j].position = point;
                     polygonDraw[j].color = isOverIndex ? sf::Color::Red : Utils::hsv((float)i / (float)_earcut.indices.size() * 360, 1, 1);
                     polygonDraw[j].color.a = isOverIndex ? 255 : 120;

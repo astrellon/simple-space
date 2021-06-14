@@ -1,6 +1,8 @@
 #pragma once
 
 #include <vector>
+#include <functional>
+
 #include <SFML/Graphics.hpp>
 
 #include "types.hpp"
@@ -30,6 +32,11 @@ namespace space
                     // Methods
             };
 
+            // Types
+            typedef std::function<void ()> GeneralAction;
+            typedef std::vector<MoveSpaceObject> MoveSpaceObjectList;
+            typedef std::vector<ObjectId> ObjectIdList;
+
             // Fields
 
             // Constructor
@@ -40,13 +47,16 @@ namespace space
 
             void addMoveSpaceObject(SpaceObject *obj, sf::Vector2f position, Area *area);
             void addRemoveObject(const ObjectId &id);
+            void addAction(GeneralAction action);
 
-            const std::vector<MoveSpaceObject> &moveSpaceObject() const { return _moveSpaceObjects; }
-            const std::vector<ObjectId> &removeObjects() const { return _removeObjects; }
+            const MoveSpaceObjectList &moveSpaceObject() const { return _moveSpaceObjects; }
+            const ObjectIdList &removeObjects() const { return _removeObjects; }
+            void triggerActions();
 
         private:
             // Fields
-            std::vector<MoveSpaceObject> _moveSpaceObjects;
-            std::vector<ObjectId> _removeObjects;
+            MoveSpaceObjectList _moveSpaceObjects;
+            ObjectIdList _removeObjects;
+            std::vector<GeneralAction> _generalActions;
     };
 } // space

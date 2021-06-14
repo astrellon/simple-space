@@ -5,7 +5,7 @@
 
 namespace space
 {
-    UIPanel::UIPanel(): _bodyContainer(nullptr), _backPanel(nullptr)
+    UIPanel::UIPanel(): _backPanel(nullptr), _bodyContainer(nullptr)
     {
 
     }

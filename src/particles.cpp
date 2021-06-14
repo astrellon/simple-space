@@ -21,8 +21,16 @@ static const GLfloat g_vertex_buffer_data[] = {
 
 namespace space
 {
-    Particles::Particles(Engine &engine, int numParticles, GLenum bufferUsage) : _engine(engine), _numParticles(numParticles), _inited(false), _bufferUsage(bufferUsage), _billboardVertexBuffer(0), _particlesPositionBuffer(0), _particlesColourBuffer(0)
+    Particles::Particles(Engine &engine, int numParticles, GLenum bufferUsage) :
+        _engine(engine),
+        _numParticles(numParticles),
+        _billboardVertexBuffer(0),
+        _particlesPositionBuffer(0),
+        _particlesColourBuffer(0),
+        _bufferUsage(bufferUsage),
+        _inited(false)
     {
+
     }
 
     void Particles::update(sf::Time dt)

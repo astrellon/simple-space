@@ -510,7 +510,8 @@ namespace space
             }
         }
 
-        return std::move(result);
+        // return std::move(result);
+        return result;
     }
 
     json toJson(const ShaderDefinition &input)

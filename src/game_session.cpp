@@ -34,7 +34,14 @@
 
 namespace space
 {
-    GameSession::GameSession(Engine &engine) : _engine(engine), _playerController(*this), _drawingPreTeleport(false), _nextId(0), _mouseOverObject(nullptr), _nextMouseOverObject(nullptr), _takingAPhoto(false)
+    GameSession::GameSession(Engine &engine) :
+        _engine(engine),
+        _mouseOverObject(nullptr),
+        _nextMouseOverObject(nullptr),
+        _playerController(*this),
+        _drawingPreTeleport(false),
+        _nextId(0),
+        _takingAPhoto(false)
     {
         _teleportEffect = std::make_unique<TeleportScreenEffect>();
         _teleportEffect->init(engine.definitionManager());
@@ -89,7 +96,7 @@ namespace space
         auto result = createObject<LivePhoto>(newId, photoSize);
 
         CloneContext cloneContext(*this, photoArea, &insideArea, _engine.timeSinceStart());
-        auto deepClone = rootObject->deepClone(newIdPrefix, cloneContext);
+        rootObject->deepClone(newIdPrefix, cloneContext);
         auto newParentObjectId = newIdPrefix + parentObject->id;
 
         SpaceObject *newParent;
@@ -314,7 +321,7 @@ namespace space
 
     void GameSession::onPostLoad(LoadingContext &context)
     {
-        for (auto i = 0; i < _spaceObjects.size(); i++)
+        for (auto i = 0u; i < _spaceObjects.size(); i++)
         {
             auto &spaceObject = _spaceObjects[i];
             if (spaceObject->type() == LivePhoto::SpaceObjectType())
@@ -323,7 +330,7 @@ namespace space
             }
         }
 
-        for (auto i = 0; i < _spaceObjects.size(); i++)
+        for (auto i = 0u; i < _spaceObjects.size(); i++)
         {
             auto &spaceObject = _spaceObjects[i];
             if (spaceObject->type() != LivePhoto::SpaceObjectType())
@@ -405,6 +412,8 @@ namespace space
         {
             moveSpaceObject(moveObj.obj, moveObj.position, moveObj.area);
         }
+
+        _nextFrameState.triggerActions();
 
         _nextFrameState.clear();
     }
@@ -578,7 +587,7 @@ namespace space
         camera.scale(scale);
         target.preDraw();
 
-        auto &renderContext = _renderStack.emplace_back(spaceObject, target, _renderStack.size() + 1, renderObject);
+        _renderStack.emplace_back(spaceObject, target, _renderStack.size() + 1, renderObject);
 
         renderObject->draw(*this, target);
 

@@ -13,7 +13,14 @@
 namespace space
 {
     Ship::Ship(const ObjectId &id, const ShipDefinition &definition):
-        SpaceObject(id), definition(definition), _sprite(*definition.texture), _interiorSprite(*definition.interiorTexture), _rotationSpeed(0), rotateInput(0), _area(AreaType::Ship, this), disableRender(false)
+        SpaceObject(id),
+        definition(definition),
+        rotateInput(0),
+        disableRender(false),
+        _area(AreaType::Ship, this),
+        _sprite(*definition.texture),
+        _interiorSprite(*definition.interiorTexture),
+        _rotationSpeed(0)
     {
         auto size = definition.texture->getSize();
         _sprite.setOrigin(size.x / 2, size.y / 2);
@@ -197,7 +204,6 @@ namespace space
         if (moveInput == sf::Vector2f() && _speed != sf::Vector2f())
         {
             auto length = _speed.length();
-            auto prevSpeed = _speed;
             auto prevSpeedDir = _speed / length;
 
             _speed -= prevSpeedDir * definition.acceleration * seconds;
@@ -212,7 +218,6 @@ namespace space
 
         if (rotateInput == 0.0f && _rotationSpeed != 0.0f)
         {
-            auto prevSpeed = _rotationSpeed;
             auto prevSign = _rotationSpeed > 0 ? 1 : -1;
             _rotationSpeed -= prevSign * definition.turnRate * seconds;
             auto newSign = _rotationSpeed > 0 ? 1 : -1;

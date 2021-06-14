@@ -45,8 +45,6 @@ namespace space
 
     void GameUITeleporter::teleporter(PlacedItemPair<Teleporter> teleporter)
     {
-        auto uiManager = _uiManager;
-
         _teleporter = teleporter;
         _text->text(teleporter.item->name());
     }

@@ -69,7 +69,8 @@ namespace space
 
         result->onPostLoad(context);
 
-        return std::move(result);
+        // return std::move(result);
+        return result;
     }
 
     json toJsonBase(const SpaceObject &input)

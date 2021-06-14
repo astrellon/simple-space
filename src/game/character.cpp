@@ -69,8 +69,6 @@ namespace space
             return;
         }
 
-        auto seconds = dt.asSeconds();
-
         if (_insideArea && _insideArea->type() == AreaType::PlanetSurface)
         {
             auto movement = moveInput * definition.speed;

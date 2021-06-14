@@ -4,7 +4,10 @@
 
 namespace space
 {
-    StartDialogueAction::StartDialogueAction(const std::string &personTalking, const Dialogue *dialogue, const DialogueAudio *dialogueAudio) : _dialogue(dialogue), _personTalking(personTalking), _dialogueAudio(dialogueAudio)
+    StartDialogueAction::StartDialogueAction(const std::string &personTalking, const Dialogue *dialogue, const DialogueAudio *dialogueAudio) :
+        _personTalking(personTalking),
+        _dialogue(dialogue),
+        _dialogueAudio(dialogueAudio)
     {
 
     }

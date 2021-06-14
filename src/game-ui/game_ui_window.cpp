@@ -6,7 +6,10 @@
 
 namespace space
 {
-    GameUIWindow::GameUIWindow(): _backPanel(nullptr), _bodyContainer(nullptr), _header(nullptr)
+    GameUIWindow::GameUIWindow():
+        _backPanel(nullptr),
+        _header(nullptr),
+        _bodyContainer(nullptr)
     {
 
     }

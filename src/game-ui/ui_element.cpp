@@ -13,6 +13,7 @@ namespace space
 
     UIElement::~UIElement()
     {
+        _destroyed = true;
         for (auto remove : _removeHandlers)
         {
             remove();
@@ -21,6 +22,11 @@ namespace space
 
     void UIElement::update(Engine &engine, sf::Time dt, sf::Vector2f parentOffset)
     {
+        if (_destroyed)
+        {
+            return;
+        }
+
         auto left = YGNodeLayoutGetLeft(_yogaNode);
         auto top = YGNodeLayoutGetTop(_yogaNode);
 
@@ -36,6 +42,11 @@ namespace space
 
     void UIElement::draw(Engine &engine, RenderCamera &target)
     {
+        if (_destroyed)
+        {
+            return;
+        }
+
         drawSelf(engine, target);
         drawChildren(engine, target);
 
@@ -47,6 +58,11 @@ namespace space
 
     bool UIElement::doesMouseHover(Engine &engine, sf::Vector2f mousePosition) const
     {
+        if (_destroyed)
+        {
+            return false;
+        }
+
         auto worldPos = Utils::getPosition(_transform);
         auto local = mousePosition - worldPos;
         auto size = getSize();
@@ -56,7 +72,7 @@ namespace space
 
     void UIElement::addChild(UIElement *element)
     {
-        if (element == nullptr || Utils::contains(_children, element))
+        if (_destroyed || element == nullptr || Utils::contains(_children, element))
         {
             return;
         }
@@ -72,7 +88,7 @@ namespace space
 
     void UIElement::removeChild(UIElement *element)
     {
-        if (element == nullptr || !Utils::contains(_children, element))
+        if (_destroyed || element == nullptr || !Utils::contains(_children, element))
         {
             return;
         }
@@ -103,6 +119,11 @@ namespace space
 
     UIElement::RemoveEventHandler UIElement::on(sf::Event::EventType type, UIElement::EventHandler handler)
     {
+        if (_destroyed)
+        {
+            return [](){};
+        }
+
         auto &list = _eventHandlers[type];
         auto id = nextHandlerId();
         list.emplace_back(id, handler);
@@ -129,6 +150,11 @@ namespace space
 
     UIEventResult UIElement::trigger(const sf::Event &event)
     {
+        if (_destroyed)
+        {
+            return UIEventResult::NotFound;
+        }
+
         auto find = _eventHandlers.find(event.type);
         if (find == _eventHandlers.end())
         {

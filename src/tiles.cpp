@@ -17,9 +17,9 @@ namespace space
 
         auto halfSize = spriteSize / 2.0f;
 
-        for (auto y = 0; y < _rows; y++)
+        for (auto y = 0u; y < _rows; y++)
         {
-            for (auto x = 0; x < _columns; x++)
+            for (auto x = 0u; x < _columns; x++)
             {
                 auto rect = sf::IntRect(x * spriteSize, y * spriteSize, spriteSize, spriteSize);
 

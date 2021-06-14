@@ -23,9 +23,8 @@ namespace space
         {
             return false;
         }
-        auto &session = *engine.currentSession();
 
-        auto &player = session.playerController();
+        auto &session = *engine.currentSession();
         return show && !session.dialogueManager().isInDialogue() && !session.isTakingAPhoto();
     }
 

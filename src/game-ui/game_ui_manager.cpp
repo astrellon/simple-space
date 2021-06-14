@@ -20,8 +20,12 @@
 
 namespace space
 {
-    GameUIManager::GameUIManager(Engine &engine): _engine(engine), _defaultFont(nullptr),
-        _interactablesPanel(nullptr), _inventoryWindow(nullptr), _teleportersPanel(nullptr),
+    GameUIManager::GameUIManager(Engine &engine):
+        _engine(engine),
+        _defaultFont(nullptr),
+        _interactablesPanel(nullptr),
+        _teleportersPanel(nullptr),
+        _inventoryWindow(nullptr),
         _dialogue(nullptr)
     {
         _bodyElement = createElement<UIRootElement>();
@@ -38,6 +42,13 @@ namespace space
         {
             std::cout << "Cannot remove body element" << std::endl;
             return false;
+        }
+
+        if (Utils::contains(_previousHoverPath, element))
+        {
+            sf::Event leaveEvent;
+            leaveEvent.type = sf::Event::EventType::MouseLeft;
+            element->trigger(leaveEvent);
         }
 
         element->parent(nullptr);

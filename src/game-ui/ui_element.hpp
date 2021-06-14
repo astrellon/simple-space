@@ -27,7 +27,7 @@ namespace space
             // Fields
 
             // Constructor
-            UIElement() : _yogaNode(YGNodeNew()), _parent(nullptr) { }
+            UIElement() : _yogaNode(YGNodeNew()), _parent(nullptr), _destroyed(false) { }
             virtual ~UIElement();
 
             // Methods
@@ -205,6 +205,8 @@ namespace space
             float layoutBorder(YGEdge edge) { return YGNodeLayoutGetBorder(_yogaNode, edge); }
             float layoutPadding(YGEdge edge) { return YGNodeLayoutGetPadding(_yogaNode, edge); }
 
+            bool destroyed() const { return _destroyed; }
+
         protected:
             // Fields
             YGNodeRef _yogaNode;
@@ -222,6 +224,7 @@ namespace space
         private:
             // Fields
             static int _nextHandlerId;
+            bool _destroyed;
 
     };
 

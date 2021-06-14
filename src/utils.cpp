@@ -54,14 +54,19 @@ namespace space
 
     std::string Utils::filenameWithoutExt(const std::string &str)
     {
-        int sepIndex = str.find_last_of('/');
-        if (sepIndex == std::string::npos)
+        auto sepIndex = -1;
+        auto sepLocation = str.find_last_of('/');
+        if (sepLocation == std::string::npos)
         {
-            sepIndex = str.find_last_of('\\');
-            if (sepIndex == std::string::npos)
+            sepLocation = str.find_last_of('\\');
+            if (sepLocation != std::string::npos)
             {
-                sepIndex = -1;
+                sepIndex = static_cast<int>(sepLocation);
             }
+        }
+        else
+        {
+            sepIndex = static_cast<int>(sepLocation);
         }
 
         auto dotIndex = str.find_last_of('.');
@@ -159,7 +164,7 @@ namespace space
         auto t1 = v2.cross(v1) / dot;
         auto t2 = (v1.dot(v3)) / dot;
 
-        if (t1 >= 0.0f & (t2 >= 0.0f && t2 <= 1.0f))
+        if ((t1 >= 0.0f) & (t2 >= 0.0f && t2 <= 1.0f))
         {
             *result = origin + direction * t1;
             return true;

@@ -2,6 +2,7 @@
 
 #include "../game/interactions/interactable.hpp"
 #include "../engine.hpp"
+#include "../game_session.hpp"
 
 #include "./ui_text_element.hpp"
 #include "./ui_button.hpp"
@@ -38,7 +39,10 @@ namespace space
 
             button->on(sf::Event::EventType::MouseButtonPressed, [actionPtr, uiManager] (const sf::Event &e)
             {
-                actionPtr->execute(*uiManager->engine().currentSession());
+                uiManager->engine().currentSession()->nextFrameState().addAction([=]()
+                {
+                    actionPtr->execute(*uiManager->engine().currentSession());
+                });
                 return UIEventResult::Triggered;
             });
         }

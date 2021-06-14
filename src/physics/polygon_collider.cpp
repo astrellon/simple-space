@@ -6,7 +6,10 @@
 
 namespace space
 {
-    PolygonCollider::PolygonCollider(b2BodyType bodyType) : _dirty(false), _body(nullptr), _bodyType(bodyType)
+    PolygonCollider::PolygonCollider(b2BodyType bodyType) :
+        _bodyType(bodyType),
+        _body(nullptr),
+        _dirty(false)
     {
 
     }
@@ -30,7 +33,7 @@ namespace space
         updateEarcut();
 
         // Not intended to be performant!
-        for (auto i = 0; i < _indices.size(); i += 3)
+        for (auto i = 0u; i < _indices.size(); i += 3)
         {
             auto vertexArray = sf::VertexArray(sf::Triangles, 3);
             for (auto j = 0; j < 3; j++)
@@ -66,7 +69,7 @@ namespace space
 
         _body = world->CreateBody(&bodyDef);
 
-        for (auto i = 0; i < _indices.size(); i += 3)
+        for (auto i = 0u; i < _indices.size(); i += 3)
         {
             b2PolygonShape shape;
             std::vector<b2Vec2> points;

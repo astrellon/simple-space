@@ -7,12 +7,20 @@ const std::array<int, 4> empty{0, 0, 0, 0};
 
 namespace space
 {
-    NineSlice::NineSlice() : _dirty(true), _texture(nullptr), _border(empty), _vertexArray(sf::TrianglesStrip, 24)
+    NineSlice::NineSlice() :
+        _texture(nullptr),
+        _border(empty),
+        _dirty(true),
+        _vertexArray(sf::TrianglesStrip, 24)
     {
 
     }
 
-    NineSlice::NineSlice(const sf::Texture *texture, int top, int right, int bottom, int left) : _dirty(true), _texture(texture), _border(empty), _vertexArray(sf::TrianglesStrip, 24)
+    NineSlice::NineSlice(const sf::Texture *texture, int top, int right, int bottom, int left) :
+        _texture(texture),
+        _border(empty),
+        _dirty(true),
+        _vertexArray(sf::TrianglesStrip, 24)
     {
         border(top, right, bottom, left);
     }
@@ -20,7 +28,7 @@ namespace space
     void NineSlice::colour(const sf::Color &colour)
     {
         auto size = _vertexArray.getVertexCount();
-        for (auto i = 0; i < size; i++)
+        for (auto i = 0u; i < size; i++)
         {
             auto &vertex = _vertexArray[i];
             vertex.color = colour;
