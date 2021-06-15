@@ -51,6 +51,11 @@
             "type": "food"
         },
         {
+            "definitionId": "BED_NEST",
+            "id": 15,
+            "type": "bed"
+        },
+        {
             "definitionId": "TELEPORTER_1",
             "id": 20,
             "type": "teleporter"
@@ -201,6 +206,7 @@
                     "ITEM_3",
                     "ITEM_13",
                     "ITEM_14",
+                    "ITEM_15",
                     "PLANET1_GRASS_1"
                 ]
             },
@@ -287,6 +293,11 @@
             "type": "placed-item",
             "itemId": 14,
             "position": [200, 400]
+        },
+        {
+            "type": "placed-item",
+            "itemId": 15,
+            "position": [400, 400]
         },
         {
             "definitionId": "SHIP_1",

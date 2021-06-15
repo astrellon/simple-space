@@ -40,6 +40,10 @@
             "eating": {
                 "frameTiming": 0.2,
                 "frames": [5, 0, 0, 0, 5, 6, 5, 6, 0, 0, 1, 0, 0]
+            },
+            "sleeping": {
+                "frameTiming": 1,
+                "frames": [7, 8]
             }
         }
     },

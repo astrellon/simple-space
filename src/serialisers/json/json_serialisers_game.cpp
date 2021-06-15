@@ -22,6 +22,7 @@
 #include "../../game/items/chair.hpp"
 #include "../../game/items/teleporter.hpp"
 #include "../../game/items/food_item.hpp"
+#include "../../game/items/bed_item.hpp"
 #include "../../game/live_photo.hpp"
 #include "../../physics/polygon_collider.hpp"
 #include "../../effects/grass_effect.hpp"
@@ -695,6 +696,9 @@ namespace space
         if (item.type() == FoodItem::ItemType())
             return toJson(dynamic_cast<const FoodItem &>(item));
 
+        if (item.type() == BedItem::ItemType())
+            return toJson(dynamic_cast<const BedItem &>(item));
+
         throw std::runtime_error("Unknown item type");
     }
 
@@ -713,6 +717,9 @@ namespace space
 
         if (type == FoodItem::ItemType())
             return addFromJsonFoodItem(j, session);
+
+        if (type == BedItem::ItemType())
+            return addFromJsonBedItem(j, session);
 
         throw std::runtime_error("Unknown item type");
     }
@@ -801,6 +808,28 @@ namespace space
         }
 
         session.createItem<FoodItem>(id, *definition);
+
+        return true;
+    }
+
+    json toJson(const BedItem &item)
+    {
+        return toJsonBase(item);
+    }
+
+    bool addFromJsonBedItem(const json &j, GameSession &session)
+    {
+        auto id = j.at("id").get<ItemId>();
+        auto definitionId = j.at("definitionId").get<DefinitionId>();
+
+        const PlaceableItemDefinition *definition;
+        if (!session.engine().definitionManager().tryGet(definitionId, &definition))
+        {
+            std::cout << "Unable to find placeable item definition " << definitionId << " for bed item " << id << std::endl;
+            return false;
+        }
+
+        session.createItem<BedItem>(id, *definition);
 
         return true;
     }

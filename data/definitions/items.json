@@ -37,5 +37,12 @@
         "name": "Apple",
         "texturePath": "data/items/apple.png",
         "canPickup": true
+    },
+    {
+        "type": "placeable-item",
+        "id": "BED_NEST",
+        "name": "Nest",
+        "texturePath": "data/items/nest.png",
+        "canPickup": true
     }
 ]

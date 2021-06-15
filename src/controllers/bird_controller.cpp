@@ -5,6 +5,7 @@
 
 #include "./actions/npc_action_move.hpp"
 #include "./actions/npc_action_find_food.hpp"
+#include "./actions/npc_action_find_bed.hpp"
 
 namespace space
 {
@@ -52,6 +53,10 @@ namespace space
         if (_needs.hunger() < 0.2f)
         {
             _highLevelActions.push(std::make_unique<NpcActionFindFood>(this));
+        }
+        else if (_needs.energy() < 0.2f)
+        {
+            _highLevelActions.push(std::make_unique<NpcActionFindBed>(this));
         }
         else
         {
