@@ -22,7 +22,6 @@ namespace space
 
         private:
             // Fields
-            float _timeToBlink;
             float _timeToNextAction;
 
             // Methods

@@ -8,7 +8,7 @@
 
 namespace space
 {
-    BirdController::BirdController(GameSession &session) : NpcController(session), _timeToBlink(0.0f), _timeToNextAction(0.0f)
+    BirdController::BirdController(GameSession &session) : NpcController(session), _timeToNextAction(0.0f)
     {
         _needs.hunger(Utils::randf(0.21f, 0.26f));
     }
@@ -21,8 +21,6 @@ namespace space
         }
 
         NpcController::update(dt);
-
-        // std::cout << "Hunger: " << _needs.hunger() << std::endl;
 
         if (_highLevelActions.size() == 0)
         {
@@ -37,23 +35,16 @@ namespace space
             }
         }
 
-        if (_character->moveInput.x < 0)
-        {
-            _character->flipSprite(false);
-        }
-        else if (_character->moveInput.x > 0)
-        {
-            _character->flipSprite(true);
-        }
+        updateAnimations(dt);
 
-        _timeToBlink -= dt.asSeconds();
-        if (_timeToBlink < 0.0f)
-        {
-            _timeToBlink += Utils::randf(2.0f, 5.0f);
-            auto &sprite = _character->sprite();
-            sprite.sequence("blink", true);
-            sprite.sequence("idle", false);
-        }
+        // if (_character->moveInput.x < 0)
+        // {
+        //     _character->flipSprite(false);
+        // }
+        // else if (_character->moveInput.x > 0)
+        // {
+        //     _character->flipSprite(true);
+        // }
     }
 
     void BirdController::chooseNextAction()

@@ -30,6 +30,7 @@ namespace space
             sf::Vector2<ushort> spriteSize() const { return _spriteSize; }
 
             bool tryGetSequence(const std::string &name, AnimationSequence *result) const;
+            bool hasSequence(const std::string &name) const;
 
             static const std::string DefinitionType() { return "animated-texture"; }
             std::string type() const { return DefinitionType(); }

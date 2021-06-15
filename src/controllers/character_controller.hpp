@@ -78,6 +78,9 @@ namespace space
             void checkForInTeleportRange(sf::Vector2f position, const Area &area);
             const TeleporterList &teleportersInRange() const { return _teleportersInRange;}
 
+            void inIdleAnimation(bool value) { _inIdleAnimation = value; }
+            bool inIdleAnimation() const { return _inIdleAnimation; }
+
             virtual bool isPlayer() const { return false; }
 
             void dropItem(PlaceableItem *placeableItem);
@@ -96,6 +99,7 @@ namespace space
             InteractableList _canInteractWithInRange;
             TeleporterList _teleportersInRange;
 
+            bool _inIdleAnimation;
             float _interactRangeObjects;
             float _interactRangeShips;
 

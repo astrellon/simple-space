@@ -25,6 +25,8 @@ namespace space
             void sequence(const std::string &name, bool immediateChange);
             const std::string &currentAnimation() const { return _currentAnimation; }
 
+            bool hasSequence(const std::string &name) const;
+
             inline const AnimatedTexture &texture() const { return _texture; }
             inline sf::IntRect currentRect() const { return _sprite.getTextureRect(); }
 

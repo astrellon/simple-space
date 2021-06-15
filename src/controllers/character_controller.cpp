@@ -21,6 +21,7 @@ namespace space
         _teleportClone(nullptr),
         _controlling(ControlNone),
         _inventory(std::make_unique<Inventory>()),
+        _inIdleAnimation(true),
         _interactRangeObjects(0),
         _interactRangeShips(0),
         _timeToNextIdle(0.0f),
@@ -158,6 +159,11 @@ namespace space
             return;
         }
 
+        if (!_inIdleAnimation)
+        {
+            return;
+        }
+
         auto immediateChange = false;
         if (_character->moveInput != sf::Vector2f() && !_character->isInSpace())
         {
@@ -183,9 +189,16 @@ namespace space
         _timeToNextIdle -= dt.asSeconds();
         if (_timeToNextIdle < 0)
         {
-            if (Utils::randi(0, 100) < 40)
+            if (sprite.hasSequence("idle2"))
             {
-                sprite.sequence("idle2", immediateChange);
+                if (Utils::randi(0, 100) < 40)
+                {
+                    sprite.sequence("idle2", immediateChange);
+                }
+                else
+                {
+                    sprite.sequence("idle", immediateChange);
+                }
             }
             else
             {

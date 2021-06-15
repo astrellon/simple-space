@@ -59,6 +59,11 @@ namespace space
         }
     }
 
+    bool AnimatedSprite::hasSequence(const std::string &name) const
+    {
+        return _texture.hasSequence(name);
+    }
+
     void AnimatedSprite::gotoNextSequence(const std::string &name)
     {
         _currentAnimation = name;

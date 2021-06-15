@@ -42,6 +42,12 @@ namespace space
         return true;
     }
 
+    bool AnimatedTexture::hasSequence(const std::string &name) const
+    {
+        auto find = _sequences.find(name);
+        return find != _sequences.end();
+    }
+
     void AnimatedTexture::createSpriteRects()
     {
         auto textureSize = _texture->getSize();

@@ -95,6 +95,9 @@ namespace space
                     break;
                 }
 
+                controller()->inIdleAnimation(false);
+                controller()->controllingCharacter()->sprite().sequence("eating", true);
+
                 foodItem->execute(*controller(), *destination);
                 if (controller()->needs().hunger() > 0.8f)
                 {
@@ -112,6 +115,7 @@ namespace space
 
     void NpcActionFindFood::onComplete()
     {
+        controller()->inIdleAnimation(true);
         if (_moveStage.get())
         {
             _moveStage->onComplete();
