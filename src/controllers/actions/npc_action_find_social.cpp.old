@@ -1,0 +1,127 @@
+#include "npc_action_find_social.hpp"
+
+#include "npc_action_move.hpp"
+
+#include "../../controllers/npc_controller.hpp"
+#include "../../game/character.hpp"
+#include "../../game/area.hpp"
+#include "../../game/items/bed_item.hpp"
+#include "../../game_session.hpp"
+
+namespace space
+{
+    NpcActionFindSocial::NpcActionFindSocial(NpcController *controller) :
+        NpcAction(controller), _stage(Stage::LookingForSocial), _destinationId("")
+    {
+
+    }
+
+    void NpcActionFindSocial::update(sf::Time dt)
+    {
+        switch (_stage)
+        {
+            case Stage::LookingForSocial:
+            {
+                auto character = controller()->controllingCharacter();
+                auto insideArea = character->insideArea();
+                if (insideArea == nullptr)
+                {
+                    return;
+                }
+
+                auto pos = character->transform().position;
+                std::vector<SortPair> availbleSocial;
+
+                insideArea->loopOver([&](SpaceObject *obj)
+                {
+                    Character *other;
+                    if (Utils::tryCast<Character>(->tryCast<Character>(other))
+                    // if (obj->type() == Character::SpaceObjectType())
+                    {
+                        if (other->controlledBy)
+                        // auto placedItem = dynamic_cast<Character *>(obj);
+                        // if (placedItem->item->type() == BedItem::ItemType())
+                        {
+                            auto otherPos = other->transform().position;
+                            auto distance = (bedPos - pos).lengthSquared();
+                            availbleSocial.emplace_back(distance, placedItem);
+                        }
+                    }
+
+                    return true;
+                });
+
+                if (availbleBed.size() == 0)
+                {
+                    return;
+                }
+
+                if (availbleBed.size() > 1)
+                {
+                    std::sort(availbleBed.begin(), availbleBed.end(), compareBedPair);
+                }
+
+                auto &closest = availbleBed.front();
+                this->_destinationId = closest.placedBed->id;
+                this->_stage = Stage::MovingToBed;
+                auto destinationPos = closest.placedBed->transform().position;
+                this->_moveStage = std::make_unique<NpcActionMove>(controller(), destinationPos);
+
+                break;
+            }
+
+            case Stage::MovingToSocial:
+            {
+                _moveStage->update(dt);
+                if (_moveStage->isComplete())
+                {
+                    _moveStage->onComplete();
+                    _stage = Stage::Sleeping;
+                }
+                break;
+            }
+
+            case Stage::Sleeping:
+            {
+                PlacedItem *destination;
+                if (!controller()->session().tryGetSpaceObject(_destinationId, &destination))
+                {
+                    std::cout << "Social gone!" << std::endl;
+                    _stage = Stage::Done;
+                    break;
+                }
+
+                auto bedItem = dynamic_cast<BedItem *>(destination->item);
+                if (bedItem == nullptr)
+                {
+                    _stage = Stage::Done;
+                    break;
+                }
+
+                controller()->inIdleAnimation(false);
+                controller()->controllingCharacter()->sprite().sequence("sleeping", true);
+
+                bedItem->execute(*controller(), *destination);
+                if (controller()->needs().energy() > 0.8f)
+                {
+                    _stage = Stage::Done;
+                }
+                break;
+            }
+
+            case Stage::Done:
+            {
+                break;
+            }
+        }
+    }
+
+    void NpcActionFindSocial::onComplete()
+    {
+        controller()->inIdleAnimation(true);
+        if (_moveStage.get())
+        {
+            _moveStage->onComplete();
+        }
+    }
+} // space

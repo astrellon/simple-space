@@ -34,9 +34,6 @@ namespace space
             virtual SpaceObject *deepClone(const ObjectId &newIdPrefix, const CloneContext &context);
             StarSystem *cloneStarSystem(const ObjectId &newId, const CloneContext &context);
 
-            static const std::string SpaceObjectType() { return StarSystemDefinition::DefinitionType(); }
-            virtual std::string type() const { return SpaceObjectType(); }
-
             virtual Area &area() { return _area; }
             virtual const Area &area () const { return _area; }
 

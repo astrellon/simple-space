@@ -39,6 +39,13 @@ namespace space
             static std::string filenameWithoutExt(const std::string &str);
             static std::string getFilenameExt(const std::string &str);
 
+            template <class T>
+            static bool tryCast(void *ptr, T *&result)
+            {
+                *result = dynamic_cast<T *>(ptr);
+                return *result != nullptr;
+            }
+
             template <typename T>
             static inline bool remove(std::vector<T> &list, T item)
             {

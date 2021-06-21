@@ -184,6 +184,36 @@ int main()
 
     printTimeDifference("Overall startup", startTime, endTime);
 
+    space::CharacterDefinition *charDef;
+    definitionManager.tryGet("GREG_CHAR", &charDef);
+
+    space::ShipDefinition *shipDef;
+    definitionManager.tryGet("SHIP_1", &shipDef);
+
+    std::vector<space::SpaceObject *> objs;
+    for (auto i = 0; i < 1000; i++)
+    {
+        objs.push_back(new space::Character("char", *charDef));
+        objs.push_back(new space::Ship("ship", *shipDef));
+    }
+
+    auto testBefore = std::chrono::high_resolution_clock::now();
+    int counter = 0;
+    for (auto i = 0; i < 1000; i++)
+    {
+        for (auto obj : objs)
+        {
+            space::Character *casted;
+            if (obj->tryCast<space::Character>(casted))
+            {
+                counter++;
+            }
+        }
+    }
+    auto testAfter = std::chrono::high_resolution_clock::now();
+    printTimeDifference("Cast Test", testBefore, testAfter);
+    std::cout << "COUNTER: " << counter << std::endl;
+
     while (window.isOpen())
     {
         space::DrawDebug::allocatedThisFrame = 0;

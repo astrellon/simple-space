@@ -13,6 +13,7 @@
 #include "draw_layers.hpp"
 #include "interactions/interactable.hpp"
 #include "clone_context.hpp"
+#include "space_object_type.hpp"
 
 namespace space
 {
@@ -29,15 +30,15 @@ namespace space
         public:
             // Fields
             const ObjectId id;
+            const SpaceObjectType type;
 
             // Constructor
-            SpaceObject(const ObjectId &id) : id(id), _insideArea(nullptr), _partOfLivePhoto(nullptr) { }
+            SpaceObject(const ObjectId &id, SpaceObjectType type = SpaceObjectType::Unknown) : id(id), type(type), _insideArea(nullptr), _partOfLivePhoto(nullptr) { }
             virtual ~SpaceObject() { }
 
             // Methods
             virtual SpaceObject *clone(const ObjectId &newId, const CloneContext &context) = 0;
             virtual SpaceObject *deepClone(const ObjectId &newIdPrefix, const CloneContext &context) { return clone(newIdPrefix + id, context); }
-            virtual std::string type() const = 0;
 
             const SpaceTransform &transform() const { return _transform; }
             SpaceTransform &transform() { return _transform; }
@@ -67,6 +68,18 @@ namespace space
             SpaceObject *rootObject();
 
             virtual bool loopOver(LoopObjectCallback callback);
+
+            template <class T>
+            bool tryCast(T *&result)
+            {
+                if (type == T::SpaceObjectTypeValue())
+                {
+                    result = reinterpret_cast<T *>(this);
+                    return true;
+                }
+
+                return false;
+            }
 
         protected:
             // Fields

@@ -14,7 +14,7 @@
 namespace space
 {
     Character::Character(const ObjectId &id, const CharacterDefinition &definition) :
-        SpaceObject(id), definition(definition), rotateInput(0), _physicsBody(nullptr), _sprite(*definition.texture)
+        SpaceObject(id, SpaceObjectType::Character, "character"), definition(definition), rotateInput(0), _physicsBody(nullptr), _sprite(*definition.texture)
     {
         createInteractable();
         _interactable->name(definition.name);

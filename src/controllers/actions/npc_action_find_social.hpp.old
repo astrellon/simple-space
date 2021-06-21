@@ -1,0 +1,57 @@
+#pragma once
+
+#include <memory>
+
+#include "npc_action.hpp"
+
+#include "../../game/items/placed_item.hpp"
+
+namespace space
+{
+    class NpcActionMove;
+
+    class NpcActionFindSocial : public NpcAction
+    {
+        public:
+            struct SortPair
+            {
+                float distance;
+                NpcController *other;
+
+                SortPair(float distance, NpcController *other): distance(distance), other(other) { }
+            };
+
+            enum class Stage
+            {
+                LookingForSocial, MovingToSocial, Talking, Listener, Done
+            };
+
+            // Fields
+
+            // Constructor
+            NpcActionFindSocial(NpcController *controller);
+
+            // Methods
+            static const std::string ActionType() { return "find-social-action"; }
+            virtual std::string type() const { return ActionType(); }
+
+            virtual void update(sf::Time dt);
+            virtual bool isComplete() const { return _stage == Stage::Done; }
+
+            virtual void onComplete();
+
+            Stage stage() const { return _stage; }
+
+           private:
+               // Fields
+               Stage _stage;
+               std::unique_ptr<NpcActionMove> _moveStage;
+               ObjectId _destinationId;
+
+               // Methods
+               static bool compareSocialPair(const SortPair &a, const SortPair &b)
+               {
+                   return a.distance < b.distance;
+               }
+    };
+} // space

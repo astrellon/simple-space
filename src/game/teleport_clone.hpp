@@ -18,9 +18,6 @@ namespace space
             virtual SpaceObject *clone(const ObjectId &newId, const CloneContext &context) { return cloneTeleportClone(newId, context); }
             TeleportClone *cloneTeleportClone(const ObjectId &newId, const CloneContext &context);
 
-            static const std::string SpaceObjectType() { return "teleport-clone"; }
-            std::string type() const { return SpaceObjectType(); }
-
             virtual void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform);
             virtual void draw(GameSession &session, RenderCamera &target);
 

@@ -13,7 +13,7 @@
 namespace space
 {
     Ship::Ship(const ObjectId &id, const ShipDefinition &definition):
-        SpaceObject(id),
+        SpaceObject(id, SpaceObjectType::Ship),
         definition(definition),
         rotateInput(0),
         disableRender(false),

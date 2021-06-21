@@ -90,7 +90,8 @@ namespace space
         if (input.isGenerated())
             return json {};
 
-        if (input.type() == Character::SpaceObjectType())
+        // if (input.type == Character::SpaceObjectType())
+        if (input.type == SpaceObjectType::)
             return toJson(dynamic_cast<const Character &>(input));
 
         else if (input.type() == Ship::SpaceObjectType())
