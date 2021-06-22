@@ -43,6 +43,7 @@
         "id": "BED_NEST",
         "name": "Nest",
         "texturePath": "data/items/nest.png",
+        "drawLayer": "background",
         "canPickup": true
     }
 ]
