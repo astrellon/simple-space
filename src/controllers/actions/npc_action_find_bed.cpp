@@ -32,11 +32,11 @@ namespace space
                 auto pos = character->transform().position;
                 std::vector<BedSortPair> availbleBed;
 
-                insideArea->loopOver([&](SpaceObject *obj)
+                for (auto obj : insideArea->objects())
                 {
-                    if (obj->type() == PlacedItem::SpaceObjectType())
+                    PlacedItem *placedItem;
+                    if (obj->tryCast(placedItem))
                     {
-                        auto placedItem = dynamic_cast<PlacedItem *>(obj);
                         if (placedItem->item->type() == BedItem::ItemType())
                         {
                             auto bedPos = placedItem->transform().position;
@@ -44,9 +44,7 @@ namespace space
                             availbleBed.emplace_back(distance, placedItem);
                         }
                     }
-
-                    return true;
-                });
+                }
 
                 if (availbleBed.size() == 0)
                 {

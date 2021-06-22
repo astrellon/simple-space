@@ -13,7 +13,10 @@
 
 namespace space
 {
-    GrassEffect::GrassEffect(const ObjectId &id, const GrassEffectDefinition &definition) : SpaceObject(id), definition(definition), _sprite(*definition.texture)
+    const SpaceObjectType2 GrassEffect::TypeValue = SpaceObjectType2::GrassEffect;
+
+    GrassEffect::GrassEffect(const ObjectId &id, const GrassEffectDefinition &definition) :
+        SpaceObject(id, TypeValue), definition(definition), _sprite(*definition.texture)
     {
 
     }

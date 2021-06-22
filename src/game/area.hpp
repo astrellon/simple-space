@@ -41,9 +41,6 @@ namespace space
     class Area : private NonCopyable
     {
         public:
-
-            typedef std::function<void(SpaceObject *)> FindObjectCallback;
-
             // Fields
 
             // Constructor
@@ -72,7 +69,6 @@ namespace space
 
             void addTeleporters(TeleporterList &result) const;
 
-            void getObjectsNearby(float radius, const sf::Vector2f &position, FindObjectCallback callback) const;
             void getObjectsNearby(float radius, const sf::Vector2f &position, std::vector<SpaceObject *> &result) const;
 
             SpaceObject *partOfObject() const { return _partOfObject; }

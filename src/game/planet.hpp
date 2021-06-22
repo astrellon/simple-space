@@ -18,6 +18,8 @@ namespace space
     class Planet : public CelestialBody
     {
         public:
+            static const SpaceObjectType2 TypeValue;
+
             typedef std::vector<PlanetSurface *> PlanetSurfaceList;
 
             // Fields
@@ -29,9 +31,6 @@ namespace space
             // Methods
             virtual SpaceObject *clone(const ObjectId &newId, const CloneContext &context) { return clonePlanet(newId, context); }
             Planet *clonePlanet(const ObjectId &newId, const CloneContext &context);
-
-            static const std::string SpaceObjectType() { return PlanetDefinition::DefinitionType(); }
-            virtual std::string type() const { return SpaceObjectType(); }
 
             virtual void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform);
             virtual void draw(GameSession &session, RenderCamera &target);

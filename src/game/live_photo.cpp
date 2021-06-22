@@ -11,7 +11,9 @@
 
 namespace space
 {
-    LivePhotoTarget::LivePhotoTarget(const ObjectId &id) : SpaceObject(id)
+    const SpaceObjectType2 LivePhotoTarget::TypeValue = SpaceObjectType2::LivePhotoTarget;
+
+    LivePhotoTarget::LivePhotoTarget(const ObjectId &id) : SpaceObject(id, TypeValue)
     {
 
     }
@@ -21,7 +23,9 @@ namespace space
         return context.session.createObject<LivePhotoTarget>(newId);
     }
 
-    LivePhoto::LivePhoto(const ObjectId &id, const sf::Vector2u renderSize) : SpaceObject(id), photoSize(renderSize), _targetObject(nullptr), _lastFrameUpdate(-1), _lastFrameDraw(-1)
+    SpaceObjectType2 LivePhoto::TypeValue = SpaceObjectType2::LivePhoto;
+
+    LivePhoto::LivePhoto(const ObjectId &id, const sf::Vector2u renderSize) : SpaceObject(id, TypeValue), photoSize(renderSize), _targetObject(nullptr), _lastFrameUpdate(-1), _lastFrameDraw(-1)
     {
 
     }

@@ -15,6 +15,8 @@
 
 namespace space
 {
+    const SpaceObjectType2 PlacedItem::TypeValue = SpaceObjectType2::PlacedItem;
+
     PlacedItem::PlacedItem(PlaceableItem *item) : PlacedItem(item->id)
     {
         this->item = item;
@@ -22,7 +24,7 @@ namespace space
         processItem();
     }
 
-    PlacedItem::PlacedItem(const ItemId &itemId) : SpaceObject(Utils::makeItemId(itemId)), _collider(nullptr)
+    PlacedItem::PlacedItem(const ItemId &itemId) : SpaceObject(Utils::makeItemId(itemId), TypeValue), _collider(nullptr)
     {
 
     }
@@ -34,7 +36,7 @@ namespace space
         processItem();
     }
 
-    PlacedItem::PlacedItem(const ObjectId &id, const ItemId &itemId) : SpaceObject(id), _collider(nullptr)
+    PlacedItem::PlacedItem(const ObjectId &id, const ItemId &itemId) : SpaceObject(id, TypeValue), _collider(nullptr)
     {
 
     }

@@ -39,7 +39,7 @@ namespace space
             virtual ~ShipDefinition() { }
 
             // Methods
-            static const std::string DefinitionType() { return "ship"; }
+            inline static const std::string DefinitionType() { return "ship"; }
             std::string type() const { return DefinitionType(); }
 
             virtual void onPostLoad(Engine &engine);

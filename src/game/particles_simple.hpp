@@ -31,6 +31,7 @@ namespace space
     {
         public:
             // Fields
+            static const SpaceObjectType2 TypeValue;
 
             // Constructor
             ParticlesSimple(const ObjectId &id, int numParticles);
@@ -38,9 +39,6 @@ namespace space
             // Methods
             virtual SpaceObject *clone(const ObjectId &newId, const CloneContext &context) { return cloneParticlesSimple(newId, context); }
             ParticlesSimple *cloneParticlesSimple(const ObjectId &newId, const CloneContext &context);
-
-            static const std::string SpaceObjectType() { return "particles"; }
-            virtual std::string type() const { return SpaceObjectType(); }
 
             virtual void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform);
             virtual void draw(GameSession &session, RenderCamera &target);

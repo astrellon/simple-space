@@ -19,7 +19,9 @@
 
 namespace space
 {
-    StarSystem::StarSystem(GameSession &session, const ObjectId &id, const StarSystemDefinition &definition) : SpaceObject(id), definition(definition), _area(AreaType::StarSystem, this)
+    const SpaceObjectType2 StarSystem::TypeValue = SpaceObjectType2::StarSystem;
+
+    StarSystem::StarSystem(GameSession &session, const ObjectId &id, const StarSystemDefinition &definition) : SpaceObject(id, TypeValue), definition(definition), _area(AreaType::StarSystem, this)
     {
         _area.main().sortEveryDraw = false;
         _background = std::make_unique<StarBackground>(session.engine(), definition.starBackgroundOptions);

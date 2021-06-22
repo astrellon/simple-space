@@ -1,5 +1,7 @@
 #include "area.hpp"
 
+#include <typeinfo>
+
 #include "space_object.hpp"
 #include "space_portal.hpp"
 #include "ship.hpp"
@@ -138,15 +140,15 @@ namespace space
         obj->insideArea(this);
         _objects.push_back(obj);
 
-        if (obj->type() == SpacePortal::SpaceObjectType())
+        SpacePortal *spacePortal;
+        if (obj->tryCast(spacePortal))
         {
-            auto spacePortal = dynamic_cast<SpacePortal *>(obj);
             _spacePortals.push_back(spacePortal);
         }
 
-        if (obj->type() == PlacedItem::SpaceObjectType())
+        PlacedItem *placedItem;
+        if (obj->tryCast(placedItem))
         {
-            auto placedItem = dynamic_cast<PlacedItem *>(obj);
             placedItem->item->onPlaced(*placedItem);
         }
 
@@ -165,9 +167,9 @@ namespace space
     {
         Utils::remove(_objects, obj);
 
-        if (obj->type() == SpacePortal::SpaceObjectType())
+        SpacePortal *spacePortal;
+        if (obj->tryCast(spacePortal))
         {
-            auto spacePortal = dynamic_cast<SpacePortal *>(obj);
             Utils::remove(_spacePortals, spacePortal);
         }
 
@@ -209,12 +211,12 @@ namespace space
     {
         for (auto obj : _objects)
         {
-            if (obj->type() != PlacedItem::SpaceObjectType())
+            PlacedItem *placedItem;
+            if (!obj->tryCast(placedItem))
             {
                 continue;
             }
 
-            auto placedItem = dynamic_cast<PlacedItem *>(obj);
             if (placedItem->item->type() != Teleporter::ItemType())
             {
                 continue;
@@ -232,19 +234,6 @@ namespace space
         if (layer == DrawLayers::Foreground) { *result = &_foreground; return true; }
 
         return false;
-    }
-
-    void Area::getObjectsNearby(float radius, const sf::Vector2f &position, Area::FindObjectCallback callback) const
-    {
-        auto lengthSquared = radius * radius;
-        for (auto obj : _objects)
-        {
-            auto dist = (position - obj->transform().position).lengthSquared();
-            if (dist <= lengthSquared)
-            {
-                callback(obj);
-            }
-        }
     }
 
     void Area::getObjectsNearby(float radius, const sf::Vector2f &position, std::vector<SpaceObject *> &result) const

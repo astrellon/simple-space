@@ -104,7 +104,11 @@ namespace space
 
     void CharacterController::checkForInTeleportRange(sf::Vector2f position, const Area &area)
     {
-        area.getObjectsNearby(_interactRangeShips, position, [&](SpaceObject *obj)
+        static std::vector<SpaceObject *> objs;
+        objs.clear();
+        area.getObjectsNearby(_interactRangeShips, position, objs);
+
+        for (auto obj : objs)
         {
             auto shipInsideOf = _character->insideArea()->partOfShip();
 
@@ -113,21 +117,22 @@ namespace space
                 return;
             }
 
-            auto type = obj->type();
-            if (type == Ship::SpaceObjectType())
+            Ship *ship;
+            if (obj->tryCast(ship))
             {
-                auto ship = dynamic_cast<Ship *>(obj);
                 ship->area().addTeleporters(_teleportersInRange);
+                continue;
             }
-            else if (type == Planet::SpaceObjectType())
+
+            Planet *planet;
+            if (obj->tryCast(planet))
             {
-                auto planet = dynamic_cast<Planet *>(obj);
                 for (auto planetSurface : planet->planetSurfaces())
                 {
                     planetSurface->area().addTeleporters(_teleportersInRange);
                 }
             }
-        });
+        }
     }
 
     void CharacterController::clearCanInteractWith()

@@ -321,21 +321,20 @@ namespace space
 
     void GameSession::onPostLoad(LoadingContext &context)
     {
-        for (auto i = 0u; i < _spaceObjects.size(); i++)
+        // Process live photos first
+        for (auto &obj : _spaceObjects)
         {
-            auto &spaceObject = _spaceObjects[i];
-            if (spaceObject->type() == LivePhoto::SpaceObjectType())
+            if (obj->is<LivePhoto>())
             {
-                spaceObject->onPostLoad(*this, context);
+                obj->onPostLoad(*this, context);
             }
         }
 
-        for (auto i = 0u; i < _spaceObjects.size(); i++)
+        for (auto &obj : _spaceObjects)
         {
-            auto &spaceObject = _spaceObjects[i];
-            if (spaceObject->type() != LivePhoto::SpaceObjectType())
+            if (!obj->is<LivePhoto>())
             {
-                spaceObject->onPostLoad(*this, context);
+                obj->onPostLoad(*this, context);
             }
         }
     }
@@ -643,9 +642,10 @@ namespace space
             }
         }
 
-        if (rootWorld->type() == StarSystem::SpaceObjectType())
+        StarSystem *starSystem;
+        PlanetSurface *planetSurface;
+        if (rootWorld->tryCast(starSystem))
         {
-            auto starSystem = dynamic_cast<StarSystem *>(rootWorld);
             auto foundInPortal = false;
             for (auto spacePortal : starSystem->area().spacePortals())
             {
@@ -661,9 +661,8 @@ namespace space
                 starSystem->checkForMouse(*this, worldMousePosition);
             }
         }
-        else if (rootWorld->type() == PlanetSurface::SpaceObjectType())
+        else if (rootWorld->tryCast(planetSurface))
         {
-            auto planetSurface = dynamic_cast<PlanetSurface *>(rootWorld);
             planetSurface->checkForMouse(*this, worldMousePosition);
         }
 

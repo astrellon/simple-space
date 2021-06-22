@@ -14,6 +14,8 @@ namespace space
     {
         public:
             // Fields
+            static const SpaceObjectType2 TypeValue;
+
             const GrassEffectDefinition &definition;
 
             // Constructor
@@ -26,9 +28,6 @@ namespace space
             virtual void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform);
             virtual void draw(GameSession &session, RenderCamera &target);
             virtual bool isGenerated() const { return true; }
-
-            static const std::string SpaceObjectType() { return "grass-effect"; }
-            virtual std::string type() const { return SpaceObjectType(); }
 
         private:
             // Fields

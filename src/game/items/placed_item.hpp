@@ -23,6 +23,8 @@ namespace space
     {
         public:
             // Fields
+            static const SpaceObjectType2 TypeValue;
+
             PlaceableItem *item;
 
             // Constructor
@@ -35,9 +37,6 @@ namespace space
             // Methods
             virtual SpaceObject *clone(const ObjectId &newId, const CloneContext &context) { return clonePlacedItem(newId, context); }
             PlacedItem *clonePlacedItem(const ObjectId &newId, const CloneContext &context);
-
-            static const std::string SpaceObjectType() { return "placed-item"; }
-            virtual std::string type() const { return SpaceObjectType(); }
 
             virtual void insideArea(Area *area);
             virtual Area *insideArea() const { return _insideArea; }

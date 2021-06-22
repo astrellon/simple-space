@@ -13,8 +13,10 @@
 
 namespace space
 {
+    const SpaceObjectType2 SpacePortal::TypeValue = SpaceObjectType2::SpacePortal;
+
     SpacePortal::SpacePortal(const ObjectId &id, const SpacePortalDefinition &definition) :
-        SpaceObject(id), definition(definition), _sprite(*definition.texture), _lerpFromShadowT(1.0f)
+        SpaceObject(id, TypeValue), definition(definition), _sprite(*definition.texture), _lerpFromShadowT(1.0f)
     {
         _sprite.sequence("idle", true);
         _shadowShape.emplace_back();
@@ -53,7 +55,10 @@ namespace space
         _sprite.sequence("active", false);
         auto pos = Utils::getPosition(_worldTransform);
 
-        _insideArea->getObjectsNearby(definition.pullRadius, pos, [&](SpaceObject *obj)
+        static std::vector<SpaceObject *> objs;
+        objs.clear();
+        _insideArea->getObjectsNearby(definition.pullRadius, pos, objs);
+        for (auto obj : objs)
         {
             if (obj->id == this->id)
             {
@@ -61,8 +66,8 @@ namespace space
                 return;
             }
 
-            auto ship = dynamic_cast<Ship *>(obj);
-            if (ship == nullptr)
+            Ship *ship;
+            if (!obj->tryCast(ship))
             {
                 // Only work on ships for now
                 return;
@@ -95,7 +100,7 @@ namespace space
                     otherNearby.entryP2 = nearby.entryP1;
                 }
             }
-        });
+        }
 
         cleanupNearbyObjects();
     }

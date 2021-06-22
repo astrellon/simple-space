@@ -21,6 +21,8 @@ namespace space
     {
         public:
             // Fields
+            static const SpaceObjectType2 TypeValue;
+
             const ShipDefinition &definition;
 
             // Inputs
@@ -35,9 +37,6 @@ namespace space
             virtual SpaceObject *clone(const ObjectId &newId, const CloneContext &context) { return cloneShip(newId, context); }
             virtual SpaceObject *deepClone(const ObjectId &newIdPrefix, const CloneContext &context);
             Ship *cloneShip(const ObjectId &newId, const CloneContext &context);
-
-            static const std::string SpaceObjectType() { return ShipDefinition::DefinitionType(); }
-            virtual std::string type() const { return SpaceObjectType(); }
 
             float rotationSpeed() const { return _rotationSpeed; }
             void rotationSpeed(float rotationSpeed) { _rotationSpeed = rotationSpeed; }

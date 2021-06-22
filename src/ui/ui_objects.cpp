@@ -61,7 +61,9 @@ namespace space
     void UIObjects::drawSpaceObject(SpaceObject &spaceObject)
     {
         ImGui::Text("Id: %s", spaceObject.id.c_str());
-        ImGui::Text("Type: %s", spaceObject.type().c_str());
+
+        auto typeStr = toString(spaceObject.type2);
+        ImGui::Text("Type: %s", typeStr.c_str());
         if (spaceObject.compendiumDefinition())
         {
             ImGui::Text("CompendiumId: %s", spaceObject.compendiumDefinition()->id.c_str());
@@ -92,19 +94,20 @@ namespace space
         inputVector2f("Position: ", trans.position);
         ImGui::InputFloat("Rotation deg", &trans.rotation);
 
-        if (spaceObject.type() == StarSystem::SpaceObjectType())
+        StarSystem *starSystem;
+        PlanetSurface *planetSurface;
+        Ship *ship;
+
+        if (spaceObject.tryCast(starSystem))
         {
-            auto starSystem = dynamic_cast<StarSystem *>(&spaceObject);
             drawArea(starSystem->area());
         }
-        else if (spaceObject.type() == PlanetSurface::SpaceObjectType())
+        else if (spaceObject.tryCast(planetSurface))
         {
-            auto planetSurface = dynamic_cast<PlanetSurface *>(&spaceObject);
             drawArea(planetSurface->area());
         }
-        else if (spaceObject.type() == Ship::SpaceObjectType())
+        else if (spaceObject.tryCast(ship))
         {
-            auto ship = dynamic_cast<Ship *>(&spaceObject);
             drawArea(ship->area());
         }
     }
@@ -129,7 +132,8 @@ namespace space
     {
         for (auto obj : layer.drawables())
         {
-            ImGui::Text("  - %s: %s", obj->id.c_str(), obj->type().c_str());
+            auto typeStr = toString(obj->type2);
+            ImGui::Text("  - %s: %s", obj->id.c_str(), typeStr.c_str());
             ImGui::SameLine();
 
             std::stringstream ss;

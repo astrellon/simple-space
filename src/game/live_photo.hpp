@@ -15,6 +15,7 @@ namespace space
     {
         public:
             // Fields
+            const static SpaceObjectType2 TypeValue;
 
             // Constructor
             LivePhotoTarget(const ObjectId &id);
@@ -24,9 +25,6 @@ namespace space
             virtual SpaceObject *clone(const ObjectId &newId, const CloneContext &context) { return cloneLivePhotoTarget(newId, context); }
             LivePhotoTarget *cloneLivePhotoTarget(const ObjectId &newId, const CloneContext &context);
 
-            static const std::string SpaceObjectType() { return "live-photo-target"; }
-            virtual std::string type() const { return SpaceObjectType(); }
-
             virtual void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform) { }
             virtual void draw(GameSession &session, RenderCamera &target) { }
     };
@@ -35,6 +33,8 @@ namespace space
     {
         public:
             // Fields
+            static SpaceObjectType2 TypeValue;
+
             const sf::Vector2u photoSize;
 
             // Constructor
@@ -46,9 +46,6 @@ namespace space
             LivePhoto *cloneLivePhoto(const ObjectId &newId, const CloneContext &context);
 
             void init(Engine &engine);
-
-            static const std::string SpaceObjectType() { return "live-photo"; }
-            virtual std::string type() const { return SpaceObjectType(); }
 
             virtual void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform);
             virtual void draw(GameSession &session, RenderCamera &target);

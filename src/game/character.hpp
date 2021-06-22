@@ -16,6 +16,8 @@ namespace space
     {
         public:
             // Fields
+            static const SpaceObjectType2 TypeValue;
+
             const CharacterDefinition &definition;
 
             // Inputs
@@ -23,14 +25,11 @@ namespace space
             sf::Vector2f moveInput;
 
             // Constructor
-            Character(const ObjectId &id, const CharacterDefinition &definition);
+            Character(const ObjectId &id, const CharacterDefinition &definition, SpaceObjectType2 type = TypeValue);
 
             // Methods
             virtual SpaceObject *clone(const ObjectId &newId, const CloneContext &context) { return cloneCharacter(newId, context); }
             Character *cloneCharacter(const ObjectId &newId, const CloneContext &context);
-
-            static const std::string SpaceObjectType() { return CharacterDefinition::DefinitionType(); }
-            virtual std::string type() const { return SpaceObjectType(); }
 
             virtual void prePhysics(GameSession &session, sf::Time dt, const sf::Transform &parentTransform);
             virtual void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform);

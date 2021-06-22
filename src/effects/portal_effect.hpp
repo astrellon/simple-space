@@ -21,9 +21,6 @@ namespace space
             void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform);
             void draw(GameSession &session, sf::RenderTarget &target);
 
-            static const std::string SpaceObjectType() { return "portal-effect"; }
-            virtual std::string type() const { return SpaceObjectType(); }
-
         private:
             struct Particle
             {

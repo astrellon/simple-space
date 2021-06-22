@@ -12,7 +12,7 @@
 
 namespace space
 {
-    PortalEffect::PortalEffect(const ObjectId &id, size_t numParticles) : SpaceObject(id), _vertices(sf::Points, numParticles), _shader(nullptr)
+    PortalEffect::PortalEffect(const ObjectId &id, size_t numParticles) : SpaceObject(id, SpaceObjectType2::Unknown), _vertices(sf::Points, numParticles), _shader(nullptr)
     {
         _particles.resize(numParticles);
 

@@ -37,6 +37,16 @@
 
 #include "json_common.hpp"
 
+#define SpaceObjectToJson(Type) { \
+    const Type *casted; \
+    if (input.tryCast(casted)) return toJson(*casted); \
+}
+
+#define SpaceObjectFromJson(Type) { \
+    if (objType == Type::TypeValue) \
+        return addFromJson##Type(j, session, context); \
+}
+
 namespace space
 {
     json toJson(const GameSession &input)
@@ -70,14 +80,13 @@ namespace space
 
         result->onPostLoad(context);
 
-        // return std::move(result);
         return result;
     }
 
     json toJsonBase(const SpaceObject &input)
     {
         json result {
-            {"type", input.type()},
+            {"type", toString(input.type2)},
             {"id", input.id},
             {"transform", toJson(input.transform())}
         };
@@ -90,71 +99,38 @@ namespace space
         if (input.isGenerated())
             return json {};
 
-        if (input.type() == Character::SpaceObjectType())
-            return toJson(dynamic_cast<const Character &>(input));
-
-        else if (input.type() == Ship::SpaceObjectType())
-            return toJson(dynamic_cast<const Ship &>(input));
-
-        else if (input.type() == Planet::SpaceObjectType())
-            return toJson(dynamic_cast<const Planet &>(input));
-
-        else if (input.type() == SpacePortal::SpaceObjectType())
-            return toJson(dynamic_cast<const SpacePortal &>(input));
-
-        else if (input.type() == PlacedItem::SpaceObjectType())
-            return toJson(dynamic_cast<const PlacedItem &>(input));
-
-        else if (input.type() == GrassEffect::SpaceObjectType())
-            return toJson(dynamic_cast<const GrassEffect &>(input));
-
-        else if (input.type() == StarSystem::SpaceObjectType())
-            return toJson(dynamic_cast<const StarSystem &>(input));
-
-        else if (input.type() == PlanetSurface::SpaceObjectType())
-            return toJson(dynamic_cast<const PlanetSurface &>(input));
-
-        else if (input.type() == LivePhoto::SpaceObjectType())
-            return toJson(dynamic_cast<const LivePhoto &>(input));
-
-        else if (input.type() == LivePhotoTarget::SpaceObjectType())
-            return toJson(dynamic_cast<const LivePhotoTarget &>(input));
+        SpaceObjectToJson(Character);
+        SpaceObjectToJson(Ship);
+        SpaceObjectToJson(Planet);
+        SpaceObjectToJson(SpacePortal);
+        SpaceObjectToJson(PlacedItem);
+        SpaceObjectToJson(GrassEffect);
+        SpaceObjectToJson(StarSystem);
+        SpaceObjectToJson(PlanetSurface);
+        SpaceObjectToJson(LivePhoto);
+        SpaceObjectToJson(LivePhotoTarget);
 
         throw std::runtime_error("Unknown space object type");
     }
     bool addFromJsonSpaceObject(const json &j, GameSession &session, LoadingContext &context)
     {
         auto type = j.at("type").get<std::string>();
-        if (type == Character::SpaceObjectType())
-            return addFromJsonCharacter(j, session, context);
+        auto objType = fromString(type);
 
-        if (type == Ship::SpaceObjectType())
-            return addFromJsonShip(j, session, context);
-
-        if (type == Planet::SpaceObjectType())
-            // Ignore planets
+        if (objType == Planet::TypeValue)
+        {
             return true;
+        }
 
-        if (type == SpacePortal::SpaceObjectType())
-            return addFromJsonSpacePortal(j, session, context);
-
-        if (type == PlacedItem::SpaceObjectType())
-            return addFromJsonPlacedItem(j, session, context);
-
-        if (type == StarSystem::SpaceObjectType())
-            return addFromJsonStarSystem(j, session, context);
-
-        if (type == PlanetSurface::SpaceObjectType())
-            return addFromJsonPlanetSurface(j, session, context);
-
-        if (type == GrassEffect::SpaceObjectType())
-            return addFromJsonGrassEffect(j, session, context);
-
-        if (type == LivePhoto::SpaceObjectType())
-            return addFromJsonLivePhoto(j, session, context);
-
-        if (type == LivePhotoTarget::SpaceObjectType())
-            return addFromJsonLivePhotoTarget(j, session, context);
+        SpaceObjectFromJson(Character);
+        SpaceObjectFromJson(Ship);
+        SpaceObjectFromJson(SpacePortal);
+        SpaceObjectFromJson(PlacedItem);
+        SpaceObjectFromJson(StarSystem);
+        SpaceObjectFromJson(PlanetSurface);
+        SpaceObjectFromJson(GrassEffect);
+        SpaceObjectFromJson(LivePhoto);
+        SpaceObjectFromJson(LivePhotoTarget);
 
         throw std::runtime_error("Unknown space object type");
     }
@@ -245,7 +221,7 @@ namespace space
     {
         json result {
             {"id", input.id},
-            {"type", input.type()},
+            {"type", toString(input.type2)},
             {"position", toJson(input.transform().position)},
             {"itemId", input.item->id}
         };
@@ -431,7 +407,7 @@ namespace space
             {"planetId", input.partOfPlanet()->id},
             {"definitionId", input.definition.id},
             {"area", toJson(input.area())},
-            {"type", input.type()}
+            {"type", toString(input.type2)}
         };
 
         return result;

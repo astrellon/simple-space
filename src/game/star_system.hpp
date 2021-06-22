@@ -23,6 +23,8 @@ namespace space
     {
         public:
             // Fields
+            static const SpaceObjectType2 TypeValue;
+
             const StarSystemDefinition &definition;
 
             // Constructor
@@ -33,9 +35,6 @@ namespace space
             virtual SpaceObject *clone(const ObjectId &newId, const CloneContext &context) { return cloneStarSystem(newId, context); }
             virtual SpaceObject *deepClone(const ObjectId &newIdPrefix, const CloneContext &context);
             StarSystem *cloneStarSystem(const ObjectId &newId, const CloneContext &context);
-
-            static const std::string SpaceObjectType() { return StarSystemDefinition::DefinitionType(); }
-            virtual std::string type() const { return SpaceObjectType(); }
 
             virtual Area &area() { return _area; }
             virtual const Area &area () const { return _area; }
