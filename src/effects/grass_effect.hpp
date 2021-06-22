@@ -14,7 +14,7 @@ namespace space
     {
         public:
             // Fields
-            static const SpaceObjectType2 TypeValue;
+            static const SpaceObjectType TypeValue;
 
             const GrassEffectDefinition &definition;
 

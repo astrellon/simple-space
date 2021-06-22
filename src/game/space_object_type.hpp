@@ -4,7 +4,7 @@
 
 namespace space
 {
-    enum class SpaceObjectType2
+    enum class SpaceObjectType
     {
         Unknown,
         Character,
@@ -21,6 +21,6 @@ namespace space
         GrassEffect
     };
 
-    const std::string toString(SpaceObjectType2 input);
-    SpaceObjectType2 fromStringSpaceObjectType(const std::string &input);
+    const std::string toString(SpaceObjectType input);
+    SpaceObjectType fromStringSpaceObjectType(const std::string &input);
 } // namespace space

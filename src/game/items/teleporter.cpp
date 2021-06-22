@@ -14,7 +14,7 @@
 
 namespace space
 {
-    const ItemType2 Teleporter::TypeValue = ItemType2::Teleporter;
+    const ItemType Teleporter::TypeValue = ItemType::Teleporter;
 
     void Teleporter::execute(CharacterController &controller, PlacedItem &placed)
     {

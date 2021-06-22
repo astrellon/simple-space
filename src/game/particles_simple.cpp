@@ -27,7 +27,7 @@ namespace space
         position = Utils::radianVector(angle, distance);
     }
 
-    const SpaceObjectType2 ParticlesSimple::TypeValue = SpaceObjectType2::ParticlesSimple;
+    const SpaceObjectType ParticlesSimple::TypeValue = SpaceObjectType::ParticlesSimple;
 
     ParticlesSimple::ParticlesSimple(const ObjectId &id, int numParticles) : SpaceObject(id, TypeValue), _verticies(sf::Triangles, numParticles * 6), _numParticles(numParticles), _particles(numParticles)
     {

@@ -18,7 +18,7 @@ namespace space
     class Planet : public CelestialBody
     {
         public:
-            static const SpaceObjectType2 TypeValue;
+            static const SpaceObjectType TypeValue;
 
             typedef std::vector<PlanetSurface *> PlanetSurfaceList;
 

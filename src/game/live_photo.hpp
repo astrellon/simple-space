@@ -15,7 +15,7 @@ namespace space
     {
         public:
             // Fields
-            const static SpaceObjectType2 TypeValue;
+            const static SpaceObjectType TypeValue;
 
             // Constructor
             LivePhotoTarget(const ObjectId &id);
@@ -33,7 +33,7 @@ namespace space
     {
         public:
             // Fields
-            static SpaceObjectType2 TypeValue;
+            static SpaceObjectType TypeValue;
 
             const sf::Vector2u photoSize;
 

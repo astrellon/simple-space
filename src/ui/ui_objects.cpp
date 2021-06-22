@@ -62,7 +62,7 @@ namespace space
     {
         ImGui::Text("Id: %s", spaceObject.id.c_str());
 
-        auto typeStr = toString(spaceObject.type2);
+        auto typeStr = toString(spaceObject.type);
         ImGui::Text("Type: %s", typeStr.c_str());
         if (spaceObject.compendiumDefinition())
         {
@@ -132,7 +132,7 @@ namespace space
     {
         for (auto obj : layer.drawables())
         {
-            auto typeStr = toString(obj->type2);
+            auto typeStr = toString(obj->type);
             ImGui::Text("  - %s: %s", obj->id.c_str(), typeStr.c_str());
             ImGui::SameLine();
 

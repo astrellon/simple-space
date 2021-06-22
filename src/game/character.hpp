@@ -16,7 +16,7 @@ namespace space
     {
         public:
             // Fields
-            static const SpaceObjectType2 TypeValue;
+            static const SpaceObjectType TypeValue;
 
             const CharacterDefinition &definition;
 
@@ -25,7 +25,7 @@ namespace space
             sf::Vector2f moveInput;
 
             // Constructor
-            Character(const ObjectId &id, const CharacterDefinition &definition, SpaceObjectType2 type = TypeValue);
+            Character(const ObjectId &id, const CharacterDefinition &definition, SpaceObjectType type = TypeValue);
 
             // Methods
             virtual SpaceObject *clone(const ObjectId &newId, const CloneContext &context) { return cloneCharacter(newId, context); }

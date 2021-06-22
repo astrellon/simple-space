@@ -2,5 +2,5 @@
 
 namespace space
 {
-    const ItemType2 PlaceableItem::TypeValue = ItemType2::Placeable;
+    const ItemType PlaceableItem::TypeValue = ItemType::Placeable;
 } // namespace space

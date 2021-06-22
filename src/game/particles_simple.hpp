@@ -31,7 +31,7 @@ namespace space
     {
         public:
             // Fields
-            static const SpaceObjectType2 TypeValue;
+            static const SpaceObjectType TypeValue;
 
             // Constructor
             ParticlesSimple(const ObjectId &id, int numParticles);

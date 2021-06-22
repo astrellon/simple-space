@@ -19,7 +19,7 @@
 
 namespace space
 {
-    const SpaceObjectType2 StarSystem::TypeValue = SpaceObjectType2::StarSystem;
+    const SpaceObjectType StarSystem::TypeValue = SpaceObjectType::StarSystem;
 
     StarSystem::StarSystem(GameSession &session, const ObjectId &id, const StarSystemDefinition &definition) : SpaceObject(id, TypeValue), definition(definition), _area(AreaType::StarSystem, this)
     {

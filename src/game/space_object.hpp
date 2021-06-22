@@ -30,10 +30,10 @@ namespace space
         public:
             // Fields
             const ObjectId id;
-            const SpaceObjectType2 type2;
+            const SpaceObjectType type;
 
             // Constructor
-            SpaceObject(const ObjectId &id, SpaceObjectType2 t) : id(id), type2(t), _insideArea(nullptr), _partOfLivePhoto(nullptr) { }
+            SpaceObject(const ObjectId &id, SpaceObjectType t) : id(id), type(t), _insideArea(nullptr), _partOfLivePhoto(nullptr) { }
             virtual ~SpaceObject() { }
 
             // Methods
@@ -70,7 +70,7 @@ namespace space
             template <typename T>
             bool tryCast(const T *& result) const
             {
-                if (type2 == T::TypeValue)
+                if (type == T::TypeValue)
                 {
                     result = reinterpret_cast<const T *>(this);
                     return true;
@@ -81,7 +81,7 @@ namespace space
             template <typename T>
             bool tryCast(T *& result)
             {
-                if (type2 == T::TypeValue)
+                if (type == T::TypeValue)
                 {
                     result = reinterpret_cast<T *>(this);
                     return true;
@@ -92,7 +92,7 @@ namespace space
             template <typename T>
             bool is() const
             {
-                return type2 == T::TypeValue;
+                return type == T::TypeValue;
             }
 
             virtual bool loopOver(LoopObjectCallback callback);

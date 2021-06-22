@@ -4,7 +4,7 @@
 
 namespace space
 {
-    enum class ItemType2
+    enum class ItemType
     {
         Unknown,
         Placeable,
@@ -14,6 +14,6 @@ namespace space
         Teleporter
     };
 
-    const std::string toString(ItemType2 input);
-    ItemType2 fromStringItemType(const std::string &input);
+    const std::string toString(ItemType input);
+    ItemType fromStringItemType(const std::string &input);
 } // namespace space

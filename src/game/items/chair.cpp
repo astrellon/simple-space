@@ -7,7 +7,7 @@
 
 namespace space
 {
-    const ItemType2 Chair::TypeValue = ItemType2::Chair;
+    const ItemType Chair::TypeValue = ItemType::Chair;
 
     void Chair::execute(CharacterController &controller, PlacedItem &placed)
     {

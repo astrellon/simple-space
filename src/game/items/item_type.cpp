@@ -2,28 +2,28 @@
 
 namespace space
 {
-    const std::string toString(ItemType2 input)
+    const std::string toString(ItemType input)
     {
         switch (input)
         {
             default:
-            case ItemType2::Unknown: return "unknown";
-            case ItemType2::Placeable: return "placeable-item";
-            case ItemType2::Bed: return "bed";
-            case ItemType2::Chair: return "chair";
-            case ItemType2::Food: return "food";
-            case ItemType2::Teleporter: return "teleporter";
+            case ItemType::Unknown: return "unknown";
+            case ItemType::Placeable: return "placeable-item";
+            case ItemType::Bed: return "bed";
+            case ItemType::Chair: return "chair";
+            case ItemType::Food: return "food";
+            case ItemType::Teleporter: return "teleporter";
         }
     }
 
-    ItemType2 fromStringItemType(const std::string &input)
+    ItemType fromStringItemType(const std::string &input)
     {
-        if (input == "placeable-item") return ItemType2::Placeable;
-        if (input == "bed") return ItemType2::Bed;
-        if (input == "chair") return ItemType2::Chair;
-        if (input == "food") return ItemType2::Food;
-        if (input == "teleporter") return ItemType2::Teleporter;
+        if (input == "placeable-item") return ItemType::Placeable;
+        if (input == "bed") return ItemType::Bed;
+        if (input == "chair") return ItemType::Chair;
+        if (input == "food") return ItemType::Food;
+        if (input == "teleporter") return ItemType::Teleporter;
 
-        return ItemType2::Unknown;
+        return ItemType::Unknown;
     }
 } // namespace space

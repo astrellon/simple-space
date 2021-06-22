@@ -52,7 +52,7 @@ namespace space
             return;
         }
 
-        auto typeStr = toString(obj->type2);
+        auto typeStr = toString(obj->type);
         ImGui::Text("%s: %s", obj->id.c_str(), typeStr.c_str());
 
         auto compendiumDef = obj->compendiumDefinition();

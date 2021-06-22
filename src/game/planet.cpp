@@ -13,7 +13,7 @@
 
 namespace space
 {
-    const SpaceObjectType2 Planet::TypeValue = SpaceObjectType2::Planet;
+    const SpaceObjectType Planet::TypeValue = SpaceObjectType::Planet;
 
     Planet::Planet(const ObjectId &id, const PlanetDefinition &definition)
         : CelestialBody(id, definition, TypeValue), definition(definition), _shader(nullptr), _initedSurfaces(false)

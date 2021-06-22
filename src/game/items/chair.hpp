@@ -11,7 +11,7 @@ namespace space
     {
         public:
             // Fields
-            static const ItemType2 TypeValue;
+            static const ItemType TypeValue;
 
             // Constructor
             Chair(ItemId id, const PlaceableItemDefinition &definition) : PlaceableItem(id, definition, TypeValue) { }

@@ -9,7 +9,7 @@
 
 namespace space
 {
-    const SpaceObjectType2 TeleportClone::TypeValue = SpaceObjectType2::TeleportClone;
+    const SpaceObjectType TeleportClone::TypeValue = SpaceObjectType::TeleportClone;
 
     TeleportClone::TeleportClone(const ObjectId &id, const Character &clone, const SpaceTransform &preTransform) :
         Character(id, clone.definition, TypeValue), _cloneId(clone.id), _preTeleport(preTransform), _postTeleport(clone.transform()), _cloneFound(nullptr)

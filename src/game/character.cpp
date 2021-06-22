@@ -13,9 +13,9 @@
 
 namespace space
 {
-    const SpaceObjectType2 Character::TypeValue = SpaceObjectType2::Character;
+    const SpaceObjectType Character::TypeValue = SpaceObjectType::Character;
 
-    Character::Character(const ObjectId &id, const CharacterDefinition &definition, SpaceObjectType2 typeValue) :
+    Character::Character(const ObjectId &id, const CharacterDefinition &definition, SpaceObjectType typeValue) :
         SpaceObject(id, typeValue), definition(definition), rotateInput(0), _physicsBody(nullptr), _sprite(*definition.texture)
     {
         createInteractable();

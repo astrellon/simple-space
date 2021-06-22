@@ -96,7 +96,7 @@ namespace space
     json toJsonBase(const SpaceObject &input)
     {
         json result {
-            {"type", toString(input.type2)},
+            {"type", toString(input.type)},
             {"id", input.id},
             {"transform", toJson(input.transform())}
         };
@@ -231,7 +231,7 @@ namespace space
     {
         json result {
             {"id", input.id},
-            {"type", toString(input.type2)},
+            {"type", toString(input.type)},
             {"position", toJson(input.transform().position)},
             {"itemId", input.item->id}
         };
@@ -417,7 +417,7 @@ namespace space
             {"planetId", input.partOfPlanet()->id},
             {"definitionId", input.definition.id},
             {"area", toJson(input.area())},
-            {"type", toString(input.type2)}
+            {"type", toString(input.type)}
         };
 
         return result;
@@ -664,7 +664,7 @@ namespace space
         return json {
             {"id", item.id},
             {"definitionId", item.definition.id},
-            {"type", toString(item.type2)}
+            {"type", toString(item.type)}
         };
     }
 

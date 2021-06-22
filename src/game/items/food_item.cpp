@@ -8,7 +8,7 @@
 
 namespace space
 {
-    const ItemType2 FoodItem::TypeValue = ItemType2::Food;
+    const ItemType FoodItem::TypeValue = ItemType::Food;
 
     void FoodItem::execute(CharacterController &controller, PlacedItem &placed)
     {

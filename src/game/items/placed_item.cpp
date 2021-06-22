@@ -15,7 +15,7 @@
 
 namespace space
 {
-    const SpaceObjectType2 PlacedItem::TypeValue = SpaceObjectType2::PlacedItem;
+    const SpaceObjectType PlacedItem::TypeValue = SpaceObjectType::PlacedItem;
 
     PlacedItem::PlacedItem(PlaceableItem *item) : PlacedItem(item->id)
     {

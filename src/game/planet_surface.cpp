@@ -8,7 +8,7 @@
 
 namespace space
 {
-    const SpaceObjectType2 PlanetSurface::TypeValue = SpaceObjectType2::PlanetSurface;
+    const SpaceObjectType PlanetSurface::TypeValue = SpaceObjectType::PlanetSurface;
 
     PlanetSurface::PlanetSurface(const ObjectId &id, const PlanetSurfaceDefinition &definition) : SpaceObject(id, TypeValue), definition(definition), _area(AreaType::PlanetSurface, this), _partOfPlanet(nullptr)
     {

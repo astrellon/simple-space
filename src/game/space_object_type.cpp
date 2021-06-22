@@ -2,42 +2,42 @@
 
 namespace space
 {
-    const std::string toString(SpaceObjectType2 input)
+    const std::string toString(SpaceObjectType input)
     {
         switch (input)
         {
             default:
-            case SpaceObjectType2::Unknown: return "unknown";
-            case SpaceObjectType2::Character: return "character";
-            case SpaceObjectType2::LivePhoto: return "live-photo";
-            case SpaceObjectType2::LivePhotoTarget: return "live-photo-target";
-            case SpaceObjectType2::ParticlesSimple: return "particles";
-            case SpaceObjectType2::PlacedItem: return "placed-item";
-            case SpaceObjectType2::Planet: return "planet";
-            case SpaceObjectType2::PlanetSurface: return "planet-surface";
-            case SpaceObjectType2::Ship: return "ship";
-            case SpaceObjectType2::StarSystem: return "star-system";
-            case SpaceObjectType2::SpacePortal: return "space-portal";
-            case SpaceObjectType2::TeleportClone: return "teleport-clone";
-            case SpaceObjectType2::GrassEffect: return "grass-effect";
+            case SpaceObjectType::Unknown: return "unknown";
+            case SpaceObjectType::Character: return "character";
+            case SpaceObjectType::LivePhoto: return "live-photo";
+            case SpaceObjectType::LivePhotoTarget: return "live-photo-target";
+            case SpaceObjectType::ParticlesSimple: return "particles";
+            case SpaceObjectType::PlacedItem: return "placed-item";
+            case SpaceObjectType::Planet: return "planet";
+            case SpaceObjectType::PlanetSurface: return "planet-surface";
+            case SpaceObjectType::Ship: return "ship";
+            case SpaceObjectType::StarSystem: return "star-system";
+            case SpaceObjectType::SpacePortal: return "space-portal";
+            case SpaceObjectType::TeleportClone: return "teleport-clone";
+            case SpaceObjectType::GrassEffect: return "grass-effect";
         }
     }
 
-    SpaceObjectType2 fromStringSpaceObjectType(const std::string &input)
+    SpaceObjectType fromStringSpaceObjectType(const std::string &input)
     {
-        if (input == "character") return SpaceObjectType2::Character;
-        if (input == "live-photo") return SpaceObjectType2::LivePhoto;
-        if (input == "live-photo-target") return SpaceObjectType2::LivePhotoTarget;
-        if (input == "particles") return SpaceObjectType2::ParticlesSimple;
-        if (input == "placed-item") return SpaceObjectType2::PlacedItem;
-        if (input == "planet") return SpaceObjectType2::Planet;
-        if (input == "planet-surface") return SpaceObjectType2::PlanetSurface;
-        if (input == "ship") return SpaceObjectType2::Ship;
-        if (input == "star-system") return SpaceObjectType2::StarSystem;
-        if (input == "space-portal") return SpaceObjectType2::SpacePortal;
-        if (input == "teleport-clone") return SpaceObjectType2::TeleportClone;
-        if (input == "grass-effect") return SpaceObjectType2::GrassEffect;
+        if (input == "character") return SpaceObjectType::Character;
+        if (input == "live-photo") return SpaceObjectType::LivePhoto;
+        if (input == "live-photo-target") return SpaceObjectType::LivePhotoTarget;
+        if (input == "particles") return SpaceObjectType::ParticlesSimple;
+        if (input == "placed-item") return SpaceObjectType::PlacedItem;
+        if (input == "planet") return SpaceObjectType::Planet;
+        if (input == "planet-surface") return SpaceObjectType::PlanetSurface;
+        if (input == "ship") return SpaceObjectType::Ship;
+        if (input == "star-system") return SpaceObjectType::StarSystem;
+        if (input == "space-portal") return SpaceObjectType::SpacePortal;
+        if (input == "teleport-clone") return SpaceObjectType::TeleportClone;
+        if (input == "grass-effect") return SpaceObjectType::GrassEffect;
 
-        return SpaceObjectType2::Unknown;
+        return SpaceObjectType::Unknown;
     }
 } // space

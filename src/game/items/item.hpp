@@ -17,18 +17,18 @@ namespace space
             static const ItemId UnknownId;
 
             const ItemId id;
-            const ItemType2 type2;
+            const ItemType type;
             const ItemDefinition &definition;
 
             // Constructor
-            Item(ItemId id, const ItemDefinition &definition, ItemType2 t) : id(id), type2(t), definition(definition) { }
+            Item(ItemId id, const ItemDefinition &definition, ItemType t) : id(id), type(t), definition(definition) { }
             virtual ~Item() { }
 
             // Methods
             template <typename T>
             bool tryCast(const T *& result) const
             {
-                if (type2 == T::TypeValue)
+                if (type == T::TypeValue)
                 {
                     result = reinterpret_cast<const T *>(this);
                     return true;
@@ -39,7 +39,7 @@ namespace space
             template <typename T>
             bool tryCast(T *& result)
             {
-                if (type2 == T::TypeValue)
+                if (type == T::TypeValue)
                 {
                     result = reinterpret_cast<T *>(this);
                     return true;
@@ -50,7 +50,7 @@ namespace space
             template <typename T>
             bool is() const
             {
-                return type2 == T::TypeValue;
+                return type == T::TypeValue;
             }
 
     };

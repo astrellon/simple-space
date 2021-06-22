@@ -13,7 +13,7 @@
 
 namespace space
 {
-    const SpaceObjectType2 SpacePortal::TypeValue = SpaceObjectType2::SpacePortal;
+    const SpaceObjectType SpacePortal::TypeValue = SpaceObjectType::SpacePortal;
 
     SpacePortal::SpacePortal(const ObjectId &id, const SpacePortalDefinition &definition) :
         SpaceObject(id, TypeValue), definition(definition), _sprite(*definition.texture), _lerpFromShadowT(1.0f)

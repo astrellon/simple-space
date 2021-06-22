@@ -14,12 +14,12 @@ namespace space
     {
         public:
             // Fields
-            static const ItemType2 TypeValue;
+            static const ItemType TypeValue;
 
             const PlaceableItemDefinition &placeableDefinition;
 
             // Constructor
-            PlaceableItem(ItemId id, const PlaceableItemDefinition &definition, ItemType2 t = TypeValue) : Item(id, definition, t), placeableDefinition(definition) { }
+            PlaceableItem(ItemId id, const PlaceableItemDefinition &definition, ItemType t = TypeValue) : Item(id, definition, t), placeableDefinition(definition) { }
             virtual ~PlaceableItem() { }
 
             // Methods

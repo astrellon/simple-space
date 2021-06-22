@@ -12,7 +12,7 @@
 
 namespace space
 {
-    const SpaceObjectType2 Ship::TypeValue = SpaceObjectType2::Ship;
+    const SpaceObjectType Ship::TypeValue = SpaceObjectType::Ship;
 
     Ship::Ship(const ObjectId &id, const ShipDefinition &definition):
         SpaceObject(id, TypeValue),
