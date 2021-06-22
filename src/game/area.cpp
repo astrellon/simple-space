@@ -212,17 +212,12 @@ namespace space
         for (auto obj : _objects)
         {
             PlacedItem *placedItem;
-            if (!obj->tryCast(placedItem))
+            Teleporter *teleporter;
+            if (!obj->tryCast(placedItem) || !placedItem->item->tryCast<Teleporter>(teleporter))
             {
                 continue;
             }
 
-            if (placedItem->item->type() != Teleporter::ItemType())
-            {
-                continue;
-            }
-
-            auto teleporter = dynamic_cast<Teleporter *>(placedItem->item);
             result.addTeleporter(PlacedItemPair<Teleporter>(placedItem, teleporter));
         }
     }

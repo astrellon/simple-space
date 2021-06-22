@@ -8,6 +8,8 @@
 
 namespace space
 {
+    const ItemType2 FoodItem::TypeValue = ItemType2::Food;
+
     void FoodItem::execute(CharacterController &controller, PlacedItem &placed)
     {
         auto npc = dynamic_cast<NpcController *>(&controller);

@@ -14,9 +14,10 @@ namespace space
     {
         public:
             // Fields
+            static const ItemType2 TypeValue;
 
             // Constructor
-            Teleporter(ItemId id, const PlaceableItemDefinition &definition) : PlaceableItem(id, definition) { }
+            Teleporter(ItemId id, const PlaceableItemDefinition &definition) : PlaceableItem(id, definition, TypeValue) { }
             virtual ~Teleporter() { }
 
             // Methods
@@ -26,9 +27,6 @@ namespace space
 
             const std::string &name() const { return _name; }
             void name(const std::string &name) { _name = name; }
-
-            static const std::string ItemType() { return "teleporter"; }
-            virtual std::string type() const { return ItemType(); }
 
         private:
             std::string _name;

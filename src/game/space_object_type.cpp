@@ -23,7 +23,7 @@ namespace space
         }
     }
 
-    SpaceObjectType2 fromString(const std::string &input)
+    SpaceObjectType2 fromStringSpaceObjectType(const std::string &input)
     {
         if (input == "character") return SpaceObjectType2::Character;
         if (input == "live-photo") return SpaceObjectType2::LivePhoto;

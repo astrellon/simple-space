@@ -8,15 +8,13 @@ namespace space
     {
         public:
             // Fields
+            static const ItemType2 TypeValue;
 
             // Constructor
-            FoodItem(ItemId id, const PlaceableItemDefinition &definition) : PlaceableItem(id, definition) { }
+            FoodItem(ItemId id, const PlaceableItemDefinition &definition) : PlaceableItem(id, definition, TypeValue) { }
             virtual ~FoodItem() { }
 
             // Methods
             virtual void execute(CharacterController &controller, PlacedItem &placed);
-
-            static const std::string ItemType() { return "food"; }
-            virtual std::string type() const { return ItemType(); }
     };
 } // space

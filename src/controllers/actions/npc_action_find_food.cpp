@@ -35,14 +35,11 @@ namespace space
                 for (auto obj : insideArea->objects())
                 {
                     PlacedItem *placedItem;
-                    if (obj->tryCast(placedItem))
+                    if (obj->tryCast(placedItem) && placedItem->item->is<FoodItem>())
                     {
-                        if (placedItem->item->type() == FoodItem::ItemType())
-                        {
-                            auto foodPos = placedItem->transform().position;
-                            auto distance = (foodPos - pos).lengthSquared();
-                            availbleFood.emplace_back(distance, placedItem);
-                        }
+                        auto foodPos = placedItem->transform().position;
+                        auto distance = (foodPos - pos).lengthSquared();
+                        availbleFood.emplace_back(distance, placedItem);
                     }
                 }
 

@@ -8,15 +8,14 @@ namespace space
     {
         public:
             // Fields
+            static const ItemType2 TypeValue;
 
             // Constructor
-            BedItem(ItemId id, const PlaceableItemDefinition &definition) : PlaceableItem(id, definition) { }
+            BedItem(ItemId id, const PlaceableItemDefinition &definition) : PlaceableItem(id, definition, TypeValue) { }
             virtual ~BedItem() { }
 
             // Methods
             virtual void execute(CharacterController &controller, PlacedItem &placed);
 
-            static const std::string ItemType() { return "bed"; }
-            virtual std::string type() const { return ItemType(); }
     };
 } // space

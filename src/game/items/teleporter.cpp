@@ -14,6 +14,8 @@
 
 namespace space
 {
+    const ItemType2 Teleporter::TypeValue = ItemType2::Teleporter;
+
     void Teleporter::execute(CharacterController &controller, PlacedItem &placed)
     {
         auto parentArea = placed.insideArea();

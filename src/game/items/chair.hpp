@@ -11,15 +11,13 @@ namespace space
     {
         public:
             // Fields
+            static const ItemType2 TypeValue;
 
             // Constructor
-            Chair(ItemId id, const PlaceableItemDefinition &definition) : PlaceableItem(id, definition) { }
+            Chair(ItemId id, const PlaceableItemDefinition &definition) : PlaceableItem(id, definition, TypeValue) { }
             virtual ~Chair() { }
 
             // Methods
             virtual void execute(CharacterController &controller, PlacedItem &placed);
-
-            static const std::string ItemType() { return "chair"; }
-            virtual std::string type() const { return ItemType(); }
     };
 } // space

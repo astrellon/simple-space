@@ -22,5 +22,5 @@ namespace space
     };
 
     const std::string toString(SpaceObjectType2 input);
-    SpaceObjectType2 fromString(const std::string &input);
+    SpaceObjectType2 fromStringSpaceObjectType(const std::string &input);
 } // namespace space

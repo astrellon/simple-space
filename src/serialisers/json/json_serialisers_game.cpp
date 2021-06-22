@@ -47,6 +47,16 @@
         return addFromJson##Type(j, session, context); \
 }
 
+#define ItemToJson(Type) { \
+    const Type *casted; \
+    if (input.tryCast(casted)) return toJson(*casted); \
+}
+
+#define ItemFromJson(Type) { \
+    if (itemType == Type::TypeValue) \
+        return addFromJson##Type(j, session); \
+}
+
 namespace space
 {
     json toJson(const GameSession &input)
@@ -115,7 +125,7 @@ namespace space
     bool addFromJsonSpaceObject(const json &j, GameSession &session, LoadingContext &context)
     {
         auto type = j.at("type").get<std::string>();
-        auto objType = fromString(type);
+        auto objType = fromStringSpaceObjectType(type);
 
         if (objType == Planet::TypeValue)
         {
@@ -654,26 +664,17 @@ namespace space
         return json {
             {"id", item.id},
             {"definitionId", item.definition.id},
-            {"type", item.type()}
+            {"type", toString(item.type2)}
         };
     }
 
-    json toJson(const Item &item)
+    json toJson(const Item &input)
     {
-        if (item.type() == PlaceableItem::ItemType())
-            return toJson(dynamic_cast<const PlaceableItem &>(item));
-
-        if (item.type() == Chair::ItemType())
-            return toJson(dynamic_cast<const Chair &>(item));
-
-        if (item.type() == Teleporter::ItemType())
-            return toJson(dynamic_cast<const Teleporter &>(item));
-
-        if (item.type() == FoodItem::ItemType())
-            return toJson(dynamic_cast<const FoodItem &>(item));
-
-        if (item.type() == BedItem::ItemType())
-            return toJson(dynamic_cast<const BedItem &>(item));
+        ItemToJson(PlaceableItem);
+        ItemToJson(Chair);
+        ItemToJson(Teleporter);
+        ItemToJson(FoodItem);
+        ItemToJson(BedItem);
 
         throw std::runtime_error("Unknown item type");
     }
@@ -681,21 +682,13 @@ namespace space
     bool addFromJsonItem(const json &j, GameSession &session)
     {
         auto type = j.at("type").get<std::string>();
+        auto itemType = fromStringItemType(type);
 
-        if (type == PlaceableItem::ItemType())
-            return addFromJsonPlaceableItem(j, session);
-
-        if (type == Chair::ItemType())
-            return addFromJsonChair(j, session);
-
-        if (type == Teleporter::ItemType())
-            return addFromJsonTeleporter(j, session);
-
-        if (type == FoodItem::ItemType())
-            return addFromJsonFoodItem(j, session);
-
-        if (type == BedItem::ItemType())
-            return addFromJsonBedItem(j, session);
+        ItemFromJson(PlaceableItem);
+        ItemFromJson(Chair);
+        ItemFromJson(Teleporter);
+        ItemFromJson(FoodItem);
+        ItemFromJson(BedItem);
 
         throw std::runtime_error("Unknown item type");
     }

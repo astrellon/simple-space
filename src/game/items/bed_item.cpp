@@ -8,6 +8,8 @@
 
 namespace space
 {
+    const ItemType2 BedItem::TypeValue = ItemType2::Bed;
+
     void BedItem::execute(CharacterController &controller, PlacedItem &placed)
     {
         auto npc = dynamic_cast<NpcController *>(&controller);

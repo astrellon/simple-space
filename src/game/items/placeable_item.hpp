@@ -14,16 +14,15 @@ namespace space
     {
         public:
             // Fields
+            static const ItemType2 TypeValue;
+
             const PlaceableItemDefinition &placeableDefinition;
 
             // Constructor
-            PlaceableItem(ItemId id, const PlaceableItemDefinition &definition) : Item(id, definition), placeableDefinition(definition) { }
+            PlaceableItem(ItemId id, const PlaceableItemDefinition &definition, ItemType2 t = TypeValue) : Item(id, definition, t), placeableDefinition(definition) { }
             virtual ~PlaceableItem() { }
 
             // Methods
-            static const std::string ItemType() { return "placeable-item"; }
-            virtual std::string type() const { return ItemType(); }
-
             virtual void execute(CharacterController &controller, PlacedItem &placed) { }
             virtual void onPlaced(PlacedItem &area) { }
 

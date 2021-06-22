@@ -35,14 +35,11 @@ namespace space
                 for (auto obj : insideArea->objects())
                 {
                     PlacedItem *placedItem;
-                    if (obj->tryCast(placedItem))
+                    if (obj->tryCast(placedItem) && placedItem->item->is<BedItem>())
                     {
-                        if (placedItem->item->type() == BedItem::ItemType())
-                        {
-                            auto bedPos = placedItem->transform().position;
-                            auto distance = (bedPos - pos).lengthSquared();
-                            availbleBed.emplace_back(distance, placedItem);
-                        }
+                        auto bedPos = placedItem->transform().position;
+                        auto distance = (bedPos - pos).lengthSquared();
+                        availbleBed.emplace_back(distance, placedItem);
                     }
                 }
 
