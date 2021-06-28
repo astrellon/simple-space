@@ -11,7 +11,7 @@
 namespace space
 {
     NpcActionFindBed::NpcActionFindBed(NpcController *controller) :
-        NpcAction(controller), _stage(Stage::LookingForBed), _destinationId("")
+        NpcAction(controller), _stage(Stage::LookingForBed), _destinationId(""), _timeToFindBed(0.0f)
     {
 
     }
@@ -54,16 +54,26 @@ namespace space
                 }
 
                 auto &closest = availbleBed.front();
-                this->_destinationId = closest.placedBed->id;
-                this->_stage = Stage::MovingToBed;
+                _destinationId = closest.placedBed->id;
+                _stage = Stage::MovingToBed;
                 auto destinationPos = closest.placedBed->transform().position;
-                this->_moveStage = std::make_unique<NpcActionMove>(controller(), destinationPos);
+                _moveStage = std::make_unique<NpcActionMove>(controller(), destinationPos);
+                _timeToFindBed = Utils::randf(6.0f, 9.0f);
 
                 break;
             }
 
             case Stage::MovingToBed:
             {
+                _timeToFindBed -= (float)dt.asSeconds();
+                if (_timeToFindBed < 0.0f)
+                {
+                    _moveStage->onComplete();
+                    std::cout << "Failed to get to bed in time\n";
+                    _stage = Stage::Done;
+                    break;
+                }
+
                 _moveStage->update(dt);
                 if (_moveStage->isComplete())
                 {

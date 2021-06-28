@@ -48,6 +48,7 @@ namespace space
                Stage _stage;
                std::unique_ptr<NpcActionMove> _moveStage;
                ObjectId _destinationId;
+               float _timeToFindFood;
 
                // Methods
                static bool compareFoodPair(const FoodSortPair &a, const FoodSortPair &b)
