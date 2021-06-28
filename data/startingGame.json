@@ -56,6 +56,11 @@
             "type": "bed"
         },
         {
+            "definitionId": "BED_NEST",
+            "id": 16,
+            "type": "bed"
+        },
+        {
             "definitionId": "TELEPORTER_1",
             "id": 20,
             "type": "teleporter"
@@ -207,6 +212,7 @@
                     "ITEM_13",
                     "ITEM_14",
                     "ITEM_15",
+                    "ITEM_16",
                     "PLANET1_GRASS_1"
                 ]
             },
@@ -287,7 +293,7 @@
         {
             "type": "placed-item",
             "itemId": 13,
-            "position": [400, 200]
+            "position": [300, 200]
         },
         {
             "type": "placed-item",
@@ -298,6 +304,11 @@
             "type": "placed-item",
             "itemId": 15,
             "position": [400, 400]
+        },
+        {
+            "type": "placed-item",
+            "itemId": 16,
+            "position": [300, 500]
         },
         {
             "definitionId": "SHIP_1",

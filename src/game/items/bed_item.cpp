@@ -19,6 +19,6 @@ namespace space
         }
 
         auto dt = controller.session().engine().deltaTime();
-        npc->needs().changeEnergy(0.01f * dt.asSeconds());
+        npc->needs().changeEnergy(0.07f * dt.asSeconds());
     }
 } // space
