@@ -249,6 +249,22 @@ namespace space
     {
         checkNextFrameState();
 
+        if (Keyboard::isKeyDown(sf::Keyboard::F))
+        {
+            if (DrawDebug::focusOnObject == nullptr)
+            {
+                Character *bird;
+                if (tryGetSpaceObject("BIRD_CHAR", &bird))
+                {
+                    DrawDebug::focusOnObject = bird;
+                }
+            }
+            else
+            {
+                DrawDebug::focusOnObject = nullptr;
+            }
+        }
+
         if (Keyboard::isKeyPressed(sf::Keyboard::Escape))
         {
             if (_takingAPhoto)
@@ -307,6 +323,11 @@ namespace space
                 clearTransition();
                 clearTeleportClone();
             }
+        }
+        else if (DrawDebug::focusOnObject)
+        {
+            auto pos = Utils::getPosition(DrawDebug::focusOnObject->worldTransform());
+            drawAtObject(*DrawDebug::focusOnObject, pos, sceneRender);
         }
         else
         {

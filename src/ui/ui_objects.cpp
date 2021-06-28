@@ -10,6 +10,7 @@
 #include "../game/ship.hpp"
 #include "../utils.hpp"
 #include "../definitions/compendium_definition.hpp"
+#include "../debug/draw_debug.hpp"
 
 namespace space
 {
@@ -93,6 +94,18 @@ namespace space
         auto &trans = spaceObject.transform();
         inputVector2f("Position: ", trans.position);
         ImGui::InputFloat("Rotation deg", &trans.rotation);
+
+        if (DrawDebug::focusOnObject == &spaceObject)
+        {
+            if (ImGui::Button("Unfocus"))
+            {
+                DrawDebug::focusOnObject = nullptr;
+            }
+        }
+        else if (ImGui::Button("Focus on this object"))
+        {
+            DrawDebug::focusOnObject = &spaceObject;
+        }
 
         StarSystem *starSystem;
         PlanetSurface *planetSurface;

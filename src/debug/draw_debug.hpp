@@ -6,20 +6,24 @@
 namespace space
 {
     class UIElement;
+    class SpaceObject;
 
     class DrawDebug
     {
         public:
             // Fields
             static int glDraw;
+            static bool pauseGame;
             static bool slow;
             static bool showPolygons;
             static bool hideGameSession;
             static bool hideEverything;
             static bool hideBackground;
+            static bool hideGameUI;
             static bool showPortalShapes;
             static bool showUIElementOutlines;
             static UIElement *highlightElement;
+            static SpaceObject *focusOnObject;
 
             static size_t totalMemoryAllocated;
             static size_t allocatedThisFrame;
