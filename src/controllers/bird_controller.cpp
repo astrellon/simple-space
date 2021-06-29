@@ -11,7 +11,8 @@ namespace space
 {
     BirdController::BirdController(GameSession &session) : NpcController(session), _timeToNextAction(0.0f)
     {
-        _needs.hunger(Utils::randf(0.21f, 0.26f));
+        _needs.hunger(Utils::randf(0.36f, 0.44f));
+        _needs.energy(Utils::randf(0.36f, 0.44f));
     }
 
     void BirdController::update(sf::Time dt)

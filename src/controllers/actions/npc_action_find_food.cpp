@@ -11,7 +11,7 @@
 namespace space
 {
     NpcActionFindFood::NpcActionFindFood(NpcController *controller) :
-        NpcAction(controller), _stage(Stage::LookingForFood), _destinationId("")
+        NpcAction(controller), _stage(Stage::LookingForFood), _destinationId(""), _timeToFindFood(0.0f)
     {
 
     }
@@ -54,16 +54,26 @@ namespace space
                 }
 
                 auto &closest = availbleFood.front();
-                this->_destinationId = closest.placedFood->id;
-                this->_stage = Stage::MovingToFood;
+                _destinationId = closest.placedFood->id;
+                _stage = Stage::MovingToFood;
                 auto destinationPos = closest.placedFood->transform().position;
-                this->_moveStage = std::make_unique<NpcActionMove>(controller(), destinationPos);
+                _moveStage = std::make_unique<NpcActionMove>(controller(), destinationPos);
+                _timeToFindFood = Utils::randf(5.0f, 8.0f);
 
                 break;
             }
 
             case Stage::MovingToFood:
             {
+                _timeToFindFood -= (float)dt.asSeconds();
+                if (_timeToFindFood < 0.0f)
+                {
+                    _moveStage->onComplete();
+                    std::cout << "Failed to get to food in time\n";
+                    _stage = Stage::Done;
+                    break;
+                }
+
                 _moveStage->update(dt);
                 if (_moveStage->isComplete())
                 {

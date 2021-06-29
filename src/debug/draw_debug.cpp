@@ -3,12 +3,15 @@
 namespace space
 {
     int DrawDebug::glDraw = 0;
+    bool DrawDebug::pauseGame = false;
     bool DrawDebug::slow = false;
     bool DrawDebug::showPolygons = false;
     bool DrawDebug::hideGameSession = false;
     bool DrawDebug::hideEverything = false;
     bool DrawDebug::hideBackground = false;
+    bool DrawDebug::hideGameUI = false;
     bool DrawDebug::showPortalShapes = false;
+    SpaceObject *DrawDebug::focusOnObject = nullptr;
     UIElement *DrawDebug::highlightElement = nullptr;
 
     size_t DrawDebug::totalMemoryAllocated = 0;

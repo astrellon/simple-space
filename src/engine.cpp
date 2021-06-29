@@ -266,7 +266,7 @@ namespace space
     {
         _frameCounter++;
 
-        if (_currentSession.get())
+        if (_currentSession.get() && !DrawDebug::pauseGame)
         {
             _currentSession->update(_deltaTime);
         }
@@ -283,6 +283,10 @@ namespace space
         if (Keyboard::isKeyDown(sf::Keyboard::P))
         {
             uiManager().uiPhotoAlbum().toggleShow();
+        }
+        if (Keyboard::isKeyDown(sf::Keyboard::H))
+        {
+            DrawDebug::hideGameUI = !DrawDebug::hideGameUI;
         }
 
         Mouse::prevMousePosition(sf::Mouse::getPosition());
@@ -310,7 +314,10 @@ namespace space
             _currentSession->draw();
         }
 
-        gameUIManager().draw(*_sceneRender);
+        if (!DrawDebug::hideGameUI)
+        {
+            gameUIManager().draw(*_sceneRender);
+        }
 
         if (_initedImgui)
         {
@@ -318,7 +325,10 @@ namespace space
             ImGui::SFML::Render(_sceneRender->texture());
         }
 
-        Mouse::draw(*this, *_sceneRender);
+        if (!DrawDebug::hideGameUI)
+        {
+            Mouse::draw(*this, *_sceneRender);
+        }
 
         _sceneRender->texture().display();
 

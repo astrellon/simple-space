@@ -33,10 +33,12 @@ namespace space
         }
 
         ImGui::Checkbox("Slow", &DrawDebug::slow);
+        ImGui::Checkbox("Pause", &DrawDebug::pauseGame);
         ImGui::Checkbox("Show Physics", &DrawDebug::showPolygons);
         ImGui::Checkbox("Hide GameSession", &DrawDebug::hideGameSession);
         ImGui::Checkbox("Hide Everything", &DrawDebug::hideEverything);
         ImGui::Checkbox("Hide Background", &DrawDebug::hideBackground);
+        ImGui::Checkbox("Hide GameUI", &DrawDebug::hideGameUI);
         ImGui::Checkbox("Bloom", &engine.enableBloom);
         ImGui::Checkbox("Show Portal Shapes", &DrawDebug::showPortalShapes);
 
