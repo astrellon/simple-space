@@ -231,6 +231,26 @@ namespace space
         return false;
     }
 
+    void Area::getObjectsNearby(float radius, const SpaceObject &toObject, std::vector<SpaceObject *> &result) const
+    {
+        auto pos = Utils::getPosition(toObject.worldTransform());
+
+        auto lengthSquared = radius * radius;
+        for (auto obj : _objects)
+        {
+            if (obj == &toObject)
+            {
+                continue;
+            }
+
+            auto dist = (pos - obj->transform().position).lengthSquared();
+            if (dist <= lengthSquared)
+            {
+                result.push_back(obj);
+            }
+        }
+    }
+
     void Area::getObjectsNearby(float radius, const sf::Vector2f &position, std::vector<SpaceObject *> &result) const
     {
         auto lengthSquared = radius * radius;

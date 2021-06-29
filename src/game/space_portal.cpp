@@ -57,15 +57,10 @@ namespace space
 
         static std::vector<SpaceObject *> objs;
         objs.clear();
-        _insideArea->getObjectsNearby(definition.pullRadius, pos, objs);
+        _insideArea->getObjectsNearby(definition.pullRadius, *this, objs);
+
         for (auto obj : objs)
         {
-            if (obj->id == this->id)
-            {
-                // Teleporting yourself is not allowed!
-                return;
-            }
-
             Ship *ship;
             if (!obj->tryCast(ship))
             {
@@ -140,6 +135,7 @@ namespace space
         NearPortalObject *nearbyPlayer;
         if (playerShip && tryGetNearbyObject(playerShip, &nearbyPlayer))
         {
+            std::cout << "Near to player ship" << std::endl;
             _shadow.point2 = nearbyPlayer->entryP2;
             _shadow.point1 = nearbyPlayer->entryP1;
             _lerpFromShadowT = 0.0f;

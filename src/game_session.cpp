@@ -34,6 +34,25 @@
 
 namespace space
 {
+    void printAreaName(Area *area)
+    {
+        if (!area)
+        {
+            std::cout << "Not in an area";
+            return;
+        }
+
+        auto partOfObj = area->partOfObject();
+        if (!partOfObj)
+        {
+            std::cout << "Area not part of an object";
+            return;
+        }
+
+        std::cout << partOfObj->id;
+        return;
+    }
+
     GameSession::GameSession(Engine &engine) :
         _engine(engine),
         _mouseOverObject(nullptr),
@@ -430,6 +449,12 @@ namespace space
     {
         for (auto &moveObj : _nextFrameState.moveSpaceObject())
         {
+            std::cout << "Next frame moving object: " <<  moveObj.obj->id << " from ";
+            printAreaName(moveObj.obj->insideArea());
+            std::cout << " to ";
+            printAreaName(moveObj.area);
+            std::cout << std::endl;
+
             moveSpaceObject(moveObj.obj, moveObj.position, moveObj.area);
         }
 

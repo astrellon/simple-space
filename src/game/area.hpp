@@ -69,6 +69,7 @@ namespace space
 
             void addTeleporters(TeleporterList &result) const;
 
+            void getObjectsNearby(float radius, const SpaceObject &toObjects, std::vector<SpaceObject *> &result) const;
             void getObjectsNearby(float radius, const sf::Vector2f &position, std::vector<SpaceObject *> &result) const;
 
             SpaceObject *partOfObject() const { return _partOfObject; }
