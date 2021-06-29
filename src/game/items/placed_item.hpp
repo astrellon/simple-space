@@ -35,6 +35,8 @@ namespace space
             virtual ~PlacedItem();
 
             // Methods
+            virtual SpaceObjectType type() const { return TypeValue; }
+
             virtual SpaceObject *clone(const ObjectId &newId, const CloneContext &context) { return clonePlacedItem(newId, context); }
             PlacedItem *clonePlacedItem(const ObjectId &newId, const CloneContext &context);
 

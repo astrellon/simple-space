@@ -16,7 +16,7 @@ namespace space
     const SpaceObjectType GrassEffect::TypeValue = SpaceObjectType::GrassEffect;
 
     GrassEffect::GrassEffect(const ObjectId &id, const GrassEffectDefinition &definition) :
-        SpaceObject(id, TypeValue), definition(definition), _sprite(*definition.texture)
+        SpaceObject(id), definition(definition), _sprite(*definition.texture)
     {
 
     }

@@ -32,6 +32,8 @@ namespace space
             virtual ~PlanetSurface() { }
 
             // Methods
+            virtual SpaceObjectType type() const { return TypeValue; }
+
             virtual SpaceObject *clone(const ObjectId &newId, const CloneContext &context) { return clonePlanetSurface(newId, context); }
             virtual SpaceObject *deepClone(const ObjectId &newIdPrefix, const CloneContext &context);
             PlanetSurface *clonePlanetSurface(const ObjectId &newId, const CloneContext &context);

@@ -29,6 +29,8 @@ namespace space
             Planet(const ObjectId &id, const PlanetDefinition &definition);
 
             // Methods
+            virtual SpaceObjectType type() const { return TypeValue; }
+
             virtual SpaceObject *clone(const ObjectId &newId, const CloneContext &context) { return clonePlanet(newId, context); }
             Planet *clonePlanet(const ObjectId &newId, const CloneContext &context);
 

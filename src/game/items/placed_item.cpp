@@ -24,7 +24,7 @@ namespace space
         processItem();
     }
 
-    PlacedItem::PlacedItem(const ItemId &itemId) : SpaceObject(Utils::makeItemId(itemId), TypeValue), _collider(nullptr)
+    PlacedItem::PlacedItem(const ItemId &itemId) : SpaceObject(Utils::makeItemId(itemId)), _collider(nullptr)
     {
 
     }
@@ -36,7 +36,7 @@ namespace space
         processItem();
     }
 
-    PlacedItem::PlacedItem(const ObjectId &id, const ItemId &itemId) : SpaceObject(id, TypeValue), _collider(nullptr)
+    PlacedItem::PlacedItem(const ObjectId &id, const ItemId &itemId) : SpaceObject(id), _collider(nullptr)
     {
 
     }

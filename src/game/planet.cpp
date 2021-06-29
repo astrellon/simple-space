@@ -16,7 +16,7 @@ namespace space
     const SpaceObjectType Planet::TypeValue = SpaceObjectType::Planet;
 
     Planet::Planet(const ObjectId &id, const PlanetDefinition &definition)
-        : CelestialBody(id, definition, TypeValue), definition(definition), _shader(nullptr), _initedSurfaces(false)
+        : CelestialBody(id, definition), definition(definition), _shader(nullptr), _initedSurfaces(false)
     {
         _renderTexture = std::make_unique<sf::RenderTexture>();
         _renderTexture->create(definition.size, definition.size);

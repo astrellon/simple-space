@@ -22,6 +22,8 @@ namespace space
             GrassEffect(const ObjectId &id, const GrassEffectDefinition &definition);
 
             // Methods
+            virtual SpaceObjectType type() const { return TypeValue; }
+
             virtual SpaceObject *clone(const ObjectId &newId, const CloneContext &context) { return cloneGrassEffect(newId, context); }
             GrassEffect *cloneGrassEffect(const ObjectId &newId, const CloneContext &context);
 

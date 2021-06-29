@@ -29,6 +29,8 @@ namespace space
             SpacePortal(const ObjectId &id, const SpacePortalDefinition &definition);
 
             // Methods
+            virtual SpaceObjectType type() const { return TypeValue; }
+
             virtual SpaceObject *clone(const ObjectId &newId, const CloneContext &context) { return cloneSpacePortal(newId, context); }
             SpacePortal *cloneSpacePortal(const ObjectId &newId, const CloneContext &context);
 

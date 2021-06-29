@@ -37,6 +37,8 @@ namespace space
             ParticlesSimple(const ObjectId &id, int numParticles);
 
             // Methods
+            virtual SpaceObjectType type() const { return TypeValue; }
+
             virtual SpaceObject *clone(const ObjectId &newId, const CloneContext &context) { return cloneParticlesSimple(newId, context); }
             ParticlesSimple *cloneParticlesSimple(const ObjectId &newId, const CloneContext &context);
 

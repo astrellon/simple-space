@@ -16,7 +16,7 @@ namespace space
             const CelestialBodyDefinition &celestialBodyDefinition;
 
             // Constructor
-            CelestialBody(const ObjectId &id, const CelestialBodyDefinition &definition, SpaceObjectType t) : SpaceObject(id, t), celestialBodyDefinition(definition) { }
+            CelestialBody(const ObjectId &id, const CelestialBodyDefinition &definition) : SpaceObject(id), celestialBodyDefinition(definition) { }
 
             // Methods
 

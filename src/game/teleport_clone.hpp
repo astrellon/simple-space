@@ -16,6 +16,8 @@ namespace space
             TeleportClone(const ObjectId &id, const Character &clone, const SpaceTransform &preTeleport);
 
             // Methods
+            virtual SpaceObjectType type() const { return TypeValue; }
+
             virtual SpaceObject *clone(const ObjectId &newId, const CloneContext &context) { return cloneTeleportClone(newId, context); }
             TeleportClone *cloneTeleportClone(const ObjectId &newId, const CloneContext &context);
 

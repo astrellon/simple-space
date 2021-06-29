@@ -15,7 +15,7 @@ namespace space
     const SpaceObjectType Ship::TypeValue = SpaceObjectType::Ship;
 
     Ship::Ship(const ObjectId &id, const ShipDefinition &definition):
-        SpaceObject(id, TypeValue),
+        SpaceObject(id),
         definition(definition),
         rotateInput(0),
         disableRender(false),

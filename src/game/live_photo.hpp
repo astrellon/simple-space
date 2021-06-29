@@ -22,6 +22,8 @@ namespace space
             ~LivePhotoTarget() { }
 
             // Methods
+            virtual SpaceObjectType type() const { return TypeValue; }
+
             virtual SpaceObject *clone(const ObjectId &newId, const CloneContext &context) { return cloneLivePhotoTarget(newId, context); }
             LivePhotoTarget *cloneLivePhotoTarget(const ObjectId &newId, const CloneContext &context);
 
@@ -42,6 +44,8 @@ namespace space
             ~LivePhoto() { }
 
             // Methods
+            virtual SpaceObjectType type() const { return TypeValue; }
+
             virtual SpaceObject *clone(const ObjectId &newId, const CloneContext &context) { return cloneLivePhoto(newId, context); }
             LivePhoto *cloneLivePhoto(const ObjectId &newId, const CloneContext &context);
 

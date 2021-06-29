@@ -30,13 +30,14 @@ namespace space
         public:
             // Fields
             const ObjectId id;
-            const SpaceObjectType type;
 
             // Constructor
-            SpaceObject(const ObjectId &id, SpaceObjectType t) : id(id), type(t), _insideArea(nullptr), _partOfLivePhoto(nullptr) { }
+            SpaceObject(const ObjectId &id) : id(id), _insideArea(nullptr), _partOfLivePhoto(nullptr) { }
             virtual ~SpaceObject() { }
 
             // Methods
+            virtual SpaceObjectType type() const { return SpaceObjectType::Unknown; }
+
             virtual SpaceObject *clone(const ObjectId &newId, const CloneContext &context) = 0;
             virtual SpaceObject *deepClone(const ObjectId &newIdPrefix, const CloneContext &context) { return clone(newIdPrefix + id, context); }
 
@@ -70,7 +71,7 @@ namespace space
             template <typename T>
             bool tryCast(const T *& result) const
             {
-                if (type == T::TypeValue)
+                if (type() == T::TypeValue)
                 {
                     result = reinterpret_cast<const T *>(this);
                     return true;
@@ -81,7 +82,7 @@ namespace space
             template <typename T>
             bool tryCast(T *& result)
             {
-                if (type == T::TypeValue)
+                if (type() == T::TypeValue)
                 {
                     result = reinterpret_cast<T *>(this);
                     return true;
@@ -92,7 +93,7 @@ namespace space
             template <typename T>
             bool is() const
             {
-                return type == T::TypeValue;
+                return type() == T::TypeValue;
             }
 
             virtual bool loopOver(LoopObjectCallback callback);

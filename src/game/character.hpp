@@ -25,9 +25,11 @@ namespace space
             sf::Vector2f moveInput;
 
             // Constructor
-            Character(const ObjectId &id, const CharacterDefinition &definition, SpaceObjectType type = TypeValue);
+            Character(const ObjectId &id, const CharacterDefinition &definition);
 
             // Methods
+            virtual SpaceObjectType type() const { return TypeValue; }
+
             virtual SpaceObject *clone(const ObjectId &newId, const CloneContext &context) { return cloneCharacter(newId, context); }
             Character *cloneCharacter(const ObjectId &newId, const CloneContext &context);
 

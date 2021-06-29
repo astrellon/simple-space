@@ -34,6 +34,8 @@ namespace space
             Ship(const ObjectId &id, const ShipDefinition &definition);
 
             // Methods
+            virtual SpaceObjectType type() const { return TypeValue; }
+
             virtual SpaceObject *clone(const ObjectId &newId, const CloneContext &context) { return cloneShip(newId, context); }
             virtual SpaceObject *deepClone(const ObjectId &newIdPrefix, const CloneContext &context);
             Ship *cloneShip(const ObjectId &newId, const CloneContext &context);

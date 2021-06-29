@@ -13,7 +13,7 @@ namespace space
 {
     const SpaceObjectType LivePhotoTarget::TypeValue = SpaceObjectType::LivePhotoTarget;
 
-    LivePhotoTarget::LivePhotoTarget(const ObjectId &id) : SpaceObject(id, TypeValue)
+    LivePhotoTarget::LivePhotoTarget(const ObjectId &id) : SpaceObject(id)
     {
 
     }
@@ -25,7 +25,7 @@ namespace space
 
     SpaceObjectType LivePhoto::TypeValue = SpaceObjectType::LivePhoto;
 
-    LivePhoto::LivePhoto(const ObjectId &id, const sf::Vector2u renderSize) : SpaceObject(id, TypeValue), photoSize(renderSize), _targetObject(nullptr), _lastFrameUpdate(-1), _lastFrameDraw(-1)
+    LivePhoto::LivePhoto(const ObjectId &id, const sf::Vector2u renderSize) : SpaceObject(id), photoSize(renderSize), _targetObject(nullptr), _lastFrameUpdate(-1), _lastFrameDraw(-1)
     {
 
     }

@@ -32,6 +32,8 @@ namespace space
             virtual ~StarSystem() { }
 
             // Methods
+            virtual SpaceObjectType type() const { return TypeValue; }
+
             virtual SpaceObject *clone(const ObjectId &newId, const CloneContext &context) { return cloneStarSystem(newId, context); }
             virtual SpaceObject *deepClone(const ObjectId &newIdPrefix, const CloneContext &context);
             StarSystem *cloneStarSystem(const ObjectId &newId, const CloneContext &context);

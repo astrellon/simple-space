@@ -16,7 +16,7 @@ namespace space
     const SpaceObjectType SpacePortal::TypeValue = SpaceObjectType::SpacePortal;
 
     SpacePortal::SpacePortal(const ObjectId &id, const SpacePortalDefinition &definition) :
-        SpaceObject(id, TypeValue), definition(definition), _sprite(*definition.texture), _lerpFromShadowT(1.0f)
+        SpaceObject(id), definition(definition), _sprite(*definition.texture), _lerpFromShadowT(1.0f)
     {
         _sprite.sequence("idle", true);
         _shadowShape.emplace_back();
