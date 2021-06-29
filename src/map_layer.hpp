@@ -48,19 +48,18 @@ are implemented.
 #include <iostream>
 #include <cmath>
 
+#include "non_copyable.hpp"
+
 namespace space
 {
     class ResourceManager;
 
-    class MapLayer final : public sf::Drawable
+    class MapLayer final : public sf::Drawable, private NonCopyable
     {
     public:
 
         // Constructor
         MapLayer(const tmx::Map& map, ResourceManager &resourceManager, std::size_t idx);
-        ~MapLayer() = default;
-        MapLayer(const MapLayer&) = delete;
-        MapLayer& operator = (const MapLayer&) = delete;
 
         // Methods
         const sf::FloatRect& getGlobalBounds() const { return m_globalBounds; }
@@ -100,7 +99,7 @@ namespace space
         void updateVisibility(const sf::View& view) const;
         void draw(sf::RenderTarget& rt, sf::RenderStates states) const override;
 
-        class Chunk final : public sf::Transformable, public sf::Drawable
+        class Chunk final : public sf::Transformable, public sf::Drawable, private NonCopyable
         {
         public:
             using Tile = std::array<sf::Vertex, 6u>;
@@ -108,11 +107,6 @@ namespace space
             Chunk(const tmx::TileLayer& layer, const std::vector<const tmx::Tileset*> &tilesets,
                 const sf::Vector2f& position, const sf::Vector2f& tileCount, const sf::Vector2u& tileSize,
                 std::size_t rowSize, ResourceManager& tr, const std::map<std::uint32_t, tmx::Tileset::Tile>& animTiles);
-
-            ~Chunk() = default;
-            Chunk(const Chunk&) = delete;
-
-            Chunk& operator = (const Chunk&) = delete;
 
             std::vector<AnimationState>& getActiveAnimations() { return m_activeAnimations; }
             bool empty() const { return m_chunkArrays.empty(); }
@@ -133,7 +127,7 @@ namespace space
             void doFlips(std::uint8_t bits, sf::Vector2f *v0, sf::Vector2f *v1, sf::Vector2f *v2, sf::Vector2f *v3);
 
         private:
-            class ChunkArray final : public sf::Drawable
+            class ChunkArray final : public sf::Drawable, private NonCopyable
             {
             public:
                 // Fields
@@ -145,18 +139,19 @@ namespace space
                 // Constructor
                 explicit ChunkArray(const sf::Texture& t, const tmx::Tileset& ts);
 
-                ~ChunkArray() = default;
-                ChunkArray(const ChunkArray&) = delete;
-                ChunkArray& operator = (const ChunkArray&) = delete;
-
                 // Methods
                 void reset();
                 void addTile(const Chunk::Tile& tile);
                 sf::Vector2u getTextureSize() const { return m_texture.getSize(); }
 
             private:
+                // Fields
                 const sf::Texture& m_texture;
                 std::vector<sf::Vertex> m_vertices;
+                mutable sf::VertexBuffer m_vertexBuffer;
+                mutable bool m_bufferDirty;
+
+                // Methods
                 void draw(sf::RenderTarget& rt, sf::RenderStates states) const override;
             };
 

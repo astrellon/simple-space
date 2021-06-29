@@ -435,7 +435,7 @@ namespace space
 
 
     MapLayer::Chunk::ChunkArray::ChunkArray(const sf::Texture& t, const tmx::Tileset& ts)
-        : m_texture(t)
+        : m_texture(t), m_vertexBuffer(sf::Triangles), m_bufferDirty(true)
     {
         auto texSize = getTextureSize();
         tileSetSize = ts.getTileSize();
@@ -448,6 +448,7 @@ namespace space
     void MapLayer::Chunk::ChunkArray::reset()
     {
         m_vertices.clear();
+        m_bufferDirty = true;
     }
 
     void MapLayer::Chunk::ChunkArray::addTile(const MapLayer::Chunk::Tile& tile)
@@ -456,13 +457,21 @@ namespace space
         {
             m_vertices.push_back(v);
         }
+        m_bufferDirty = true;
     }
 
     void MapLayer::Chunk::ChunkArray::draw(sf::RenderTarget& rt, sf::RenderStates states) const
     {
+        if (m_bufferDirty)
+        {
+            m_vertexBuffer.create(m_vertices.size());
+            m_vertexBuffer.update(m_vertices.data(), m_vertices.size(), 0);
+            m_bufferDirty = false;
+        }
+
         states.texture = &m_texture;
         DrawDebug::glDraw++;
-        rt.draw(m_vertices.data(), m_vertices.size(), sf::Triangles, states);
+        rt.draw(m_vertexBuffer, states);
     }
 
 } // namespace space
