@@ -34,6 +34,7 @@ namespace space
             static int nextHandlerId() { return ++_nextHandlerId; }
 
             virtual void init(GameUIManager &uiManager) { }
+            virtual void preUpdate(Engine &engine, sf::Time dt);
             virtual void update(Engine &engine, sf::Time dt, sf::Vector2f parentOffset);
             virtual void draw(Engine &engine, RenderCamera &target);
             virtual bool doesMouseHover(Engine &engine, sf::Vector2f mousePosition) const;

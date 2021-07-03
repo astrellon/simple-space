@@ -1,14 +1,14 @@
 #include "game_ui_inventory_item.hpp"
 
-#include "../game/items/item.hpp"
-#include "../game/items/placeable_item.hpp"
-#include "../controllers/player_controller.hpp"
-#include "../engine.hpp"
-#include "../game_session.hpp"
+#include "../ui_text_element.hpp"
+#include "../ui_button.hpp"
+#include "../game_ui_manager.hpp"
 
-#include "./ui_text_element.hpp"
-#include "./ui_button.hpp"
-#include "./game_ui_manager.hpp"
+#include "../../game/items/item.hpp"
+#include "../../game/items/placeable_item.hpp"
+#include "../../controllers/player_controller.hpp"
+#include "../../engine.hpp"
+#include "../../game_session.hpp"
 
 namespace space
 {

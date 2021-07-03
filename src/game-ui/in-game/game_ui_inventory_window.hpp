@@ -1,6 +1,6 @@
 #pragma once
 
-#include "./game_ui_window.hpp"
+#include "../game_ui_window.hpp"
 #include <observe/observer.h>
 
 namespace space
@@ -20,6 +20,7 @@ namespace space
             // Methods
             virtual void init(GameUIManager &uiManager);
             virtual void draw(Engine &engine, RenderCamera &target);
+            virtual void preUpdate(Engine &engine, sf::Time dt);
 
             void inventory(Inventory *inventory);
             Inventory *inventory() const { return _inventory; }

@@ -164,9 +164,6 @@ int main()
     auto gameSession = gameSessionTemp.get();
     engine.currentSession(std::move(gameSessionTemp));
 
-    space::StarSystem *starSystem1;
-    gameSession->tryGetSpaceObject<space::StarSystem>("STAR_SYSTEM_1", &starSystem1);
-
     auto &gameUIManager = engine.gameUIManager();
 
     gameUIManager.defaultFont(resourceManager.font("data/fonts/PixelOperator.ttf"));

@@ -2,9 +2,9 @@
 
 #include <vector>
 
-#include "./ui_element.hpp"
+#include "../ui_element.hpp"
 
-#include "../game/items/placed_item.hpp"
+#include "../../game/items/placed_item.hpp"
 
 namespace space
 {

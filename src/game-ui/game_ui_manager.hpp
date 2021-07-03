@@ -16,10 +16,7 @@ namespace space
     class RenderCamera;
     class UITextElement;
 
-    class GameUIInventoryWindow;
-    class GameUIInteractablesPanel;
-    class GameUITeleportersPanel;
-    class GameUIDialogue;
+    class InGameUIPage;
 
     class GameUIManager : private NonCopyable
     {
@@ -73,10 +70,7 @@ namespace space
 
             void initDefaultWindows();
 
-            GameUIInteractablesPanel &interactablesPanel() { return *_interactablesPanel; }
-            GameUITeleportersPanel &teleportersPanel() { return *_teleportersPanel; }
-            GameUIInventoryWindow &inventoryWindow() { return *_inventoryWindow; }
-            GameUIDialogue &dialogue() { return *_dialogue; }
+            InGameUIPage &inGameUIPage() { return *_inGameUIPage; }
 
         private:
             // Fields
@@ -91,10 +85,7 @@ namespace space
             NineSlice _defaultPanelBackPanel;
             NineSlice _defaultButton;
 
-            GameUIInteractablesPanel *_interactablesPanel;
-            GameUITeleportersPanel *_teleportersPanel;
-            GameUIInventoryWindow *_inventoryWindow;
-            GameUIDialogue *_dialogue;
+            InGameUIPage *_inGameUIPage;
 
             // Methods
     };

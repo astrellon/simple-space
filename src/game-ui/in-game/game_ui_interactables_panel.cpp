@@ -1,16 +1,17 @@
 #include "game_ui_interactables_panel.hpp"
 
-#include "./game_ui_manager.hpp"
-#include "./ui_text_element.hpp"
-#include "./ui_button.hpp"
 #include "./game_ui_interactable.hpp"
-#include "./ui_panel.hpp"
 
-#include "../game/interactions/interactable.hpp"
-#include "../game/interactions/interactable_list.hpp"
-#include "../engine.hpp"
-#include "../game_session.hpp"
-#include "../controllers/player_controller.hpp"
+#include "../game_ui_manager.hpp"
+#include "../ui_text_element.hpp"
+#include "../ui_button.hpp"
+#include "../ui_panel.hpp"
+
+#include "../../game/interactions/interactable.hpp"
+#include "../../game/interactions/interactable_list.hpp"
+#include "../../engine.hpp"
+#include "../../game_session.hpp"
+#include "../../controllers/player_controller.hpp"
 
 namespace space
 {
@@ -36,6 +37,33 @@ namespace space
         }
 
         UIElement::draw(engine, target);
+    }
+
+    void GameUIInteractablesPanel::preUpdate(Engine &engine, sf::Time dt)
+    {
+        if (destroyed())
+        {
+            return;
+        }
+
+        auto session = engine.currentSession();
+        if (session)
+        {
+            if (session->playerController().controlling() == ControllingValue::ControlCharacter)
+            {
+                interactables(&session->playerController().canInteractWithInRange());
+            }
+            else
+            {
+                interactables(nullptr);
+            }
+        }
+        else
+        {
+            interactables(nullptr);
+        }
+
+        UIElement::preUpdate(engine, dt);
     }
 
     void GameUIInteractablesPanel::update(Engine &engine, sf::Time dt, sf::Vector2f parentOffset)

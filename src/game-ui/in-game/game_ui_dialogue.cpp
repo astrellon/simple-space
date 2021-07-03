@@ -2,18 +2,18 @@
 
 #include <SFML/Audio.hpp>
 
-#include "./game_ui_manager.hpp"
-#include "./ui_text_element.hpp"
-#include "./ui_panel.hpp"
-#include "./ui_button.hpp"
+#include "../game_ui_manager.hpp"
+#include "../ui_text_element.hpp"
+#include "../ui_panel.hpp"
+#include "../ui_button.hpp"
 
-#include "../dialogue_manager.hpp"
-#include "../engine.hpp"
-#include "../game_session.hpp"
+#include "../../dialogue_manager.hpp"
+#include "../../engine.hpp"
+#include "../../game_session.hpp"
 
-#include "../definitions/dialogue_audio.hpp"
+#include "../../definitions/dialogue_audio.hpp"
 
-#include "../mustache.hpp"
+#include "../../mustache.hpp"
 
 using kainjow::mustache::mustache;
 

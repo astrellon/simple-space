@@ -20,6 +20,19 @@ namespace space
         }
     }
 
+    void UIElement::preUpdate(Engine &engine, sf::Time dt)
+    {
+        if (_destroyed)
+        {
+            return;
+        }
+
+        for (auto child : _children)
+        {
+            child->preUpdate(engine, dt);
+        }
+    }
+
     void UIElement::update(Engine &engine, sf::Time dt, sf::Vector2f parentOffset)
     {
         if (_destroyed)

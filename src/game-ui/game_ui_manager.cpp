@@ -13,20 +13,13 @@
 #include "../game_session.hpp"
 #include "../controllers/player_controller.hpp"
 
-#include "./game_ui_interactables_panel.hpp"
-#include "./game_ui_teleporters_panel.hpp"
-#include "./game_ui_inventory_window.hpp"
-#include "./game_ui_dialogue.hpp"
+#include "./in_game_ui_page.hpp"
 
 namespace space
 {
     GameUIManager::GameUIManager(Engine &engine):
         _engine(engine),
-        _defaultFont(nullptr),
-        _interactablesPanel(nullptr),
-        _teleportersPanel(nullptr),
-        _inventoryWindow(nullptr),
-        _dialogue(nullptr)
+        _defaultFont(nullptr)
     {
         _bodyElement = createElement<UIRootElement>();
     }
@@ -118,39 +111,11 @@ namespace space
 
     void GameUIManager::preUpdate(sf::Time dt)
     {
-        auto session = _engine.currentSession();
-        if (session)
-        {
-            if (session->playerController().controlling() == ControllingValue::ControlCharacter)
-            {
-                _interactablesPanel->interactables(&session->playerController().canInteractWithInRange());
-            }
-            else
-            {
-                _interactablesPanel->interactables(nullptr);
-            }
-        }
-        else
-        {
-            _interactablesPanel->interactables(nullptr);
-        }
+        _bodyElement->preUpdate(_engine, dt);
     }
 
     void GameUIManager::update(sf::Time dt)
     {
-        if (Keyboard::isKeyUp(sf::Keyboard::I))
-        {
-            if (_engine.currentSession() && _inventoryWindow->inventory() == nullptr)
-            {
-                auto &inv = _engine.currentSession()->playerController().inventory();
-                _inventoryWindow->inventory(&inv);
-            }
-            else
-            {
-                _inventoryWindow->inventory(nullptr);
-            }
-        }
-
         auto renderSize = _engine.renderSize();
         auto bodyNode = _bodyElement->yogaNode();
         YGNodeCalculateLayout(bodyNode, renderSize.x, renderSize.y, YGDirectionLTR);
@@ -173,16 +138,7 @@ namespace space
 
     void GameUIManager::initDefaultWindows()
     {
-        _inventoryWindow = createElement<GameUIInventoryWindow>();
-        body()->addChild(_inventoryWindow);
-
-        _interactablesPanel = createElement<GameUIInteractablesPanel>();
-        body()->addChild(_interactablesPanel);
-
-        _teleportersPanel = createElement<GameUITeleportersPanel>();
-        body()->addChild(_teleportersPanel);
-
-        _dialogue = createElement<GameUIDialogue>();
-        body()->addChild(_dialogue);
+        _inGameUIPage = createElement<InGameUIPage>();
+        body()->addChild(_inGameUIPage);
     }
 } // space

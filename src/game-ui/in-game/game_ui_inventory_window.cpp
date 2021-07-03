@@ -1,12 +1,16 @@
 #include "game_ui_inventory_window.hpp"
 
-#include "./game_ui_manager.hpp"
-#include "./ui_text_element.hpp"
-#include "./ui_button.hpp"
 #include "./game_ui_inventory_item.hpp"
 
-#include "../game/items/item.hpp"
-#include "../game/inventory.hpp"
+#include "../game_ui_manager.hpp"
+#include "../ui_text_element.hpp"
+#include "../ui_button.hpp"
+
+#include "../../game/items/item.hpp"
+#include "../../game/inventory.hpp"
+#include "../../engine.hpp"
+#include "../../game_session.hpp"
+#include "../../keyboard.hpp"
 
 namespace space
 {
@@ -70,6 +74,36 @@ namespace space
                 this->removeItem(item);
             });
         }
+    }
+
+    void GameUIInventoryWindow::preUpdate(Engine &engine, sf::Time dt)
+    {
+        if (destroyed())
+        {
+            return;
+        }
+
+        if (engine.currentSession())
+        {
+            if (Keyboard::isKeyUp(sf::Keyboard::I))
+            {
+                if (inventory() == nullptr)
+                {
+                    auto &inv = engine.currentSession()->playerController().inventory();
+                    inventory(&inv);
+                }
+                else
+                {
+                    inventory(nullptr);
+                }
+            }
+        }
+        else
+        {
+            inventory(nullptr);
+        }
+
+        UIElement::preUpdate(engine, dt);
     }
 
     void GameUIInventoryWindow::addItem(Item *item)

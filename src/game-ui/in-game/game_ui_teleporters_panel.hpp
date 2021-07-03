@@ -2,8 +2,9 @@
 
 #include <observe/observer.h>
 
-#include "./game_ui_window.hpp"
-#include "../game/items/placed_item.hpp"
+#include "../game_ui_window.hpp"
+
+#include "../../game/items/placed_item.hpp"
 
 namespace space
 {

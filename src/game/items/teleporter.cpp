@@ -10,7 +10,8 @@
 #include "../../engine.hpp"
 #include "../../ui/ui_manager.hpp"
 #include "../../game-ui/game_ui_manager.hpp"
-#include "../../game-ui/game_ui_teleporters_panel.hpp"
+#include "../../game-ui/in_game_ui_page.hpp"
+#include "../../game-ui/in-game/game_ui_teleporters_panel.hpp"
 
 namespace space
 {
@@ -28,7 +29,7 @@ namespace space
         if (controller.isPlayer())
         {
             auto &session = controller.session();
-            auto &teleporterPanel = session.engine().gameUIManager().teleportersPanel();
+            auto &teleporterPanel = session.engine().gameUIManager().inGameUIPage().teleportersPanel();
             teleporterPanel.teleporters(&controller.teleportersInRange());
         }
     }
@@ -52,7 +53,7 @@ namespace space
 
         if (controller->isPlayer())
         {
-            session.engine().gameUIManager().teleportersPanel().teleporters(nullptr);
+            session.engine().gameUIManager().inGameUIPage().teleportersPanel().teleporters(nullptr);
         }
     }
 } // namespace space

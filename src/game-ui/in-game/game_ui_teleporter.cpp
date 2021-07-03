@@ -1,13 +1,13 @@
 #include "game_ui_teleporter.hpp"
 
-#include "../game/items/teleporter.hpp"
-#include "../engine.hpp"
-#include "../game_session.hpp"
-#include "../game/character.hpp"
+#include "../ui_text_element.hpp"
+#include "../ui_button.hpp"
+#include "../game_ui_manager.hpp"
 
-#include "./ui_text_element.hpp"
-#include "./ui_button.hpp"
-#include "./game_ui_manager.hpp"
+#include "../../game/items/teleporter.hpp"
+#include "../../engine.hpp"
+#include "../../game_session.hpp"
+#include "../../game/character.hpp"
 
 namespace space
 {
