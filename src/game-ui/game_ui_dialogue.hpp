@@ -53,5 +53,6 @@ namespace space
 
             // Methods
             void processText(DialogueManager &manager);
+            void onGameSessionStart();
     };
 } // space

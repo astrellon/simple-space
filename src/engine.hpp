@@ -9,6 +9,7 @@
 
 #include <chrono>
 #include <SFML/Graphics.hpp>
+#include <observe/event.h>
 
 namespace space
 {
@@ -21,8 +22,13 @@ namespace space
     class Engine : private NonCopyable
     {
         public:
+            // Types
+            typedef observe::Event<GameSession *> GameSessionChanged;
+
             // Fields
             bool enableBloom;
+            GameSessionChanged onGameSessionStarted;
+            GameSessionChanged onGameSessionEnded;
 
             // Constructor
             Engine(sf::RenderWindow *window);
@@ -53,7 +59,7 @@ namespace space
             sf::Vector2u renderSize() const;
 
             GameSession *currentSession() const;
-            void currentSession(std::unique_ptr<GameSession> session);
+            GameSession *currentSession(std::unique_ptr<GameSession> session);
             GameSession *startGameSession();
 
             sf::Time deltaTime() const;

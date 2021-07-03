@@ -63,16 +63,24 @@ namespace space
         _nextButton->width(60);
         _nextButton->text("Next");
 
-        auto &manager = uiManager.engine().currentSession()->dialogueManager();
-        _removeDialogueHandler = manager.onNextDialogue.createObserver([this, &manager]()
+        auto &engine = this->_uiManager->engine();
+        engine.onGameSessionEnded.createObserver([this](GameSession *session)
         {
-            this->processText(manager);
+            this->_removeDialogueHandler.reset();
         });
 
-        _nextButton->on(sf::Event::EventType::MouseButtonReleased, [&manager]( const sf::Event &e)
+        engine.onGameSessionStarted.createObserver([this, &engine](GameSession *session)
         {
-            manager.nextLine();
+            this->onGameSessionStart();
+        });
+        onGameSessionStart();
 
+        _nextButton->on(sf::Event::EventType::MouseButtonReleased, [this, &engine]( const sf::Event &e)
+        {
+            if (engine.currentSession())
+            {
+                engine.currentSession()->dialogueManager().nextLine();
+            }
             return UIEventResult::Triggered;
         });
 
@@ -86,6 +94,11 @@ namespace space
 
     void GameUIDialogue::draw(Engine &engine, RenderCamera &target)
     {
+        if (!engine.currentSession())
+        {
+            return;
+        }
+
         auto &manager = engine.currentSession()->dialogueManager();
         if (!manager.isInDialogue())
         {
@@ -97,6 +110,11 @@ namespace space
 
     void GameUIDialogue::update(Engine &engine, sf::Time dt, sf::Vector2f parentOffset)
     {
+        if (!engine.currentSession())
+        {
+            return;
+        }
+
         auto &manager = engine.currentSession()->dialogueManager();
         if (!manager.isInDialogue())
         {
@@ -143,5 +161,18 @@ namespace space
 
         _nameText->text(manager.personTalkingName());
         _contentText->text("");
+    }
+
+    void GameUIDialogue::onGameSessionStart()
+    {
+        auto &engine = _uiManager->engine();
+        if (engine.currentSession())
+        {
+            auto &manager = engine.currentSession()->dialogueManager();
+            _removeDialogueHandler = manager.onNextDialogue.createObserver([this, &manager]()
+            {
+                this->processText(manager);
+            });
+        }
     }
 } // space

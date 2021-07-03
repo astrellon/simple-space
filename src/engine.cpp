@@ -105,23 +105,37 @@ namespace space
     {
         return _currentSession.get();
     }
-    void Engine::currentSession(std::unique_ptr<GameSession> session)
+
+    GameSession *Engine::currentSession(std::unique_ptr<GameSession> session)
     {
+        if (_currentSession.get())
+        {
+            onGameSessionEnded.emit(_currentSession.get());
+        }
+
         _currentSession = std::move(session);
-        auto &player = _currentSession->playerController();
-        if (player.controlling() == space::ControlShip)
+
+        if (_currentSession.get())
         {
-            _currentSession->setPlayerControllingShip(player.controllingShip());
+            auto &player = _currentSession->playerController();
+            if (player.controlling() == space::ControlShip)
+            {
+                _currentSession->setPlayerControllingShip(player.controllingShip());
+            }
+            else if (player.controlling() == space::ControlCharacter)
+            {
+                _currentSession->setPlayerControllingCharacter();
+            }
+
+            onGameSessionStarted.emit(_currentSession.get());
         }
-        else if (player.controlling() == space::ControlCharacter)
-        {
-            _currentSession->setPlayerControllingCharacter();
-        }
+
+        return _currentSession.get();
     }
+
     GameSession *Engine::startGameSession()
     {
-        _currentSession = std::make_unique<GameSession>(*this);
-        return _currentSession.get();
+        return currentSession(std::make_unique<GameSession>(*this));
     }
 
     void Engine::changeCursor(const DefinitionId &cursorId)
