@@ -199,12 +199,12 @@
         {
             "type": "placed-item",
             "itemId": 10,
-            "position": [50, 50]
+            "position": [850, 850]
         },
         {
             "type": "placed-item",
             "itemId": 3,
-            "position": [150, 50]
+            "position": [950, 850]
         },
         {
             "type": "placed-item",
@@ -214,17 +214,17 @@
         {
             "type": "placed-item",
             "itemId": 21,
-            "position": [400, 100]
+            "position": [1200, 900]
         },
         {
             "type": "placed-item",
             "itemId": 22,
-            "position": [300, 500]
+            "position": [2100, 1300]
         },
         {
             "type": "placed-item",
             "itemId": 23,
-            "position": [500, 250]
+            "position": [2200, 950]
         },
         {
             "id": "PLANET_GRASSY_1",
@@ -326,22 +326,22 @@
         {
             "type": "placed-item",
             "itemId": 13,
-            "position": [300, 200]
+            "position": [1100, 1000]
         },
         {
             "type": "placed-item",
             "itemId": 14,
-            "position": [200, 400]
+            "position": [1000, 1200]
         },
         {
             "type": "placed-item",
             "itemId": 15,
-            "position": [400, 400]
+            "position": [1200, 1200]
         },
         {
             "type": "placed-item",
             "itemId": 16,
-            "position": [300, 500]
+            "position": [1100, 1300]
         },
         {
             "definitionId": "SHIP_1",
@@ -391,7 +391,7 @@
             "id": "BIRD_CHAR",
             "type": "character",
             "transform": {
-                "position": [80, 280]
+                "position": [880, 1080]
             }
         },
         {
@@ -399,7 +399,7 @@
             "id": "BIRD_CHAR_2",
             "type": "character",
             "transform": {
-                "position": [120, 290]
+                "position": [920, 1090]
             }
         },
         {
@@ -407,7 +407,7 @@
             "id": "BIRD_CHAR_3",
             "type": "character",
             "transform": {
-                "position": [200, 250]
+                "position": [1000, 1050]
             }
         },
         {
@@ -415,7 +415,7 @@
             "id": "BIRD_CHAR_4",
             "type": "character",
             "transform": {
-                "position": [50, 380]
+                "position": [850, 1180]
             }
         },
         {
@@ -430,7 +430,7 @@
             "definitionId": "FRED_CHAR",
             "id": "FRED",
             "transform": {
-                "position": [ 120.0, 20.0 ]
+                "position": [ 920.0, 820.0 ]
             },
             "type": "character"
         },
@@ -577,7 +577,7 @@
             "id": "LIVE_PHOTO_1:PLANET1_GRASS_1",
             "definitionId": "GRASS_1",
             "transform": {
-                "position": [150, 150]
+                "position": [950, 1050]
             }
         }
     ]
