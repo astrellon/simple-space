@@ -69,6 +69,21 @@
             "definitionId": "TREE_1",
             "id": 11,
             "type": "placeable-item"
+        },
+        {
+            "definitionId": "TREE_1",
+            "id": 21,
+            "type": "placeable-item"
+        },
+        {
+            "definitionId": "TREE_1",
+            "id": 22,
+            "type": "placeable-item"
+        },
+        {
+            "definitionId": "TREE_2",
+            "id": 23,
+            "type": "placeable-item"
         }
     ],
     "characterControllers": [
@@ -197,6 +212,21 @@
             "position": [200, 200]
         },
         {
+            "type": "placed-item",
+            "itemId": 21,
+            "position": [400, 100]
+        },
+        {
+            "type": "placed-item",
+            "itemId": 22,
+            "position": [300, 500]
+        },
+        {
+            "type": "placed-item",
+            "itemId": 23,
+            "position": [500, 250]
+        },
+        {
             "id": "PLANET_GRASSY_1",
             "planetId": "STAR_SYSTEM_1:SS_PLANET_1",
             "definitionId": "PLANET_GRASSY_1",
@@ -213,6 +243,9 @@
                     "ITEM_14",
                     "ITEM_15",
                     "ITEM_16",
+                    "ITEM_21",
+                    "ITEM_22",
+                    "ITEM_23",
                     "PLANET1_GRASS_1"
                 ]
             },

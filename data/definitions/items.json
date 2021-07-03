@@ -23,12 +23,24 @@
         "type": "placeable-item",
         "id": "TREE_1",
         "name": "Tree",
-        "texturePath": "data/textures/tree1.png",
-        "textureOffset": [3, 67],
+        "texturePath": "data/textures/chestnut-003.png",
+        "textureOffset": [6, 62],
         "canPickup": false,
         "physicsShape": {
             "type": "circle",
-            "radius": 2
+            "radius": 14
+        }
+    },
+    {
+        "type": "placeable-item",
+        "id": "TREE_2",
+        "name": "Tree",
+        "texturePath": "data/textures/chestnut-003.png",
+        "textureOffset": [6, 62],
+        "canPickup": false,
+        "physicsShape": {
+            "type": "circle",
+            "radius": 14
         }
     },
     {
