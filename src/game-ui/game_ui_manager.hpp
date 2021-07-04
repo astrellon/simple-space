@@ -17,6 +17,7 @@ namespace space
     class UITextElement;
 
     class InGameUIPage;
+    class MainMenuPage;
 
     class GameUIManager : private NonCopyable
     {
@@ -71,6 +72,7 @@ namespace space
             void initDefaultWindows();
 
             InGameUIPage &inGameUIPage() { return *_inGameUIPage; }
+            MainMenuPage &mainMenuPage() { return *_mainMenuPage; }
 
         private:
             // Fields
@@ -86,6 +88,7 @@ namespace space
             NineSlice _defaultButton;
 
             InGameUIPage *_inGameUIPage;
+            MainMenuPage *_mainMenuPage;
 
             // Methods
     };

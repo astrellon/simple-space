@@ -160,9 +160,9 @@ int main()
     nlohmann::json startingGameJson;
     startingGameFile >> startingGameJson;
 
-    auto gameSessionTemp = space::fromJsonGameSession(engine, startingGameJson);
-    auto gameSession = gameSessionTemp.get();
-    engine.currentSession(std::move(gameSessionTemp));
+    // auto gameSessionTemp = space::fromJsonGameSession(engine, startingGameJson);
+    // auto gameSession = gameSessionTemp.get();
+    // engine.currentSession(std::move(gameSessionTemp));
 
     auto &gameUIManager = engine.gameUIManager();
 

@@ -137,8 +137,10 @@ namespace space
     void UIElementWindow::drawElement(UIElement &element)
     {
         ImGui::Text("Type: %s", element.elementType());
-
+        ImGui::Text("Width x Height: %f, %f", element.layoutWidth(), element.layoutHeight());
         ImGui::Text("Position TRBL: %f, %f, %f, %f", element.layoutTop(), element.layoutRight(), element.layoutBottom(), element.layoutLeft());
+        ImGui::Text("Border TRBL: %f, %f, %f, %f", element.layoutBorder(YGEdgeTop), element.layoutBorder(YGEdgeRight), element.layoutBorder(YGEdgeBottom), element.layoutBorder(YGEdgeLeft));
+        ImGui::Text("Margin TRBL: %f, %f, %f, %f", element.margin(YGEdgeTop), element.layoutBorder(YGEdgeRight), element.layoutBorder(YGEdgeBottom), element.layoutBorder(YGEdgeLeft));
 
         ImGuiYGPaddingAll(element);
         ImGuiYGMarginAll(element);

@@ -14,6 +14,7 @@
 #include "../controllers/player_controller.hpp"
 
 #include "./in_game_ui_page.hpp"
+#include "./main_menu_page.hpp"
 
 namespace space
 {
@@ -139,6 +140,9 @@ namespace space
     void GameUIManager::initDefaultWindows()
     {
         _inGameUIPage = createElement<InGameUIPage>();
-        body()->addChild(_inGameUIPage);
+        // body()->addChild(_inGameUIPage);
+
+        _mainMenuPage = createElement<MainMenuPage>();
+        body()->addChild(_mainMenuPage);
     }
 } // space

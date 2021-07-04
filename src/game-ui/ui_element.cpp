@@ -18,6 +18,7 @@ namespace space
         {
             remove();
         }
+        _removeHandlers.clear();
     }
 
     void UIElement::preUpdate(Engine &engine, sf::Time dt)

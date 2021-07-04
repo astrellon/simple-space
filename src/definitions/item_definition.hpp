@@ -17,6 +17,7 @@ namespace space
             // Fields
             std::string texturePath;
             std::string name;
+            sf::IntRect textureRect;
             sf::Vector2f textureOffset;
 
             const sf::Texture *texture;

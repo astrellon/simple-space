@@ -42,7 +42,7 @@ namespace space
         ImGui::Checkbox("Bloom", &engine.enableBloom);
         ImGui::Checkbox("Show Portal Shapes", &DrawDebug::showPortalShapes);
 
-        auto transition = engine.currentSession()->currentTransition();
+        auto transition = engine.currentSession() ? engine.currentSession()->currentTransition() : nullptr;
         if (transition)
         {
             ImGui::Text("Transition: %f", transition->percent(engine.timeSinceStart()));

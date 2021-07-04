@@ -1,6 +1,7 @@
 #pragma once
 
-#include "../game_ui_window.hpp"
+#include "../ui_element.hpp"
+
 #include <observe/observer.h>
 
 namespace space
@@ -27,7 +28,7 @@ namespace space
             void interactables(const InteractableList *interactables);
             const InteractableList *interactables() const { return _interactables; }
 
-            virtual const char*elementType() const { return "GameUIInteractables"; }
+            virtual const char *elementType() const { return "GameUIInteractables"; }
 
         private:
             // Fields

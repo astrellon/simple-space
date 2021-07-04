@@ -19,6 +19,7 @@ file(GLOB src_files
     "src/ui/*.cpp"
     "src/game-ui/*.cpp"
     "src/game-ui/in-game/*.cpp"
+    "src/game-ui/main-menu/*.cpp"
     "src/controllers/*.cpp"
     "src/controllers/actions/*.cpp"
 )
