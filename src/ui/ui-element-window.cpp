@@ -142,6 +142,69 @@ namespace space
         ImGui::Text("Border TRBL: %f, %f, %f, %f", element.layoutBorder(YGEdgeTop), element.layoutBorder(YGEdgeRight), element.layoutBorder(YGEdgeBottom), element.layoutBorder(YGEdgeLeft));
         ImGui::Text("Margin TRBL: %f, %f, %f, %f", element.margin(YGEdgeTop), element.layoutBorder(YGEdgeRight), element.layoutBorder(YGEdgeBottom), element.layoutBorder(YGEdgeLeft));
 
+        auto flexBasis = element.flexBasis();
+        if (ImGuiYGValue("Flex Basis: ", flexBasis, true))
+        {
+            element.flexBasis(flexBasis);
+        }
+
+        auto flexGrow = element.flexGrow();
+        if (ImGui::SliderFloat("Flex Grow: ", &flexGrow, 0.0f, 3.0f))
+        {
+            element.flexGrow(flexGrow);
+        }
+
+        auto flexShrink = element.flexShrink();
+        if (ImGui::SliderFloat("Flex Shrink: ", &flexShrink, 0.0f, 3.0f))
+        {
+            element.flexShrink(flexShrink);
+        }
+
+        auto justifyContent = element.justifyContent();
+        static const char *justifyContentLabels = "Flex Start\0Flex End\0Center\0Space Around\0Space Between\0Space Evenly\0\0";
+        static std::vector<YGJustify> justifyContentValues = { YGJustifyFlexStart, YGJustifyFlexEnd, YGJustifyCenter, YGJustifySpaceAround, YGJustifySpaceBetween, YGJustifySpaceEvenly };
+        auto justifyContentIndex = (int)Utils::findIndex(justifyContentValues, justifyContent);
+        if (justifyContentIndex >= 0)
+        {
+            if (ImGui::Combo("Justify Content", &justifyContentIndex, justifyContentLabels))
+            {
+                element.justifyContent(justifyContentValues[justifyContentIndex]);
+            }
+        }
+
+        auto alignItems = element.alignItems();
+        static const char *alignLabels = "Auto\0Baseline\0Center\0Flex Start\0Flex End\0Space Around\0Space Between\0Stretch\0\0";
+        static std::vector<YGAlign> alignValues = { YGAlignAuto, YGAlignBaseline, YGAlignCenter, YGAlignFlexStart, YGAlignFlexEnd, YGAlignSpaceAround, YGAlignSpaceBetween, YGAlignStretch };
+
+        auto alignItemsIndex = (int)Utils::findIndex(alignValues, alignItems);
+        if (alignItemsIndex >= 0)
+        {
+            if (ImGui::Combo("Align Items", &alignItemsIndex, alignLabels))
+            {
+                element.alignItems(alignValues[alignItemsIndex]);
+            }
+        }
+
+        auto alignContent = element.alignContent();
+        auto alignContentIndex = (int)Utils::findIndex(alignValues, alignContent);
+        if (alignContentIndex >= 0)
+        {
+            if (ImGui::Combo("Align Content", &alignContentIndex, alignLabels))
+            {
+                element.alignItems(alignValues[alignItemsIndex]);
+            }
+        }
+
+        auto alignSelf = element.alignSelf();
+        auto alignSelfIndex = (int)Utils::findIndex(alignValues, alignSelf);
+        if (alignSelfIndex >= 0)
+        {
+            if (ImGui::Combo("Align Self", &alignSelfIndex, alignLabels))
+            {
+                element.alignSelf(alignValues[alignSelfIndex]);
+            }
+        }
+
         ImGuiYGPaddingAll(element);
         ImGuiYGMarginAll(element);
 

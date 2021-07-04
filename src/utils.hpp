@@ -74,6 +74,17 @@ namespace space
             }
 
             template <typename T>
+            static inline std::size_t findIndex(const std::vector<T> &list, T item)
+            {
+                auto find = std::find(list.begin(), list.end(), item);
+                if (find != list.end())
+                {
+                    return find - list.begin();
+                }
+                return -1u;
+            }
+
+            template <typename T>
             static bool json_try_get(const json &j, const std::string &name, T &result)
             {
                 auto find = j.find(name);

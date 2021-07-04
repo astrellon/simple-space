@@ -74,6 +74,10 @@ namespace space
             void alignContent(YGAlign align) { YGNodeStyleSetAlignContent(_yogaNode, align); }
             YGAlign alignContent() const { return YGNodeStyleGetAlignContent(_yogaNode); }
 
+            // Align Self
+            void alignSelf(YGAlign align) { YGNodeStyleSetAlignSelf(_yogaNode, align); }
+            YGAlign alignSelf() const { return YGNodeStyleGetAlignSelf(_yogaNode); }
+
             // Align Items
             void alignItems(YGAlign align) { YGNodeStyleSetAlignItems(_yogaNode, align); }
             YGAlign alignItems() const { return YGNodeStyleGetAlignItems(_yogaNode); }
@@ -104,6 +108,21 @@ namespace space
 
             // Flex Basis
             void flexBasis(float basis) { YGNodeStyleSetFlexBasis(_yogaNode, basis); }
+            void flexBasis(YGValue basis)
+            {
+                if (basis.unit == YGUnitAuto)
+                {
+                    flexBasisAuto();
+                }
+                else if (basis.unit == YGUnitPercent)
+                {
+                    flexBasisPercent(basis.value);
+                }
+                else
+                {
+                    flexBasis(basis.value);
+                }
+            }
             void flexBasisPercent(float percent) { YGNodeStyleSetFlexBasisPercent(_yogaNode, percent); }
             void flexBasisAuto() { YGNodeStyleSetFlexBasisAuto(_yogaNode); }
             YGValue flexBasis() const { return YGNodeStyleGetFlexBasis(_yogaNode); }
