@@ -42,6 +42,7 @@ namespace space
         _cameraScale(2.0f),
         _initedImgui(false),
         _headlessMode(window == nullptr),
+        _currentSession(nullptr),
         _window(window),
         _deltaTime(sf::Time::Zero),
         _timeSinceStartOnUpdate(sf::Time::Zero),
@@ -101,41 +102,45 @@ namespace space
         return _sceneRender->texture().getSize();
     }
 
-    GameSession *Engine::currentSession() const
+    BaseGameScene *Engine::gameScene(std::unique_ptr<BaseGameScene> gameScene)
     {
-        return _currentSession.get();
-    }
-
-    GameSession *Engine::currentSession(std::unique_ptr<GameSession> session)
-    {
-        if (_currentSession.get())
+        if (_gameScene.get())
         {
-            onGameSessionEnded.emit(_currentSession.get());
+            onGameSceneEnded.emit(_gameScene.get());
         }
 
-        _currentSession = std::move(session);
+        _gameScene = std::move(gameScene);
+        _currentSession = nullptr;
 
-        if (_currentSession.get())
+        if (_gameScene.get())
         {
-            auto &player = _currentSession->playerController();
-            if (player.controlling() == space::ControlShip)
+            auto gameSession = dynamic_cast<GameSession *>(_gameScene.get());
+            if (gameSession)
             {
-                _currentSession->setPlayerControllingShip(player.controllingShip());
-            }
-            else if (player.controlling() == space::ControlCharacter)
-            {
-                _currentSession->setPlayerControllingCharacter();
+                _currentSession = gameSession;
+                auto &player = gameSession->playerController();
+                if (player.controlling() == space::ControlShip)
+                {
+                    gameSession->setPlayerControllingShip(player.controllingShip());
+                }
+                else if (player.controlling() == space::ControlCharacter)
+                {
+                    gameSession->setPlayerControllingCharacter();
+                }
             }
 
-            onGameSessionStarted.emit(_currentSession.get());
+            onGameSceneStarted.emit(_gameScene.get());
         }
 
-        return _currentSession.get();
+        return _gameScene.get();
     }
 
     GameSession *Engine::startGameSession()
     {
-        return currentSession(std::make_unique<GameSession>(*this));
+        auto gameSession = std::make_unique<GameSession>(*this);
+        auto result = gameSession.get();
+        gameScene(std::move(gameSession));
+        return result;
     }
 
     void Engine::changeCursor(const DefinitionId &cursorId)
@@ -280,9 +285,9 @@ namespace space
     {
         _frameCounter++;
 
-        if (_currentSession.get() && !DrawDebug::pauseGame)
+        if (_gameScene.get() && !DrawDebug::pauseGame)
         {
-            _currentSession->update(_deltaTime);
+            _gameScene->update(_deltaTime);
         }
 
         for (auto usedRenderCamera : _renderCameras.used())
@@ -323,9 +328,9 @@ namespace space
         }
 
         // Draw main scene
-        if (!DrawDebug::hideEverything && _currentSession.get())
+        if (!DrawDebug::hideEverything && _gameScene.get())
         {
-            _currentSession->draw();
+            _gameScene->draw();
         }
 
         if (!DrawDebug::hideGameUI)

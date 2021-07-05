@@ -18,17 +18,18 @@ namespace space
     class Overlay;
     class BloomEffect;
     class GameUIManager;
+    class BaseGameScene;
 
     class Engine : private NonCopyable
     {
         public:
             // Types
-            typedef observe::Event<GameSession *> GameSessionChanged;
+            typedef observe::Event<BaseGameScene *> GameSceneChanged;
 
             // Fields
             bool enableBloom;
-            GameSessionChanged onGameSessionStarted;
-            GameSessionChanged onGameSessionEnded;
+            GameSceneChanged onGameSceneStarted;
+            GameSceneChanged onGameSceneEnded;
 
             // Constructor
             Engine(sf::RenderWindow *window);
@@ -58,9 +59,11 @@ namespace space
             sf::Vector2u windowSize() const;
             sf::Vector2u renderSize() const;
 
-            GameSession *currentSession() const;
-            GameSession *currentSession(std::unique_ptr<GameSession> session);
+            GameSession *currentSession() const {  return _currentSession; }
             GameSession *startGameSession();
+
+            BaseGameScene *gameScene() const { return _gameScene.get(); }
+            BaseGameScene *gameScene(std::unique_ptr<BaseGameScene> session);
 
             sf::Time deltaTime() const;
             sf::Time timeSinceStart() const;
@@ -104,7 +107,8 @@ namespace space
             float _cameraScale;
             bool _initedImgui;
             bool _headlessMode;
-            std::unique_ptr<GameSession> _currentSession;
+            std::unique_ptr<BaseGameScene> _gameScene;
+            GameSession *_currentSession;
             sf::RenderWindow *_window;
             sf::Clock _timer;
             sf::Clock _timerSinceStart;

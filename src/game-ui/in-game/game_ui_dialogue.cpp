@@ -64,12 +64,12 @@ namespace space
         _nextButton->text("Next");
 
         auto &engine = this->_uiManager->engine();
-        engine.onGameSessionEnded.createObserver([this](GameSession *session)
+        engine.onGameSceneEnded.createObserver([this](BaseGameScene *gameScene)
         {
             this->_removeDialogueHandler.reset();
         });
 
-        engine.onGameSessionStarted.createObserver([this, &engine](GameSession *session)
+        engine.onGameSceneStarted.createObserver([this, &engine](BaseGameScene *gameScene)
         {
             this->onGameSessionStart();
         });

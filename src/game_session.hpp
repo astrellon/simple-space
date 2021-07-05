@@ -15,6 +15,7 @@
 #include "controllers/player_controller.hpp"
 #include "next_frame_state.hpp"
 #include "effects/texture_overlay.hpp"
+#include "base_game_scene.hpp"
 
 namespace space
 {
@@ -37,7 +38,7 @@ namespace space
     class LoadingContext;
     class LivePhoto;
 
-    class GameSession
+    class GameSession : public BaseGameScene
     {
         public:
             // Fields
@@ -154,8 +155,8 @@ namespace space
 
             void saveGame();
 
-            void update(sf::Time dt);
-            void draw();
+            virtual void update(sf::Time dt);
+            virtual void draw();
             void drawAtObject(SpaceObject &spaceObject, sf::Vector2f fromPosition, RenderCamera &target);
             void onPostLoad(LoadingContext &context);
 
