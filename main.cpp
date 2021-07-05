@@ -15,7 +15,9 @@
 #include "src/resource_manager.hpp"
 #include "src/tiles.hpp"
 #include "src/game_session.hpp"
+#include "src/main_menu_scene.hpp"
 #include "src/utils.hpp"
+#include "src/game_scene_manager.hpp"
 #include "src/game/live_photo.hpp"
 #include "src/definitions/ship_definition.hpp"
 #include "src/definitions/character_definition.hpp"
@@ -156,14 +158,6 @@ int main()
 
     engine.changeCursor("CURSOR_DEFAULT");
 
-    std::ifstream startingGameFile("data/startingGame.json");
-    nlohmann::json startingGameJson;
-    startingGameFile >> startingGameJson;
-
-    // auto gameSessionTemp = space::fromJsonGameSession(engine, startingGameJson);
-    // auto gameSession = gameSessionTemp.get();
-    // engine.currentSession(std::move(gameSessionTemp));
-
     auto &gameUIManager = engine.gameUIManager();
 
     gameUIManager.defaultFont(resourceManager.font("data/fonts/PixelOperator.ttf"));
@@ -171,7 +165,8 @@ int main()
     gameUIManager.defaultPanelBackPanel(space::NineSlice(resourceManager.texture("data/textures/testPanel4.png"), 8, 8, 8, 8));
     gameUIManager.defaultButton(space::NineSlice(resourceManager.texture("data/textures/testButton.png"), 8, 8, 8, 8));
 
-    gameUIManager.initDefaultWindows();
+    engine.gameUIManager().initDefaultWindows();
+    space::GameSceneManager::switchToMainMenu(engine);
 
     // auto particles = gameSession->createObject<space::ParticlesSimple>("PARTICLES_1", 10000);
     // particles->transform().position = sf::Vector2f(-150.0f, 0);

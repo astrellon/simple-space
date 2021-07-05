@@ -28,6 +28,9 @@ namespace space
             shader = &shaderDef->shader;
         }
 
-        engine.resourceManager().image(starColoursPath, &starColours);
+        if (!engine.resourceManager().image(starColoursPath, &starColours))
+        {
+            starColours = nullptr;
+        }
     }
 } // namespace space

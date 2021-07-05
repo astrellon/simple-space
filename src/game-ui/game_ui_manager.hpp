@@ -71,8 +71,11 @@ namespace space
 
             void initDefaultWindows();
 
-            InGameUIPage &inGameUIPage() { return *_inGameUIPage; }
-            MainMenuPage &mainMenuPage() { return *_mainMenuPage; }
+            InGameUIPage *inGameUIPage() { return _inGameUIPage; }
+            MainMenuPage *mainMenuPage() { return _mainMenuPage; }
+
+            void currentPage(UIElement *page);
+            UIElement *currentPage() const { return _currentPage; }
 
         private:
             // Fields
@@ -81,6 +84,7 @@ namespace space
             std::vector<UIElement *> _currentHoverPath;
             std::vector<UIElement *> _previousHoverPath;
             UIRootElement *_bodyElement;
+            UIElement *_currentPage;
 
             const sf::Font *_defaultFont;
             NineSlice _defaultWindowBackPanel;

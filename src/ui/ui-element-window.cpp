@@ -109,11 +109,16 @@ namespace space
         ImGui::BeginChild("ElementsList", ImVec2(width * middle, height), false);
         auto &allElements = engine.gameUIManager().allElements();
 
-        auto node_flags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
         for (auto &element : allElements)
         {
+            auto nodeFlags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
+            if (element.get() == _selectedElement)
+            {
+                nodeFlags |= ImGuiTreeNodeFlags_Selected;
+            }
+
             auto elementTypeStr = element->elementType();
-            ImGui::TreeNodeEx((void *)element.get(), node_flags, "%s", elementTypeStr);
+            ImGui::TreeNodeEx((void *)element.get(), nodeFlags, "%s", elementTypeStr);
             if (ImGui::IsItemClicked())
             {
                 _selectedElement = element.get();
@@ -140,7 +145,7 @@ namespace space
         ImGui::Text("Width x Height: %f, %f", element.layoutWidth(), element.layoutHeight());
         ImGui::Text("Position TRBL: %f, %f, %f, %f", element.layoutTop(), element.layoutRight(), element.layoutBottom(), element.layoutLeft());
         ImGui::Text("Border TRBL: %f, %f, %f, %f", element.layoutBorder(YGEdgeTop), element.layoutBorder(YGEdgeRight), element.layoutBorder(YGEdgeBottom), element.layoutBorder(YGEdgeLeft));
-        ImGui::Text("Margin TRBL: %f, %f, %f, %f", element.margin(YGEdgeTop), element.layoutBorder(YGEdgeRight), element.layoutBorder(YGEdgeBottom), element.layoutBorder(YGEdgeLeft));
+        // ImGui::Text("Margin TRBL: %f, %f, %f, %f", element.margin(YGEdgeTop), element.layoutBorder(YGEdgeRight), element.layoutBorder(YGEdgeBottom), element.layoutBorder(YGEdgeLeft));
 
         auto flexBasis = element.flexBasis();
         if (ImGuiYGValue("Flex Basis: ", flexBasis, true))
@@ -212,6 +217,34 @@ namespace space
         {
             auto textElement = dynamic_cast<UITextElement &>(element);
             ImGui::Text("Text [%u]: %s", (uint)textElement.text().size(), textElement.text().c_str());
+        }
+
+        if (element.parent())
+        {
+            std::stringstream label;
+            label << "Parent: " << element.parent()->elementType();
+            if (ImGui::Button(label.str().c_str()))
+            {
+                _selectedElement = element.parent();
+                DrawDebug::highlightElement = element.parent();
+            }
+        }
+        else
+        {
+            ImGui::Text("No parent");
+        }
+
+        ImGui::Text("Children: %u", (int)element.children().size());
+
+        for (auto child : element.children())
+        {
+            std::stringstream label;
+            label << "- " << child->elementType();
+            if (ImGui::Button(label.str().c_str()))
+            {
+                _selectedElement = child;
+                DrawDebug::highlightElement = child;
+            }
         }
     }
 }

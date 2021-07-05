@@ -37,7 +37,7 @@ namespace space
             button->text(action->label());
             addChild(button);
 
-            button->on(sf::Event::EventType::MouseButtonPressed, [actionPtr, uiManager] (const sf::Event &e)
+            button->onClick([actionPtr, uiManager] (const sf::Event &e)
             {
                 uiManager->engine().currentSession()->nextFrameState().addAction([=]()
                 {

@@ -5,7 +5,7 @@
 
 namespace space
 {
-    MainMenuPage::MainMenuPage()
+    MainMenuPage::MainMenuPage(): _mainMenuPanel(nullptr)
     {
 
     }
@@ -17,5 +17,8 @@ namespace space
 
         alignItems(YGAlignCenter);
         justifyContent(YGJustifyCenter);
+        widthPercent(100);
+        heightPercent(100);
+        padding(20, 20, 20, 20);
     }
 } // space

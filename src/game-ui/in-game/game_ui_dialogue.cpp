@@ -75,7 +75,7 @@ namespace space
         });
         onGameSessionStart();
 
-        _nextButton->on(sf::Event::EventType::MouseButtonReleased, [this, &engine]( const sf::Event &e)
+        _nextButton->onClick([this, &engine]( const sf::Event &e)
         {
             if (engine.currentSession())
             {

@@ -22,7 +22,7 @@ namespace space
 
         _dropButton->text("Drop");
         _dropButton->width(50);
-        _dropButton->on(sf::Event::EventType::MouseButtonPressed, [&](const sf::Event &e)
+        _dropButton->onClick([&](const sf::Event &e)
         {
             uiManager.engine().currentSession()->nextFrameState().addAction([&]()
             {

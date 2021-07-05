@@ -48,6 +48,7 @@ namespace space
             void parent(UIElement *parent);
 
             RemoveEventHandler on(sf::Event::EventType type, EventHandler handler);
+            RemoveEventHandler onClick(EventHandler handler);
             UIEventResult trigger(const sf::Event &event);
 
             YGNodeRef yogaNode() { return _yogaNode; }

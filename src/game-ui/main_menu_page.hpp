@@ -22,7 +22,7 @@ namespace space
             // Methods
             virtual void init(GameUIManager &uiManager);
 
-            virtual const char*elementType() const { return "MainMenuPage"; }
+            virtual const char *elementType() const { return "MainMenuPage"; }
 
         private:
             // Fields

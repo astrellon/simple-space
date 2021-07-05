@@ -5,6 +5,10 @@
 #include "../ui_panel.hpp"
 #include "../game_ui_manager.hpp"
 
+#include "../../engine.hpp"
+#include "../../game_session.hpp"
+#include "../../game_scene_manager.hpp"
+
 namespace space
 {
     MainMenuPanel::MainMenuPanel() : _panel(nullptr),
@@ -18,12 +22,13 @@ namespace space
 
     void MainMenuPanel::init(GameUIManager &uiManager)
     {
+        auto &engine = uiManager.engine();
         width(200);
-        heightAuto();
         flexShrink(1.0f);
 
         _panel = uiManager.createElement<UIPanel>();
         addChild(_panel);
+        _panel->flexShrink(1.0f);
 
         auto heading = uiManager.createElement<UITextElement>();
         heading->text("Main Menu");
@@ -32,6 +37,11 @@ namespace space
         _startGameButton = uiManager.createElement<UIButton>();
         _startGameButton->text("Start Game");
         _startGameButton->widthPercent(100);
+        _startGameButton->onClick([&engine](const sf::Event &e)
+        {
+            GameSceneManager::startNewGame(engine);
+            return UIEventResult::Triggered;
+        });
         _panel->bodyContainer()->addChild(_startGameButton);
 
         _loadGameButton = uiManager.createElement<UIButton>();
@@ -47,6 +57,11 @@ namespace space
         _exitButton = uiManager.createElement<UIButton>();
         _exitButton->text("Exit");
         _exitButton->widthPercent(100);
+        _exitButton->onClick([&engine](const sf::Event &e)
+        {
+            engine.window()->close();
+            return UIEventResult::Triggered;
+        });
         _panel->bodyContainer()->addChild(_exitButton);
     }
 } // space

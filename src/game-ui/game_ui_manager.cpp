@@ -20,7 +20,10 @@ namespace space
 {
     GameUIManager::GameUIManager(Engine &engine):
         _engine(engine),
-        _defaultFont(nullptr)
+        _currentPage(nullptr),
+        _defaultFont(nullptr),
+        _inGameUIPage(nullptr),
+        _mainMenuPage(nullptr)
     {
         _bodyElement = createElement<UIRootElement>();
     }
@@ -140,9 +143,22 @@ namespace space
     void GameUIManager::initDefaultWindows()
     {
         _inGameUIPage = createElement<InGameUIPage>();
-        // body()->addChild(_inGameUIPage);
-
         _mainMenuPage = createElement<MainMenuPage>();
-        body()->addChild(_mainMenuPage);
     }
+
+    void GameUIManager::currentPage(UIElement *page)
+    {
+        if (_currentPage)
+        {
+            _bodyElement->removeChild(_currentPage);
+        }
+
+        _currentPage = page;
+
+        if (_currentPage)
+        {
+            _bodyElement->addChild(_currentPage);
+        }
+    }
+
 } // space

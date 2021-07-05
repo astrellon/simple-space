@@ -27,7 +27,7 @@ namespace space
 
         flexDirection(YGFlexDirectionRow);
 
-        _actionButton->on(sf::Event::EventType::MouseButtonPressed, [this, &uiManager] (const sf::Event &e)
+        _actionButton->onClick([this, &uiManager] (const sf::Event &e)
         {
             if (this->_teleporter.item == nullptr)
             {

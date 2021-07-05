@@ -149,7 +149,6 @@ namespace space
                 if (iter->first == id)
                 {
                     list.erase(iter);
-                    std::cout << "Removed event listener!" << std::endl;
                     return;
                 }
             }
@@ -160,6 +159,11 @@ namespace space
         _removeHandlers.push_back(result);
 
         return result;
+    }
+
+    UIElement::RemoveEventHandler UIElement::onClick(UIElement::EventHandler handler)
+    {
+        return on(sf::Event::EventType::MouseButtonPressed, handler);
     }
 
     UIEventResult UIElement::trigger(const sf::Event &event)

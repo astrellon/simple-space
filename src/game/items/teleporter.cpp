@@ -29,7 +29,7 @@ namespace space
         if (controller.isPlayer())
         {
             auto &session = controller.session();
-            auto &teleporterPanel = session.engine().gameUIManager().inGameUIPage().teleportersPanel();
+            auto &teleporterPanel = session.engine().gameUIManager().inGameUIPage()->teleportersPanel();
             teleporterPanel.teleporters(&controller.teleportersInRange());
         }
     }
@@ -53,7 +53,7 @@ namespace space
 
         if (controller->isPlayer())
         {
-            session.engine().gameUIManager().inGameUIPage().teleportersPanel().teleporters(nullptr);
+            session.engine().gameUIManager().inGameUIPage()->teleportersPanel().teleporters(nullptr);
         }
     }
 } // namespace space
