@@ -10,6 +10,7 @@ namespace space
     class GameUIInteractablesPanel;
     class GameUITeleportersPanel;
     class GameUIDialogue;
+    class GameUIStopFlying;
 
     class InGameUIPage : public UIElement
     {
@@ -36,6 +37,7 @@ namespace space
             GameUITeleportersPanel *_teleportersPanel;
             GameUIInventoryWindow *_inventoryWindow;
             GameUIDialogue *_dialogue;
+            GameUIStopFlying *_stopFlying;
 
             // Methods
     };

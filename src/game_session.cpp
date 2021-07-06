@@ -290,10 +290,6 @@ namespace space
             {
                 _takingAPhoto = false;
             }
-            else if (_playerController.controlling() == ControlShip)
-            {
-                setPlayerControllingCharacter();
-            }
         }
 
         _playerController.update(dt);
