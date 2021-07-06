@@ -36,7 +36,7 @@ namespace space
 
     void UIElement::update(Engine &engine, sf::Time dt, sf::Vector2f parentOffset)
     {
-        if (_destroyed)
+        if (_destroyed || !_visible)
         {
             return;
         }
@@ -50,13 +50,18 @@ namespace space
 
         for (auto child : _children)
         {
+            if (!child->visible())
+            {
+                continue;
+            }
+
             child->update(engine, dt, offset);
         }
     }
 
     void UIElement::draw(Engine &engine, RenderCamera &target)
     {
-        if (_destroyed)
+        if (_destroyed || !_visible)
         {
             return;
         }
@@ -72,7 +77,7 @@ namespace space
 
     bool UIElement::doesMouseHover(Engine &engine, sf::Vector2f mousePosition) const
     {
-        if (_destroyed)
+        if (_destroyed || !_visible)
         {
             return false;
         }
@@ -192,10 +197,34 @@ namespace space
         return UIEventResult::Triggered;
     }
 
+    void UIElement::visible(bool value)
+    {
+        if (value == _visible)
+        {
+            return;
+        }
+
+        _visible = value;
+
+        if (value)
+        {
+            YGNodeStyleSetPositionType(_yogaNode, _position);
+        }
+        else
+        {
+            YGNodeStyleSetPositionType(_yogaNode, YGPositionTypeAbsolute);
+        }
+    }
+
     void UIElement::drawChildren(Engine &engine, RenderCamera &target)
     {
         for (auto child : _children)
         {
+            if (!child->visible())
+            {
+                continue;
+            }
+
             child->draw(engine, target);
         }
     }

@@ -27,7 +27,7 @@ namespace space
             // Fields
 
             // Constructor
-            UIElement() : _yogaNode(YGNodeNew()), _parent(nullptr), _destroyed(false) { }
+            UIElement() : _yogaNode(YGNodeNew()), _parent(nullptr), _position(YGPositionTypeRelative), _destroyed(false), _visible(true) { }
             virtual ~UIElement();
 
             // Methods
@@ -84,8 +84,15 @@ namespace space
             YGAlign alignItems() const { return YGNodeStyleGetAlignItems(_yogaNode); }
 
             // Position Type
-            void positionType(YGPositionType type) { YGNodeStyleSetPositionType(_yogaNode, type); }
-            YGPositionType positionType() const { return YGNodeStyleGetPositionType(_yogaNode); }
+            void positionType(YGPositionType type)
+            {
+                _position = type;
+                if (_visible)
+                {
+                    YGNodeStyleSetPositionType(_yogaNode, type);
+                }
+            }
+            YGPositionType positionType() const { return _position; }
 
             // Flex Wrap
             void flexWrap(YGWrap wrap) { YGNodeStyleSetFlexWrap(_yogaNode, wrap); }
@@ -228,6 +235,11 @@ namespace space
 
             bool destroyed() const { return _destroyed; }
 
+            void visible(bool value);
+            bool visible() const { return _visible; }
+
+            bool toggleVisible() { visible(!visible()); return visible(); }
+
         protected:
             // Fields
             YGNodeRef _yogaNode;
@@ -245,7 +257,9 @@ namespace space
         private:
             // Fields
             static int _nextHandlerId;
+            YGPositionType _position;
             bool _destroyed;
+            bool _visible;
 
     };
 
