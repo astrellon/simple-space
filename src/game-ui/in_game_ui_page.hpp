@@ -11,6 +11,7 @@ namespace space
     class GameUITeleportersPanel;
     class GameUIDialogue;
     class GameUIStopFlying;
+    class InGameMainMenuPanel;
 
     class InGameUIPage : public UIElement
     {
@@ -30,6 +31,7 @@ namespace space
             GameUITeleportersPanel &teleportersPanel() { return *_teleportersPanel; }
             GameUIInventoryWindow &inventoryWindow() { return *_inventoryWindow; }
             GameUIDialogue &dialogue() { return *_dialogue; }
+            InGameMainMenuPanel &inGameMainMenuPanel() { return *_inGameMainMenuPanel; }
 
         private:
             // Fields
@@ -38,6 +40,7 @@ namespace space
             GameUIInventoryWindow *_inventoryWindow;
             GameUIDialogue *_dialogue;
             GameUIStopFlying *_stopFlying;
+            InGameMainMenuPanel *_inGameMainMenuPanel;
 
             // Methods
     };

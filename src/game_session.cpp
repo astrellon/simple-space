@@ -26,6 +26,9 @@
 #include "effects/transition.hpp"
 #include "effects/teleport_screen_effect.hpp"
 #include "controllers/npc_controller.hpp"
+#include "game-ui/in_game_ui_page.hpp"
+#include "game-ui/game_ui_manager.hpp"
+#include "game-ui/in-game/in_game_main_menu_panel.hpp"
 
 #include "serialisers/json/json_serialisers_game.hpp"
 #include "serialisers/loading_context.hpp"
@@ -284,11 +287,15 @@ namespace space
             }
         }
 
-        if (Keyboard::isKeyPressed(sf::Keyboard::Escape))
+        if (Keyboard::isKeyDown(sf::Keyboard::Escape))
         {
             if (_takingAPhoto)
             {
                 _takingAPhoto = false;
+            }
+            else
+            {
+                _engine.gameUIManager().inGameUIPage()->inGameMainMenuPanel().toggleVisible();
             }
         }
 

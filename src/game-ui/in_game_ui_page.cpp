@@ -5,6 +5,7 @@
 #include "./in-game/game_ui_inventory_window.hpp"
 #include "./in-game/game_ui_dialogue.hpp"
 #include "./in-game/game_ui_stop_flying.hpp"
+#include "./in-game/in_game_main_menu_panel.hpp"
 
 #include "./game_ui_manager.hpp"
 
@@ -15,7 +16,8 @@ namespace space
         _teleportersPanel(nullptr),
         _inventoryWindow(nullptr),
         _dialogue(nullptr),
-        _stopFlying(nullptr)
+        _stopFlying(nullptr),
+        _inGameMainMenuPanel(nullptr)
     {
 
     }
@@ -36,5 +38,9 @@ namespace space
 
         _stopFlying = uiManager.createElement<GameUIStopFlying>();
         addChild(_stopFlying);
+
+        _inGameMainMenuPanel = uiManager.createElement<InGameMainMenuPanel>();
+        addChild(_inGameMainMenuPanel);
+        _inGameMainMenuPanel->visible(false);
     }
 } // space

@@ -7,7 +7,7 @@ namespace space
     class UIPanel;
     class UIButton;
 
-    class MainMenuPanel : public UIElement
+    class InGameMainMenuPanel : public UIElement
     {
         public:
             // Fields
@@ -17,14 +17,15 @@ namespace space
             // Methods
             virtual void init(GameUIManager &uiManager);
 
-            virtual const char *elementType() const { return "MainMenuPanel"; }
+            virtual const char *elementType() const { return "InGameMainMenuPanel"; }
 
         private:
             // Fields
             UIPanel *_panel = nullptr;
-            UIButton *_startGameButton = nullptr;
+            UIButton *_resumeGameButton = nullptr;
+            UIButton *_saveGameButton = nullptr;
             UIButton *_loadGameButton = nullptr;
-            UIButton *_editorButton = nullptr;
+            UIButton *_backToMainMenuButton = nullptr;
             UIButton *_exitButton = nullptr;
 
             // Methods
