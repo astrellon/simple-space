@@ -19,6 +19,8 @@ namespace space
 
             virtual const char *elementType() const { return "InGameMainMenuPanel"; }
 
+            virtual void preUpdate(Engine &engine, sf::Time dt);
+
         private:
             // Fields
             UIPanel *_panel = nullptr;

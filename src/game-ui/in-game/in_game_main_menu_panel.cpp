@@ -66,4 +66,10 @@ namespace space
         });
         _panel->bodyContainer()->addChild(_exitButton);
     }
+
+    void InGameMainMenuPanel::preUpdate(Engine &engine, sf::Time dt)
+    {
+        auto screenSize = engine.renderSize();
+        margin(20, 0, 0, screenSize.x / 2 - 100);
+    }
 } // space

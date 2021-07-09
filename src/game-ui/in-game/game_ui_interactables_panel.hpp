@@ -23,7 +23,6 @@ namespace space
             virtual void init(GameUIManager &uiManager);
             virtual void draw(Engine &engine, RenderCamera &target);
             virtual void preUpdate(Engine &engine, sf::Time dt);
-            virtual void update(Engine &engine, sf::Time dt, sf::Vector2f parentOffset);
 
             void interactables(const InteractableList *interactables);
             const InteractableList *interactables() const { return _interactables; }

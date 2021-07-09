@@ -37,12 +37,12 @@ namespace space
         UIElement::draw(engine, target);
     }
 
-    void GameUITeleportersPanel::update(Engine &engine, sf::Time dt, sf::Vector2f parentOffset)
+    void GameUITeleportersPanel::preUpdate(Engine &engine, sf::Time dt)
     {
         auto screenSize = engine.renderSize();
         margin(screenSize.y / 2 - 32, 0, 0, screenSize.x / 2 - 32 - 200);
 
-        UIElement::update(engine, dt, parentOffset);
+        UIElement::preUpdate(engine, dt);
     }
 
     void GameUITeleportersPanel::teleporters(const TeleporterList *teleporters)

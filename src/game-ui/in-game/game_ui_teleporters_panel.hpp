@@ -24,7 +24,7 @@ namespace space
             // Methods
             virtual void init(GameUIManager &uiManager);
             virtual void draw(Engine &engine, RenderCamera &target);
-            virtual void update(Engine &engine, sf::Time dt, sf::Vector2f parentOffset);
+            virtual void preUpdate(Engine &engine, sf::Time dt);
 
             void teleporters(const TeleporterList *teleporters);
             const TeleporterList *teleporters() const { return _teleporters; }
