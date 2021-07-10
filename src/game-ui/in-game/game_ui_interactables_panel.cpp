@@ -66,6 +66,15 @@ namespace space
         auto screenSize = engine.renderSize();
         margin(screenSize.y / 2 - 32, 0, 0, screenSize.x / 2 + 32);
 
+        if (engine.currentSession())
+        {
+            visible(!engine.currentSession()->isInGameMenuVisible());
+        }
+        else
+        {
+            visible(false);
+        }
+
         UIElement::preUpdate(engine, dt);
     }
 

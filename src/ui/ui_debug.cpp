@@ -33,6 +33,15 @@ namespace space
         }
 
         ImGui::Checkbox("Slow", &DrawDebug::slow);
+        float timeScale = engine.timeScale();
+        if (ImGui::SliderFloat("Time Scale", &timeScale, 0, 2.0f))
+        {
+            engine.timeScale(timeScale);
+        }
+        if (ImGui::Button("Reset Time Scale"))
+        {
+            engine.timeScale(1.0f);
+        }
         ImGui::Checkbox("Pause", &DrawDebug::pauseGame);
         ImGui::Checkbox("Show Physics", &DrawDebug::showPolygons);
         ImGui::Checkbox("Hide GameSession", &DrawDebug::hideGameSession);
@@ -45,7 +54,7 @@ namespace space
         auto transition = engine.currentSession() ? engine.currentSession()->currentTransition() : nullptr;
         if (transition)
         {
-            ImGui::Text("Transition: %f", transition->percent(engine.timeSinceStart()));
+            ImGui::Text("Transition: %f", transition->percent(engine.inGameTime()));
         }
         else
         {

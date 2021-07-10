@@ -54,6 +54,9 @@ namespace space
             float cameraScale() const;
             void cameraScale(float scale);
 
+            float timeScale() const;
+            void timeScale(float scale);
+
             bool isHeadless() const { return _headlessMode; }
 
             sf::Vector2u windowSize() const;
@@ -68,6 +71,7 @@ namespace space
             sf::Time deltaTime() const;
             sf::Time timeSinceStart() const;
             sf::Time timeSinceStartOnUpdate() const;
+            sf::Time inGameTime() const;
 
             RenderCamera &sceneRender() { return *_sceneRender; }
             RenderCamera &sceneRenderTransition() { return *_sceneRenderTransition; }
@@ -105,6 +109,7 @@ namespace space
 
             float _spriteScale;
             float _cameraScale;
+            float _timeScale;
             bool _initedImgui;
             bool _headlessMode;
             std::unique_ptr<BaseGameScene> _gameScene;
@@ -112,6 +117,7 @@ namespace space
             sf::RenderWindow *_window;
             sf::Clock _timer;
             sf::Clock _timerSinceStart;
+            sf::Time _inGameTime;
             sf::Time _deltaTime;
             sf::Time _timeSinceStartOnUpdate;
             int _frameCounter;

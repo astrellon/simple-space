@@ -81,7 +81,7 @@ namespace space
         glMatrixMode(GL_MODELVIEW);
 
         auto usePointSize = scale > 1.0f ? 1 : 0;
-        shader()->setUniform("timeSinceStart", _engine.timeSinceStart().asSeconds());
+        shader()->setUniform("timeSinceStart", _engine.inGameTime().asSeconds());
         shader()->setUniform("pointSize", usePointSize);
 
         glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);

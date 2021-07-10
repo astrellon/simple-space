@@ -35,7 +35,7 @@ namespace space
             return;
         }
 
-        if (gameSession->playerController().controlling() != ControllingValue::ControlShip)
+        if (gameSession->playerController().controlling() != ControllingValue::ControlShip || gameSession->isInGameMenuVisible())
         {
             visible(false);
         }

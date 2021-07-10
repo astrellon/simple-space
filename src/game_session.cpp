@@ -117,7 +117,7 @@ namespace space
         auto photoSize = static_cast<sf::Vector2u>(photoArea.getSize());
         auto result = createObject<LivePhoto>(newId, photoSize);
 
-        CloneContext cloneContext(*this, photoArea, &insideArea, _engine.timeSinceStart());
+        CloneContext cloneContext(*this, photoArea, &insideArea, _engine.inGameTime());
         rootObject->deepClone(newIdPrefix, cloneContext);
         auto newParentObjectId = newIdPrefix + parentObject->id;
 
@@ -295,7 +295,7 @@ namespace space
             }
             else
             {
-                _engine.gameUIManager().inGameUIPage()->inGameMainMenuPanel().toggleVisible();
+                toggleInGameMenu();
             }
         }
 
@@ -336,7 +336,7 @@ namespace space
 
             sceneRenderTransition.texture().display();
 
-            auto t = _transition->percent(_engine.timeSinceStart());
+            auto t = _transition->percent(_engine.inGameTime());
 
             _teleportEffect->draw(*this, &sceneRenderTransition.texture().getTexture(), sceneRender, t);
 
@@ -417,13 +417,28 @@ namespace space
         return Utils::contains(_spaceObjectsUpdateEveryFrame, spaceObject);
     }
 
+    bool GameSession::isInGameMenuVisible() const
+    {
+        return _engine.gameUIManager().inGameUIPage()->inGameMainMenuPanel().visible();
+    }
+
+    void GameSession::toggleInGameMenu()
+    {
+        _engine.gameUIManager().inGameUIPage()->inGameMainMenuPanel().toggleVisible();
+    }
+
+    void GameSession::inGameMenuVisible(bool visible)
+    {
+        _engine.gameUIManager().inGameUIPage()->inGameMainMenuPanel().visible(visible);
+    }
+
     void GameSession::createTransition(const Area *prevArea, const Area *area, TeleportClone &teleportClone)
     {
         auto windowSize = _engine.windowSize();
         auto aspectRatio = static_cast<float>(windowSize.x) / static_cast<float>(windowSize.y);
         auto duration = sf::seconds(2.2f * aspectRatio);
 
-        auto transition = std::make_unique<Transition>(_engine.timeSinceStart(), duration, teleportClone, *_playerController.controllingObject());
+        auto transition = std::make_unique<Transition>(_engine.inGameTime(), duration, teleportClone, *_playerController.controllingObject());
 
         setTransition(transition);
     }

@@ -40,6 +40,7 @@ namespace space
 
         _spriteScale(1.0f),
         _cameraScale(2.0f),
+        _timeScale(1.0f),
         _initedImgui(false),
         _headlessMode(window == nullptr),
         _currentSession(nullptr),
@@ -86,6 +87,15 @@ namespace space
     void Engine::cameraScale(float scale)
     {
         _cameraScale = scale;
+    }
+
+    float Engine::timeScale() const
+    {
+        return _timeScale;
+    }
+    void Engine::timeScale(float scale)
+    {
+        _timeScale = Utils::clamp(scale, 0.0f, 2.0f);
     }
 
     sf::Vector2u Engine::windowSize() const
@@ -235,6 +245,10 @@ namespace space
     {
         return _timeSinceStartOnUpdate;
     }
+    sf::Time Engine::inGameTime() const
+    {
+        return _inGameTime;
+    }
 
     void Engine::onResize(sf::Vector2f area)
     {
@@ -270,8 +284,20 @@ namespace space
         _frameStart = now;
 
         _deltaTime = _timer.getElapsedTime();
+        auto timeScale = _timeScale;
+        if (_currentSession && _currentSession->isInGameMenuVisible())
+        {
+            timeScale = 0.0f;
+        }
+
+        if (timeScale != 1.0f)
+        {
+            _deltaTime *= timeScale;
+        }
         _timeSinceStartOnUpdate = timeSinceStart();
         _timer.restart();
+
+        _inGameTime += _deltaTime;
 
         if (_initedImgui)
         {

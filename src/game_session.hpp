@@ -174,6 +174,10 @@ namespace space
             void removeFromUpdateEveryFrame(SpaceObject *spaceObject);
             bool doesUpdateEveryFrame(SpaceObject *spaceObject) const;
 
+            bool isInGameMenuVisible() const;
+            void toggleInGameMenu();
+            void inGameMenuVisible(bool visible);
+
         private:
             // Fields
             Engine &_engine;

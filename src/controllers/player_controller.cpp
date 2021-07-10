@@ -7,6 +7,7 @@
 #include "../game/character.hpp"
 #include "../game/planet.hpp"
 #include "../game/planet_surface.hpp"
+#include "../game_session.hpp"
 
 namespace space
 {
@@ -65,29 +66,32 @@ namespace space
         sf::Vector2f moveInput;
         float rotateInput = 0;
 
-        if (Keyboard::isKeyPressed(sf::Keyboard::A))
+        if (!session().isInGameMenuVisible())
         {
-            moveInput.x -= 1;
-        }
-        if (Keyboard::isKeyPressed(sf::Keyboard::D))
-        {
-            moveInput.x += 1;
-        }
-        if (Keyboard::isKeyPressed(sf::Keyboard::W))
-        {
-            moveInput.y -= 1;
-        }
-        if (Keyboard::isKeyPressed(sf::Keyboard::S))
-        {
-            moveInput.y += 1;
-        }
-        if (Keyboard::isKeyPressed(sf::Keyboard::Q))
-        {
-            rotateInput -= 1;
-        }
-        if (Keyboard::isKeyPressed(sf::Keyboard::E))
-        {
-            rotateInput += 1;
+            if (Keyboard::isKeyPressed(sf::Keyboard::A))
+            {
+                moveInput.x -= 1;
+            }
+            if (Keyboard::isKeyPressed(sf::Keyboard::D))
+            {
+                moveInput.x += 1;
+            }
+            if (Keyboard::isKeyPressed(sf::Keyboard::W))
+            {
+                moveInput.y -= 1;
+            }
+            if (Keyboard::isKeyPressed(sf::Keyboard::S))
+            {
+                moveInput.y += 1;
+            }
+            if (Keyboard::isKeyPressed(sf::Keyboard::Q))
+            {
+                rotateInput -= 1;
+            }
+            if (Keyboard::isKeyPressed(sf::Keyboard::E))
+            {
+                rotateInput += 1;
+            }
         }
 
         _ship->moveInput = moveInput;
@@ -99,29 +103,32 @@ namespace space
         sf::Vector2f moveInput;
         float rotateInput = 0;
 
-        if (Keyboard::isKeyPressed(sf::Keyboard::A))
+        if (!session().isInGameMenuVisible())
         {
-            moveInput.x -= 1;
-        }
-        if (Keyboard::isKeyPressed(sf::Keyboard::D))
-        {
-            moveInput.x += 1;
-        }
-        if (Keyboard::isKeyPressed(sf::Keyboard::W))
-        {
-            moveInput.y -= 1;
-        }
-        if (Keyboard::isKeyPressed(sf::Keyboard::S))
-        {
-            moveInput.y += 1;
-        }
-        if (Keyboard::isKeyPressed(sf::Keyboard::Q))
-        {
-            rotateInput -= 1;
-        }
-        if (Keyboard::isKeyPressed(sf::Keyboard::E))
-        {
-            rotateInput += 1;
+            if (Keyboard::isKeyPressed(sf::Keyboard::A))
+            {
+                moveInput.x -= 1;
+            }
+            if (Keyboard::isKeyPressed(sf::Keyboard::D))
+            {
+                moveInput.x += 1;
+            }
+            if (Keyboard::isKeyPressed(sf::Keyboard::W))
+            {
+                moveInput.y -= 1;
+            }
+            if (Keyboard::isKeyPressed(sf::Keyboard::S))
+            {
+                moveInput.y += 1;
+            }
+            if (Keyboard::isKeyPressed(sf::Keyboard::Q))
+            {
+                rotateInput -= 1;
+            }
+            if (Keyboard::isKeyPressed(sf::Keyboard::E))
+            {
+                rotateInput += 1;
+            }
         }
         // if (Keyboard::isKeyPressed(sf::Keyboard::F))
         // {

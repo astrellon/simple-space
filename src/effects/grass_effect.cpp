@@ -53,7 +53,7 @@ namespace space
         shader.setUniform("insideScale", Utils::InsideScale);
         shader.setUniform("worldPosition", sf::Glsl::Vec2(_transform.position));
         shader.setUniform("invTextureSize", sf::Glsl::Vec2(1.0f / size.x, 1.0f / size.y));
-        shader.setUniform("timeSinceStart", session.engine().timeSinceStart().asSeconds());
+        shader.setUniform("timeSinceStart", session.engine().inGameTime().asSeconds());
         shader.setUniform("windSpeed", 1.5f);
 
         auto playerPos = session.playerController().controllingCharacter()->transform().position;

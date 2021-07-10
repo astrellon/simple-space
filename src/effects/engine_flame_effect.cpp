@@ -27,7 +27,7 @@ namespace space
 
         if (_engineBrightness >= 0.0f)
         {
-            auto time = session.engine().timeSinceStart().asSeconds();
+            auto time = session.engine().inGameTime().asSeconds();
             auto flux = Utils::clamp01(_engineBrightness - Utils::perlin(time * 7.0f) * 0.3f);
 
             _glow.setColor(sf::Color(255, 255, 255, flux * 255));

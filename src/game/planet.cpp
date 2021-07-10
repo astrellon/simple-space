@@ -73,7 +73,7 @@ namespace space
         renderState.shader = _shader;
         renderState.blendMode = sf::BlendMode(sf::BlendMode::One, sf::BlendMode::SrcAlpha);
 
-        _shader->setUniform("timeSinceStart", session.engine().timeSinceStart().asSeconds());
+        _shader->setUniform("timeSinceStart", session.engine().inGameTime().asSeconds());
         _shader->setUniform("offset", 0.0f);
         _shader->setUniform("scale", definition.scale);
         _shader->setUniform("oscillateNoise", definition.oscillateNoise);
