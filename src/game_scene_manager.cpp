@@ -4,6 +4,7 @@
 
 #include "main_menu_scene.hpp"
 #include "game_session.hpp"
+#include "editor_game_session.hpp"
 #include "engine.hpp"
 #include "game-ui/game_ui_manager.hpp"
 #include "game-ui/ui_element.hpp"
@@ -30,4 +31,11 @@ namespace space
         engine.gameScene(space::fromJsonGameSession(engine, startingGameJson));
         engine.gameUIManager().currentPage(engine.gameUIManager().inGameUIPage());
     }
+
+    void GameSceneManager::startEditor(Engine &engine)
+    {
+        engine.gameScene(std::make_unique<EditorGameSession>(engine));
+        engine.gameUIManager().currentPage(nullptr);
+    }
+
 } // space

@@ -239,14 +239,6 @@ namespace space
     void GameSession::clearTransition()
     {
         std::cout << "Clearing transition" << std::endl;
-
-        // auto &renderTrans = _engine.sceneRenderTransition();
-
-        // auto cameraProps = renderTrans.camera().cameraProps();
-        // cameraProps.following = false;
-        // cameraProps.followingRotation = false;
-        // renderTrans.camera().cameraProps(cameraProps);
-
         _transition = std::move(nullptr);
     }
 

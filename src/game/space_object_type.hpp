@@ -18,7 +18,8 @@ namespace space
         ParticlesSimple,
         PlacedItem,
         TeleportClone,
-        GrassEffect
+        GrassEffect,
+        EditorCameraTarget
     };
 
     const std::string toString(SpaceObjectType input);

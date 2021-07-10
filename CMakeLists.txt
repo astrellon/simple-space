@@ -11,6 +11,7 @@ file(GLOB src_files
     "src/game/*.cpp"
     "src/game/items/*.cpp"
     "src/game/interactions/*.cpp"
+    "src/editor/*.cpp"
     "src/debug/*.cpp"
     "src/definitions/*.cpp"
     "src/serialisers/json/*.cpp"

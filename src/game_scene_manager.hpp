@@ -5,8 +5,6 @@
 namespace space
 {
     class Engine;
-    class MainMenuScene;
-    class GameSession;
 
     class GameSceneManager
     {
@@ -18,6 +16,7 @@ namespace space
             // Methods
             static void switchToMainMenu(Engine &engine);
             static void startNewGame(Engine &engine);
+            static void startEditor(Engine &engine);
 
         private:
             GameSceneManager();

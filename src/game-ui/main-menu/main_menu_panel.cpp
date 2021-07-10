@@ -45,6 +45,11 @@ namespace space
         _editorButton->text("Start Editor");
         _editorButton->widthPercent(100);
         _panel->bodyContainer()->addChild(_editorButton);
+        _editorButton->onClick([&engine](const sf::Event &e)
+        {
+            GameSceneManager::startEditor(engine);
+            return UIEventResult::Triggered;
+        });
 
         _exitButton = uiManager.createElement<UIButton>();
         _exitButton->text("Exit");

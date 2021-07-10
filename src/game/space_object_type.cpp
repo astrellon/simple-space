@@ -20,6 +20,7 @@ namespace space
             case SpaceObjectType::SpacePortal: return "space-portal";
             case SpaceObjectType::TeleportClone: return "teleport-clone";
             case SpaceObjectType::GrassEffect: return "grass-effect";
+            case SpaceObjectType::EditorCameraTarget: return "editor-camera-target";
         }
     }
 
@@ -37,6 +38,7 @@ namespace space
         if (input == "space-portal") return SpaceObjectType::SpacePortal;
         if (input == "teleport-clone") return SpaceObjectType::TeleportClone;
         if (input == "grass-effect") return SpaceObjectType::GrassEffect;
+        if (input == "editor-camera-target") return SpaceObjectType::EditorCameraTarget;
 
         return SpaceObjectType::Unknown;
     }

@@ -178,7 +178,7 @@ namespace space
             void toggleInGameMenu();
             void inGameMenuVisible(bool visible);
 
-        private:
+        protected:
             // Fields
             Engine &_engine;
             SpaceObject *_mouseOverObject;
