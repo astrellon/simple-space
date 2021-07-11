@@ -1,4 +1,4 @@
-#include "ui-element-window.hpp"
+#include "ui_element_window.hpp"
 
 #include <sstream>
 
@@ -10,8 +10,6 @@
 #include "../game-ui/ui_text_element.hpp"
 #include "../utils.hpp"
 #include "../debug/draw_debug.hpp"
-
-
 
 namespace space
 {

@@ -5,6 +5,7 @@
 #include "../../space_transform.hpp"
 #include "../../utils.hpp"
 #include "../../photo_album.hpp"
+#include "../../editor_game_session.hpp"
 
 #include "../../definitions/dialogue.hpp"
 #include "../../definition_manager.hpp"
@@ -73,9 +74,21 @@ namespace space
 
     std::unique_ptr<GameSession> fromJsonGameSession(Engine &engine, const json &j)
     {
-        LoadingContext context;
         auto result = std::make_unique<GameSession>(engine);
-        auto &session = *result.get();
+        loadIntoGameSession(*result.get(), engine, j);
+        return result;
+    }
+
+    std::unique_ptr<EditorGameSession> fromJsonEditorGameSession(Engine &engine, const json &j)
+    {
+        auto result = std::make_unique<EditorGameSession>(engine);
+        loadIntoGameSession(*result.get(), engine, j);
+        return result;
+    }
+
+    void loadIntoGameSession(GameSession &session, Engine &engine, const json &j)
+    {
+        LoadingContext context;
 
         for (auto &item : j.at("items"))
             addFromJsonItem(item, session);
@@ -86,11 +99,9 @@ namespace space
         for (auto &characterControllers : j.at("characterControllers"))
             addFromJsonCharacterController(characterControllers, session);
 
-        addFromJsonPlayerController(j.at("playerController"), *result);
+        addFromJsonPlayerController(j.at("playerController"), session);
 
-        result->onPostLoad(context);
-
-        return result;
+        session.onPostLoad(context);
     }
 
     json toJsonBase(const SpaceObject &input)

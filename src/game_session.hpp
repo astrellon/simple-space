@@ -158,7 +158,7 @@ namespace space
             virtual void update(sf::Time dt);
             virtual void draw();
             void drawAtObject(SpaceObject &spaceObject, sf::Vector2f fromPosition, RenderCamera &target);
-            void onPostLoad(LoadingContext &context);
+            virtual void onPostLoad(LoadingContext &context);
 
             void nextId(int id) { _nextId = id; }
             int nextId() { return ++_nextId; }

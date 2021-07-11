@@ -18,6 +18,7 @@ file(GLOB src_files
     "src/physics/*.cpp"
     "src/imgui/*.cpp"
     "src/ui/*.cpp"
+    "src/ui/editor/*.cpp"
     "src/game-ui/*.cpp"
     "src/game-ui/in-game/*.cpp"
     "src/game-ui/main-menu/*.cpp"

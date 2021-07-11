@@ -17,4 +17,9 @@ namespace space
         populateCloneFromThis(result, context);
         return result;
     }
+
+    void EditorCameraTarget::update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform)
+    {
+        updateWorldTransform(parentTransform);
+    }
 } // space

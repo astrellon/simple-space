@@ -8,11 +8,13 @@
 #include "ui_frame_buffers.hpp"
 #include "ui_photo_album.hpp"
 #include "ui_compendium.hpp"
-#include "ui-element-window.hpp"
+#include "ui_element_window.hpp"
+#include "editor/ui_area_selector.hpp"
 
 namespace space
 {
-    UIManager::UIManager() : _uiSelected(nullptr), _uiObjects(nullptr), _uiFrameBuffers(nullptr), _uiPhotoAlbum(nullptr), _uiCompendium(nullptr), _uiElementWindow(nullptr)
+    UIManager::UIManager() : _uiSelected(nullptr), _uiObjects(nullptr), _uiFrameBuffers(nullptr),
+        _uiPhotoAlbum(nullptr), _uiCompendium(nullptr), _uiElementWindow(nullptr), _uiAreaSelector(nullptr)
     {
 
     }
@@ -27,6 +29,7 @@ namespace space
         _uiPhotoAlbum = createWindow<UIPhotoAlbum>();
         _uiCompendium = createWindow<UICompendium>();
         _uiElementWindow = createWindow<UIElementWindow>();
+        _uiAreaSelector = createWindow<UIAreaSelector>();
     }
 
     void UIManager::draw(Engine &engine)

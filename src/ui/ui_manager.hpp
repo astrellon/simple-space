@@ -17,6 +17,7 @@ namespace space
     class UIPhotoAlbum;
     class UICompendium;
     class UIElementWindow;
+    class UIAreaSelector;
 
     class UIManager
     {
@@ -52,6 +53,7 @@ namespace space
             UIPhotoAlbum &uiPhotoAlbum() { return *_uiPhotoAlbum; }
             UICompendium &uiCompendium() { return *_uiCompendium; }
             UIElementWindow &uiElementWindow() { return *_uiElementWindow; }
+            UIAreaSelector &uiAreaSelector() { return *_uiAreaSelector; }
 
         private:
             // Fields
@@ -65,6 +67,7 @@ namespace space
             UIPhotoAlbum *_uiPhotoAlbum;
             UICompendium *_uiCompendium;
             UIElementWindow *_uiElementWindow;
+            UIAreaSelector *_uiAreaSelector;
 
             // Methods
     };

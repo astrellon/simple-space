@@ -19,7 +19,7 @@ namespace space
             virtual SpaceObject *clone(const ObjectId &newId, const CloneContext &context) { return cloneEditorCameraTarget(newId, context); }
             EditorCameraTarget *cloneEditorCameraTarget(const ObjectId &newId, const CloneContext &context);
 
-            virtual void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform) { }
+            virtual void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform);
             virtual void draw(GameSession &session, RenderCamera &target) { }
 
             virtual bool isGenerated() const { return true; }

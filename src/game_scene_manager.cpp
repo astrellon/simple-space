@@ -10,6 +10,8 @@
 #include "game-ui/ui_element.hpp"
 #include "game-ui/main_menu_page.hpp"
 #include "game-ui/in_game_ui_page.hpp"
+#include "ui/ui_manager.hpp"
+#include "ui/editor/ui_area_selector.hpp"
 
 #include "serialisers/json/json.hpp"
 #include "serialisers/json/json_serialisers_game.hpp"
@@ -34,8 +36,13 @@ namespace space
 
     void GameSceneManager::startEditor(Engine &engine)
     {
-        engine.gameScene(std::make_unique<EditorGameSession>(engine));
+        std::ifstream startingGameFile("data/startingGame.json");
+        nlohmann::json startingGameJson;
+        startingGameFile >> startingGameJson;
+
+        engine.gameScene(space::fromJsonEditorGameSession(engine, startingGameJson));
         engine.gameUIManager().currentPage(nullptr);
+        engine.uiManager().uiAreaSelector().show = true;
     }
 
 } // space

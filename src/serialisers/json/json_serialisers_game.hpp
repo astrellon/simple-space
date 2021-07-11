@@ -9,6 +9,7 @@ using nlohmann::json;
 namespace space
 {
     class GameSession;
+    class EditorGameSession;
     class Engine;
     class SpaceObject;
     class Character;
@@ -43,6 +44,9 @@ namespace space
 
     json toJson(const GameSession &input);
     std::unique_ptr<GameSession> fromJsonGameSession(Engine &engine, const json &j);
+    std::unique_ptr<EditorGameSession> fromJsonEditorGameSession(Engine &engine, const json &j);
+
+    void loadIntoGameSession(GameSession &session, Engine &engine, const json &j);
 
     json toJsonBase(const SpaceObject &input);
     json toJson(const SpaceObject &input);

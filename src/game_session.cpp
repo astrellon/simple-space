@@ -372,6 +372,15 @@ namespace space
                 obj->onPostLoad(*this, context);
             }
         }
+
+        if (playerController().controlling() == space::ControlShip)
+        {
+            setPlayerControllingShip(playerController().controllingShip());
+        }
+        else if (playerController().controlling() == space::ControlCharacter)
+        {
+            setPlayerControllingCharacter();
+        }
     }
 
     ObjectId GameSession::nextObjectId()

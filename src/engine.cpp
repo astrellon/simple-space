@@ -128,15 +128,6 @@ namespace space
             if (gameSession)
             {
                 _currentSession = gameSession;
-                auto &player = gameSession->playerController();
-                if (player.controlling() == space::ControlShip)
-                {
-                    gameSession->setPlayerControllingShip(player.controllingShip());
-                }
-                else if (player.controlling() == space::ControlCharacter)
-                {
-                    gameSession->setPlayerControllingCharacter();
-                }
             }
 
             onGameSceneStarted.emit(_gameScene.get());

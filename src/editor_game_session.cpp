@@ -2,6 +2,9 @@
 
 #include "editor/editor_camera_target.hpp"
 
+#include "game/character.hpp"
+#include "game/space_object.hpp"
+
 #include "keyboard.hpp"
 #include "engine.hpp"
 #include "utils.hpp"
@@ -11,7 +14,7 @@ namespace space
 {
     EditorGameSession::EditorGameSession(Engine &engine) : GameSession(engine)
     {
-        _cameraTarget = createObject<EditorCameraTarget>(nextObjectId());
+        _cameraTarget = createObject<EditorCameraTarget>("__EDITOR_CAMERA_TARGET");
     }
 
     void EditorGameSession::update(sf::Time dt)
@@ -24,22 +27,28 @@ namespace space
         const float speed = 150.0f;
         auto seconds = dt.asSeconds();
         auto cameraMove = speed * seconds;
+        sf::Vector2f moveTarget;
 
         if (Keyboard::isKeyPressed(sf::Keyboard::A))
         {
-            _cameraTarget->transform().position.x -= cameraMove;
+            moveTarget.x -= cameraMove;
         }
         if (Keyboard::isKeyPressed(sf::Keyboard::D))
         {
-            _cameraTarget->transform().position.x += cameraMove;
+            moveTarget.x += cameraMove;
         }
         if (Keyboard::isKeyPressed(sf::Keyboard::W))
         {
-            _cameraTarget->transform().position.y -= cameraMove;
+            moveTarget.y -= cameraMove;
         }
         if (Keyboard::isKeyPressed(sf::Keyboard::S))
         {
-            _cameraTarget->transform().position.y += cameraMove;
+            moveTarget.y += cameraMove;
+        }
+
+        if (moveTarget != sf::Vector2f())
+        {
+            _cameraTarget->transform().position += moveTarget;
         }
     }
 
@@ -58,5 +67,22 @@ namespace space
             auto pos = Utils::getPosition(_cameraTarget->worldTransform());
             drawAtObject(*_cameraTarget, pos, sceneRender);
         }
+    }
+
+    void EditorGameSession::onPostLoad(LoadingContext &context)
+    {
+        GameSession::onPostLoad(context);
+
+        auto character = _playerController.controllingCharacter();
+        if (character != nullptr)
+        {
+            auto target = Utils::getPosition(character->worldTransform());
+            moveSpaceObject(_cameraTarget, target, character->insideArea());
+        }
+    }
+
+    void EditorGameSession::moveCameraTo(Area &area, sf::Vector2f position)
+    {
+        moveSpaceObject(_cameraTarget, position, &area);
     }
 } // space
