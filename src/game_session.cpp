@@ -694,11 +694,6 @@ namespace space
             return;
         }
 
-        if (Mouse::isMousePressed(sf::Mouse::Left))
-        {
-            std::cout << "Click\n";
-        }
-
         auto mousePosition = sf::Mouse::getPosition(*_engine.window());
         auto worldMousePosition = _engine.window()->mapPixelToCoords(mousePosition, sceneRender.camera().view());
 

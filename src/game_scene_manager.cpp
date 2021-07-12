@@ -17,8 +17,44 @@
 #include "serialisers/json/json.hpp"
 #include "serialisers/json/json_serialisers_game.hpp"
 
+#include "definition_manager.hpp"
+#include "definitions/placeable_item_definition.hpp"
+#include "game/planet_surface.hpp"
+
 namespace space
 {
+    void addTrees(Engine &engine)
+    {
+        auto session = engine.currentSession();
+
+        auto &definitionManager = engine.definitionManager();
+        const PlaceableItemDefinition *tree1;
+
+        if (!definitionManager.tryGet<space::PlaceableItemDefinition>("TREE_1", &tree1))
+        {
+            std::cout << "Could not find tree :(\n";
+            return;
+        }
+
+        PlanetSurface *planetSurface;
+        if (!session->tryGetSpaceObject<PlanetSurface>("PLANET_GRASSY_1", &planetSurface))
+        {
+            std::cout << "Could not find planet surface :(\n";
+            return;
+        }
+
+        auto itemId = 100;
+        for (auto i = 0; i < 20000; i++)
+        {
+            auto newTree = session->createItem<PlaceableItem>(itemId++, *tree1);
+            auto step = i / 100;
+            auto offset = step % 2 ? 30 : 0;
+            auto y = step * 80;
+            auto x = (i % 100) * 60 + offset;
+            planetSurface->area().addPlaceable(*session, newTree, sf::Vector2f(x, y));
+        }
+    }
+
     void GameSceneManager::switchToMainMenu(Engine &engine)
     {
         engine.gameScene(std::make_unique<space::MainMenuScene>(engine));
@@ -33,6 +69,8 @@ namespace space
 
         engine.gameScene(space::fromJsonGameSession(engine, startingGameJson));
         engine.gameUIManager().currentPage(engine.gameUIManager().inGameUIPage());
+
+        addTrees(engine);
     }
 
     void GameSceneManager::startEditor(Engine &engine)
@@ -45,6 +83,8 @@ namespace space
         engine.gameUIManager().currentPage(nullptr);
         engine.uiManager().uiAreaSelector().show = true;
         engine.uiManager().uiSelected().show = true;
+
+        addTrees(engine);
     }
 
 } // space

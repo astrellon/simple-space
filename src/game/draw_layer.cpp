@@ -45,7 +45,12 @@ namespace space
 
     bool DrawLayer::sortByPosition(SpaceObject *obj1, SpaceObject *obj2)
     {
-        return obj1->transform().position.y < obj2->transform().position.y;
+        auto diff = obj1->transform().position.y - obj2->transform().position.y;
+        if (diff == 0.0f)
+        {
+            return obj1->id < obj2->id;
+        }
+        return diff < 0.0f;
     }
 
     bool DrawLayer::checkForMouse(const Area *inRelationToArea, GameSession &session, sf::Vector2f mousePosition) const
