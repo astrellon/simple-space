@@ -58,7 +58,7 @@ namespace space
             void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform);
             void draw(GameSession &session, RenderCamera &target);
             void onPostLoad(GameSession &session, LoadingContext &context);
-            bool checkForMouse(GameSession &session, sf::Vector2f mousePosition) const;
+            bool checkForMouse(const Area *inRelationTo, GameSession &session, sf::Vector2f mousePosition) const;
 
             void addObject(SpaceObject *obj);
             void removeObject(SpaceObject *obj);

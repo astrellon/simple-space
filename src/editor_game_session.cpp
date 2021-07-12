@@ -22,7 +22,7 @@ namespace space
         for (auto &spaceObject : _spaceObjectsUpdateEveryFrame)
             spaceObject->update(*this, dt, sf::Transform::Identity);
 
-        handleMouse();
+        handleMouse(_cameraTarget);
 
         const float speed = 150.0f;
         auto seconds = dt.asSeconds();

@@ -55,7 +55,7 @@ namespace space
             virtual void update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform);
             virtual void draw(GameSession &session, RenderCamera &target);
             virtual void onPostLoad(GameSession &session, LoadingContext &context);
-            virtual bool doesMouseHover(GameSession &session, sf::Vector2f mousePosition) const;
+            virtual bool doesMouseHover(const Area *inRelationTo, GameSession &session, sf::Vector2f mousePosition) const;
 
             virtual void drawInterior(GameSession &session, RenderCamera &target);
 

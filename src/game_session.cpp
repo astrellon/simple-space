@@ -299,7 +299,7 @@ namespace space
         for (auto &spaceObject : _spaceObjectsUpdateEveryFrame)
             spaceObject->update(*this, dt, sf::Transform::Identity);
 
-        handleMouse();
+        handleMouse(_playerController.controllingObject());
 
         if (_takingAPhoto)
         {
@@ -482,7 +482,7 @@ namespace space
         _nextFrameState.clear();
     }
 
-    bool GameSession::checkMouseSpacePortal(sf::Vector2f mousePosition, SpacePortal *spacePortal)
+    bool GameSession::checkMouseSpacePortal(SpaceObject *cameraTarget, sf::Vector2f mousePosition, SpacePortal *spacePortal)
     {
         auto &sceneRender = _engine.sceneRender();
 
@@ -514,7 +514,7 @@ namespace space
         auto diff = targetObject->transform().position - spacePortal->transform().position;
         mousePosition += diff;
 
-        targetStarSystem->checkForMouse(*this, mousePosition);
+        targetStarSystem->checkForMouse(cameraTarget->insideArea(), *this, mousePosition);
         return true;
     }
 
@@ -678,7 +678,7 @@ namespace space
         _renderStack.pop_back();
     }
 
-    void GameSession::handleMouse()
+    void GameSession::handleMouse(SpaceObject *target)
     {
         auto &sceneRender = _engine.sceneRender();
         _nextMouseOverObject = nullptr;
@@ -689,16 +689,26 @@ namespace space
             return;
         }
 
+        if (!target)
+        {
+            return;
+        }
+
+        if (Mouse::isMousePressed(sf::Mouse::Left))
+        {
+            std::cout << "Click\n";
+        }
+
         auto mousePosition = sf::Mouse::getPosition(*_engine.window());
         auto worldMousePosition = _engine.window()->mapPixelToCoords(mousePosition, sceneRender.camera().view());
 
-        auto rootWorld = _playerController.controllingObject()->rootObject();
+        auto rootWorld = target->rootObject();
 
         if (_takingAPhoto)
         {
             if (Mouse::isMousePressed(sf::Mouse::Left))
             {
-                auto livePhoto = createLivePhoto(*_playerController.controllingObject()->insideArea(), sf::IntRect(worldMousePosition.x, worldMousePosition.y, 256, 256));
+                auto livePhoto = createLivePhoto(*target->insideArea(), sf::IntRect(worldMousePosition.x, worldMousePosition.y, 256, 256));
 
                 _playerController.photoAlbum().addPhoto(livePhoto);
                 _playerController.compendium().processNewPhoto(livePhoto);
@@ -714,7 +724,7 @@ namespace space
             auto foundInPortal = false;
             for (auto spacePortal : starSystem->area().spacePortals())
             {
-                foundInPortal = checkMouseSpacePortal(worldMousePosition, spacePortal);
+                foundInPortal = checkMouseSpacePortal(target, worldMousePosition, spacePortal);
                 if (foundInPortal)
                 {
                     break;
@@ -723,12 +733,12 @@ namespace space
 
             if (!foundInPortal)
             {
-                starSystem->checkForMouse(*this, worldMousePosition);
+                starSystem->checkForMouse(target->insideArea(), *this, worldMousePosition);
             }
         }
         else if (rootWorld->tryCast(planetSurface))
         {
-            planetSurface->checkForMouse(*this, worldMousePosition);
+            planetSurface->checkForMouse(target->insideArea(), *this, worldMousePosition);
         }
 
         if (_nextMouseOverObject != _mouseOverObject)

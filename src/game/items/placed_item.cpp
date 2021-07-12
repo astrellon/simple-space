@@ -196,7 +196,7 @@ namespace space
         }
     }
 
-    bool PlacedItem::doesMouseHover(GameSession &session, sf::Vector2f mousePosition) const
+    bool PlacedItem::doesMouseHover(const Area *inRelationTo, GameSession &session, sf::Vector2f mousePosition) const
     {
         auto worldPos = Utils::getPosition(_worldTransform);
         auto local = mousePosition - worldPos;

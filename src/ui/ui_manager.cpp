@@ -3,13 +3,14 @@
 #include "ui_window.hpp"
 #include "ui_debug.hpp"
 #include "ui_definitions.hpp"
-#include "ui_selected.hpp"
 #include "ui_objects.hpp"
 #include "ui_frame_buffers.hpp"
 #include "ui_photo_album.hpp"
 #include "ui_compendium.hpp"
 #include "ui_element_window.hpp"
+
 #include "editor/ui_area_selector.hpp"
+#include "editor/ui_selected.hpp"
 
 namespace space
 {

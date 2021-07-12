@@ -1,8 +1,11 @@
 #pragma once
 
+#include <memory>
+
 #include "ui_window.hpp"
 #include "../types.hpp"
 #include "../game/area.hpp"
+#include "ui_object_edit.hpp"
 
 namespace space
 {
@@ -13,6 +16,7 @@ namespace space
     {
         public:
             // Fields
+            ObjectId selectedObjectId;
 
             // Constructor
             UIObjects();
@@ -25,15 +29,8 @@ namespace space
 
         private:
             // Fields
-            ObjectId _selectedObjectId;
+            std::unique_ptr<UIObjectEdit> _selectedObjectEditor;
 
             // Methods
-            void drawSpaceObject(SpaceObject &spaceObject);
-            void drawArea(Area &area);
-            void drawLayer(DrawLayer &layer);
-
-            static const char *areaTypeString(AreaType type);
-
-            static bool inputVector2f(const std::string &label, sf::Vector2f &input);
     };
 } // space

@@ -78,9 +78,9 @@ namespace space
         }
     }
 
-    bool PlanetSurface::checkForMouse(GameSession &session, sf::Vector2f mousePosition)
+    bool PlanetSurface::checkForMouse(const Area *inRelationTo, GameSession &session, sf::Vector2f mousePosition)
     {
-        return _area.checkForMouse(session, mousePosition);
+        return _area.checkForMouse(inRelationTo, session, mousePosition);
     }
 
     bool PlanetSurface::loopOver(LoopObjectCallback callback)

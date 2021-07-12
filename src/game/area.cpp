@@ -83,14 +83,14 @@ namespace space
         }
     }
 
-    bool Area::checkForMouse(GameSession &session, sf::Vector2f mousePosition) const
+    bool Area::checkForMouse(const Area *inRelationTo, GameSession &session, sf::Vector2f mousePosition) const
     {
-        if (_main.checkForMouse(session, mousePosition))
+        if (_main.checkForMouse(inRelationTo, session, mousePosition))
         {
             return true;
         }
 
-        if (_background.checkForMouse(session, mousePosition))
+        if (_background.checkForMouse(inRelationTo, session, mousePosition))
         {
             return true;
         }

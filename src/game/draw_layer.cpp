@@ -48,11 +48,11 @@ namespace space
         return obj1->transform().position.y < obj2->transform().position.y;
     }
 
-    bool DrawLayer::checkForMouse(GameSession &session, sf::Vector2f mousePosition) const
+    bool DrawLayer::checkForMouse(const Area *inRelationToArea, GameSession &session, sf::Vector2f mousePosition) const
     {
         for (auto iter = _drawables.rbegin(); iter != _drawables.rend(); ++iter)
         {
-            if ((*iter)->doesMouseHover(session, mousePosition))
+            if ((*iter)->doesMouseHover(inRelationToArea, session, mousePosition))
             {
                 session.setNextMouseHover(*iter);
                 return true;

@@ -69,9 +69,9 @@ namespace space
         _area.draw(session, target);
     }
 
-    bool StarSystem::checkForMouse(GameSession &session, sf::Vector2f mousePosition)
+    bool StarSystem::checkForMouse(const Area *inRelationTo, GameSession &session, sf::Vector2f mousePosition)
     {
-        return _area.checkForMouse(session, mousePosition);
+        return _area.checkForMouse(inRelationTo, session, mousePosition);
     }
 
     void StarSystem::init(GameSession &session)

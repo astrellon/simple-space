@@ -9,6 +9,7 @@ namespace space
     class SpaceObject;
     class GameSession;
     class RenderCamera;
+    class Area;
 
     class DrawLayer
     {
@@ -31,7 +32,7 @@ namespace space
 
             void sortObjects();
 
-            bool checkForMouse(GameSession &session, sf::Vector2f mousePosition) const;
+            bool checkForMouse(const Area *inRelationToArea, GameSession &session, sf::Vector2f mousePosition) const;
 
         private:
             // Fields

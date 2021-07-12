@@ -120,12 +120,11 @@ namespace space
         _area.onPostLoad(session, context);
     }
 
-    bool Ship::doesMouseHover(GameSession &session, sf::Vector2f mousePosition) const
+    bool Ship::doesMouseHover(const Area *inRelationTo, GameSession &session, sf::Vector2f mousePosition) const
     {
-        auto &controller = session.playerController();
-        if (controller.controlling() == ControlCharacter && controller.controllingCharacter()->insideArea()->partOfShip() == this)
+        if (inRelationTo && inRelationTo->partOfShip() == this)
         {
-            return _area.checkForMouse(session, mousePosition);
+            return _area.checkForMouse(inRelationTo, session, mousePosition);
         }
         else
         {

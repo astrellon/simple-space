@@ -119,7 +119,7 @@ namespace space
             target.texture().draw(shape, _worldTransform);
         }
     }
-    bool Character::doesMouseHover(GameSession &session, sf::Vector2f mousePosition) const
+    bool Character::doesMouseHover(const Area *inRelationToArea, GameSession &session, sf::Vector2f mousePosition) const
     {
         auto worldPos = Utils::getPosition(_worldTransform);
         auto local = mousePosition - worldPos;

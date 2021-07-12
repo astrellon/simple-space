@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ui_panel.hpp"
+#include "../ui_panel.hpp"
 
 namespace space
 {
@@ -15,6 +15,11 @@ namespace space
             virtual bool isOpen(Engine &engine);
             virtual void checkPosition(Engine &engine);
             virtual void doDraw(Engine &engine);
+
+        private:
+            // Fields
+
+            // Methods
 
     };
 } // space

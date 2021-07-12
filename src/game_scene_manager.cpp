@@ -12,6 +12,7 @@
 #include "game-ui/in_game_ui_page.hpp"
 #include "ui/ui_manager.hpp"
 #include "ui/editor/ui_area_selector.hpp"
+#include "ui/editor/ui_selected.hpp"
 
 #include "serialisers/json/json.hpp"
 #include "serialisers/json/json_serialisers_game.hpp"
@@ -43,6 +44,7 @@ namespace space
         engine.gameScene(space::fromJsonEditorGameSession(engine, startingGameJson));
         engine.gameUIManager().currentPage(nullptr);
         engine.uiManager().uiAreaSelector().show = true;
+        engine.uiManager().uiSelected().show = true;
     }
 
 } // space

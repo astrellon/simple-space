@@ -1,12 +1,15 @@
 #include "ui_selected.hpp"
 
-#include "../imgui/imgui.h"
-#include "../imgui/imgui-SFML.h"
+#include "../../imgui/imgui.h"
+#include "../../imgui/imgui-SFML.h"
 
-#include "../engine.hpp"
-#include "../game_session.hpp"
-#include "../controllers/player_controller.hpp"
-#include "../definitions/compendium_definition.hpp"
+#include "../../engine.hpp"
+#include "../../game_session.hpp"
+#include "../../controllers/player_controller.hpp"
+#include "../../definitions/compendium_definition.hpp"
+
+#include "../ui_manager.hpp"
+#include "../ui_objects.hpp"
 
 namespace space
 {
@@ -19,13 +22,12 @@ namespace space
 
     bool UISelected::isOpen(Engine &engine)
     {
-        return false;
-        // if (!engine.currentSession())
-        // {
-        //     return false;
-        // }
+        if (!engine.currentSession())
+        {
+            return false;
+        }
 
-        // return show && engine.currentSession()->playerController().selectedObject().size() > 0;
+        return show && engine.currentSession()->playerController().selectedObject().size() > 0;
     }
 
     void UISelected::checkPosition(Engine &engine)
@@ -55,13 +57,10 @@ namespace space
         auto typeStr = toString(obj->type());
         ImGui::Text("%s: %s", obj->id.c_str(), typeStr.c_str());
 
-        auto compendiumDef = obj->compendiumDefinition();
-        if (compendiumDef)
+        if (ImGui::Button("Show in objects"))
         {
-            ImGui::NewLine();
-            ImGui::Text("Compendium:");
-            ImGui::Text("Name: %s", compendiumDef->name.c_str());
-            ImGui::Text("Description: %s", compendiumDef->description.c_str());
+            engine.uiManager().uiObjects().show = true;
+            engine.uiManager().uiObjects().selectedObjectId = id;
         }
     }
 } // space
