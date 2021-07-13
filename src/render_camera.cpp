@@ -6,9 +6,8 @@
 namespace space
 {
     RenderCamera::RenderCamera(Engine &engine, std::string debugName) : _camera(engine, debugName), _created(false),
-        _batchBuffer(sf::PrimitiveType::Triangles, sf::VertexBuffer::Dynamic), _batchTexture(nullptr), _batchBufferIndex(0)
+        _batchBuffer(sf::PrimitiveType::Triangles, 0xFFFF), _batchTexture(nullptr), _batchBufferIndex(0)
     {
-        _batchBuffer.create(0xFFFF);
     }
 
     RenderCamera::~RenderCamera()
@@ -53,21 +52,23 @@ namespace space
 
         _batchTexture = sprite.getTexture();
 
-        static std::vector<sf::Vertex> tempTransform;
+        // static std::vector<sf::Vertex> tempTransform;
 
-        if (tempTransform.size() < vertices.size())
-        {
-            tempTransform.reserve(vertices.size());
-        }
+        // if (tempTransform.size() < vertices.size())
+        // {
+        //     tempTransform.reserve(vertices.size());
+        // }
 
-        tempTransform.assign(vertices.data(), vertices.data() + vertices.size());
+        // tempTransform.assign(vertices.data(), vertices.data() + vertices.size());
 
         for (auto i = 0u; i < vertices.size(); i++)
         {
-            tempTransform[i].position = worldTransform * tempTransform[i].position;
+            _batchBuffer[_batchBufferIndex + i].position = worldTransform * vertices[i].position;
+            _batchBuffer[_batchBufferIndex + i].color = vertices[i].color;
+            _batchBuffer[_batchBufferIndex + i].texCoords = vertices[i].texCoords;
         }
 
-        _batchBuffer.update(tempTransform.data(), vertices.size(), _batchBufferIndex);
+        // _batchBuffer.update(tempTransform.data(), vertices.size(), _batchBufferIndex);
         _batchBufferIndex += vertices.size();
     }
 
@@ -77,7 +78,9 @@ namespace space
         {
             sf::RenderStates states;
             states.texture = _batchTexture;
-            texture().draw(_batchBuffer, 0, _batchBufferIndex, states);
+            // texture().draw(_batchBuffer, 0, _batchBufferIndex, states);
+            _batchBuffer.maxDrawCount = _batchBufferIndex;
+            texture().draw(_batchBuffer, states);
             _batchBufferIndex = 0;
             _batchTexture = nullptr;
             DrawDebug::glDraw++;

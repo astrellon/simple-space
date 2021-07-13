@@ -39,7 +39,7 @@ namespace space
             Camera _camera;
             sf::RenderTexture _texture;
             bool _created;
-            sf::VertexBuffer _batchBuffer;
+            sf::VertexArray _batchBuffer;
             const sf::Texture *_batchTexture;
             int _batchBufferIndex;
 
