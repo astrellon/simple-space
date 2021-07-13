@@ -22,9 +22,14 @@ namespace space
             sortObjects();
         }
 
+        auto &view = target.camera().view();
+
         for (auto obj : _drawables)
         {
-            obj->draw(session, target);
+            if (obj->isInView(view))
+            {
+                obj->draw(session, target);
+            }
         }
     }
 

@@ -89,6 +89,20 @@ namespace space
         return str.substr(dotIndex + 1);
     }
 
+    bool Utils::isSpriteInView(const sf::Transform &worldTransform, const sf::FloatRect &spriteBounds, const sf::View &view)
+    {
+        auto worldPos = Utils::getPosition(worldTransform);
+        auto viewPos = view.getTransform().transformPoint(worldPos);
+        auto scale = spriteBounds.getSize().length() / view.getSize().length() + 1.2f;
+
+        if (viewPos.x >= -scale && viewPos.x <= scale && viewPos.y >= -scale && viewPos.y <= scale)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     std::mt19937 Utils::randWithSeed(int seed)
     {
         std::random_device rd;

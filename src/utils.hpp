@@ -39,6 +39,8 @@ namespace space
             static std::string filenameWithoutExt(const std::string &str);
             static std::string getFilenameExt(const std::string &str);
 
+            static bool isSpriteInView(const sf::Transform &worldTransform, const sf::FloatRect &spriteBounds, const sf::View &view);
+
             template <typename T>
             static inline bool remove(std::vector<T> &list, T item)
             {

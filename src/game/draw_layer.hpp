@@ -4,6 +4,8 @@
 
 #include <SFML/Graphics.hpp>
 
+#include "../non_copyable.hpp"
+
 namespace space
 {
     class SpaceObject;
@@ -11,7 +13,7 @@ namespace space
     class RenderCamera;
     class Area;
 
-    class DrawLayer
+    class DrawLayer : private NonCopyable
     {
         public:
             typedef std::vector<SpaceObject *> SpaceObjects;

@@ -203,6 +203,11 @@ namespace space
         return _spriteBounds.contains(local);
     }
 
+    bool PlacedItem::isInView(const sf::View &view) const
+    {
+        return Utils::isSpriteInView(_worldTransform, _spriteBounds, view);
+    }
+
     DrawLayers::Type PlacedItem::drawLayer() const
     {
         return item->placeableDefinition.drawLayer;
