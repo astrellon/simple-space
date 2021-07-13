@@ -158,8 +158,7 @@ namespace space
 
     void PlacedItem::draw(GameSession &session, RenderCamera &target)
     {
-        target.texture().draw(_sprite, _worldTransform);
-        DrawDebug::glDraw++;
+        target.drawSprite(_sprite, _worldTransform * _sprite.getTransform());
 
         if (DrawDebug::showPolygons)
         {

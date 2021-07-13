@@ -28,6 +28,9 @@ namespace space
             void onResize(sf::Vector2f area, float cameraScale);
             void preDraw();
 
+            void drawSprite(const sf::Sprite &sprite, const sf::Transform &worldTransform);
+            void commitBatch();
+
             operator Camera &() { return _camera; }
             operator sf::RenderTexture &() { return _texture; }
 
@@ -36,5 +39,10 @@ namespace space
             Camera _camera;
             sf::RenderTexture _texture;
             bool _created;
+            sf::VertexBuffer _batchBuffer;
+            const sf::Texture *_batchTexture;
+            int _batchBufferIndex;
+
+            // Methods
     };
 } // space

@@ -675,6 +675,8 @@ namespace space
             ignoreShip->drawInterior(*this, target);
         }
 
+        target.commitBatch();
+
         _renderStack.pop_back();
     }
 
