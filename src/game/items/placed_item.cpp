@@ -24,7 +24,7 @@ namespace space
         processItem();
     }
 
-    PlacedItem::PlacedItem(const ItemId &itemId) : SpaceObject(Utils::makeItemId(itemId)), _collider(nullptr)
+    PlacedItem::PlacedItem(const ItemId &itemId) : SpaceObject(Utils::makeItemId(itemId)), _collider(nullptr), _setTransform(false)
     {
 
     }
@@ -36,7 +36,7 @@ namespace space
         processItem();
     }
 
-    PlacedItem::PlacedItem(const ObjectId &id, const ItemId &itemId) : SpaceObject(id), _collider(nullptr)
+    PlacedItem::PlacedItem(const ObjectId &id, const ItemId &itemId) : SpaceObject(id), _collider(nullptr), _setTransform(false)
     {
 
     }
@@ -149,7 +149,11 @@ namespace space
 
     void PlacedItem::update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform)
     {
-        updateWorldTransform(parentTransform);
+        if (!_setTransform)
+        {
+            updateWorldTransform(parentTransform);
+            _setTransform = true;
+        }
     }
 
     void PlacedItem::draw(GameSession &session, RenderCamera &target)

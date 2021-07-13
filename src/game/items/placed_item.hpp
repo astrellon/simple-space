@@ -57,6 +57,7 @@ namespace space
             sf::Sprite _sprite;
             b2Body *_collider;
             sf::FloatRect _spriteBounds;
+            bool _setTransform;
 
             // Methods
             void processItem();

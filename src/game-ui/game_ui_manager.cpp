@@ -63,7 +63,6 @@ namespace space
                 break;
             }
         }
-
     }
 
     void GameUIManager::updateUnderMouse(sf::Vector2f mousePosition)
