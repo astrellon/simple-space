@@ -107,6 +107,7 @@ namespace space
 
     void Character::draw(GameSession &session, RenderCamera &target)
     {
+        target.commitBatch();
         target.texture().draw(_sprite, _worldTransform);
         DrawDebug::glDraw++;
 
