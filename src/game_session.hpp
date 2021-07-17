@@ -51,6 +51,8 @@ namespace space
             ~GameSession();
 
             // Methods
+            bool isEditor() const { return false; }
+
             const SpaceObjectList &spaceObjects() const { return _spaceObjects; }
             const ItemList &items() const { return _items; }
             const CharacterControllerList &characterControllers() const { return _characterControllers; }

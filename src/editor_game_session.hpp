@@ -18,6 +18,8 @@ namespace space
             EditorGameSession(Engine &engine);
 
             // Methods
+            bool isEditor() const { return true; }
+
             virtual void update(sf::Time dt);
             virtual void draw();
             virtual void onPostLoad(LoadingContext &context);

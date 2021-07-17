@@ -50,15 +50,19 @@ namespace space
     void Area::update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform)
     {
         auto transform = parentTransform * _transform;
-        if (_physicsWorld)
-        {
-            for (auto obj : _objects)
-            {
-                obj->prePhysics(session, dt, transform);
-            }
 
-            auto physicsSteps = std::min(dt.asSeconds(), 1.0f / 60.0f);
-            _physicsWorld->Step(physicsSteps, 4, 2);
+        if (!session.isEditor())
+        {
+            if (_physicsWorld)
+            {
+                for (auto obj : _objects)
+                {
+                    obj->prePhysics(session, dt, transform);
+                }
+
+                auto physicsSteps = std::min(dt.asSeconds(), 1.0f / 60.0f);
+                _physicsWorld->Step(physicsSteps, 4, 2);
+            }
         }
 
         for (auto obj : _objects)
