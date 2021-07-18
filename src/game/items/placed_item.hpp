@@ -47,9 +47,13 @@ namespace space
             virtual void draw(GameSession &session, RenderCamera &target);
             virtual void onPostLoad(GameSession &session, LoadingContext &context);
             virtual bool doesMouseHover(const Area *inRelationTo, GameSession &session, sf::Vector2f mousePosition) const;
-            virtual bool isInView(const sf::View &view) const;
 
             virtual DrawLayers::Type drawLayer() const;
+
+            inline sf::FloatRect getBounds() const { return _worldBounds; }
+            bool equals(const PlacedItem *other) const { return other != nullptr && id == other->id; }
+
+            void updateWorldBounds();
 
         private:
             // Fields
@@ -57,6 +61,7 @@ namespace space
             sf::Sprite _sprite;
             b2Body *_collider;
             sf::FloatRect _spriteBounds;
+            sf::FloatRect _worldBounds;
             bool _setTransform;
 
             // Methods

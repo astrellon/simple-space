@@ -274,6 +274,7 @@ namespace space
             result = session.createObject<PlacedItem>(item);
         }
         result->transform().position = position;
+        result->updateWorldBounds();
 
         return true;
     }

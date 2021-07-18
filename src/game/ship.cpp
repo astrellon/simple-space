@@ -134,11 +134,6 @@ namespace space
         }
     }
 
-    bool Ship::isInView(const sf::View &view) const
-    {
-        return Utils::isSpriteInView(_worldTransform, _spriteBounds, view);
-    }
-
     void Ship::drawInterior(GameSession &session, RenderCamera &target)
     {
         target.texture().draw(_interiorSprite, _worldTransform);

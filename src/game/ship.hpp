@@ -56,7 +56,6 @@ namespace space
             virtual void draw(GameSession &session, RenderCamera &target);
             virtual void onPostLoad(GameSession &session, LoadingContext &context);
             virtual bool doesMouseHover(const Area *inRelationTo, GameSession &session, sf::Vector2f mousePosition) const;
-            virtual bool isInView(const sf::View &view) const;
 
             virtual void drawInterior(GameSession &session, RenderCamera &target);
 

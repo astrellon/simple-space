@@ -6,12 +6,26 @@
 
 #include "../non_copyable.hpp"
 
+#include "../quadtree/Quadtree.h"
+
 namespace space
 {
     class SpaceObject;
     class GameSession;
     class RenderCamera;
     class Area;
+    class PlacedItem;
+
+    class DrawLayerPlacedItemsTree : public quadtree::Quadtree<PlacedItem *>, private NonCopyable
+    {
+        public:
+            // Fields
+
+            // Constructor
+            DrawLayerPlacedItemsTree(sf::Vector2f boxSize);
+
+            // Methods
+    };
 
     class DrawLayer : private NonCopyable
     {
@@ -20,9 +34,10 @@ namespace space
 
             // Fields
             bool sortEveryDraw;
+            const bool useQuadTree;
 
             // Constructor
-            DrawLayer(bool sortEveryDraw = false);
+            DrawLayer(bool useQuadTree, bool sortEveryDraw = false);
 
             // Methods
             void draw(GameSession &session, RenderCamera &target);
@@ -39,6 +54,7 @@ namespace space
         private:
             // Fields
             SpaceObjects _drawables;
+            DrawLayerPlacedItemsTree _quadtree;
 
             // Methods
             static bool sortByPosition(SpaceObject *obj1, SpaceObject *obj2);

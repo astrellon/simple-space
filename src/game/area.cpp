@@ -20,7 +20,7 @@
 
 namespace space
 {
-    Area::Area(AreaType type, SpaceObject *partOfObject) : _type(type), _partOfObject(partOfObject), _background(false), _main(true), _foreground(false)
+    Area::Area(AreaType type, SpaceObject *partOfObject) : _type(type), _partOfObject(partOfObject), _background(false, false), _main(type == AreaType::PlanetSurface, true), _foreground(false, false)
     {
         if (type == AreaType::Ship || type == AreaType::PlanetSurface)
         {
@@ -202,6 +202,7 @@ namespace space
 
         auto placedItem = session.createObject<PlacedItem>(item);
         placedItem->transform().position = position;
+        placedItem->updateWorldBounds();
         placedItem->insideArea(this);
         layer->addObject(placedItem);
         _objects.push_back(placedItem);

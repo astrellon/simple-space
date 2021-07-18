@@ -61,6 +61,8 @@ namespace space
 
         _spriteBounds = _sprite.getGlobalBounds();
 
+        updateWorldBounds();
+
         createInteractable();
         _interactable->createInteraction<UseItemAction>(this);
         if (item->placeableDefinition.canPickup)
@@ -80,6 +82,14 @@ namespace space
         });
 
         _interactable->name(item->definition.name);
+    }
+
+    void PlacedItem::updateWorldBounds()
+    {
+        _worldBounds.left = std::max(0.0f, _transform.position.x + _spriteBounds.left);
+        _worldBounds.top = std::max(0.0f, _transform.position.y + _spriteBounds.top);
+        _worldBounds.width = _spriteBounds.width;
+        _worldBounds.height = _spriteBounds.height;
     }
 
     void PlacedItem::addPhysics(b2World &world)
@@ -204,11 +214,6 @@ namespace space
         auto worldPos = Utils::getPosition(_worldTransform);
         auto local = mousePosition - worldPos;
         return _spriteBounds.contains(local);
-    }
-
-    bool PlacedItem::isInView(const sf::View &view) const
-    {
-        return Utils::isSpriteInView(_worldTransform, _spriteBounds, view);
     }
 
     DrawLayers::Type PlacedItem::drawLayer() const
