@@ -63,7 +63,7 @@ namespace space
         for (auto obj : area.objects())
         {
             auto interactable = obj->interactable();
-            if (!interactable || interactable == thisInteractable)
+            if (!interactable || interactable == thisInteractable || interactable->interactions().size() == 0)
             {
                 continue;
             }

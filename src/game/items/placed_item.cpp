@@ -64,7 +64,10 @@ namespace space
         updateWorldBounds();
 
         createInteractable();
-        _interactable->createInteraction<UseItemAction>(this);
+        if (item->placeableDefinition.canUse)
+        {
+            _interactable->createInteraction<UseItemAction>(this);
+        }
         if (item->placeableDefinition.canPickup)
         {
             _interactable->createInteraction<PickupAction>(this);

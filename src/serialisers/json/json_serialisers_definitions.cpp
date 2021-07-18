@@ -413,7 +413,8 @@ namespace space
         auto result = json {
             {"id", input.id},
             {"texturePath", input.texturePath},
-            {"canPickup", input.canPickup}
+            {"canPickup", input.canPickup},
+            {"canUse", input.canUse}
         };
 
         if (input.textureOffset != sf::Vector2f())
@@ -436,6 +437,7 @@ namespace space
         j.at("name").get_to(result->name);
         j.at("texturePath").get_to(result->texturePath);
         Utils::json_try_get(j, "canPickup", result->canPickup);
+        Utils::json_try_get(j, "canUse", result->canUse);
         Utils::json_try_get(j, "textureOffset", result->textureOffset);
 
         auto physicsShapeFind = j.find("physicsShape");

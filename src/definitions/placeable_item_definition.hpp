@@ -11,11 +11,12 @@ namespace space
         public:
             // Fields
             bool canPickup;
+            bool canUse;
             PhysicsShape physicsShape;
             DrawLayers::Type drawLayer;
 
             // Constructor
-            PlaceableItemDefinition(DefinitionId id) : ItemDefinition(id), drawLayer(DrawLayers::Main) { }
+            PlaceableItemDefinition(DefinitionId id) : ItemDefinition(id), canPickup(false), canUse(true), drawLayer(DrawLayers::Main) { }
             virtual ~PlaceableItemDefinition() { }
 
             // Methods

@@ -26,6 +26,7 @@
         "texturePath": "data/textures/tree2.png",
         "textureOffset": [3, 32],
         "canPickup": false,
+        "canUse": false,
         "physicsShape": {
             "type": "circle",
             "radius": 14
@@ -38,6 +39,7 @@
         "texturePath": "data/textures/chestnut-003.png",
         "textureOffset": [6, 62],
         "canPickup": false,
+        "canUse": false,
         "physicsShape": {
             "type": "circle",
             "radius": 14
