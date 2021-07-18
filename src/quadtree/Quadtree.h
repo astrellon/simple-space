@@ -131,7 +131,12 @@ private:
     void add(Node* node, std::size_t depth, const sf::Rect<Float>& box, const T& value)
     {
         assert(node != nullptr);
-        assert(box.contains(value->getBounds()));
+        // assert(box.contains(value->getBounds()));
+        if (!box.contains(value->getBounds()))
+        {
+            return;
+        }
+
         if (isLeaf(node))
         {
             // Insert the value in this node if possible
@@ -179,7 +184,12 @@ private:
     void remove(Node* node, Node* parent, const sf::Rect<Float>& box, const T& value)
     {
         assert(node != nullptr);
-        assert(box.contains(value->getBounds()));
+        // assert(box.contains(value->getBounds()));
+        if (!box.contains(value->getBounds()))
+        {
+            return;
+        }
+
         if (isLeaf(node))
         {
             // Remove the value from node
@@ -240,7 +250,11 @@ private:
     void query(Node* node, const sf::Rect<Float>& box, const sf::Rect<Float>& queryBox, std::vector<T>& values) const
     {
         assert(node != nullptr);
-        assert(queryBox.intersects(box));
+        if (!queryBox.intersects(box))
+        {
+            return;
+        }
+
         for (const auto& value : node->values)
         {
             if (queryBox.intersects(value->getBounds()))

@@ -4,13 +4,14 @@
 
 #include <yoga/Yoga.h>
 
+#include <valgrind/callgrind.h>
+
 #include <iostream>
 #include <thread>
 #include <chrono>
 #include <vector>
 #include <iomanip>
 #include <malloc.h>
-#include <valgrind/callgrind.h>
 
 #include "src/engine.hpp"
 #include "src/resource_manager.hpp"
@@ -100,56 +101,9 @@ void printTimeDifference(const char *prefix, std::chrono::system_clock::time_poi
     std::cout << "Time taken for: " << prefix << " " << diff.count() << "ms" << std::endl;
 }
 
-struct QNode
-{
-    sf::FloatRect box;
-    std::size_t id;
-
-    sf::FloatRect getBounds() const { return box; }
-    bool equals(const QNode *other) { return id == other->id; }
-};
-
-std::vector<QNode> generateRandomNodes(std::size_t n)
-{
-    auto generator = std::default_random_engine();
-    auto originDistribution = std::uniform_real_distribution(0.0f, 1.0f);
-    auto sizeDistribution = std::uniform_real_distribution(0.0f, 0.01f);
-    auto nodes = std::vector<QNode>(n);
-    for (auto i = std::size_t(0); i < n; ++i)
-    {
-        nodes[i].box.left = originDistribution(generator);
-        nodes[i].box.top = originDistribution(generator);
-        nodes[i].box.width = std::min(1.0f - nodes[i].box.left, sizeDistribution(generator));
-        nodes[i].box.height = std::min(1.0f - nodes[i].box.top, sizeDistribution(generator));
-        nodes[i].id = i;
-    }
-    return nodes;
-}
-
 int main()
 {
-    // auto box = sf::FloatRect(0, 0, 1, 1);
-    // auto quad = quadtree::Quadtree<QNode *>(box);
-
-    // std::cout << "Size of quadtree: " << sizeof(quadtree::Quadtree<QNode *>) << std::endl;
-
-    // auto nodes = generateRandomNodes(20000000u);
     auto startTime = std::chrono::high_resolution_clock::now();
-    // for (auto &node : nodes)
-    // {
-    //     quad.add(&node);
-    // }
-    // auto afterAdd = std::chrono::high_resolution_clock::now();
-    // auto smallBox = sf::FloatRect(0.45f, 0.45f, 0.55f, 0.55f);
-
-    // auto found = quad.query(smallBox);
-    // auto afterQuery = std::chrono::high_resolution_clock::now();
-
-    // printTimeDifference("TreeAdd", startTime, afterAdd);
-    // printTimeDifference("Query", afterAdd, afterQuery);
-    // std::cout << "Num found: " << found.size() << std::endl;
-
-    // return 0;
 
     sf::ContextSettings settings;
     settings.majorVersion = 3;
@@ -226,8 +180,6 @@ int main()
 
     printTimeDifference("Overall startup", startTime, endTime);
 
-    CALLGRIND_TOGGLE_COLLECT;
-
     while (window.isOpen())
     {
         space::DrawDebug::allocatedThisFrame = 0;
@@ -247,7 +199,6 @@ int main()
         }
     }
 
-    CALLGRIND_TOGGLE_COLLECT;
     CALLGRIND_DUMP_STATS;
 
     engine.shutdown();

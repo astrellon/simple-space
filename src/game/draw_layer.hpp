@@ -51,6 +51,8 @@ namespace space
 
             bool checkForMouse(const Area *inRelationToArea, GameSession &session, sf::Vector2f mousePosition) const;
 
+            const DrawLayerPlacedItemsTree &quadTree() const { return _quadtree; }
+
         private:
             // Fields
             SpaceObjects _drawables;

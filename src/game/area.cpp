@@ -186,6 +186,25 @@ namespace space
         obj->insideArea(nullptr);
     }
 
+    std::vector<SpaceObject *> Area::getNearbyObjects(sf::FloatRect inRect) const
+    {
+        std::vector<SpaceObject *> result;
+        result.insert(result.begin(), _background.drawables().begin(), _background.drawables().end());
+
+        if (_main.useQuadTree)
+        {
+            auto inView = _main.quadTree().query(inRect);
+            result.reserve(inView.size() + _main.drawables().size() + result.size());
+            for (auto i : inView)
+            {
+                result.push_back(reinterpret_cast<SpaceObject *>(i));
+            }
+
+        }
+        result.insert(result.end(), _main.drawables().begin(), _main.drawables().end());
+        return result;
+    }
+
     PlacedItem *Area::addPlaceable(GameSession &session, PlaceableItem *item, sf::Vector2f position)
     {
         DrawLayer *layer;

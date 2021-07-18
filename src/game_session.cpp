@@ -3,6 +3,8 @@
 #include <SFML/OpenGL.hpp>
 #include "imgui/imgui.h"
 
+#include <valgrind/callgrind.h>
+
 #include "debug/draw_debug.hpp"
 #include "engine.hpp"
 #include "render_camera.hpp"
@@ -261,6 +263,7 @@ namespace space
 
     void GameSession::update(sf::Time dt)
     {
+    CALLGRIND_TOGGLE_COLLECT;
         checkNextFrameState();
 
         if (Keyboard::isKeyDown(sf::Keyboard::F))
@@ -309,10 +312,12 @@ namespace space
         {
             _engine.changeCursor("CURSOR_DEFAULT");
         }
+    CALLGRIND_TOGGLE_COLLECT;
     }
 
     void GameSession::draw()
     {
+    CALLGRIND_TOGGLE_COLLECT;
         //std::cout << "---- New Draw ----" << std::endl;
         _renderStack.clear();
         auto &sceneRender = _engine.sceneRender();
@@ -352,6 +357,7 @@ namespace space
                 drawAtObject(*controllingObject, pos, sceneRender);
             }
         }
+    CALLGRIND_TOGGLE_COLLECT;
     }
 
     void GameSession::onPostLoad(LoadingContext &context)

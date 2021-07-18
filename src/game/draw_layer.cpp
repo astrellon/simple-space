@@ -18,7 +18,7 @@ namespace space
 
     }
 
-    DrawLayer::DrawLayer(bool useQuadTree, bool sortEveryDraw) : sortEveryDraw(sortEveryDraw), useQuadTree(useQuadTree), _quadtree(sf::Vector2f(4096, 4096))
+    DrawLayer::DrawLayer(bool useQuadTree, bool sortEveryDraw) : sortEveryDraw(sortEveryDraw), useQuadTree(useQuadTree), _quadtree(sf::Vector2f(4096 * 2, 4096 * 2))
     {
 
     }

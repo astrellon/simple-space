@@ -65,6 +65,8 @@ namespace space
             const std::vector<SpaceObject *> &objects() const { return _objects; }
             const std::vector<SpacePortal *> &spacePortals() const { return _spacePortals; }
 
+            std::vector<SpaceObject *> getNearbyObjects(sf::FloatRect inRect) const;
+
             PlacedItem *addPlaceable(GameSession &session, PlaceableItem *item, sf::Vector2f position);
 
             void addTeleporters(TeleporterList &result) const;
