@@ -9,6 +9,7 @@
 #include "definitions/planet_definition.hpp"
 #include "game/space_object.hpp"
 #include "game/items/item.hpp"
+#include "game/ihas_area.hpp"
 #include "game_session_render.hpp"
 
 #include "dialogue_manager.hpp"
@@ -37,7 +38,6 @@ namespace space
     class SpacePortal;
     class LoadingContext;
     class LivePhoto;
-    class IHasArea;
 
     class GameSession : public BaseGameScene
     {
@@ -67,6 +67,12 @@ namespace space
                 auto result = obj.get();
                 _spaceObjects.emplace_back(std::move(obj));
                 _spaceObjectsMap[result->id] = result;
+
+                auto hasArea = dynamic_cast<IHasArea *>(result);
+                if (hasArea != nullptr)
+                {
+                    _areaObjects.push_back(hasArea);
+                }
 
                 return result;
             }

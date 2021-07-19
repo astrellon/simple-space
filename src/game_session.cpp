@@ -454,6 +454,12 @@ namespace space
             return;
         }
 
+        auto hasArea = dynamic_cast<IHasArea *>(obj);
+        if (hasArea != nullptr)
+        {
+            Utils::remove(_areaObjects, hasArea);
+        }
+
         Utils::remove(_spaceObjectsUpdateEveryFrame, obj);
 
         if (obj->insideArea())

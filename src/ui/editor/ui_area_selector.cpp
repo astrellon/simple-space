@@ -23,14 +23,10 @@ namespace space
             return;
         }
 
-        auto &objects = session->spaceObjects();
-        for (auto &obj : objects)
+        auto &areaWithObjects = session->objectsWithArea();
+        for (auto hasArea : areaWithObjects)
         {
-            auto hasArea = dynamic_cast<IHasArea *>(obj.get());
-            if (hasArea == nullptr)
-            {
-                continue;
-            }
+            auto obj = dynamic_cast<SpaceObject *>(hasArea);
 
             std::stringstream label;
             label << toString(obj->type()) << ": " << obj->id;
