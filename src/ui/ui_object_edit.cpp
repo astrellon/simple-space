@@ -96,25 +96,25 @@ namespace space
         // ImGui::NewLine();
     }
 
-    void UIObjectEdit::drawLayer(DrawLayer &layer)
-    {
-        for (auto obj : layer.drawables())
-        {
-            auto typeStr = toString(obj->type());
-            ImGui::Text("  - %s: %s", obj->id.c_str(), typeStr.c_str());
-            ImGui::SameLine();
+    // void UIObjectEdit::drawLayer(DrawLayer &layer)
+    // {
+    //     for (auto obj : layer.drawables())
+    //     {
+    //         auto typeStr = toString(obj->type());
+    //         ImGui::Text("  - %s: %s", obj->id.c_str(), typeStr.c_str());
+    //         ImGui::SameLine();
 
-            std::stringstream ss;
-            ss << "Select##" << obj->id;
-            if (ImGui::Button(ss.str().c_str()))
-            {
-                if (_selectHandler)
-                {
-                    _selectHandler(obj);
-                }
-            }
-        }
-    }
+    //         std::stringstream ss;
+    //         ss << "Select##" << obj->id;
+    //         if (ImGui::Button(ss.str().c_str()))
+    //         {
+    //             if (_selectHandler)
+    //             {
+    //                 _selectHandler(obj);
+    //             }
+    //         }
+    //     }
+    // }
 
     const char *UIObjectEdit::areaTypeString(AreaType type)
     {

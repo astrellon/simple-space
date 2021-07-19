@@ -36,7 +36,7 @@ namespace space
             // Methods
             void drawSpaceObject();
             void drawArea(Area &area);
-            void drawLayer(DrawLayer &layer);
+            // void drawLayer(DrawLayer &layer);
 
             static const char *areaTypeString(AreaType type);
 

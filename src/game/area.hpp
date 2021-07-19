@@ -7,7 +7,6 @@
 #include <SFML/Graphics.hpp>
 #include <box2d/box2d.h>
 
-#include "draw_layer.hpp"
 #include "draw_layers.hpp"
 #include "../non_copyable.hpp"
 #include "../types.hpp"
