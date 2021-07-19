@@ -57,15 +57,16 @@ namespace space
         auto rangeSquared = _interactRangeObjects * _interactRangeObjects;
         auto outOfRange = rangeSquared + 1.0f;
         auto size = sf::Vector2f(_interactRangeObjects, _interactRangeObjects);
-        //_canInteractWithInRange.clear();
         std::vector<Interactable *> interactablesToRemove = _canInteractWithInRange.interactables();
 
-        auto thisInteractable = _character ? _character->interactable() : nullptr;
-        auto roughArea = sf::FloatRect(playerPos - size * 0.5f, size);
-        for (auto obj : area.getNearbyObjects(roughArea))
+        static std::vector<SpaceObject *> nearbyObjects;
+        nearbyObjects.clear();
+        area.getObjectsNearby(_interactRangeObjects, *_character, nearbyObjects);
+
+        for (auto obj : nearbyObjects)
         {
             auto interactable = obj->interactable();
-            if (!interactable || interactable == thisInteractable || interactable->interactions().size() == 0)
+            if (!interactable || interactable->interactions().size() == 0)
             {
                 continue;
             }

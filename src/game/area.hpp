@@ -13,6 +13,7 @@
 #include "../types.hpp"
 #include "clone_context.hpp"
 #include "space_object_type.hpp"
+#include "area_quadtree.hpp"
 
 namespace space
 {
@@ -66,12 +67,11 @@ namespace space
             const std::vector<SpaceObject *> &objects() const { return _objects; }
             const std::vector<SpaceObject *> &objects(SpaceObjectType type) const;
 
-            std::vector<SpaceObject *> getNearbyObjects(sf::FloatRect inRect) const;
-
             PlacedItem *addPlaceable(GameSession &session, PlaceableItem *item, sf::Vector2f position);
 
             void addTeleporters(TeleporterList &result) const;
 
+            void getObjectsNearby(sf::FloatRect inRect, std::vector<SpaceObject *> &result) const;
             void getObjectsNearby(float radius, const SpaceObject &toObjects, std::vector<SpaceObject *> &result) const;
             void getObjectsNearby(float radius, const sf::Vector2f &position, std::vector<SpaceObject *> &result) const;
 
@@ -81,10 +81,6 @@ namespace space
             StarSystem *partOfStarSystem() const { return _type == AreaType::StarSystem ? _partOfStarSystem : nullptr; }
 
             b2World *physicsWorld() const { return _physicsWorld.get(); }
-
-            DrawLayer &background() { return _background; }
-            DrawLayer &main() { return _main; }
-            DrawLayer &foreground() { return _foreground; }
 
             bool loopOver(LoopObjectCallback callback);
 
@@ -97,6 +93,11 @@ namespace space
             SpaceObject *_partOfObject;
             sf::Transform _transform;
 
+            AreaQuadtree _quadtree;
+            std::vector<SpaceObject *> _notInQuadTree;
+
+            std::vector<SpaceObject *> _lastDrawnObjects;
+
             union
             {
                 Ship *_partOfShip;
@@ -104,11 +105,7 @@ namespace space
                 StarSystem *_partOfStarSystem;
             };
 
-            DrawLayer _background;
-            DrawLayer _main;
-            DrawLayer _foreground;
-
             // Methods
-            bool tryGetLayer(DrawLayers::Type layer, DrawLayer **result);
+            static bool sortByPosition(SpaceObject *obj1, SpaceObject *obj2);
     };
 } // space

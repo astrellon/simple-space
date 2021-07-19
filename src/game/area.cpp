@@ -20,7 +20,7 @@
 
 namespace space
 {
-    Area::Area(AreaType type, SpaceObject *partOfObject) : _type(type), _partOfObject(partOfObject), _background(false, false), _main(type == AreaType::PlanetSurface, true), _foreground(false, false)
+    Area::Area(AreaType type, SpaceObject *partOfObject) : _type(type), _partOfObject(partOfObject), _quadtree(sf::FloatRect(0, 0, 8192, 8192))
     {
         if (type == AreaType::Ship || type == AreaType::PlanetSurface)
         {
@@ -73,9 +73,26 @@ namespace space
 
     void Area::draw(GameSession &session, RenderCamera &target)
     {
-        _background.draw(session, target);
-        _main.draw(session, target);
-        _foreground.draw(session, target);
+        _lastDrawnObjects.clear();
+
+        auto &view = target.camera().view();
+        auto scale = target.camera().scale();
+        auto size = view.getSize() * scale;
+        auto viewBox = sf::FloatRect(view.getCenter() * scale - size * 0.5f, size);
+
+        static std::vector<SpaceObject *> inViewObjects;
+        inViewObjects.clear();
+         _quadtree.query(viewBox, inViewObjects);
+
+         _lastDrawnObjects.insert(_lastDrawnObjects.begin(), inViewObjects.begin(), inViewObjects.end());
+         _lastDrawnObjects.insert(_lastDrawnObjects.end(), _notInQuadTree.begin(), _notInQuadTree.end());
+
+        std::sort(_lastDrawnObjects.begin(), _lastDrawnObjects.end(), sortByPosition);
+
+        for (auto drawable : _lastDrawnObjects)
+        {
+            drawable->draw(session, target);
+        }
     }
 
     void Area::onPostLoad(GameSession &session, LoadingContext &context)
@@ -89,14 +106,27 @@ namespace space
 
     bool Area::checkForMouse(const Area *inRelationTo, GameSession &session, sf::Vector2f mousePosition) const
     {
-        if (_main.checkForMouse(inRelationTo, session, mousePosition))
+        sf::FloatRect box(mousePosition.x, mousePosition.y, 1, 1);
+        auto queryFound = _quadtree.query(box);
+        if (queryFound.size() > 0)
         {
-            return true;
+            for (auto iter = queryFound.rbegin(); iter != queryFound.rend(); ++iter)
+            {
+                if ((*iter)->doesMouseHover(inRelationTo, session, mousePosition))
+                {
+                    session.setNextMouseHover(*iter);
+                    return true;
+                }
+            }
         }
 
-        if (_background.checkForMouse(inRelationTo, session, mousePosition))
+        for (auto iter = _notInQuadTree.rbegin(); iter != _notInQuadTree.rend(); ++iter)
         {
-            return true;
+            if ((*iter)->doesMouseHover(inRelationTo, session, mousePosition))
+            {
+                session.setNextMouseHover(*iter);
+                return true;
+            }
         }
 
         return false;
@@ -158,22 +188,20 @@ namespace space
 
         _groupedObjects[obj->type()].push_back(obj);
 
+        if (_type == AreaType::PlanetSurface && obj->isStaticObject() && obj->getBounds().getSize() != sf::Vector2f())
+        {
+            _quadtree.add(obj);
+        }
+        else
+        {
+            _notInQuadTree.push_back(obj);
+        }
+
         PlacedItem *placedItem;
         if (obj->tryCast(placedItem))
         {
             placedItem->item->onPlaced(*placedItem);
         }
-
-        DrawLayer *layer;
-        if (tryGetLayer(obj->drawLayer(), &layer))
-        {
-            layer->addObject(obj);
-        }
-        else
-        {
-            std::cout << "Unable to find layer for " << obj->id << std::endl;
-        }
-
     }
     void Area::removeObject(SpaceObject *obj)
     {
@@ -185,42 +213,14 @@ namespace space
             Utils::remove(find->second, obj);
         }
 
-        DrawLayer *layer;
-        if (tryGetLayer(obj->drawLayer(), &layer))
-        {
-            layer->removeObject(obj);
-        }
-
         obj->insideArea(nullptr);
-    }
 
-    std::vector<SpaceObject *> Area::getNearbyObjects(sf::FloatRect inRect) const
-    {
-        std::vector<SpaceObject *> result;
-        result.insert(result.begin(), _background.drawables().begin(), _background.drawables().end());
-
-        if (_main.useQuadTree)
-        {
-            auto inView = _main.quadTree().query(inRect);
-            result.reserve(inView.size() + _main.drawables().size() + result.size());
-            for (auto i : inView)
-            {
-                result.push_back(reinterpret_cast<SpaceObject *>(i));
-            }
-
-        }
-        result.insert(result.end(), _main.drawables().begin(), _main.drawables().end());
-        return result;
+        _quadtree.remove(obj);
+        Utils::remove(_notInQuadTree, obj);
     }
 
     PlacedItem *Area::addPlaceable(GameSession &session, PlaceableItem *item, sf::Vector2f position)
     {
-        DrawLayer *layer;
-        if (!tryGetLayer(item->placeableDefinition.drawLayer, &layer))
-        {
-            return nullptr;
-        }
-
         // Snap position to the inside pixel scaling.
         position /= Utils::InsideScale;
         position.x = std::round(position.x);
@@ -230,9 +230,8 @@ namespace space
         auto placedItem = session.createObject<PlacedItem>(item);
         placedItem->transform().position = position;
         placedItem->updateWorldBounds();
-        placedItem->insideArea(this);
-        layer->addObject(placedItem);
-        _objects.push_back(placedItem);
+
+        addObject(placedItem);
 
         item->onPlaced(*placedItem);
 
@@ -254,46 +253,40 @@ namespace space
         }
     }
 
-    bool Area::tryGetLayer(DrawLayers::Type layer, DrawLayer **result)
+    void Area::getObjectsNearby(sf::FloatRect inRect, std::vector<SpaceObject *> &result) const
     {
-        if (layer == DrawLayers::Background) { *result = &_background; return true; }
-        if (layer == DrawLayers::Main) { *result = &_main; return true; }
-        if (layer == DrawLayers::Foreground) { *result = &_foreground; return true; }
+        _quadtree.query(inRect, result);
 
-        return false;
+        for (auto obj : _notInQuadTree)
+        {
+            auto pos = obj->transform().position;
+            if (inRect.contains(pos))
+            {
+                result.push_back(obj);
+            }
+        }
     }
 
     void Area::getObjectsNearby(float radius, const SpaceObject &toObject, std::vector<SpaceObject *> &result) const
     {
-        auto pos = Utils::getPosition(toObject.worldTransform());
-
-        auto lengthSquared = radius * radius;
-        for (auto obj : _objects)
+        // auto pos = Utils::getPosition(toObject.worldTransform());
+        auto pos = toObject.transform().position;
+        sf::FloatRect box(pos.x - radius, pos.y - radius, radius * 2, radius * 2);
+        getObjectsNearby(box, result);
+        for (auto iter = result.begin(); iter != result.end(); ++iter)
         {
-            if (obj == &toObject)
+            if ((*iter)->id == toObject.id)
             {
-                continue;
-            }
-
-            auto dist = (pos - obj->transform().position).lengthSquared();
-            if (dist <= lengthSquared)
-            {
-                result.push_back(obj);
+                result.erase(iter);
+                break;
             }
         }
     }
 
     void Area::getObjectsNearby(float radius, const sf::Vector2f &position, std::vector<SpaceObject *> &result) const
     {
-        auto lengthSquared = radius * radius;
-        for (auto obj : _objects)
-        {
-            auto dist = (position - obj->transform().position).lengthSquared();
-            if (dist <= lengthSquared)
-            {
-                result.push_back(obj);
-            }
-        }
+        sf::FloatRect box(position.x - radius, position.y - radius, radius * 2, radius * 2);
+        getObjectsNearby(box, result);
     }
 
     bool Area::loopOver(LoopObjectCallback callback)
@@ -307,5 +300,20 @@ namespace space
         }
 
         return true;
+    }
+
+    bool Area::sortByPosition(SpaceObject *obj1, SpaceObject *obj2)
+    {
+        auto layerDiff = obj1->drawLayer() - obj2->drawLayer();
+        if (layerDiff == 0)
+        {
+            auto diff = obj1->transform().position.y - obj2->transform().position.y;
+            if (diff == 0.0f)
+            {
+                return obj1->id < obj2->id;
+            }
+            return diff < 0.0f;
+        }
+        return layerDiff < 0;
     }
 } // space

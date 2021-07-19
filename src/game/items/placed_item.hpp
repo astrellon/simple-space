@@ -47,11 +47,11 @@ namespace space
             virtual void draw(GameSession &session, RenderCamera &target);
             virtual void onPostLoad(GameSession &session, LoadingContext &context);
             virtual bool doesMouseHover(const Area *inRelationTo, GameSession &session, sf::Vector2f mousePosition) const;
+            virtual bool isStaticObject() const { return true; }
 
             virtual DrawLayers::Type drawLayer() const;
 
-            inline sf::FloatRect getBounds() const { return _worldBounds; }
-            bool equals(const PlacedItem *other) const { return other != nullptr && id == other->id; }
+            virtual sf::FloatRect getBounds() const { return _worldBounds; }
 
             void updateWorldBounds();
 

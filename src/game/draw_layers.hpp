@@ -8,12 +8,7 @@ namespace space
     class DrawLayers
     {
         public:
-            enum Type {
-                NotSet = 0x00,
-                Background = 0x01,
-                Main = 0x02,
-                Foreground = 0x04
-            };
+            enum Type { NotSet, Background, Main, Foreground };
             // Fields
 
             // Methods

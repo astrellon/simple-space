@@ -13,10 +13,6 @@ namespace quadtree
 template<typename T, typename Float = float>
 class Quadtree
 {
-    // static_assert(std::is_convertible_v<std::invoke_result_t<GetBox, const T&>, sf::Rect<Float>>,
-    //     "GetBox must be a callable of signature sf::Rect<Float>(const T&)");
-    // static_assert(std::is_convertible_v<std::invoke_result_t<Equal, const T&, const T&>, bool>,
-    //     "Equal must be a callable of signature bool(const T&, const T&)");
     static_assert(std::is_arithmetic_v<Float>);
 
 public:
@@ -36,6 +32,10 @@ public:
         remove(mRoot.get(), nullptr, mBox, value);
     }
 
+    void query(const sf::Rect<Float>& box, std::vector<T> &result) const
+    {
+        query(mRoot.get(), mBox, box, result);
+    }
     std::vector<T> query(const sf::Rect<Float>& box) const
     {
         auto values = std::vector<T>();
@@ -62,8 +62,6 @@ private:
 
     sf::Rect<Float> mBox;
     std::unique_ptr<Node> mRoot;
-    // GetBox mGetBox;
-    // Equal mEqual;
 
     bool isLeaf(const Node* node) const
     {
@@ -79,7 +77,7 @@ private:
             // North West
             case 0:
                 return sf::Rect<Float>(origin, childSize);
-            // Norst East
+            // North East
             case 1:
                 return sf::Rect<Float>(sf::Vector2<Float>(origin.x + childSize.x, origin.y), childSize);
             // South West
@@ -215,7 +213,8 @@ private:
         // Find the value in node->values
         auto it = std::find_if(std::begin(node->values), std::end(node->values),
             [this, &value](const auto& rhs){ return value->equals(rhs); });
-        assert(it != std::end(node->values) && "Trying to remove a value that is not present in the node");
+        // assert(it != std::end(node->values) && "Trying to remove a value that is not present in the node");
+        if (it == std::end(node->values)) return;
         // Swap with the last element and pop back
         *it = std::move(node->values.back());
         node->values.pop_back();

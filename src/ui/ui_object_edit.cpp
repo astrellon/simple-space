@@ -83,17 +83,17 @@ namespace space
     void UIObjectEdit::drawArea(Area &area)
     {
         ImGui::Text("Area");
-        ImGui::Text("- Background:");
-        drawLayer(area.background());
-        ImGui::NewLine();
+        // ImGui::Text("- Background:");
+        // drawLayer(area.background());
+        // ImGui::NewLine();
 
-        ImGui::Text("- Main:");
-        drawLayer(area.main());
-        ImGui::NewLine();
+        // ImGui::Text("- Main:");
+        // drawLayer(area.main());
+        // ImGui::NewLine();
 
-        ImGui::Text("- Foreground:");
-        drawLayer(area.foreground());
-        ImGui::NewLine();
+        // ImGui::Text("- Foreground:");
+        // drawLayer(area.foreground());
+        // ImGui::NewLine();
     }
 
     void UIObjectEdit::drawLayer(DrawLayer &layer)

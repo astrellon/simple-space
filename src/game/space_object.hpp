@@ -62,6 +62,11 @@ namespace space
             virtual bool doesMouseHover(const Area *inRelationTo, GameSession &session, sf::Vector2f mousePosition) const { return false; }
             virtual bool isGenerated() const { return false; }
 
+            virtual sf::FloatRect getBounds() const { return sf::FloatRect(); }
+            virtual bool equals(const SpaceObject *other) const { return other != nullptr && id == other->id; }
+
+            virtual bool isStaticObject() const { return false; }
+
             virtual const CompendiumDefinition *compendiumDefinition() const { return nullptr; }
 
             virtual DrawLayers::Type drawLayer() const { return DrawLayers::Main; }
