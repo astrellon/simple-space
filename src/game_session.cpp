@@ -664,11 +664,11 @@ namespace space
         auto starSystem = dynamic_cast<StarSystem *>(renderObject);
         if (starSystem)
         {
-            for (auto spacePortal : starSystem->area().spacePortals())
+            for (auto spacePortal : starSystem->area().objects(SpaceObjectType::SpacePortal))
             {
                 if (_renderStack.size() <= 1)
                 {
-                    drawSpacePortal(spacePortal);
+                    drawSpacePortal(spacePortal->as<SpacePortal>());
                 }
             }
         }
@@ -725,9 +725,9 @@ namespace space
         if (rootWorld->tryCast(starSystem))
         {
             auto foundInPortal = false;
-            for (auto spacePortal : starSystem->area().spacePortals())
+            for (auto spacePortal : starSystem->area().objects(SpaceObjectType::SpacePortal))
             {
-                foundInPortal = checkMouseSpacePortal(target, worldMousePosition, spacePortal);
+                foundInPortal = checkMouseSpacePortal(target, worldMousePosition, spacePortal->as<SpacePortal>());
                 if (foundInPortal)
                 {
                     break;

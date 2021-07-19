@@ -12,6 +12,7 @@
 #include "../non_copyable.hpp"
 #include "../types.hpp"
 #include "clone_context.hpp"
+#include "space_object_type.hpp"
 
 namespace space
 {
@@ -63,7 +64,7 @@ namespace space
             void addObject(SpaceObject *obj);
             void removeObject(SpaceObject *obj);
             const std::vector<SpaceObject *> &objects() const { return _objects; }
-            const std::vector<SpacePortal *> &spacePortals() const { return _spacePortals; }
+            const std::vector<SpaceObject *> &objects(SpaceObjectType type) const;
 
             std::vector<SpaceObject *> getNearbyObjects(sf::FloatRect inRect) const;
 
@@ -91,7 +92,7 @@ namespace space
             // Fields
             AreaType _type;
             std::vector<SpaceObject *> _objects;
-            std::vector<SpacePortal *> _spacePortals;
+            std::map<SpaceObjectType, std::vector<SpaceObject *>> _groupedObjects;
             std::unique_ptr<b2World> _physicsWorld;
             SpaceObject *_partOfObject;
             sf::Transform _transform;

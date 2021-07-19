@@ -91,6 +91,28 @@ namespace space
             }
 
             template <typename T>
+            T *as()
+            {
+                if (type() == T::TypeValue)
+                {
+                    return reinterpret_cast<T *>(this);
+                }
+
+                throw std::runtime_error("Cannot cast space object!");
+            }
+
+            template <typename T>
+            const T *as() const
+            {
+                if (type() == T::TypeValue)
+                {
+                    return reinterpret_cast<const T *>(this);
+                }
+
+                throw std::runtime_error("Cannot cast space object!");
+            }
+
+            template <typename T>
             bool is() const
             {
                 return type() == T::TypeValue;

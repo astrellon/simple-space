@@ -129,6 +129,18 @@ namespace space
         collider.removeFromWorld(_physicsWorld.get());
     }
 
+    const std::vector<SpaceObject *> &Area::objects(SpaceObjectType type) const
+    {
+        auto find = _groupedObjects.find(type);
+        if (find == _groupedObjects.end())
+        {
+            static std::vector<SpaceObject *> empty;
+            return empty;
+        }
+
+        return find->second;
+    }
+
     void Area::addObject(SpaceObject *obj)
     {
         if (obj == nullptr)
@@ -144,11 +156,7 @@ namespace space
         obj->insideArea(this);
         _objects.push_back(obj);
 
-        SpacePortal *spacePortal;
-        if (obj->tryCast(spacePortal))
-        {
-            _spacePortals.push_back(spacePortal);
-        }
+        _groupedObjects[obj->type()].push_back(obj);
 
         PlacedItem *placedItem;
         if (obj->tryCast(placedItem))
@@ -171,10 +179,10 @@ namespace space
     {
         Utils::remove(_objects, obj);
 
-        SpacePortal *spacePortal;
-        if (obj->tryCast(spacePortal))
+        auto find = _groupedObjects.find(obj->type());
+        if (find != _groupedObjects.end())
         {
-            Utils::remove(_spacePortals, spacePortal);
+            Utils::remove(find->second, obj);
         }
 
         DrawLayer *layer;
