@@ -18,7 +18,7 @@ namespace space
             EditorGameSession(Engine &engine);
 
             // Methods
-            bool isEditor() const { return true; }
+            virtual bool isEditor() const { return true; }
 
             virtual void update(sf::Time dt);
             virtual void draw();

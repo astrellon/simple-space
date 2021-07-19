@@ -1,6 +1,7 @@
 #include "editor_game_session.hpp"
 
 #include "editor/editor_camera_target.hpp"
+#include <valgrind/callgrind.h>
 
 #include "game/character.hpp"
 #include "game/space_object.hpp"
@@ -19,6 +20,7 @@ namespace space
 
     void EditorGameSession::update(sf::Time dt)
     {
+    CALLGRIND_TOGGLE_COLLECT;
         for (auto &spaceObject : _spaceObjectsUpdateEveryFrame)
             spaceObject->update(*this, dt, sf::Transform::Identity);
 
@@ -50,10 +52,12 @@ namespace space
         {
             _cameraTarget->transform().position += moveTarget;
         }
+    CALLGRIND_TOGGLE_COLLECT;
     }
 
     void EditorGameSession::draw()
     {
+    CALLGRIND_TOGGLE_COLLECT;
         _renderStack.clear();
         auto &sceneRender = _engine.sceneRender();
 
@@ -67,6 +71,7 @@ namespace space
             auto pos = Utils::getPosition(_cameraTarget->worldTransform());
             drawAtObject(*_cameraTarget, pos, sceneRender);
         }
+    CALLGRIND_TOGGLE_COLLECT;
     }
 
     void EditorGameSession::onPostLoad(LoadingContext &context)
