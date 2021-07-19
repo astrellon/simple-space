@@ -1,6 +1,5 @@
 #include "star_background.hpp"
 
-#include <random>
 #include <algorithm>
 
 #include <SFML/OpenGL.hpp>
@@ -15,6 +14,7 @@
 #include "utils.hpp"
 #include "render_camera.hpp"
 #include "debug/draw_debug.hpp"
+#include "fastrand.hpp"
 
 namespace space
 {
@@ -143,17 +143,15 @@ namespace space
         auto numParticles = _parent.numParticles();
         auto seed = (position.x + (position.y << 16)) + 17;
 
-        auto rand = Utils::randWithSeed(seed);
-
         auto positionOffset = sf::Vector3f(position.x, position.y, 0) * area;
 
-        std::uniform_real_distribution<float> posRange(0, area);
-        std::uniform_real_distribution<float> depthRange(-500, 0);
-        std::uniform_real_distribution<float> colourRange(120, 220);
+        Fastrand posRange(seed);
+        Fastrand depthRange(seed * 3 + 17);
+        Fastrand colourRange(seed * 9 + 111);
+        Fastrand textureColourRange(seed * 11 + 1);
 
         auto starColourTexture = _parent.options().starColours;
         auto starColourTextureSize = starColourTexture ? starColourTexture->getSize() : sf::Vector2u(0, 0);
-        std::uniform_real_distribution<float> textureColourRange(0, starColourTextureSize.y);
 
         _verticies.reserve(numParticles);
 
@@ -161,22 +159,22 @@ namespace space
         {
             auto &vertex = _verticies[i];
 
-            auto x = posRange(rand);
-            auto y = posRange(rand);
-            auto z = depthRange(rand);
+            auto x = posRange.next(0, area);
+            auto y = posRange.next(0, area);
+            auto z = depthRange.next(-500, 0);
             vertex.position = sf::Vector3f(x, y, z) + positionOffset;
 
             sf::Color colour;
             if (starColourTexture)
             {
-                auto index = static_cast<int>(textureColourRange(rand));
+                auto index = static_cast<int>(textureColourRange.next(0, starColourTextureSize.y));
                 colour = starColourTexture->getPixel(0, index);
             }
             else
             {
-                colour.r = static_cast<sf::Uint8>(colourRange(rand));
-                colour.g = static_cast<sf::Uint8>(colourRange(rand));
-                colour.b = static_cast<sf::Uint8>(colourRange(rand));
+                colour.r = static_cast<sf::Uint8>(colourRange.next(120, 220));
+                colour.g = static_cast<sf::Uint8>(colourRange.next(120, 220));
+                colour.b = static_cast<sf::Uint8>(colourRange.next(120, 220));
             }
             vertex.color = colour;
         }
