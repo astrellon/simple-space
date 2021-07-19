@@ -95,12 +95,6 @@ int errorHandler(Display *display, XErrorEvent *event)
     return 1;
 }
 
-void printTimeDifference(const char *prefix, std::chrono::system_clock::time_point time1, std::chrono::system_clock::time_point time2)
-{
-    auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(time2 - time1);
-    std::cout << "Time taken for: " << prefix << " " << diff.count() << "ms" << std::endl;
-}
-
 int main()
 {
     auto startTime = std::chrono::high_resolution_clock::now();
@@ -148,14 +142,14 @@ int main()
     definitionManager.onPostLoad(engine);
     auto afterDefinitions = std::chrono::high_resolution_clock::now();
 
-    printTimeDifference("Window", startTime, afterCreateWindow);
-    printTimeDifference("GLEW", afterCreateWindow, afterGlew);
-    printTimeDifference("Engine", afterGlew, afterCreateEngine);
-    printTimeDifference("Textures", afterCreateEngine, afterTextures);
-    printTimeDifference("Fonts", afterTextures, afterFonts);
-    printTimeDifference("Maps", afterFonts, afterMaps);
-    printTimeDifference("Sounds", afterMaps, afterSounds);
-    printTimeDifference("Definitions", afterSounds, afterDefinitions);
+    space::Utils::printTimeDifference("Window", startTime, afterCreateWindow);
+    space::Utils::printTimeDifference("GLEW", afterCreateWindow, afterGlew);
+    space::Utils::printTimeDifference("Engine", afterGlew, afterCreateEngine);
+    space::Utils::printTimeDifference("Textures", afterCreateEngine, afterTextures);
+    space::Utils::printTimeDifference("Fonts", afterTextures, afterFonts);
+    space::Utils::printTimeDifference("Maps", afterFonts, afterMaps);
+    space::Utils::printTimeDifference("Sounds", afterMaps, afterSounds);
+    space::Utils::printTimeDifference("Definitions", afterSounds, afterDefinitions);
 
     engine.initEffects();
     engine.uiManager().initDefaultWindows();
@@ -178,7 +172,7 @@ int main()
 
     auto endTime = std::chrono::high_resolution_clock::now();
 
-    printTimeDifference("Overall startup", startTime, endTime);
+    space::Utils::printTimeDifference("Overall startup", startTime, endTime);
 
     while (window.isOpen())
     {

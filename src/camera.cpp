@@ -22,7 +22,7 @@ namespace space
         if (_props.following)
         {
             SpaceObject *followingObject;
-            if (_engine.currentSession()->tryGetSpaceObject(_props.followingId, &followingObject))
+            if (_engine.currentSession()->tryGetSpaceObject(_props.followingId, followingObject))
             {
                 auto trans = followingObject->worldTransform();
                 sf::Vector2f pos(trans.getMatrix()[12], trans.getMatrix()[13]);
@@ -39,7 +39,7 @@ namespace space
         if (_props.followingRotation)
         {
             SpaceObject *followingObject;
-            if (_engine.currentSession()->tryGetSpaceObject(_props.followingRotationId, &followingObject))
+            if (_engine.currentSession()->tryGetSpaceObject(_props.followingRotationId, followingObject))
             {
                 resetRotation = false;
                 _view.setRotation(followingObject->transform().rotation);
@@ -123,7 +123,7 @@ namespace space
         if (_props.followingRotation)
         {
             SpaceObject *followingObject;
-            if (_engine.currentSession()->tryGetSpaceObject(_props.followingRotationId, &followingObject))
+            if (_engine.currentSession()->tryGetSpaceObject(_props.followingRotationId, followingObject))
             {
                 return followingObject->transform().rotation;
             }

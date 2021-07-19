@@ -18,7 +18,7 @@ namespace space
         for (auto postLoad : _onPostLoadObjects)
         {
             SpaceObject *character;
-            if (session.tryGetSpaceObject(postLoad, &character))
+            if (session.tryGetSpaceObject(postLoad, character))
             {
                 area.addObject(character);
             }

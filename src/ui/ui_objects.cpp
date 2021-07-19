@@ -46,7 +46,7 @@ namespace space
             ImGui::BeginChild("SelectedObject", ImVec2(width * (1 - middle), height), false);
 
             SpaceObject *selectedObject;
-            if (!engine.currentSession()->tryGetSpaceObject(selectedObjectId, &selectedObject))
+            if (!engine.currentSession()->tryGetSpaceObject(selectedObjectId, selectedObject))
             {
                 ImGui::Text("Selected object doesn't exist anymore");
                 _selectedObjectEditor->spaceObject = nullptr;

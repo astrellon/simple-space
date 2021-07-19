@@ -2,6 +2,7 @@
 
 #include <fstream>
 
+#include "utils.hpp"
 #include "main_menu_scene.hpp"
 #include "game_session.hpp"
 #include "editor_game_session.hpp"
@@ -37,7 +38,7 @@ namespace space
         }
 
         PlanetSurface *planetSurface;
-        if (!session->tryGetSpaceObject<PlanetSurface>("PLANET_GRASSY_1", &planetSurface))
+        if (!session->tryGetSpaceObject<PlanetSurface>("PLANET_GRASSY_1", planetSurface))
         {
             std::cout << "Could not find planet surface :(\n";
             return;

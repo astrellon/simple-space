@@ -58,7 +58,7 @@ namespace space
     bool TeleportClone::tryGetClone(GameSession &session, Character **result)
     {
         SpaceObject *cloneObject;
-        if (!session.tryGetSpaceObject(_cloneId, &cloneObject))
+        if (!session.tryGetSpaceObject(_cloneId, cloneObject))
         {
             *result = nullptr;
             return false;

@@ -79,7 +79,7 @@ namespace space
         if (context.tryGetPostLoadObjectId(id, LoadingType::LivePhotoTarget, liveTargetId))
         {
             SpaceObject *target;
-            if (session.tryGetSpaceObject(liveTargetId, &target))
+            if (session.tryGetSpaceObject(liveTargetId, target))
             {
                 targetObject(target);
 

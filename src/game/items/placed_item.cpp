@@ -201,7 +201,7 @@ namespace space
 
         if (item == nullptr)
         {
-            if (session.tryGetItem(_itemId, &item))
+            if (session.tryGetItem(_itemId, item))
             {
                 processItem();
             }

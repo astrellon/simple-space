@@ -77,28 +77,24 @@ namespace space
 
     }
 
-    bool GameSession::tryGetItem(const ItemId &id, Item **result)
+    bool GameSession::tryGetItem(const ItemId &id, Item *&result)
     {
-        for (auto &item : _items)
+        auto find = _itemMap.find(id);
+        if (find != _itemMap.end())
         {
-            if (item->id == id)
-            {
-                *result = item.get();
-                return true;
-            }
+            result = find->second;
+            return true;
         }
 
         return false;
     }
-    bool GameSession::tryGetSpaceObject(const ObjectId &id, SpaceObject **result)
+    bool GameSession::tryGetSpaceObject(const ObjectId &id, SpaceObject *&result)
     {
-        for (auto &obj : _spaceObjects)
+        auto find = _spaceObjectsMap.find(id);
+        if (find != _spaceObjectsMap.end())
         {
-            if (obj->id == id)
-            {
-                *result = obj.get();
-                return true;
-            }
+            result = find->second;
+            return true;
         }
 
         return false;
@@ -124,7 +120,7 @@ namespace space
         auto newParentObjectId = newIdPrefix + parentObject->id;
 
         SpaceObject *newParent;
-        if (!tryGetSpaceObject(newParentObjectId, &newParent))
+        if (!tryGetSpaceObject(newParentObjectId, newParent))
         {
             std::cout << "Failed to find new live photo parent: " << newParentObjectId << std::endl;
             return nullptr;
@@ -271,7 +267,7 @@ namespace space
             if (DrawDebug::focusOnObject == nullptr)
             {
                 Character *bird;
-                if (tryGetSpaceObject("BIRD_CHAR", &bird))
+                if (tryGetSpaceObject("BIRD_CHAR", bird))
                 {
                     DrawDebug::focusOnObject = bird;
                 }
@@ -453,7 +449,7 @@ namespace space
     void GameSession::removeSpaceObject(const ObjectId &id)
     {
         SpaceObject *obj;
-        if (!tryGetSpaceObject(id, &obj))
+        if (!tryGetSpaceObject(id, obj))
         {
             return;
         }
@@ -466,6 +462,12 @@ namespace space
         }
 
         Utils::remove(_spaceObjects, obj);
+
+        auto find = _spaceObjectsMap.find(id);
+        if (find != _spaceObjectsMap.end())
+        {
+            _spaceObjectsMap.erase(find);
+        }
 
         // TODO Remove star systems and planet surfaces
     }
@@ -500,7 +502,7 @@ namespace space
 
         // Bail if we can't find the target object
         SpaceObject *targetObject;
-        if (!tryGetSpaceObject(spacePortal->targetObjectId, &targetObject))
+        if (!tryGetSpaceObject(spacePortal->targetObjectId, targetObject))
         {
             return false;
         }
@@ -537,7 +539,7 @@ namespace space
 
         // Bail if we can't find the target object
         SpaceObject *targetObject;
-        if (!tryGetSpaceObject(spacePortal->targetObjectId, &targetObject))
+        if (!tryGetSpaceObject(spacePortal->targetObjectId, targetObject))
         {
             return;
         }

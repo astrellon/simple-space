@@ -7,6 +7,7 @@
 #include <sstream>
 #include <iomanip>
 #include <memory>
+#include <chrono>
 
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
@@ -40,6 +41,13 @@ namespace space
             static std::string getFilenameExt(const std::string &str);
 
             static bool isSpriteInView(const sf::Transform &worldTransform, const sf::FloatRect &spriteBounds, const sf::View &view);
+
+            static void printTimeDifference(const char *prefix, std::chrono::system_clock::time_point time1, std::chrono::system_clock::time_point time2)
+            {
+                auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(time2 - time1);
+                std::cout << "Time taken for: " << prefix << " " << diff.count() << "ms" << std::endl;
+            }
+
 
             template <typename T>
             static inline bool remove(std::vector<T> &list, T item)

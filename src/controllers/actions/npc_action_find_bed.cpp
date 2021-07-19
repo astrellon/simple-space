@@ -32,7 +32,14 @@ namespace space
                 auto pos = character->transform().position;
                 std::vector<BedSortPair> availbleBed;
 
-                for (auto obj : insideArea->objects())
+                static sf::Vector2f range(1000, 1000);
+                static std::vector<SpaceObject *> nearbyObjects;
+                sf::FloatRect bedRange(pos - range, range * 2.0f);
+
+                nearbyObjects.clear();
+                insideArea->getObjectsNearby(bedRange, nearbyObjects);
+
+                for (auto obj : nearbyObjects)
                 {
                     PlacedItem *placedItem;
                     if (obj->tryCast(placedItem) && placedItem->item->is<BedItem>())
@@ -86,7 +93,7 @@ namespace space
             case Stage::Sleeping:
             {
                 PlacedItem *destination;
-                if (!controller()->session().tryGetSpaceObject(_destinationId, &destination))
+                if (!controller()->session().tryGetSpaceObject(_destinationId, destination))
                 {
                     std::cout << "Bed gone!" << std::endl;
                     _stage = Stage::Done;

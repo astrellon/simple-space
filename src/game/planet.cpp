@@ -41,7 +41,7 @@ namespace space
             for (auto surfaceId : definition.planetSurfaceIds)
             {
                 PlanetSurface *surface;
-                if (session.tryGetSpaceObject<PlanetSurface>(surfaceId, &surface))
+                if (session.tryGetSpaceObject<PlanetSurface>(surfaceId, surface))
                 {
                     addPlanetSurface(surface);
                 }

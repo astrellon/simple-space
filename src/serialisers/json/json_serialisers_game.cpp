@@ -259,7 +259,7 @@ namespace space
         auto position = fromJsonVector2f(j.at("position"));
 
         PlaceableItem *item;
-        if (!session.tryGetItem<PlaceableItem>(itemId, &item))
+        if (!session.tryGetItem<PlaceableItem>(itemId, item))
         {
             return false;
         }
@@ -447,7 +447,7 @@ namespace space
 
         auto planetId = j.at("planetId").get<ObjectId>();
         Planet *planet;
-        if (!session.tryGetSpaceObject<Planet>(planetId, &planet))
+        if (!session.tryGetSpaceObject<Planet>(planetId, planet))
         {
             std::cout << "Unable to find planet " << planetId << " for planet surface" << std::endl;
             return false;
@@ -482,7 +482,7 @@ namespace space
         {
             auto id = itemId.get<ItemId>();
             Item *item;
-            if (!session.tryGetItem(id, &item))
+            if (!session.tryGetItem(id, item))
             {
                 std::cout << "Unable to find item for inventory: " << id << std::endl;
                 continue;
@@ -523,7 +523,7 @@ namespace space
         if (Utils::json_try_get(j, "controllingCharacter", controllingCharacterId))
         {
             Character *character;
-            if (session.tryGetSpaceObject<Character>(controllingCharacterId, &character))
+            if (session.tryGetSpaceObject<Character>(controllingCharacterId, character))
             {
                 controller.controllingCharacter(character);
             }
@@ -536,7 +536,7 @@ namespace space
         if (Utils::json_try_get(j, "controllingShip", controllingShipId))
         {
             Ship *ship;
-            if (session.tryGetSpaceObject<Ship>(controllingShipId, &ship))
+            if (session.tryGetSpaceObject<Ship>(controllingShipId, ship))
             {
                 controller.controllingShip(ship);
             }

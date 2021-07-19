@@ -44,7 +44,7 @@ namespace space
         }
 
         SpaceObject *targetObject;
-        if (!session.tryGetSpaceObject(targetObjectId, &targetObject))
+        if (!session.tryGetSpaceObject(targetObjectId, targetObject))
         {
             std::cout << "Unable to find target object for space portal" << std::endl;
             _sprite.sequence("idle", false);

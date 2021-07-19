@@ -48,7 +48,7 @@ namespace space
 
         auto id = session->playerController().selectedObject();
         SpaceObject *obj;
-        if (!session->tryGetSpaceObject(id, &obj))
+        if (!session->tryGetSpaceObject(id, obj))
         {
             ImGui::Text("Cannot find %s", id.c_str());
             return;

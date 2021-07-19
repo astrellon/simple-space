@@ -28,7 +28,7 @@ namespace space
         ObjectId livePhotoId;
         if (context.tryGetLivePhotoId(id, livePhotoId))
         {
-            session.tryGetSpaceObject<LivePhoto>(livePhotoId, &_partOfLivePhoto);
+            session.tryGetSpaceObject<LivePhoto>(livePhotoId, _partOfLivePhoto);
         }
     }
 

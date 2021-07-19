@@ -37,6 +37,7 @@ namespace space
     class SpacePortal;
     class LoadingContext;
     class LivePhoto;
+    class IHasArea;
 
     class GameSession : public BaseGameScene
     {
@@ -56,6 +57,7 @@ namespace space
             const SpaceObjectList &spaceObjects() const { return _spaceObjects; }
             const ItemList &items() const { return _items; }
             const CharacterControllerList &characterControllers() const { return _characterControllers; }
+            const std::vector<IHasArea *> &objectsWithArea() const { return _areaObjects; }
 
             template <typename T, typename... TArgs>
             auto createObject(TArgs &&... args)
@@ -64,6 +66,7 @@ namespace space
                 auto obj = std::make_unique<T>(std::forward<TArgs>(args)...);
                 auto result = obj.get();
                 _spaceObjects.emplace_back(std::move(obj));
+                _spaceObjectsMap[result->id] = result;
 
                 return result;
             }
@@ -74,20 +77,21 @@ namespace space
                 auto item = std::make_unique<T>(std::forward<TArgs>(args)...);
                 auto result = item.get();
                 _items.emplace_back(std::move(item));
+                _itemMap[result->id] = result;
 
                 return result;
             }
 
-            bool tryGetItem(const ItemId &id, Item **result);
+            bool tryGetItem(const ItemId &id, Item *&result);
 
             template <typename T>
-            bool tryGetItem(const ItemId &id, T **result)
+            bool tryGetItem(const ItemId &id, T *&result)
             {
                 Item *temp;
-                if (tryGetItem(id, &temp))
+                if (tryGetItem(id, temp))
                 {
-                    *result = dynamic_cast<T *>(temp);
-                    return *result != nullptr;
+                    result = dynamic_cast<T *>(temp);
+                    return result != nullptr;
                 }
 
                 return false;
@@ -102,16 +106,16 @@ namespace space
                 return result;
             }
 
-            bool tryGetSpaceObject(const ObjectId &id, SpaceObject **result);
+            bool tryGetSpaceObject(const ObjectId &id, SpaceObject *&result);
 
             template <typename T>
-            bool tryGetSpaceObject(const ObjectId &id, T **result)
+            bool tryGetSpaceObject(const ObjectId &id, T *&result)
             {
                 SpaceObject *temp;
-                if (tryGetSpaceObject(id, &temp))
+                if (tryGetSpaceObject(id, temp))
                 {
-                    *result = dynamic_cast<T *>(temp);
-                    return *result != nullptr;
+                    result = dynamic_cast<T *>(temp);
+                    return result != nullptr;
                 }
 
                 return false;
@@ -187,8 +191,11 @@ namespace space
             SpaceObject *_nextMouseOverObject;
 
             SpaceObjectList _spaceObjects;
+            std::vector<IHasArea *> _areaObjects;
+            std::map<ObjectId, SpaceObject *> _spaceObjectsMap;
             std::vector<SpaceObject *> _spaceObjectsUpdateEveryFrame;
             ItemList _items;
+            std::map<ItemId, Item *> _itemMap;
             CharacterControllerList _characterControllers;
             NextFrameState _nextFrameState;
 
