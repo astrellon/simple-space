@@ -162,10 +162,17 @@ namespace space
 
     void PlacedItem::update(GameSession &session, sf::Time dt, const sf::Transform &parentTransform)
     {
-        if (!_setTransform)
+        if (insideArea()->type() == AreaType::PlanetSurface)
+        {
+            if (!_setTransform)
+            {
+                updateWorldTransform(parentTransform);
+                _setTransform = true;
+            }
+        }
+        else
         {
             updateWorldTransform(parentTransform);
-            _setTransform = true;
         }
     }
 
