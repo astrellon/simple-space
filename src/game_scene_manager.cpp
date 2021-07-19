@@ -45,13 +45,13 @@ namespace space
         }
 
         auto itemId = 100;
-        for (auto i = 0; i < 20000; i++)
+        for (auto i = 0; i < 3000; i++)
         {
             auto newTree = session->createItem<PlaceableItem>(itemId++, *tree1);
-            auto step = i / 100;
+            auto step = i / 50;
             auto offset = step % 2 ? 30 : 0;
-            auto y = step * 80;
-            auto x = (i % 100) * 60 + offset;
+            auto y = step * 60;
+            auto x = (i % 50) * 80 + offset;
             planetSurface->area().addPlaceable(*session, newTree, sf::Vector2f(x, y));
         }
     }

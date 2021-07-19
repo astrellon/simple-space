@@ -26,7 +26,7 @@ namespace space
 
         handleMouse(_cameraTarget);
 
-        const float speed = 150.0f;
+        const float speed = 300.0f;
         auto seconds = dt.asSeconds();
         auto cameraMove = speed * seconds;
         sf::Vector2f moveTarget;
