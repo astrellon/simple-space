@@ -19,7 +19,7 @@
 
 namespace space
 {
-    Area::Area(AreaType type, SpaceObject *partOfObject) : _type(type), _partOfObject(partOfObject), _quadtree(sf::FloatRect(0, 0, 8192, 8192))
+    Area::Area(AreaType type, SpaceObject *partOfObject) : _type(type), _partOfObject(partOfObject), _quadtree(sf::FloatRect(0, 0, 8192 * 100, 8192 * 100))
     {
         if (type == AreaType::Ship || type == AreaType::PlanetSurface)
         {

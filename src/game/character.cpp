@@ -8,6 +8,7 @@
 #include "../space_transform.hpp"
 #include "../debug/draw_debug.hpp"
 #include "../render_camera.hpp"
+#include "../keyboard.hpp"
 #include "ship.hpp"
 #include "area.hpp"
 
@@ -181,6 +182,13 @@ namespace space
     {
         auto pos = _physicsBody->GetPosition();
         auto rotation = _physicsBody->GetAngle();
+
+        if (Keyboard::isKeyPressed(sf::Keyboard::LShift))
+        {
+            auto move = moveInput * 10.0f;
+            pos += b2Vec2(move.x, move.y);
+            _physicsBody->SetTransform(pos, rotation);
+        }
 
         _transform.position = sf::Vector2f(pos.x, pos.y);
         _transform.rotation = Utils::radiansToDegrees(rotation);

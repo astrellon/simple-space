@@ -25,7 +25,7 @@
         "name": "Blobby Tree",
         "texturePath": "data/textures/tree2.png",
         "textureOffset": [3, 32],
-        "canPickup": false,
+        "canPickup": true,
         "canUse": false,
         "physicsShape": {
             "type": "circle",
@@ -38,7 +38,7 @@
         "name": "Big Tree",
         "texturePath": "data/textures/chestnut-003.png",
         "textureOffset": [6, 62],
-        "canPickup": false,
+        "canPickup":true,
         "canUse": false,
         "physicsShape": {
             "type": "circle",

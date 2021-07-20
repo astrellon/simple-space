@@ -173,6 +173,7 @@ int main()
     auto endTime = std::chrono::high_resolution_clock::now();
 
     space::Utils::printTimeDifference("Overall startup", startTime, endTime);
+    CALLGRIND_TOGGLE_COLLECT;
 
     while (window.isOpen())
     {
@@ -192,6 +193,7 @@ int main()
             std::this_thread::sleep_for(std::chrono::milliseconds(250));
         }
     }
+    CALLGRIND_TOGGLE_COLLECT;
 
     CALLGRIND_DUMP_STATS;
 

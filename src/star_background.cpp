@@ -1,5 +1,6 @@
 #include "star_background.hpp"
 
+#include <valgrind/callgrind.h>
 #include <algorithm>
 
 #include <SFML/OpenGL.hpp>
@@ -137,6 +138,7 @@ namespace space
 
     void StarBackgroundChunk::position(sf::Vector2i position)
     {
+    CALLGRIND_TOGGLE_COLLECT;
         _position = position;
 
         auto area = _parent.area();
@@ -187,6 +189,7 @@ namespace space
         {
             throw std::runtime_error("Error updating vertex buffer for star background");
         }
+    CALLGRIND_TOGGLE_COLLECT;
     }
 
     void StarBackgroundChunk::draw(RenderCamera &target, sf::RenderStates &states)
