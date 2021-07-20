@@ -122,6 +122,10 @@ namespace space
         _gameScene = std::move(gameScene);
         _currentSession = nullptr;
 
+        cameraScale(2.0f);
+        timeScale(1.0f);
+        _sceneRender->camera().scale(1.0f);
+
         if (_gameScene.get())
         {
             auto gameSession = dynamic_cast<GameSession *>(_gameScene.get());
@@ -328,8 +332,8 @@ namespace space
         Mouse::prevMousePosition(sf::Mouse::getPosition());
         Mouse::update(*this, _deltaTime);
 
-        gameUIManager().preUpdate(_deltaTime);
-        gameUIManager().update(_deltaTime);
+        _gameUIManager->preUpdate(_deltaTime);
+        _gameUIManager->update(_deltaTime);
     }
 
     void Engine::draw()
@@ -352,7 +356,7 @@ namespace space
 
         if (!DrawDebug::hideGameUI)
         {
-            gameUIManager().draw(*_sceneRender);
+            _gameUIManager->draw(*_sceneRender);
         }
 
         if (_initedImgui)
