@@ -1,7 +1,5 @@
 #include "area.hpp"
 
-#include <typeinfo>
-
 #include "space_object.hpp"
 #include "space_portal.hpp"
 #include "ship.hpp"
@@ -13,6 +11,7 @@
 #include "items/placed_item.hpp"
 #include "teleporter_list.hpp"
 
+#include "../engine.hpp"
 #include "../game_session.hpp"
 #include "../physics/polygon_collider.hpp"
 #include "../utils.hpp"
@@ -106,7 +105,8 @@ namespace space
 
     bool Area::checkForMouse(const Area *inRelationTo, GameSession &session, sf::Vector2f mousePosition) const
     {
-        sf::FloatRect box(mousePosition.x, mousePosition.y, 1, 1);
+        auto localPos = mousePosition * session.engine().sceneRender().camera().scale();
+        sf::FloatRect box(localPos, sf::Vector2f(1, 1));
         auto queryFound = _quadtree.query(box);
         if (queryFound.size() > 0)
         {
@@ -201,6 +201,11 @@ namespace space
         if (obj->tryCast(placedItem))
         {
             placedItem->item->onPlaced(*placedItem);
+
+            if (placedItem->item->type == ItemType::Teleporter)
+            {
+                _teleporters.push_back(placedItem);
+            }
         }
     }
     void Area::removeObject(SpaceObject *obj)
@@ -211,6 +216,12 @@ namespace space
         if (find != _groupedObjects.end())
         {
             Utils::remove(find->second, obj);
+        }
+
+        PlacedItem *placedItem;
+        if (obj->tryCast(placedItem) && placedItem->item->type == ItemType::Teleporter)
+        {
+            Utils::remove(_teleporters, placedItem);
         }
 
         obj->insideArea(nullptr);
@@ -240,15 +251,13 @@ namespace space
 
     void Area::addTeleporters(TeleporterList &result) const
     {
-        for (auto obj : _objects)
+        for (auto placedItem : _teleporters)
         {
-            PlacedItem *placedItem;
             Teleporter *teleporter;
-            if (!obj->tryCast(placedItem) || !placedItem->item->tryCast<Teleporter>(teleporter))
+            if (!placedItem->item->tryCast<Teleporter>(teleporter))
             {
                 continue;
             }
-
             result.addTeleporter(PlacedItemPair<Teleporter>(placedItem, teleporter));
         }
     }

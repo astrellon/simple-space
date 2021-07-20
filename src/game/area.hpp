@@ -87,6 +87,7 @@ namespace space
             // Fields
             AreaType _type;
             std::vector<SpaceObject *> _objects;
+            std::vector<PlacedItem *> _teleporters;
             std::map<SpaceObjectType, std::vector<SpaceObject *>> _groupedObjects;
             std::unique_ptr<b2World> _physicsWorld;
             SpaceObject *_partOfObject;
