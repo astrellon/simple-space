@@ -14,6 +14,7 @@
 #include "ui/ui_manager.hpp"
 #include "ui/editor/ui_area_selector.hpp"
 #include "ui/editor/ui_selected.hpp"
+#include "ui/editor/ui_editor_menu.hpp"
 
 #include "serialisers/json/json.hpp"
 #include "serialisers/json/json_serialisers_game.hpp"
@@ -71,7 +72,7 @@ namespace space
         engine.gameScene(space::fromJsonGameSession(engine, startingGameJson));
         engine.gameUIManager().currentPage(engine.gameUIManager().inGameUIPage());
 
-        addTrees(engine);
+        // addTrees(engine);
     }
 
     void GameSceneManager::startEditor(Engine &engine)
@@ -84,8 +85,9 @@ namespace space
         engine.gameUIManager().currentPage(nullptr);
         engine.uiManager().uiAreaSelector().show = true;
         engine.uiManager().uiSelected().show = true;
+        engine.uiManager().uiEditorMenu().show = true;
 
-        addTrees(engine);
+        // addTrees(engine);
     }
 
 } // space

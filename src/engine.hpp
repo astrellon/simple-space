@@ -14,6 +14,7 @@
 namespace space
 {
     class GameSession;
+    class EditorGameSession;
     class UIManager;
     class Overlay;
     class BloomEffect;
@@ -63,6 +64,7 @@ namespace space
             sf::Vector2u renderSize() const;
 
             GameSession *currentSession() const {  return _currentSession; }
+            EditorGameSession *editorSession() const {  return _editorSession; }
             GameSession *startGameSession();
 
             BaseGameScene *gameScene() const { return _gameScene.get(); }
@@ -114,6 +116,7 @@ namespace space
             bool _headlessMode;
             std::unique_ptr<BaseGameScene> _gameScene;
             GameSession *_currentSession;
+            EditorGameSession *_editorSession;
             sf::RenderWindow *_window;
             sf::Clock _timer;
             sf::Clock _timerSinceStart;

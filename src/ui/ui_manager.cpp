@@ -11,11 +11,14 @@
 
 #include "editor/ui_area_selector.hpp"
 #include "editor/ui_selected.hpp"
+#include "editor/ui_editor_menu.hpp"
+#include "editor/ui_object_create.hpp"
 
 namespace space
 {
     UIManager::UIManager() : _uiSelected(nullptr), _uiObjects(nullptr), _uiFrameBuffers(nullptr),
-        _uiPhotoAlbum(nullptr), _uiCompendium(nullptr), _uiElementWindow(nullptr), _uiAreaSelector(nullptr)
+        _uiPhotoAlbum(nullptr), _uiCompendium(nullptr), _uiElementWindow(nullptr), _uiAreaSelector(nullptr),
+        _uiEditorMenu(nullptr), _uiObjectCreate(nullptr)
     {
 
     }
@@ -31,6 +34,8 @@ namespace space
         _uiCompendium = createWindow<UICompendium>();
         _uiElementWindow = createWindow<UIElementWindow>();
         _uiAreaSelector = createWindow<UIAreaSelector>();
+        _uiEditorMenu = createWindow<UIEditorMenu>();
+        _uiObjectCreate = createWindow<UIObjectCreate>();
     }
 
     void UIManager::draw(Engine &engine)

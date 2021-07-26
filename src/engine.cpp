@@ -6,6 +6,7 @@
 
 #include "utils.hpp"
 #include "game_session.hpp"
+#include "editor_game_session.hpp"
 #include "keyboard.hpp"
 #include "mouse.hpp"
 #include "particles.hpp"
@@ -44,6 +45,7 @@ namespace space
         _initedImgui(false),
         _headlessMode(window == nullptr),
         _currentSession(nullptr),
+        _editorSession(nullptr),
         _window(window),
         _deltaTime(sf::Time::Zero),
         _timeSinceStartOnUpdate(sf::Time::Zero),
@@ -121,6 +123,7 @@ namespace space
 
         _gameScene = std::move(gameScene);
         _currentSession = nullptr;
+        _editorSession = nullptr;
 
         cameraScale(2.0f);
         timeScale(1.0f);
@@ -128,6 +131,12 @@ namespace space
 
         if (_gameScene.get())
         {
+            auto editorSession = dynamic_cast<EditorGameSession *>(_gameScene.get());
+            if (editorSession)
+            {
+                _editorSession = editorSession;
+            }
+
             auto gameSession = dynamic_cast<GameSession *>(_gameScene.get());
             if (gameSession)
             {
@@ -358,6 +367,8 @@ namespace space
         {
             _gameUIManager->draw(*_sceneRender);
         }
+
+        // ImGui::ShowDemoWindow();
 
         if (_initedImgui)
         {

@@ -1,8 +1,10 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include <functional>
 
 #include "game_session.hpp"
+#include "game/items/item_type.hpp"
 
 namespace space
 {
@@ -12,7 +14,11 @@ namespace space
     class EditorGameSession : public GameSession
     {
         public:
+            // Types
+
             // Fields
+            PlaceableItemDefinition *creatingItem;
+            ItemType creatingItemType;
 
             // Constructor
             EditorGameSession(Engine &engine);
@@ -31,5 +37,6 @@ namespace space
             EditorCameraTarget *_cameraTarget;
 
             // Methods
+            void handleMouseForCreate(SpaceObject *relativeTo);
     };
 } // space

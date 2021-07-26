@@ -696,23 +696,15 @@ namespace space
 
     void GameSession::handleMouse(SpaceObject *target)
     {
-        auto &sceneRender = _engine.sceneRender();
         _nextMouseOverObject = nullptr;
 
-        if (ImGui::IsAnyWindowHovered() || ImGui::IsAnyItemHovered())
+        if (ImGui::IsAnyWindowHovered() || ImGui::IsAnyItemHovered() || !target)
         {
             _mouseOverObject = nullptr;
             return;
         }
 
-        if (!target)
-        {
-            return;
-        }
-
-        auto mousePosition = sf::Mouse::getPosition(*_engine.window());
-        auto worldMousePosition = _engine.window()->mapPixelToCoords(mousePosition, sceneRender.camera().view());
-
+        auto worldMousePosition = getWorldMousePosition();
         auto rootWorld = target->rootObject();
 
         if (_takingAPhoto)
@@ -776,5 +768,21 @@ namespace space
         {
             _playerController.selectedObject(_mouseOverObject ? _mouseOverObject->id : "");
         }
+    }
+
+    sf::Vector2f GameSession::getWorldMousePosition() const
+    {
+        auto &sceneRender = _engine.sceneRender();
+        auto mousePosition = sf::Mouse::getPosition(*_engine.window());
+
+        return _engine.window()->mapPixelToCoords(mousePosition, sceneRender.camera().view());
+    }
+
+    sf::Vector2f GameSession::getLocalMousePosition(Area *relativeTo) const
+    {
+        auto worldMousePos = getWorldMousePosition();
+
+        auto targetWorld = Utils::getPosition(relativeTo->partOfObject()->worldTransform());
+        return worldMousePos - targetWorld;
     }
 } // namespace space

@@ -66,7 +66,8 @@ namespace space
             {"spaceObjects", toJsonArray(input.spaceObjects())},
             {"items", toJsonArray(input.items())},
             {"playerController", toJson(input.playerController())},
-            {"characterControllers", toJsonArray(input.characterControllers())}
+            {"characterControllers", toJsonArray(input.characterControllers())},
+            {"nextId", input.currentNextId()}
         };
 
         return result;
@@ -100,6 +101,12 @@ namespace space
             addFromJsonCharacterController(characterControllers, session);
 
         addFromJsonPlayerController(j.at("playerController"), session);
+
+        int nextId = 0;
+        if (Utils::json_try_get<int>(j, "nextId", nextId))
+        {
+            session.nextId(nextId);
+        }
 
         session.onPostLoad(context);
     }

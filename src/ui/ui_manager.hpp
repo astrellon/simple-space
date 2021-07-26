@@ -18,6 +18,8 @@ namespace space
     class UICompendium;
     class UIElementWindow;
     class UIAreaSelector;
+    class UIEditorMenu;
+    class UIObjectCreate;
 
     class UIManager
     {
@@ -54,6 +56,8 @@ namespace space
             UICompendium &uiCompendium() { return *_uiCompendium; }
             UIElementWindow &uiElementWindow() { return *_uiElementWindow; }
             UIAreaSelector &uiAreaSelector() { return *_uiAreaSelector; }
+            UIEditorMenu &uiEditorMenu() { return *_uiEditorMenu; }
+            UIObjectCreate &uiObjectCreate() { return *_uiObjectCreate; }
 
         private:
             // Fields
@@ -68,6 +72,8 @@ namespace space
             UICompendium *_uiCompendium;
             UIElementWindow *_uiElementWindow;
             UIAreaSelector *_uiAreaSelector;
+            UIEditorMenu *_uiEditorMenu;
+            UIObjectCreate *_uiObjectCreate;
 
             // Methods
     };

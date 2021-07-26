@@ -174,6 +174,7 @@ namespace space
 
             void nextId(int id) { _nextId = id; }
             int nextId() { return ++_nextId; }
+            int currentNextId() const { return _nextId; }
 
             void takingAPhoto(bool value) { _takingAPhoto = value; }
             bool isTakingAPhoto() const { return _takingAPhoto; }
@@ -224,6 +225,9 @@ namespace space
             bool checkMouseSpacePortal(SpaceObject *cameraTarget, sf::Vector2f mousePosition, SpacePortal *spacePortal);
 
             void handleMouse(SpaceObject *target);
+
+            sf::Vector2f getWorldMousePosition() const;
+            sf::Vector2f getLocalMousePosition(Area *relativeTo) const;
 
     };
 } // town
