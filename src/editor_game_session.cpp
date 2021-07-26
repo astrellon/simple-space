@@ -27,6 +27,9 @@ namespace space
     void EditorGameSession::update(sf::Time dt)
     {
     CALLGRIND_TOGGLE_COLLECT;
+
+        checkNextFrameState();
+
         for (auto &spaceObject : _spaceObjectsUpdateEveryFrame)
             spaceObject->update(*this, dt, sf::Transform::Identity);
 
@@ -123,8 +126,8 @@ namespace space
             return;
         }
 
-        auto worldMousePosition = getWorldMousePosition();
         auto area = relativeTo->insideArea();
+        auto localMousePosition = getLocalMousePosition(area);
 
         PlaceableItem *newItem = nullptr;
         if (creatingItemType == ItemType::Teleporter)
@@ -155,7 +158,10 @@ namespace space
 
         if (newItem != nullptr)
         {
-            area->addPlaceable(*this, newItem, worldMousePosition);
+            nextFrameState().addAction([this, newItem, localMousePosition, area]()
+            {
+                area->addPlaceable(*this, newItem, localMousePosition);
+            });
         }
     }
 } // space

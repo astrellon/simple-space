@@ -783,6 +783,11 @@ namespace space
         auto worldMousePos = getWorldMousePosition();
 
         auto targetWorld = Utils::getPosition(relativeTo->partOfObject()->worldTransform());
-        return worldMousePos - targetWorld;
+        auto local =  worldMousePos - targetWorld;
+        if (relativeTo->type() != AreaType::StarSystem)
+        {
+            local /= Utils::InsideScale;
+        }
+        return local;
     }
 } // namespace space
